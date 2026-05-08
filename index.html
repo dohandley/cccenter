@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>cccenter — MLB Picks Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f7f5;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-2: #4a4a4a;
+    --ink-3: #8a8a8a;
+    --rule: #e8e8e6;
+    --header-bg: #1a2237;
+    --header-ink: #ffffff;
+    --header-ink-2: #c8cdd9;
+    --green: #2a7a3a;
+    --green-bg: #e7f3ea;
+    --red: #b53939;
+    --red-bg: #fbe9e9;
+    --yellow-bg: #fdf6dd;
+    --yellow-bd: #d6b637;
+    --row-alt: #fafaf8;
+    --pill-bg: #f0f0ee;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 24px 20px 80px; }
+  .header-card {
+    background: var(--header-bg);
+    color: var(--header-ink);
+    border-radius: 8px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--header-ink-2);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .header-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .header-meta {
+    font-size: 13px;
+    color: var(--header-ink-2);
+  }
+  section { margin-bottom: 28px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 0 4px 8px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 0;
+  }
+  .section-head h2 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .section-head .meta {
+    font-size: 13px;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  table.picks {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table.picks tr.row {
+    border-bottom: 1px solid var(--rule);
+  }
+  table.picks tr.row:nth-child(even) {
+    background: var(--row-alt);
+  }
+  table.picks td {
+    padding: 12px 8px;
+    vertical-align: middle;
+  }
+  td.player { font-weight: 600; }
+  td.player .team { color: var(--ink-3); font-weight: 400; margin-left: 4px; }
+  td.book { color: var(--ink-2); text-align: center; }
+  td.price { font-weight: 600; text-align: right; }
+  td.price.plus { color: var(--green); }
+  td.price.minus { color: var(--red); }
+  td.stake { color: var(--ink-2); text-align: right; padding-right: 16px; }
+  tr.flag td {
+    padding-top: 0;
+    padding-bottom: 10px;
+    color: var(--red);
+    font-size: 12.5px;
+    font-weight: 500;
+  }
+  .notes {
+    background: var(--yellow-bg);
+    border-left: 3px solid var(--yellow-bd);
+    padding: 12px 16px;
+    margin: 20px 0 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+  }
+  .notes strong { font-weight: 600; }
+  .yesterday-card {
+    background: var(--green-bg);
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+  .yesterday-card.negative {
+    background: var(--red-bg);
+  }
+  .yesterday-headline {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .yesterday-card.negative .yesterday-headline {
+    color: var(--red);
+  }
+  .yesterday-sub {
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-top: 4px;
+  }
+  .settled-list {
+    margin-top: 12px;
+  }
+  .settled-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 13px;
+  }
+  .settled-row:last-child { border-bottom: none; }
+  .settled-row .lhs { display: flex; gap: 8px; align-items: baseline; }
+  .settled-row .badge {
+    display: inline-block;
+    width: 18px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 0;
+    border-radius: 3px;
+  }
+  .badge.W { background: var(--green-bg); color: var(--green); }
+  .badge.L { background: var(--red-bg); color: var(--red); }
+  .badge.Push, .badge.Void { background: var(--pill-bg); color: var(--ink-3); }
+  .settled-row .units {
+    font-weight: 600;
+  }
+  .settled-row .units.plus { color: var(--green); }
+  .settled-row .units.minus { color: var(--red); }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .stat-value.plus { color: var(--green); }
+  .stat-value.minus { color: var(--red); }
+  .stat-sub {
+    font-size: 11px;
+    color: var(--ink-3);
+    margin-top: 4px;
+  }
+  .history-day {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    background: var(--card);
+    overflow: hidden;
+  }
+  .history-day summary {
+    cursor: pointer;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    user-select: none;
+  }
+  .history-day summary::-webkit-details-marker { display: none; }
+  .history-day summary::after {
+    content: '▸';
+    color: var(--ink-3);
+    font-size: 11px;
+    margin-left: 8px;
+    transition: transform 0.15s;
+  }
+  .history-day[open] summary::after { transform: rotate(90deg); }
+  .history-day .day-stats {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .history-day .day-stats .units.plus { color: var(--green); font-weight: 600; }
+  .history-day .day-stats .units.minus { color: var(--red); font-weight: 600; }
+  .history-day .day-body {
+    padding: 4px 16px 12px;
+    border-top: 1px solid var(--rule);
+  }
+  .empty {
+    color: var(--ink-3);
+    font-size: 13px;
+    padding: 20px 4px;
+    text-align: center;
+    font-style: italic;
+  }
+  .footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    font-size: 11px;
+    color: var(--ink-3);
+    text-align: center;
+  }
+  @media (max-width: 600px) {
+    .wrap { padding: 16px 12px 60px; }
+    .header-title { font-size: 20px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    table.picks td { padding: 10px 4px; }
+    td.book { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div id="header" class="header-card">
+      <div class="header-eyebrow">MLB PICKS</div>
+      <h1 class="header-title">Loading…</h1>
+      <div class="header-meta"></div>
+    </div>
+
+    <div id="today"></div>
+
+    <section id="yesterday"></section>
+
+    <section id="cumulative">
+      <div class="section-head"><h2>📊 Cumulative</h2></div>
+      <div class="stats-grid" id="stats-grid"></div>
+    </section>
+
+    <section id="history">
+      <div class="section-head"><h2>🗓 History</h2></div>
+      <div id="history-list"></div>
+    </section>
+
+    <div class="footer">
+      cccenter · data: <code>picks_log.csv</code> · last load <span id="loaded-at"></span>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
