@@ -12,12 +12,12 @@ pick_date,player_name,team,game,prop_type,book,open_price,open_implied_prob,ob_p
 2026-05-05,Corey Seager,tex,tex@nyy,HRR_O1.5,Pinnacle,-125,55.56,1.78,,,0.3,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-06T13:00:00Z,,,OB HRR edge; price reconstructed
 2026-05-05,Kevin McGonigle,det,det@cle,HRR_O1.5,Pinnacle,-135,57.45,1.92,,,0.32,S,,,,,,,,2,ob,,1.00,L,-1.00,2026-05-06T13:00:00Z,-135,0,multi-source HRR (OB+PF)
 2026-05-05,Bobby Witt Jr.,kc,cle@kc,HRR_O1.5,PrizePicks,-120,54.55,1.88,,,0.31,A,,,,,,,,1,ob,,0.50,W,0.42,2026-05-06T13:00:00Z,,,OB HRR edge; PrizePicks not in OB closing snapshot
-2026-05-07,Aaron Judge,nyy,tex@nyy,HR_O0.5,Novig,225,30.77,,1,1,,A,,,,,,,,1,ob,,0.50,,,,,,OB-only Tier A; correlated w/ TB pick
-2026-05-07,Kyle Schwarber,phi,oak@phi,HR_O0.5,Onyx Odds,292,25.51,,1,1,,A,,,,,,,,1,ob,,0.50,,,,,,OB-only Tier A
-2026-05-07,Nick Kurtz,oak,oak@phi,HR_O0.5,Pinnacle,289,25.71,,1,1,,A,,,,,,,,1,ob,,0.50,,,,,,OB-only Tier A; rookie sample caveat
-2026-05-07,Aaron Judge,nyy,tex@nyy,TB_O1.5,Fanatics,115,46.51,2,3,,0.5,S,,,,,,,,1,ob,,0.50,,,,,,OB-only; correlated w/ Judge HR
-2026-05-07,Hunter Goodman,col,nym@col,TB_O1.5,BetOnline,109,47.85,2,2,,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only Coors
-2026-05-07,Shea Langeliers,oak,oak@phi,TB_O1.5,betPARX,112,47.17,2,2,,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only
-2026-05-07,Yandy Diaz,tb,tb@bos,TB_O1.5,Novig,111,47.39,2,2,,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only
-2026-05-07,Marcus Semien,nym,nym@col,TB_O1.5,BetMGM,105,48.78,2,2,,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only; only nym@col exposure
-2026-05-07,Byron Buxton,min,min@wsh,TB_O1.5,Novig,100,50.00,2,2,,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only
+2026-05-07,Aaron Judge,nyy,tex@nyy,HR_O0.5,Novig,225,30.77,,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,202,23,OB-only Tier A; correlated w/ TB pick
+2026-05-07,Kyle Schwarber,phi,oak@phi,HR_O0.5,Onyx Odds,292,25.51,,1,1,,A,,,,,,,,1,ob,,0.50,W,1.46,2026-05-08T13:00:00Z,,,OB-only Tier A; closing snapshot missing Onyx
+2026-05-07,Nick Kurtz,oak,oak@phi,HR_O0.5,Pinnacle,289,25.71,,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,,,played (1BB+lineout); 0 HR; closing snapshot missing
+2026-05-07,Aaron Judge,nyy,tex@nyy,TB_O1.5,Fanatics,115,46.51,2,3,,0.5,S,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,100,15,Judge 1H/1TB; OB-only correlated w/ HR pick
+2026-05-07,Hunter Goodman,col,nym@col,TB_O1.5,BetOnline,109,47.85,2,2,,0.5,A,,,,,,,,1,ob,,0.50,Void,0.00,2026-05-08T13:00:00Z,,,DNP; B. Sullivan started at C; stake refunded
+2026-05-07,Shea Langeliers,oak,oak@phi,TB_O1.5,betPARX,112,47.17,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-08T13:00:00Z,,,Langeliers 2H+HR=5TB
+2026-05-07,Yandy Diaz,tb,tb@bos,TB_O1.5,Novig,111,47.39,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-08T13:00:00Z,,,Diaz 2H incl 2B = 3 TB; OB game_stats row missing
+2026-05-07,Marcus Semien,nym,nym@col,TB_O1.5,BetMGM,105,48.78,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,,,Semien 0-2 2BB 0TB; OB game_stats row missing
+2026-05-07,Byron Buxton,min,min@wsh,TB_O1.5,Novig,100,50.00,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,,,Buxton 1H/1TB
