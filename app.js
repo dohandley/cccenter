@@ -2,15 +2,14 @@
    Reads picks_log.csv (committed alongside this file) and renders:
      - header daily summary
      - today's picks grouped by prop_type
-     - yesterday's results card
+     - yesterday's results card (ROI excludes voids per bankroll_rules.md)
      - cumulative stats (4 cards)
      - collapsible history by date
 */
 
-const UNIT_DOLLARS = 25; // $25 per unit per bankroll_rules.md
-const CSV_URL = 'picks_log.csv?cb=' + Date.now(); // cache bust
+const UNIT_DOLLARS = 25;
+const CSV_URL = 'picks_log.csv?cb=' + Date.now();
 
-// ---------- CSV parser (handles quoted fields and commas inside quotes) ----------
 function parseCSV(text) {
   const rows = [];
   let row = [], field = '', inQuotes = false;
@@ -24,7 +23,7 @@ function parseCSV(text) {
       if (c === '"') { inQuotes = true; }
       else if (c === ',') { row.push(field); field = ''; }
       else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
-      else if (c === '\r') { /* skip */ }
+      else if (c === '\r') {}
       else { field += c; }
     }
   }
@@ -38,7 +37,6 @@ function parseCSV(text) {
   });
 }
 
-// ---------- helpers ----------
 const fmtPrice = p => {
   const n = parseInt(p, 10);
   if (isNaN(n)) return p || '';
@@ -52,8 +50,7 @@ const fmtUnits = u => {
 const fmtDollars = d => {
   const n = parseFloat(d);
   if (isNaN(n)) return '';
-  const s = (n >= 0 ? '+$' : '-$') + Math.abs(n).toFixed(2);
-  return s;
+  return (n >= 0 ? '+$' : '-$') + Math.abs(n).toFixed(2);
 };
 const fmtDate = ymd => {
   if (!ymd) return '';
@@ -70,34 +67,21 @@ const propTypeMeta = {
   'HRR_O2.5': { emoji: '🎯', label: 'H+R+RBI Over 2.5' },
 };
 const propMeta = pt => propTypeMeta[pt] || { emoji: '🏷', label: pt };
+const URGENCY_RE = /\b\d{1,2}:\d{2}\s*(AM|PM)?\s*ET\b/i;
 
-// Compute the average price implied breakeven for a list of picks
-function impliedProb(price) {
-  const n = parseInt(price, 10);
-  if (isNaN(n) || n === 0) return null;
-  if (n > 0) return 100 / (n + 100);
-  return Math.abs(n) / (Math.abs(n) + 100);
-}
-
-// ---------- render ----------
 function render(picks) {
   const loadedAt = document.getElementById('loaded-at');
   if (loadedAt) loadedAt.textContent = new Date().toLocaleString();
-
   if (!picks.length) {
     document.querySelector('.header-title').textContent = 'No picks yet';
     document.querySelector('.header-meta').textContent = 'Waiting for first day of data.';
     return;
   }
-
-  // Determine today and yesterday from data (most recent two pick_dates)
   const dates = [...new Set(picks.map(p => p.pick_date))].filter(Boolean).sort().reverse();
   const todayDate = dates[0];
   const yesterdayDate = dates[1];
-
   const todayPicks = picks.filter(p => p.pick_date === todayDate);
   const yesterdayPicks = yesterdayDate ? picks.filter(p => p.pick_date === yesterdayDate) : [];
-
   renderHeader(todayDate, todayPicks);
   renderToday(todayPicks);
   renderYesterday(yesterdayDate, yesterdayPicks);
@@ -121,7 +105,6 @@ function renderToday(picks) {
     root.innerHTML = '<section><div class="section-head"><h2>Today</h2></div><div class="empty">No picks for today.</div></section>';
     return;
   }
-  // Group by prop_type, preserving insertion order of first appearance
   const groups = {};
   for (const p of picks) {
     if (!groups[p.prop_type]) groups[p.prop_type] = [];
@@ -147,10 +130,15 @@ function renderToday(picks) {
         '<td class="stake">' + parseFloat(p.stake_units).toFixed(2) + 'u</td>';
       tbl.appendChild(tr);
       if (p.notes && p.notes.trim()) {
-        const flagTr = document.createElement('tr');
-        flagTr.className = 'flag';
-        flagTr.innerHTML = '<td colspan="4">⏰ ' + escapeHtml(p.notes) + '</td>';
-        tbl.appendChild(flagTr);
+        const isUrgent = URGENCY_RE.test(p.notes);
+        const noteTr = document.createElement('tr');
+        if (isUrgent) {
+          noteTr.className = 'flag';
+          noteTr.innerHTML = '<td colspan="4">⏰ ' + escapeHtml(p.notes) + '</td>';
+        } else {
+          noteTr.innerHTML = '<td colspan="4" style="padding-top:0;padding-bottom:10px;color:var(--ink-3);font-size:12px;font-style:italic;">' + escapeHtml(p.notes) + '</td>';
+        }
+        tbl.appendChild(noteTr);
       }
     }
     sec.appendChild(tbl);
@@ -166,14 +154,15 @@ function renderYesterday(date, picks) {
     return;
   }
   const settled = picks.filter(p => p.result && p.result !== '');
+  const settledNonVoid = settled.filter(p => p.result !== 'Void');
   const wins = settled.filter(p => p.result === 'W').length;
   const losses = settled.filter(p => p.result === 'L').length;
   const pushes = settled.filter(p => p.result === 'Push').length;
   const voids = settled.filter(p => p.result === 'Void').length;
-  const totalStake = settled.reduce((s, p) => s + (parseFloat(p.stake_units) || 0), 0);
+  const stakeAtRisk = settledNonVoid.reduce((s, p) => s + (parseFloat(p.stake_units) || 0), 0);
   const netUnits = settled.reduce((s, p) => s + (parseFloat(p.payout_units) || 0), 0);
   const netDollars = netUnits * UNIT_DOLLARS;
-  const roi = totalStake > 0 ? (netUnits / totalStake) * 100 : 0;
+  const roi = stakeAtRisk > 0 ? (netUnits / stakeAtRisk) * 100 : 0;
   const clvVals = settled.map(p => parseFloat(p.clv_cents)).filter(v => !isNaN(v));
   const avgClv = clvVals.length ? (clvVals.reduce((a, b) => a + b, 0) / clvVals.length) : null;
 
@@ -192,7 +181,6 @@ function renderYesterday(date, picks) {
   if (avgClv !== null) html += '  ·  Avg CLV ' + (avgClv >= 0 ? '+' : '') + avgClv.toFixed(0) + ' bp';
   html += '</div></div>';
 
-  // List of settled picks
   html += '<div class="settled-list">';
   for (const p of settled) {
     const pu = parseFloat(p.payout_units) || 0;
@@ -211,9 +199,9 @@ function renderCumulative(picks) {
   grid.innerHTML = '';
   const settled = picks.filter(p => p.result && p.result !== '' && p.result !== 'Void');
   const wins = settled.filter(p => p.result === 'W').length;
-  const totalStake = settled.reduce((s, p) => s + (parseFloat(p.stake_units) || 0), 0);
+  const stakeAtRisk = settled.reduce((s, p) => s + (parseFloat(p.stake_units) || 0), 0);
   const netUnits = settled.reduce((s, p) => s + (parseFloat(p.payout_units) || 0), 0);
-  const roi = totalStake > 0 ? (netUnits / totalStake) * 100 : 0;
+  const roi = stakeAtRisk > 0 ? (netUnits / stakeAtRisk) * 100 : 0;
   const hitRate = settled.length ? (wins / settled.length) * 100 : 0;
   const clvVals = settled.map(p => parseFloat(p.clv_cents)).filter(v => !isNaN(v));
   const avgClv = clvVals.length ? (clvVals.reduce((a, b) => a + b, 0) / clvVals.length) : null;
@@ -243,7 +231,6 @@ function renderHistory(picks, todayDate) {
   for (const d of dates) {
     const dayPicks = picks.filter(p => p.pick_date === d);
     const settled = dayPicks.filter(p => p.result && p.result !== '');
-    const stake = settled.reduce((s, p) => s + (parseFloat(p.stake_units) || 0), 0);
     const net = settled.reduce((s, p) => s + (parseFloat(p.payout_units) || 0), 0);
     const wins = settled.filter(p => p.result === 'W').length;
     const losses = settled.filter(p => p.result === 'L').length;
@@ -277,7 +264,6 @@ function escapeHtml(s) {
   })[c]);
 }
 
-// ---------- boot ----------
 fetch(CSV_URL)
   .then(r => {
     if (!r.ok) throw new Error('CSV fetch failed: ' + r.status);
