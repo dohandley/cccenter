@@ -21,3 +21,17 @@ pick_date,player_name,team,game,prop_type,book,open_price,open_implied_prob,ob_p
 2026-05-07,Yandy Diaz,tb,tb@bos,TB_O1.5,Novig,111,47.39,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-08T13:00:00Z,,,Diaz 2H incl 2B = 3 TB; OB game_stats row missing
 2026-05-07,Marcus Semien,nym,nym@col,TB_O1.5,BetMGM,105,48.78,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,,,Semien 0-2 2BB 0TB; OB game_stats row missing
 2026-05-07,Byron Buxton,min,min@wsh,TB_O1.5,Novig,100,50.00,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,,,Buxton 1H/1TB
+2026-05-08,Aaron Judge,nyy,nyy@mil,HR_O0.5,Novig,285,25.97,0,1,1,,A,,,,,,,,1,ob,,0.50,,,,,,OB-only Tier A; correlated w/ TB pick
+2026-05-08,Kyle Schwarber,phi,col@phi,HR_O0.5,Novig,298,25.13,0,1,1,,A,,,,,,,,1,ob,,0.50,,,,,,OB-only Tier A; vs COL pitching at CBP
+2026-05-08,Munetaka Murakami,cws,sea@cws,HR_O0.5,Fanduel,290,25.64,0,1,1,,A,,,,,,,,1,ob,,0.50,,,,,,OB-only Tier A
+2026-05-08,Yordan Alvarez,hou,hou@cin,HR_O0.5,ProphetX,286,25.91,0,1,1,,A,,,,,,,,1,ob,,0.50,,,,,,OB-only Tier A; correlated w/ TB pick
+2026-05-08,Juan Soto,nym,nym@ari,HR_O0.5,bet365,280,26.32,0,1,1,,A,,,,,,,,1,ob,,0.50,,,,,,OB-only Tier A; correlated w/ TB pick
+2026-05-08,Yordan Alvarez,hou,hou@cin,TB_O1.5,Novig,100,50.00,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only TB top-tier; correlates w/ HR
+2026-05-08,Yandy Diaz,tb,tb@bos,TB_O1.5,Novig,100,50.00,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only TB top-tier
+2026-05-08,Jackson Merrill,sd,stl@sd,TB_O1.5,BetMGM,100,50.00,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only TB top-tier
+2026-05-08,Bobby Witt Jr.,kc,det@kc,TB_O1.5,BetMGM,-110,52.38,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only TB top-tier; minus money override per user
+2026-05-08,Juan Soto,nym,nym@ari,TB_O1.5,BetOnline,-114,53.27,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only TB top-tier; correlates w/ HR; minus money override per user
+2026-05-08,Jose Ramirez,cle,min@cle,TB_O1.5,Novig,111,47.39,2,2,3,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only TB Tier A
+2026-05-08,Shea Langeliers,oak,oak@bal,TB_O1.5,BetMGM,110,47.62,2,2,3,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only TB Tier A
+2026-05-08,Aaron Judge,nyy,nyy@mil,TB_O1.5,Fanatics,125,44.44,1,2,3,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only TB borderline (p50=1); correlates w/ HR
+2026-05-08,Kyle Schwarber,phi,col@phi,TB_O1.5,theScore,150,40.00,1,2,3,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB-only TB borderline (p50=1); vs COL pitching; correlates w/ HR
