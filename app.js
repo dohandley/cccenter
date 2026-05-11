@@ -1,10 +1,10 @@
 /* cccenter — MLB picks tracker dashboard
    Reads picks_log.csv (committed alongside this file) and renders:
-     - header daily summary
-     - today's picks grouped by prop_type
-     - yesterday's results card (ROI excludes voids per bankroll_rules.md)
-     - cumulative stats (4 cards)
-     - collapsible history by date
+   - header daily summary
+   - today's picks grouped by prop_type
+   - most recent settled slate (was "yesterday")
+   - cumulative stats (4 cards)
+   - collapsible history by date
 */
 
 const UNIT_DOLLARS = 25;
@@ -58,6 +58,32 @@ const fmtDate = ymd => {
   const dt = new Date(Date.UTC(y, m-1, d));
   return dt.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 };
+// Real today's date in America/New_York as YYYY-MM-DD.
+// MLB days are ET-based, and the picks log is keyed on game date (ET).
+function todayInET() {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/New_York',
+    year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date());
+  const y = parts.find(p => p.type === 'year').value;
+  const m = parts.find(p => p.type === 'month').value;
+  const d = parts.find(p => p.type === 'day').value;
+  return y + '-' + m + '-' + d;
+}
+// Days between two YYYY-MM-DD strings (UTC math, no DST drift since we treat both as same TZ).
+function daysBetween(ymdA, ymdB) {
+  const [ay, am, ad] = ymdA.split('-').map(Number);
+  const [by, bm, bd] = ymdB.split('-').map(Number);
+  const a = Date.UTC(ay, am-1, ad);
+  const b = Date.UTC(by, bm-1, bd);
+  return Math.round((a - b) / 86400000);
+}
+function staleLabel(latestPickDate, today) {
+  const diff = daysBetween(today, latestPickDate);
+  if (diff <= 0) return '';
+  if (diff === 1) return '1 day ago';
+  return diff + ' days ago';
+}
 const propTypeMeta = {
   'HR_O0.5': { emoji: '⚾', label: 'Home Runs' },
   'TB_O1.5': { emoji: '📊', label: 'Total Bases Over 1.5' },
@@ -77,34 +103,68 @@ function render(picks) {
     document.querySelector('.header-meta').textContent = 'Waiting for first day of data.';
     return;
   }
+  const today = todayInET();
   const dates = [...new Set(picks.map(p => p.pick_date))].filter(Boolean).sort().reverse();
-  const todayDate = dates[0];
-  const yesterdayDate = dates[1];
-  const todayPicks = picks.filter(p => p.pick_date === todayDate);
-  const yesterdayPicks = yesterdayDate ? picks.filter(p => p.pick_date === yesterdayDate) : [];
-  renderHeader(todayDate, todayPicks);
-  renderToday(todayPicks);
-  renderYesterday(yesterdayDate, yesterdayPicks);
+  const latestPickDate = dates[0];
+  const todayPicks = picks.filter(p => p.pick_date === today);
+  // If today has picks, "yesterday's results" = the slate before today.
+  // If today has no picks, "most recent slate" = latestPickDate, and the prior-day card = the slate before that.
+  let priorSlateDate;
+  if (todayPicks.length > 0) {
+    priorSlateDate = dates.find(d => d < today);
+  } else {
+    priorSlateDate = dates.find(d => d < latestPickDate);
+  }
+  const priorSlatePicks = priorSlateDate ? picks.filter(p => p.pick_date === priorSlateDate) : [];
+  renderHeader(today, latestPickDate, todayPicks);
+  renderToday(today, latestPickDate, todayPicks, picks);
+  renderPriorSlate(priorSlateDate, priorSlatePicks);
   renderCumulative(picks);
-  renderHistory(picks, todayDate);
+  renderHistory(picks, today, latestPickDate);
 }
 
-function renderHeader(date, todayPicks) {
-  document.querySelector('.header-title').textContent = fmtDate(date);
-  const totalUnits = todayPicks.reduce((s, p) => s + (parseFloat(p.stake_units) || 0), 0);
-  const totalDollars = totalUnits * UNIT_DOLLARS;
-  const cap = (totalUnits / 10 * 100).toFixed(0);
-  document.querySelector('.header-meta').textContent =
-    todayPicks.length + ' live picks  ·  ' + totalUnits.toFixed(2) + 'u  ·  $' + totalDollars.toFixed(2) + '  ·  ' + cap + '% of daily cap';
+function renderHeader(today, latestPickDate, todayPicks) {
+  const titleEl = document.querySelector('.header-title');
+  const metaEl = document.querySelector('.header-meta');
+  if (todayPicks.length > 0) {
+    titleEl.textContent = fmtDate(today);
+    const totalUnits = todayPicks.reduce((s, p) => s + (parseFloat(p.stake_units) || 0), 0);
+    const totalDollars = totalUnits * UNIT_DOLLARS;
+    const cap = (totalUnits / 10 * 100).toFixed(0);
+    metaEl.textContent =
+      todayPicks.length + ' live picks · ' + totalUnits.toFixed(2) + 'u · $' + totalDollars.toFixed(2) + ' · ' + cap + '% of daily cap';
+  } else {
+    titleEl.textContent = fmtDate(today);
+    const stale = staleLabel(latestPickDate, today);
+    metaEl.textContent = 'No picks logged for today yet. Latest slate: ' + fmtDate(latestPickDate) + (stale ? ' (' + stale + ')' : '') + '.';
+  }
 }
 
-function renderToday(picks) {
+function renderToday(today, latestPickDate, todayPicks, allPicks) {
   const root = document.getElementById('today');
   root.innerHTML = '';
-  if (!picks.length) {
-    root.innerHTML = '<section><div class="section-head"><h2>Today</h2></div><div class="empty">No picks for today.</div></section>';
+  if (todayPicks.length > 0) {
+    renderPicksGroup(root, todayPicks);
     return;
   }
+  // No picks for today — show empty state, plus the most recent slate as a fallback
+  // so the dashboard isn't blank.
+  const stale = staleLabel(latestPickDate, today);
+  const empty = document.createElement('section');
+  empty.innerHTML = '<div class="section-head"><h2>Today</h2></div>' +
+    '<div class="empty">No picks for ' + fmtDate(today) + ' yet. Run <code>pick today</code> when ready.</div>';
+  root.appendChild(empty);
+  const recent = allPicks.filter(p => p.pick_date === latestPickDate);
+  if (recent.length) {
+    const sec = document.createElement('section');
+    sec.innerHTML = '<div class="section-head"><h2>📋 Most recent slate — ' + fmtDate(latestPickDate) +
+      (stale ? ' <span class="meta">(' + stale + ')</span>' : '') + '</h2></div>';
+    root.appendChild(sec);
+    renderPicksGroup(root, recent);
+  }
+}
+
+function renderPicksGroup(root, picks) {
   const groups = {};
   for (const p of picks) {
     if (!groups[p.prop_type]) groups[p.prop_type] = [];
@@ -146,11 +206,11 @@ function renderToday(picks) {
   }
 }
 
-function renderYesterday(date, picks) {
+function renderPriorSlate(date, picks) {
   const root = document.getElementById('yesterday');
   root.innerHTML = '';
   if (!date || !picks.length) {
-    root.innerHTML = '<div class="section-head"><h2>📈 Yesterday</h2></div><div class="empty">No prior day to settle.</div>';
+    root.innerHTML = '<div class="section-head"><h2>📈 Prior slate</h2></div><div class="empty">No prior day to settle.</div>';
     return;
   }
   const settled = picks.filter(p => p.result && p.result !== '');
@@ -167,18 +227,18 @@ function renderYesterday(date, picks) {
   const avgClv = clvVals.length ? (clvVals.reduce((a, b) => a + b, 0) / clvVals.length) : null;
 
   const cardClass = netUnits >= 0 ? 'yesterday-card' : 'yesterday-card negative';
-  let html = '<div class="section-head"><h2>📈 Yesterday — ' + fmtDate(date) + '</h2></div>';
+  let html = '<div class="section-head"><h2>📈 Prior slate — ' + fmtDate(date) + '</h2></div>';
   if (settled.length === 0) {
     html += '<div class="empty">' + picks.length + ' picks logged but not yet settled.</div>';
     root.innerHTML = html;
     return;
   }
   html += '<div class="' + cardClass + '">';
-  html += '<div class="yesterday-headline">' + fmtUnits(netUnits) + '  ·  ' + fmtDollars(netDollars) + '  ·  ROI ' + (roi >= 0 ? '+' : '') + roi.toFixed(2) + '%</div>';
+  html += '<div class="yesterday-headline">' + fmtUnits(netUnits) + ' · ' + fmtDollars(netDollars) + ' · ROI ' + (roi >= 0 ? '+' : '') + roi.toFixed(2) + '%</div>';
   html += '<div class="yesterday-sub">' + wins + 'W · ' + losses + 'L';
   if (pushes) html += ' · ' + pushes + ' Push';
   if (voids) html += ' · ' + voids + ' Void';
-  if (avgClv !== null) html += '  ·  Avg CLV ' + (avgClv >= 0 ? '+' : '') + avgClv.toFixed(0) + ' bp';
+  if (avgClv !== null) html += ' · Avg CLV ' + (avgClv >= 0 ? '+' : '') + avgClv.toFixed(0) + ' bp';
   html += '</div></div>';
 
   html += '<div class="settled-list">';
@@ -220,10 +280,14 @@ function renderCumulative(picks) {
   }
 }
 
-function renderHistory(picks, todayDate) {
+function renderHistory(picks, today, latestPickDate) {
   const root = document.getElementById('history-list');
   root.innerHTML = '';
-  const dates = [...new Set(picks.map(p => p.pick_date))].filter(d => d && d !== todayDate).sort().reverse();
+  // Exclude both today and (if today is empty) the latest pick date already shown above.
+  const hide = new Set([today]);
+  const hasToday = picks.some(p => p.pick_date === today);
+  if (!hasToday) hide.add(latestPickDate);
+  const dates = [...new Set(picks.map(p => p.pick_date))].filter(d => d && !hide.has(d)).sort().reverse();
   if (!dates.length) {
     root.innerHTML = '<div class="empty">No history yet.</div>';
     return;
