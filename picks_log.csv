@@ -13,19 +13,19 @@ pick_date,player_name,team,game,prop_type,book,open_price,open_implied_prob,ob_p
 2026-05-05,Kevin McGonigle,det,det@cle,HRR_O1.5,Pinnacle,-135,57.45,1.92,,,0.32,S,,,,,,,,2,ob,,1.00,L,-1.00,2026-05-06T13:00:00Z,-135,0,multi-source HRR (OB+PF)
 2026-05-05,Bobby Witt Jr.,kc,cle@kc,HRR_O1.5,PrizePicks,-120,54.55,1.88,,,0.31,A,,,,,,,,1,ob,,0.50,W,0.42,2026-05-06T13:00:00Z,,,OB HRR edge; PrizePicks not in OB closing snapshot
 2026-05-07,Aaron Judge,nyy,tex@nyy,HR_O0.5,Novig,225,30.77,,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only Tier A; correlated w/ TB pick; settled late 5/13: 0 HR in 5 AB; closing snapshot N/A (~6d post-settle)
-2026-05-07,Kyle Schwarber,phi,oak@phi,HR_O0.5,Onyx Odds,292,25.51,,1,1,,A,,,,,,,,1,ob,,0.50,W,1.46,2026-05-13T15:00:00Z,,,OB-only Tier A; settled late 5/13: 1 HR, 5 TB vs Athletics; closing snapshot N/A (~6d post-settle)
+2026-05-07,Kyle Schwarber,phi,oak@phi,HR_O0.5,Onyx Odds,292,25.51,,1,1,,A,,,,,,,,1,ob,,0.50,W,1.46,2026-05-13T15:00:00Z,,,"OB-only Tier A; settled late 5/13: 1 HR, 5 TB vs Athletics; closing snapshot N/A (~6d post-settle)"
 2026-05-07,Nick Kurtz,oak,oak@phi,HR_O0.5,Pinnacle,289,25.71,,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only Tier A; rookie sample caveat; settled late 5/13: 0 HR in 4 AB; closing snapshot N/A (~6d post-settle)
-2026-05-07,Aaron Judge,nyy,tex@nyy,TB_O1.5,Fanatics,115,46.51,2,3,,0.5,S,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only; correlated w/ Judge HR; settled late 5/13: 1 TB (1H, 0XBH); closing snapshot N/A (~6d post-settle)
+2026-05-07,Aaron Judge,nyy,tex@nyy,TB_O1.5,Fanatics,115,46.51,2,3,,0.5,S,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,"OB-only; correlated w/ Judge HR; settled late 5/13: 1 TB (1H, 0XBH); closing snapshot N/A (~6d post-settle)"
 2026-05-07,Hunter Goodman,col,nym@col,TB_O1.5,BetOnline,109,47.85,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only Coors; settled late 5/13: 1 TB in 4 AB; closing snapshot N/A (~6d post-settle)
 2026-05-07,Shea Langeliers,oak,oak@phi,TB_O1.5,betPARX,112,47.17,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-13T15:00:00Z,,,OB-only; settled late 5/13: 5 TB (HR+double in 5 AB); closing snapshot N/A (~6d post-settle)
 2026-05-07,Yandy Diaz,tb,tb@bos,TB_O1.5,Novig,111,47.39,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-13T15:00:00Z,,,OB-only; settled late 5/13: 3 TB (2H including XBH); closing snapshot N/A (~6d post-settle)
 2026-05-07,Marcus Semien,nym,nym@col,TB_O1.5,BetMGM,105,48.78,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.53,2026-05-13T15:00:00Z,,,OB-only; only nym@col exposure; settled late 5/13: 8 TB in G1 of DH (4H w/ XBH); BetMGM grades G1 only; closing snapshot N/A (~6d post-settle)
 2026-05-07,Byron Buxton,min,min@wsh,TB_O1.5,Novig,100,50.00,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only; settled late 5/13: 1 TB in 5 AB; closing snapshot N/A (~6d post-settle)
 2026-05-13,Aaron Judge,nyy,nyy@bal,HR_O0.5,Pinnacle,249,28.65,,1,1,,S,62,20,40,35,29,,,1,ob;pf,,0.50,,,,,,EPF PASS (true 33.6%@4PA vs offered 28.7%); PF rating 62 not flagged; OB-only signal
-2026-05-13,Kyle Schwarber,phi,phi@bos,HR_O0.5,bet365,265,27.4,,1,1,,S,,,,,,,,1,ob;pf,,0.50,,,,,,EPF PASS (true 33.4%@4PA vs offered 27.4%); PF row not surfaced in HR-only top 30, treated as not-flagged
+2026-05-13,Kyle Schwarber,phi,phi@bos,HR_O0.5,bet365,265,27.4,,1,1,,S,,,,,,,,1,ob;pf,,0.50,,,,,,"EPF PASS (true 33.4%@4PA vs offered 27.4%); PF row not surfaced in HR-only top 30, treated as not-flagged"
 2026-05-13,Munetaka Murakami,cws,kc@cws,HR_O0.5,betPARX,340,22.73,,1,1,,S,,,,,,,,1,ob;pf,,0.50,,,,,,Not in top-20 EPF list (145 AB); .103 HR/AB small-sample suggests true ~28-32%; offered 22.7% implied; OB only
 2026-05-13,Ben Rice,nyy,nyy@bal,HR_O0.5,Pinnacle,311,24.33,,,,,,73,20,30,40,34,,,1,ob;pf,,0.50,,,,,,PF-only signal (OB p75/p90=0); PF 73 + season 34% HR-game rate; +311 implied 24.3%; speculative add
-2026-05-13,Aaron Judge,nyy,nyy@bal,TB_O1.5,Pinnacle,104,49.02,2,3,4,0.5,S,71,60,70,55,53,,,1,ob;pf,,0.50,,,,,,OB tier S (p50=2,p75=3,p90=4) + PF 71; correlated w/ Judge HR; plus-money
+2026-05-13,Aaron Judge,nyy,nyy@bal,TB_O1.5,Pinnacle,104,49.02,2,3,4,0.5,S,71,60,70,55,53,,,1,ob;pf,,0.50,,,,,,"OB tier S (p50=2,p75=3,p90=4) + PF 71; correlated w/ Judge HR; plus-money"
 2026-05-13,Sal Stewart,cin,wsh@cin,TB_O1.5,Fanatics,100,50.0,2,3,4,0.5,S,,,,,,,,1,ob,,0.50,,,,,,OB tier S; PF not flagged; cold-weather risk Cin?
 2026-05-13,Elly De La Cruz,cin,wsh@cin,TB_O1.5,Novig,109,47.85,2,3,3,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB tier A; correlated w/ Sal Stewart (same game stack)
 2026-05-13,Jarren Duran,bos,phi@bos,TB_O1.5,Novig,100,50.0,2,3,3,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB tier A; faces Andrew Painter (RHP)
