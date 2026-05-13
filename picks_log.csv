@@ -12,26 +12,23 @@ pick_date,player_name,team,game,prop_type,book,open_price,open_implied_prob,ob_p
 2026-05-05,Corey Seager,tex,tex@nyy,HRR_O1.5,Pinnacle,-125,55.56,1.78,,,0.3,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-06T13:00:00Z,,,OB HRR edge; price reconstructed
 2026-05-05,Kevin McGonigle,det,det@cle,HRR_O1.5,Pinnacle,-135,57.45,1.92,,,0.32,S,,,,,,,,2,ob,,1.00,L,-1.00,2026-05-06T13:00:00Z,-135,0,multi-source HRR (OB+PF)
 2026-05-05,Bobby Witt Jr.,kc,cle@kc,HRR_O1.5,PrizePicks,-120,54.55,1.88,,,0.31,A,,,,,,,,1,ob,,0.50,W,0.42,2026-05-06T13:00:00Z,,,OB HRR edge; PrizePicks not in OB closing snapshot
-2026-05-07,Aaron Judge,nyy,tex@nyy,HR_O0.5,Novig,225,30.77,,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,202,23,OB-only Tier A; correlated w/ TB pick
-2026-05-07,Kyle Schwarber,phi,oak@phi,HR_O0.5,Onyx Odds,292,25.51,,1,1,,A,,,,,,,,1,ob,,0.50,W,1.46,2026-05-08T13:00:00Z,,,OB-only Tier A; closing snapshot missing Onyx
-2026-05-07,Nick Kurtz,oak,oak@phi,HR_O0.5,Pinnacle,289,25.71,,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,,,played (1BB+lineout); 0 HR; closing snapshot missing
-2026-05-07,Aaron Judge,nyy,tex@nyy,TB_O1.5,Fanatics,115,46.51,2,3,,0.5,S,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,100,15,Judge 1H/1TB; OB-only correlated w/ HR pick
-2026-05-07,Hunter Goodman,col,nym@col,TB_O1.5,BetOnline,109,47.85,2,2,,0.5,A,,,,,,,,1,ob,,0.50,Void,0.00,2026-05-08T13:00:00Z,,,DNP; B. Sullivan started at C; stake refunded
-2026-05-07,Shea Langeliers,oak,oak@phi,TB_O1.5,betPARX,112,47.17,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-08T13:00:00Z,,,Langeliers 2H+HR=5TB
-2026-05-07,Yandy Diaz,tb,tb@bos,TB_O1.5,Novig,111,47.39,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-08T13:00:00Z,,,Diaz 2H incl 2B = 3 TB; OB game_stats row missing
-2026-05-07,Marcus Semien,nym,nym@col,TB_O1.5,BetMGM,105,48.78,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,,,Semien 0-2 2BB 0TB; OB game_stats row missing
-2026-05-07,Byron Buxton,min,min@wsh,TB_O1.5,Novig,100,50.00,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-08T13:00:00Z,,,Buxton 1H/1TB
-2026-05-08,Aaron Judge,nyy,nyy@mil,HR_O0.5,Novig,285,25.97,0,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,270,105,Judge 4AB 1H 0HR; OB-only Tier A; correlated w/ TB pick
-2026-05-08,Kyle Schwarber,phi,col@phi,HR_O0.5,Novig,298,25.13,0,1,1,,A,,,,,,,,1,ob,,0.50,W,1.49,2026-05-11T15:00:00Z,288,65,Schwarber 2-run HR 6th (200th as Phillie); OB-only Tier A
-2026-05-08,Munetaka Murakami,cws,sea@cws,HR_O0.5,Fanduel,290,25.64,0,1,1,,A,,,,,,,,1,ob,,0.50,W,1.45,2026-05-11T15:00:00Z,300,-64,Murakami 1 HR; negative CLV (market moved against)
-2026-05-08,Yordan Alvarez,hou,hou@cin,HR_O0.5,ProphetX,286,25.91,0,1,1,,A,,,,,,,,1,ob,,0.50,W,1.43,2026-05-11T15:00:00Z,291,-33,Alvarez 13th HR (2R 6th inning 115.9mph); negative CLV
-2026-05-08,Juan Soto,nym,nym@ari,HR_O0.5,bet365,280,26.32,0,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,,,Soto 0-4; closing snapshot missing
-2026-05-08,Yordan Alvarez,hou,hou@cin,TB_O1.5,Novig,100,50.00,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,W,0.50,2026-05-11T15:00:00Z,100,0,Alvarez 4AB 2H 1HR = 5TB
-2026-05-08,Yandy Diaz,tb,tb@bos,TB_O1.5,Novig,100,50.00,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,100,0,Diaz 0-3
-2026-05-08,Jackson Merrill,sd,stl@sd,TB_O1.5,BetMGM,100,50.00,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,-125,556,Merrill 4AB 1H = 1TB; CLV +556c (huge market move)
-2026-05-08,Bobby Witt Jr.,kc,det@kc,TB_O1.5,BetMGM,-110,52.38,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,W,0.45,2026-05-11T15:00:00Z,-115,111,Witt 3AB 1H 2B = 2TB; minus money override hit
-2026-05-08,Juan Soto,nym,nym@ari,TB_O1.5,BetOnline,-114,53.27,2,3,4,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,,,Soto 0-4; minus money override; closing snapshot missing
-2026-05-08,Jose Ramirez,cle,min@cle,TB_O1.5,Novig,111,47.39,2,2,3,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-11T15:00:00Z,111,0,Ramirez 4AB 2H 1RBI = 2TB
-2026-05-08,Shea Langeliers,oak,oak@bal,TB_O1.5,BetMGM,110,47.62,2,2,3,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,,,Langeliers 5AB 1H = 1TB; BetMGM TB not in close snapshot
-2026-05-08,Aaron Judge,nyy,nyy@mil,TB_O1.5,Fanatics,125,44.44,1,2,3,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,125,0,Judge 4AB 1H 0HR = 1TB
-2026-05-08,Kyle Schwarber,phi,col@phi,TB_O1.5,theScore,150,40.00,1,2,3,0.5,A,,,,,,,,1,ob,,0.50,W,0.75,2026-05-11T15:00:00Z,150,0,Schwarber 6AB 1H 1HR = 4TB; best-price spot of slate
+2026-05-07,Aaron Judge,nyy,tex@nyy,HR_O0.5,Novig,225,30.77,,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only Tier A; correlated w/ TB pick; settled late 5/13: 0 HR in 5 AB; closing snapshot N/A (~6d post-settle)
+2026-05-07,Kyle Schwarber,phi,oak@phi,HR_O0.5,Onyx Odds,292,25.51,,1,1,,A,,,,,,,,1,ob,,0.50,W,1.46,2026-05-13T15:00:00Z,,,OB-only Tier A; settled late 5/13: 1 HR, 5 TB vs Athletics; closing snapshot N/A (~6d post-settle)
+2026-05-07,Nick Kurtz,oak,oak@phi,HR_O0.5,Pinnacle,289,25.71,,1,1,,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only Tier A; rookie sample caveat; settled late 5/13: 0 HR in 4 AB; closing snapshot N/A (~6d post-settle)
+2026-05-07,Aaron Judge,nyy,tex@nyy,TB_O1.5,Fanatics,115,46.51,2,3,,0.5,S,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only; correlated w/ Judge HR; settled late 5/13: 1 TB (1H, 0XBH); closing snapshot N/A (~6d post-settle)
+2026-05-07,Hunter Goodman,col,nym@col,TB_O1.5,BetOnline,109,47.85,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only Coors; settled late 5/13: 1 TB in 4 AB; closing snapshot N/A (~6d post-settle)
+2026-05-07,Shea Langeliers,oak,oak@phi,TB_O1.5,betPARX,112,47.17,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-13T15:00:00Z,,,OB-only; settled late 5/13: 5 TB (HR+double in 5 AB); closing snapshot N/A (~6d post-settle)
+2026-05-07,Yandy Diaz,tb,tb@bos,TB_O1.5,Novig,111,47.39,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.56,2026-05-13T15:00:00Z,,,OB-only; settled late 5/13: 3 TB (2H including XBH); closing snapshot N/A (~6d post-settle)
+2026-05-07,Marcus Semien,nym,nym@col,TB_O1.5,BetMGM,105,48.78,2,2,,0.5,A,,,,,,,,1,ob,,0.50,W,0.53,2026-05-13T15:00:00Z,,,OB-only; only nym@col exposure; settled late 5/13: 8 TB in G1 of DH (4H w/ XBH); BetMGM grades G1 only; closing snapshot N/A (~6d post-settle)
+2026-05-07,Byron Buxton,min,min@wsh,TB_O1.5,Novig,100,50.00,2,2,,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-13T15:00:00Z,,,OB-only; settled late 5/13: 1 TB in 5 AB; closing snapshot N/A (~6d post-settle)
+2026-05-13,Aaron Judge,nyy,nyy@bal,HR_O0.5,Pinnacle,249,28.65,,1,1,,S,62,20,40,35,29,,,1,ob;pf,,0.50,,,,,,EPF PASS (true 33.6%@4PA vs offered 28.7%); PF rating 62 not flagged; OB-only signal
+2026-05-13,Kyle Schwarber,phi,phi@bos,HR_O0.5,bet365,265,27.4,,1,1,,S,,,,,,,,1,ob;pf,,0.50,,,,,,EPF PASS (true 33.4%@4PA vs offered 27.4%); PF row not surfaced in HR-only top 30, treated as not-flagged
+2026-05-13,Munetaka Murakami,cws,kc@cws,HR_O0.5,betPARX,340,22.73,,1,1,,S,,,,,,,,1,ob;pf,,0.50,,,,,,Not in top-20 EPF list (145 AB); .103 HR/AB small-sample suggests true ~28-32%; offered 22.7% implied; OB only
+2026-05-13,Ben Rice,nyy,nyy@bal,HR_O0.5,Pinnacle,311,24.33,,,,,,73,20,30,40,34,,,1,ob;pf,,0.50,,,,,,PF-only signal (OB p75/p90=0); PF 73 + season 34% HR-game rate; +311 implied 24.3%; speculative add
+2026-05-13,Aaron Judge,nyy,nyy@bal,TB_O1.5,Pinnacle,104,49.02,2,3,4,0.5,S,71,60,70,55,53,,,1,ob;pf,,0.50,,,,,,OB tier S (p50=2,p75=3,p90=4) + PF 71; correlated w/ Judge HR; plus-money
+2026-05-13,Sal Stewart,cin,wsh@cin,TB_O1.5,Fanatics,100,50.0,2,3,4,0.5,S,,,,,,,,1,ob,,0.50,,,,,,OB tier S; PF not flagged; cold-weather risk Cin?
+2026-05-13,Elly De La Cruz,cin,wsh@cin,TB_O1.5,Novig,109,47.85,2,3,3,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB tier A; correlated w/ Sal Stewart (same game stack)
+2026-05-13,Jarren Duran,bos,phi@bos,TB_O1.5,Novig,100,50.0,2,3,3,0.5,A,,,,,,,,1,ob,,0.50,,,,,,OB tier A; faces Andrew Painter (RHP)
+2026-05-13,Otto Lopez,mia,mia@min,TB_O1.5,BetMGM,115,46.51,2,3,3,0.5,A,75,60,70,50,54,,,2,ob;pf,,1.00,,,,,,OB+PF multi-source (PF rating 75); BetMGM only plus-money line
+2026-05-13,Bobby Witt Jr.,kc,kc@cws,TB_O1.5,BetOnline,100,50.0,2,2,3,0.5,B,71,100,70,50,54,,,1,ob;pf,,0.50,,,,,,OB tier B + PF 71 borderline; recent hot streak (L5 100%)
+2026-05-13,Mookie Betts,lad,sf@lad,TB_O1.5,BetMGM,110,47.62,2,2,3,0.5,B,,,,,,,,1,ob,,0.50,,,,,,OB tier B; SF@LAD; OB-only
