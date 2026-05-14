@@ -35,3 +35,15 @@ pick_date,player_name,team,game,prop_type,book,open_price,open_implied_prob,ob_p
 2026-05-08,Shea Langeliers,oak,oak@bal,TB_O1.5,BetMGM,110,47.62,2,2,3,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,,,Langeliers 5AB 1H = 1TB; BetMGM TB not in close snapshot
 2026-05-08,Aaron Judge,nyy,nyy@mil,TB_O1.5,Fanatics,125,44.44,1,2,3,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,125,0,Judge 4AB 1H 0HR = 1TB
 2026-05-08,Kyle Schwarber,phi,col@phi,TB_O1.5,theScore,150,40.00,1,2,3,0.5,A,,,,,,,,1,ob,,0.50,W,0.75,2026-05-11T15:00:00Z,150,0,Schwarber 6AB 1H 1HR = 4TB; best-price spot of slate
+2026-05-14,Hunter Goodman,col,col@pit,HR_O0.5,bet365,550,15.38,,,1,,A,63,,,,,green,22.2,2,"ob,pf,so",,1.00,,,,,,SO Best Bet ADV 22.2% + PF Rating 63
+2026-05-14,Ryan Jeffers,min,mia@min,HR_O0.5,bet365,650,13.33,0,0,1,,S,,,,,,orange,22.9,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
+2026-05-14,Brent Rooker,oak,stl@oak,HR_O0.5,bet365,500,16.67,0,0,1,,S,,,,,,orange,22.0,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
+2026-05-14,Royce Lewis,min,mia@min,HR_O0.5,bet365,700,12.50,0,0,1,,S,,,,,,orange,20.7,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
+2026-05-14,Zack Gelof,oak,stl@oak,HR_O0.5,bet365,750,11.76,0,0,1,,S,,,,,,orange,21.0,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
+2026-05-14,Carlos Cortes,oak,stl@oak,HR_O0.5,BetMGM,650,13.33,0,0,1,,S,,,,,,orange,18.2,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
+2026-05-14,Josh Bell,min,mia@min,HR_O0.5,Fanduel,800,11.11,0,0,1,,S,63,,,,,,,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + PF Rating 63
+2026-05-14,Marcell Ozuna,pit,col@pit,HR_O0.5,bet365,750,11.76,,,,,,,,,,,orange,23.0,1,"ob,pf,so",,0.50,,,,,,SO-only Best Bet ADV 23.0% (Coors)
+2026-05-14,Ian Happ,chc,chc@atl,HR_O0.5,BetMGM,675,12.90,,,,,,,,,,,orange,12.5,1,"ob,pf,so",,0.50,,,,,,SO-only Best Bet ADV 12.5%
+2026-05-14,Kyle Schwarber,phi,phi@bos,HR_O0.5,Fanduel,425,19.05,0,0,1,,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB-only EPF#3 clears (fair +208 req +232; offered +425)
+2026-05-14,Bobby Witt Jr.,kc,kc@cws,TB_O1.5,BetOnline,110,47.62,2,3,4,0.5,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB Tier A p75=3 plus-money
+2026-05-14,Yordan Alvarez,hou,sea@hou,TB_O1.5,BetMGM,115,46.51,2,3,4,0.5,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB Tier A p75=3 plus-money
