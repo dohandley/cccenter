@@ -48,3 +48,14 @@ pick_date,player_name,team,game,prop_type,book,open_price,open_implied_prob,ob_p
 2026-05-14,Bobby Witt Jr.,kc,kc@cws,TB_O1.5,BetOnline,110,47.62,2,3,4,0.5,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB Tier A p75=3 plus-money
 2026-05-14,Yordan Alvarez,hou,sea@hou,TB_O1.5,BetMGM,115,46.51,2,3,4,0.5,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB Tier A p75=3 plus-money
 2026-05-14,Brandon Lowe,pit,col@pit,HR_O0.5,Fanduel,470,17.54,0,0,1,,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB-only EPF#19 clears (fair +346 req +381; offered +470)
+2026-05-15,Ryan Waldschmidt,ari,ari@col,HR_O0.5,BetMGM,775,11.43,0,0,1,,S,,,,,,green,34.8,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO green tier ADV 34.8%
+2026-05-15,Edouard Julien,col,ari@col,HR_O0.5,BetMGM,700,12.50,0,0,1,,S,,,,,,orange,27.3,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 27.3%
+2026-05-15,Ezequiel Tovar,col,ari@col,HR_O0.5,BetMGM,700,12.50,0,0,1,,S,,,,,,orange,21.7,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 21.7%
+2026-05-15,Willi Castro,col,ari@col,HR_O0.5,BetMGM,750,11.76,0,0,1,,S,,,,,,orange,20.0,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 20.0%
+2026-05-15,Ryan Jeffers,min,mil@min,HR_O0.5,BetMGM,650,13.33,0,0,1,,S,,,,,,orange,18.2,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 18.2%
+2026-05-15,Troy Johnston,col,ari@col,HR_O0.5,BetMGM,700,12.50,0,0,1,,S,,,,,,orange,16.7,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 16.7%
+2026-05-15,Spencer Steer,cin,cin@cle,HR_O0.5,BetMGM,700,12.50,,,,,,83,,,,,orange,21.7,2,"ob,pf,so",,1.00,,,,,,PF Rating 83 + SO orange tier ADV 21.7%
+2026-05-15,Zack Gelof,oak,sf@oak,HR_O0.5,BetMGM,600,14.29,,,,,,84,,,,,orange,20.0,2,"ob,pf,so",,1.00,,,,,,PF Rating 84 + SO orange tier ADV 20.0%
+2026-05-15,Bobby Witt Jr.,kc,kc@stl,HRR_O1.5,BetOnline,-120,54.55,2.11,4.12,5.93,,S,84,,,,,,,2,"ob,pf,so",,1.00,,,,,,OB p50=2.11 (P[HRR>=2]~58%) + PF 84
+2026-05-15,Hunter Goodman,col,ari@col,HR_O0.5,BetMGM,300,25.00,0,0,1,,A,,,,,,orange,7.1,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier (lower ADV)
+2026-05-15,Yordan Alvarez,hou,tex@hou,HR_O0.5,Pinnacle,250,28.57,0,0,1,,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB p90=1 only; plus-money single-source
