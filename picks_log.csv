@@ -35,27 +35,32 @@ pick_date,player_name,team,game,prop_type,book,open_price,open_implied_prob,ob_p
 2026-05-08,Shea Langeliers,oak,oak@bal,TB_O1.5,BetMGM,110,47.62,2,2,3,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,,,Langeliers 5AB 1H = 1TB; BetMGM TB not in close snapshot
 2026-05-08,Aaron Judge,nyy,nyy@mil,TB_O1.5,Fanatics,125,44.44,1,2,3,0.5,A,,,,,,,,1,ob,,0.50,L,-0.50,2026-05-11T15:00:00Z,125,0,Judge 4AB 1H 0HR = 1TB
 2026-05-08,Kyle Schwarber,phi,col@phi,TB_O1.5,theScore,150,40.00,1,2,3,0.5,A,,,,,,,,1,ob,,0.50,W,0.75,2026-05-11T15:00:00Z,150,0,Schwarber 6AB 1H 1HR = 4TB; best-price spot of slate
-2026-05-14,Hunter Goodman,col,col@pit,HR_O0.5,bet365,550,15.38,,,1,,A,63,,,,,green,22.2,2,"ob,pf,so",,1.00,,,,,,SO Best Bet ADV 22.2% + PF Rating 63
-2026-05-14,Ryan Jeffers,min,mia@min,HR_O0.5,bet365,650,13.33,0,0,1,,S,,,,,,orange,22.9,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
-2026-05-14,Brent Rooker,oak,stl@oak,HR_O0.5,bet365,500,16.67,0,0,1,,S,,,,,,orange,22.0,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
-2026-05-14,Royce Lewis,min,mia@min,HR_O0.5,bet365,700,12.50,0,0,1,,S,,,,,,orange,20.7,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
-2026-05-14,Zack Gelof,oak,stl@oak,HR_O0.5,bet365,750,11.76,0,0,1,,S,,,,,,orange,21.0,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
-2026-05-14,Carlos Cortes,oak,stl@oak,HR_O0.5,BetMGM,650,13.33,0,0,1,,S,,,,,,orange,18.2,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier
-2026-05-14,Josh Bell,min,mia@min,HR_O0.5,Fanduel,800,11.11,0,0,1,,S,63,,,,,,,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + PF Rating 63
-2026-05-14,Marcell Ozuna,pit,col@pit,HR_O0.5,bet365,750,11.76,,,,,,,,,,,orange,23.0,1,"ob,pf,so",,0.50,,,,,,SO-only Best Bet ADV 23.0% (Coors)
-2026-05-14,Ian Happ,chc,chc@atl,HR_O0.5,BetMGM,675,12.90,,,,,,,,,,,orange,12.5,1,"ob,pf,so",,0.50,,,,,,SO-only Best Bet ADV 12.5%
-2026-05-14,Kyle Schwarber,phi,phi@bos,HR_O0.5,Fanduel,425,19.05,0,0,1,,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB-only EPF#3 clears (fair +208 req +232; offered +425)
-2026-05-14,Bobby Witt Jr.,kc,kc@cws,TB_O1.5,BetOnline,110,47.62,2,3,4,0.5,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB Tier A p75=3 plus-money
-2026-05-14,Yordan Alvarez,hou,sea@hou,TB_O1.5,BetMGM,115,46.51,2,3,4,0.5,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB Tier A p75=3 plus-money
-2026-05-14,Brandon Lowe,pit,col@pit,HR_O0.5,Fanduel,470,17.54,0,0,1,,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB-only EPF#19 clears (fair +346 req +381; offered +470)
-2026-05-15,Ryan Waldschmidt,ari,ari@col,HR_O0.5,BetMGM,775,11.43,0,0,1,,S,,,,,,green,34.8,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO green tier ADV 34.8%
-2026-05-15,Edouard Julien,col,ari@col,HR_O0.5,BetMGM,700,12.50,0,0,1,,S,,,,,,orange,27.3,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 27.3%
-2026-05-15,Ezequiel Tovar,col,ari@col,HR_O0.5,BetMGM,700,12.50,0,0,1,,S,,,,,,orange,21.7,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 21.7%
-2026-05-15,Willi Castro,col,ari@col,HR_O0.5,BetMGM,750,11.76,0,0,1,,S,,,,,,orange,20.0,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 20.0%
-2026-05-15,Ryan Jeffers,min,mil@min,HR_O0.5,BetMGM,650,13.33,0,0,1,,S,,,,,,orange,18.2,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 18.2%
-2026-05-15,Troy Johnston,col,ari@col,HR_O0.5,BetMGM,700,12.50,0,0,1,,S,,,,,,orange,16.7,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier ADV 16.7%
-2026-05-15,Spencer Steer,cin,cin@cle,HR_O0.5,BetMGM,700,12.50,,,,,,83,,,,,orange,21.7,2,"ob,pf,so",,1.00,,,,,,PF Rating 83 + SO orange tier ADV 21.7%
-2026-05-15,Zack Gelof,oak,sf@oak,HR_O0.5,BetMGM,600,14.29,,,,,,84,,,,,orange,20.0,2,"ob,pf,so",,1.00,,,,,,PF Rating 84 + SO orange tier ADV 20.0%
-2026-05-15,Bobby Witt Jr.,kc,kc@stl,HRR_O1.5,BetOnline,-120,54.55,2.11,4.12,5.93,,S,84,,,,,,,2,"ob,pf,so",,1.00,,,,,,OB p50=2.11 (P[HRR>=2]~58%) + PF 84
-2026-05-15,Hunter Goodman,col,ari@col,HR_O0.5,BetMGM,300,25.00,0,0,1,,A,,,,,,orange,7.1,2,"ob,pf,so",,1.00,,,,,,OB p90=1 + SO orange tier (lower ADV)
-2026-05-15,Yordan Alvarez,hou,tex@hou,HR_O0.5,Pinnacle,250,28.57,0,0,1,,A,,,,,,,,1,"ob,pf,so",,0.50,,,,,,OB p90=1 only; plus-money single-source
+2026-05-14,Hunter Goodman,col,col@pit,HR_O0.5,bet365,550,15.38,,,1,,A,63,,,,,green,22.2,2,"ob,pf,so",,1.00,L,-1,2026-05-15T13:00:00Z,,,SO Best Bet ADV 22.2% + PF Rating 63
+2026-05-14,Ryan Jeffers,min,mia@min,HR_O0.5,bet365,650,13.33,0,0,1,,S,,,,,,orange,22.9,2,"ob,pf,so",,1.00,L,-1,2026-05-15T13:00:00Z,,,OB p90=1 + SO orange tier
+2026-05-14,Brent Rooker,oak,stl@oak,HR_O0.5,bet365,500,16.67,0,0,1,,S,,,,,,orange,22.0,2,"ob,pf,so",,1.00,L,-1,2026-05-15T13:00:00Z,390,110,OB p90=1 + SO orange tier
+2026-05-14,Royce Lewis,min,mia@min,HR_O0.5,bet365,700,12.50,0,0,1,,S,,,,,,orange,20.7,2,"ob,pf,so",,1.00,L,-1,2026-05-15T13:00:00Z,,,OB p90=1 + SO orange tier
+2026-05-14,Zack Gelof,oak,stl@oak,HR_O0.5,bet365,750,11.76,0,0,1,,S,,,,,,orange,21.0,2,"ob,pf,so",,1.00,W,7.5,2026-05-15T13:00:00Z,750,0,OB p90=1 + SO orange tier
+2026-05-14,Carlos Cortes,oak,stl@oak,HR_O0.5,BetMGM,650,13.33,0,0,1,,S,,,,,,orange,18.2,2,"ob,pf,so",,1.00,L,-1,2026-05-15T13:00:00Z,,,OB p90=1 + SO orange tier
+2026-05-14,Josh Bell,min,mia@min,HR_O0.5,Fanduel,800,11.11,0,0,1,,S,63,,,,,,,2,"ob,pf,so",,1.00,L,-1,2026-05-15T13:00:00Z,,,OB p90=1 + PF Rating 63
+2026-05-14,Marcell Ozuna,pit,col@pit,HR_O0.5,bet365,750,11.76,,,,,,,,,,,orange,23.0,1,"ob,pf,so",,0.50,L,-0.5,2026-05-15T13:00:00Z,,,SO-only Best Bet ADV 23.0% (Coors)
+2026-05-14,Ian Happ,chc,chc@atl,HR_O0.5,BetMGM,675,12.90,,,,,,,,,,,orange,12.5,1,"ob,pf,so",,0.50,W,3.375,2026-05-15T13:00:00Z,,,SO-only Best Bet ADV 12.5%
+2026-05-14,Kyle Schwarber,phi,phi@bos,HR_O0.5,Fanduel,425,19.05,0,0,1,,A,,,,,,,,1,"ob,pf,so",,0.50,W,2.125,2026-05-15T13:00:00Z,390,35,OB-only EPF#3 clears (fair +208 req +232; offered +425)
+2026-05-14,Bobby Witt Jr.,kc,kc@cws,TB_O1.5,BetOnline,110,47.62,2,3,4,0.5,A,,,,,,,,1,"ob,pf,so",,0.50,L,-0.5,2026-05-15T13:00:00Z,-128,238,OB Tier A p75=3 plus-money
+2026-05-14,Yordan Alvarez,hou,sea@hou,TB_O1.5,BetMGM,115,46.51,2,3,4,0.5,A,,,,,,,,1,"ob,pf,so",,0.50,W,0.575,2026-05-15T13:00:00Z,,,OB Tier A p75=3 plus-money
+2026-05-14,Brandon Lowe,pit,col@pit,HR_O0.5,Fanduel,470,17.54,0,0,1,,A,,,,,,,,1,"ob,pf,so",,0.50,L,-0.5,2026-05-15T13:00:00Z,,,OB-only EPF#19 clears (fair +346 req +381; offered +470)
+2026-05-15,Ryan Waldschmidt,ari,ari@col,HR_O0.5,BetMGM,775,11.43,0,0,1,,S,,,,,,green,34.8,2,"ob,pf,so",,1.00,L,-1,2026-05-16T13:00:00Z,,,OB p90=1 + SO green tier ADV 34.8%
+2026-05-15,Edouard Julien,col,ari@col,HR_O0.5,BetMGM,700,12.50,0,0,1,,S,,,,,,orange,27.3,2,"ob,pf,so",,1.00,L,-1,2026-05-16T13:00:00Z,,,OB p90=1 + SO orange tier ADV 27.3%
+2026-05-15,Ezequiel Tovar,col,ari@col,HR_O0.5,BetMGM,700,12.50,0,0,1,,S,,,,,,orange,21.7,2,"ob,pf,so",,1.00,L,-1,2026-05-16T13:00:00Z,,,OB p90=1 + SO orange tier ADV 21.7%
+2026-05-15,Willi Castro,col,ari@col,HR_O0.5,BetMGM,750,11.76,0,0,1,,S,,,,,,orange,20.0,2,"ob,pf,so",,1.00,L,-1,2026-05-16T13:00:00Z,,,OB p90=1 + SO orange tier ADV 20.0%
+2026-05-15,Ryan Jeffers,min,mil@min,HR_O0.5,BetMGM,650,13.33,0,0,1,,S,,,,,,orange,18.2,2,"ob,pf,so",,1.00,L,-1,2026-05-16T13:00:00Z,,,OB p90=1 + SO orange tier ADV 18.2%
+2026-05-15,Troy Johnston,col,ari@col,HR_O0.5,BetMGM,700,12.50,0,0,1,,S,,,,,,orange,16.7,2,"ob,pf,so",,1.00,L,-1,2026-05-16T13:00:00Z,,,OB p90=1 + SO orange tier ADV 16.7%
+2026-05-15,Spencer Steer,cin,cin@cle,HR_O0.5,BetMGM,700,12.50,,,,,,83,,,,,orange,21.7,2,"ob,pf,so",,1.00,L,-1,2026-05-16T13:00:00Z,,,PF Rating 83 + SO orange tier ADV 21.7%
+2026-05-15,Zack Gelof,oak,sf@oak,HR_O0.5,BetMGM,600,14.29,,,,,,84,,,,,orange,20.0,2,"ob,pf,so",,1.00,L,-1,2026-05-16T13:00:00Z,,,PF Rating 84 + SO orange tier ADV 20.0%
+2026-05-15,Bobby Witt Jr.,kc,kc@stl,HRR_O1.5,BetOnline,-120,54.55,2.11,4.12,5.93,,S,84,,,,,,,2,"ob,pf,so",,1.00,W,0.833,2026-05-16T13:00:00Z,-120,0,OB p50=2.11 (P[HRR>=2]~58%) + PF 84
+2026-05-15,Hunter Goodman,col,ari@col,HR_O0.5,BetMGM,300,25.00,0,0,1,,A,,,,,,orange,7.1,2,"ob,pf,so",,1.00,W,3,2026-05-16T13:00:00Z,,,OB p90=1 + SO orange tier (lower ADV)
+2026-05-18,Matt McLain,cin,cin@phi,TB_O1.5,bet365,190,34.48,1,2,3,,A,64,,,,,green,31.0,3,"ob,pf,so",,1.5,,,,,,OB+PF L5 3.0 TB+SO GREEN ADV 31% (vs LHP Lodolo)
+2026-05-18,Shea Langeliers,oak,oak@laa,TB_O1.5,BetMGM,115,46.51,2,3,3,0.5,A,57,,,,,blue,,3,"ob,pf,so",,1.5,,,,,,OB A p75=3 + PF 57 + SO blue best-book; vs RHP .331
+2026-05-18,Byron Buxton,min,hou@min,TB_O1.5,Fanatics,105,48.78,2,3,4,0.5,A,65,,,,,,,2,"ob,pf,so",,1.0,,,,,,OB A + PF 65 L5=4.4 TB; SO no edge
+2026-05-18,Byron Buxton,min,hou@min,HR_O0.5,bet365,312,24.27,0,0,1,,A,67,,,,,,,2,"ob,pf,so",,1.0,,,,,,OB p90=1 + PF 67 L5=0.8 HR; SO no edge
+2026-05-18,Juan Soto,nym,nym@wsh,HR_O0.5,Pinnacle,263,27.55,0,1,1,,S,55,,,,,blue,,3,"ob,pf,so",,1.0,,,,,,OB S + PF 55 + SO blue best-book; vs RHP .333
+2026-05-18,Nick Kurtz,oak,oak@laa,HR_O0.5,betPARX,370,21.28,0,1,1,,S,,,,,,,,1,"ob,pf,so",,0.5,,,,,,"OB S longshot; PF no rating, SO no edge"
