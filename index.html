@@ -372,8 +372,7 @@ window.clr=()=>{if(!confirm('Clear ALL data (NBA + MLB)?'))return;S.days={};sv()
 // good data, so the board still renders if you're offline.
 const GH_BASE='https://raw.githubusercontent.com/dohandley/cccenter/main';
 const LIVE_SOURCES=[
-  `${GH_BASE}/picks_log_mlb.json`,           // raw MKB (primary)
-  `${GH_BASE}/picks_log_mlb_blended.json`,   // post-blend (optional)
+  `${GH_BASE}/picks_log_mlb.json`,           // raw MKB (only published source)
 ];
 window.refreshLive=async(opts={})=>{
   let okCount=0,failCount=0;
