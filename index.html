@@ -68,7 +68,19 @@ function fmtU(v,withSign=true){
 }
 // Toggle dollar/unit display (only flips if a unit size is set).
 window.toggleUnitMode=()=>{const sz=parseFloat(S.unitSize);if(!(sz>0)){toast('Enter a unit size first');return}S.dollarMode=!S.dollarMode;sv();render();};
-window.setUnitSize=v=>{S.unitSize=(v||'').replace(/[^0-9.]/g,'');if(!(parseFloat(S.unitSize)>0))S.dollarMode=false;sv();};
+window.setUnitSize=v=>{
+  S.unitSize=(v||'').replace(/[^0-9.]/g,'');
+  const sz=parseFloat(S.unitSize);
+  // Typing a valid size switches to dollar view live; clearing it reverts to units.
+  S.dollarMode = sz>0;
+  sv();
+  // Update the header chip in place (no full render — keeps the input focused).
+  const lbl=document.getElementById('unitLabel');
+  const val=document.getElementById('unitVal');
+  if(lbl) lbl.textContent = (S.dollarMode?'$':'Units');
+  if(val){const raw=parseFloat(val.getAttribute('data-uval'))||0; val.textContent=fmtU(raw);}
+};
+// On blur/Enter, do a full render so History & Performance tabs also reflect the size.
 window.commitUnitSize=()=>{render();};
 ld();document.documentElement.setAttribute('data-theme',S.theme||'light');
 // ═══ DEDUP ON LOAD: remove duplicate picks from prior bad imports ═══
@@ -136,7 +148,7 @@ function render(){const st=stats(),sp=SP[S.sp],sc=sC(),a=document.getElementById
   const themeIcon=S.theme==='dark'?'☀️':'🌙';
   const ds=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   const h=`<div class="hdr"><div class="hdr-in"><div class="logo-w"><img class="logo-mark" src="logo.png"><div><div class="logo-text"><span>Chasin Cheddar's</span> Command Center</div><div class="logo-date">${ds.toUpperCase()}</div></div></div>
-    <div class="hdr-r">${S.src!=='all'?`<div class="chip" style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber-text)">${S.src==='mkb'?'MKB':S.src==='simpleodds'?'SimpleOdds':'Blended'}</div>`:''}<div class="chip">W-L <span class="${st.roi>=0?'p':'n'}">${st.hits}-${st.total-st.hits}</span></div><div class="chip">ROI <span class="${st.roi>=0?'p':'n'}">${st.roi>=0?'+':''}${st.roi}%</span></div><div class="chip chip-tap" onclick="toggleUnitMode()" title="Tap to toggle units / dollars">${S.dollarMode&&parseFloat(S.unitSize)>0?'$':'Units'} <span class="${st.bbU>=0?'p':'n'}">${fmtU(st.bbU)}</span></div><input class="unit-inp" type="text" inputmode="decimal" placeholder="1u=$" value="${S.unitSize||''}" oninput="setUnitSize(this.value)" onblur="commitUnitSize()" onkeydown="if(event.key==='Enter')this.blur()" title="Set your unit size in dollars (press Enter to apply)"><div class="chip">Streak <span class="${st.stT==='W'?'p':'n'}">${st.stk}${st.stT||'—'}</span></div><button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">${themeIcon}</button><button class="btn" onclick="refreshLive()" title="Pull latest from GitHub">↻ Refresh</button><button class="btn" onclick="showImp()">Import</button></div></div></div>`;
+    <div class="hdr-r">${S.src!=='all'?`<div class="chip" style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber-text)">${S.src==='mkb'?'MKB':S.src==='simpleodds'?'SimpleOdds':'Blended'}</div>`:''}<div class="chip">W-L <span class="${st.roi>=0?'p':'n'}">${st.hits}-${st.total-st.hits}</span></div><div class="chip">ROI <span class="${st.roi>=0?'p':'n'}">${st.roi>=0?'+':''}${st.roi}%</span></div><div class="chip chip-tap" onclick="toggleUnitMode()" title="Tap to toggle units / dollars"><span id="unitLabel">${S.dollarMode&&parseFloat(S.unitSize)>0?'$':'Units'}</span> <span id="unitVal" data-uval="${st.bbU}" class="${st.bbU>=0?'p':'n'}">${fmtU(st.bbU)}</span></div><input class="unit-inp" type="text" inputmode="decimal" placeholder="1u=$" value="${S.unitSize||''}" oninput="setUnitSize(this.value)" onblur="commitUnitSize()" onkeydown="if(event.key==='Enter')this.blur()" title="Set your unit size in dollars (press Enter to apply)"><div class="chip">Streak <span class="${st.stT==='W'?'p':'n'}">${st.stk}${st.stT||'—'}</span></div><button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">${themeIcon}</button><button class="btn" onclick="refreshLive()" title="Pull latest from GitHub">↻ Refresh</button><button class="btn" onclick="showImp()">Import</button></div></div></div>`;
   const nav=`<div class="nav"><div class="nav-in">${Object.entries(SP).map(([k,v])=>`<button class="sp ${S.sp===k?'on':''}" onclick="setSp('${k}')">${v.e} ${v.l}${sc[k]?` <span class="badge">${sc[k]}</span>`:''}</button>`).join('')}<div class="ndiv"></div>${[['picks','Picks'],['history','History'],['performance','Performance'],['analysis','Analysis']].map(([id,l])=>`<button class="nt ${S.v===id?'on':''}" onclick="setV('${id}')">${l}</button>`).join('')}</div></div>`;
   a.innerHTML=h+nav+`<div class="body">${S.v==='picks'?pgP(st):S.v==='history'?pgH(st):S.v==='performance'?pgPf(st):pgA(st)}</div>`}
 window.setV=v=>{S.v=v;sv();render()};window.setSp=s=>{S.sp=s;sv();render()};
