@@ -95,6 +95,10 @@ const aS=()=>srcF(Object.values(S.days).flatMap(d=>sP(d.picks)));
 const rS=()=>aS().filter(p=>p.resolved);
 const tS=()=>srcF(sP((S.days[td()]||{picks:[]}).picks));
 const sC=()=>{const c={};Object.values(S.days).forEach(d=>(d.picks||[]).forEach(p=>{const s=p.sport||'nba';c[s]=(c[s]||0)+1}));return c};
+// Nav-badge count: best_bets only, so the badge matches the universe the W-L /
+// ROI header actually reports on. sC() (all picks incl. lotto) is still used by
+// the Clear-sport buttons, which genuinely remove everything.
+const sCB=()=>{const c={};Object.values(S.days).forEach(d=>(d.picks||[]).forEach(p=>{if((p.list||'best_bets')!=='best_bets')return;const s=p.sport||'nba';c[s]=(c[s]||0)+1}));return c};
 
 // ═══ NORMALIZE HELPERS FOR ROBUST MATCHING ═══
 // Lowercase, trim, collapse whitespace/underscores so "batter_total_bases" matches "Batter Total Bases"
@@ -144,7 +148,7 @@ function genD(){const nP=[{n:'Luka Doncic',g:'Mavs @ Lakers',t:'7:30 PM'},{n:'Ja
     days[ds]={picks,imported:Date.now()-d*864e5}}return days}
 
 let tT;function toast(m){clearTimeout(tT);document.querySelectorAll('.toast').forEach(e=>e.remove());const e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);tT=setTimeout(()=>e.remove(),3e3)}
-function render(){const st=stats(),sp=SP[S.sp],sc=sC(),a=document.getElementById('app');
+function render(){const st=stats(),sp=SP[S.sp],sc=sCB(),a=document.getElementById('app');
   const themeIcon=S.theme==='dark'?'☀️':'🌙';
   const ds=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   const h=`<div class="hdr"><div class="hdr-in"><div class="logo-w"><img class="logo-mark" src="logo.png"><div><div class="logo-text"><span>Chasin Cheddar's</span> Command Center</div><div class="logo-date">${ds.toUpperCase()}</div></div></div>
