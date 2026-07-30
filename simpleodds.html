@@ -61,9 +61,76 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) var(--bg)}body{backgroun
 .secth{font-weight:800;font-size:13px;color:var(--text);margin:20px 0 10px;display:flex;align-items:center;gap:8px;letter-spacing:-.02em}
 .secth .sub{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-4);font-weight:500;letter-spacing:0}
 .hint{font-size:10.5px;color:var(--text-4);line-height:1.55;margin-bottom:14px;font-family:'JetBrains Mono',monospace}
+.body{position:relative}.body::before{content:"";position:fixed;top:50%;left:50%;width:420px;height:420px;background:url(logo.png) center/contain no-repeat;transform:translate(-50%,-50%);opacity:.16;pointer-events:none;z-index:0}[data-theme="dark"] .body::before{opacity:.09}.body>*{position:relative;z-index:1}
 @media(max-width:900px){td.hm,th.hm{display:none}}
-@media(max-width:768px){.cg{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hdr-r .chip{display:none}.hdr-r .chip-tap{display:flex}.nav-in{overflow-x:auto}.ndiv{display:none}.pc-games{margin-left:0;width:100%;text-align:left}}
+@media(max-width:768px){.cg{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.nav-in{overflow-x:auto}.ndiv{display:none}}
 @media(max-width:500px){td.hs,th.hs{display:none}.fbar{gap:3px}.body{padding:14px 16px 60px}.stats{grid-template-columns:1fr 1fr}.pf-grid{grid-template-columns:repeat(2,1fr)}}
+/* ═══ MOBILE REFINEMENTS ═══════════════════════════════════════════════
+   Mirrors the pass on index.html so the two boards feel identical on a
+   phone, plus rules for this page's own components (parlay cards, leg
+   tables). Kept as one block so desktop styling is untouched. */
+@media(max-width:768px){
+  /* iOS zooms the viewport when a focused input is under 16px. */
+  .sinp,.unit-inp{font-size:16px}
+  .sinp{width:100%}
+  .hdr-in{padding:10px 14px;gap:8px}
+  .logo-mark{width:40px;height:40px}
+  .logo-text{font-size:.88rem}
+  /* Header controls ran past a 390px viewport and scrolled the whole page
+     sideways. Wrap them onto their own row and scroll that row instead.
+     Unlike index.html the W-L/ROI chips stay visible here — the record is
+     the point of this board, and the scrolling row gives them room. */
+  .hdr-in{flex-wrap:wrap;row-gap:6px}
+  .hdr-r{width:100%;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;padding-bottom:2px}
+  .hdr-r::-webkit-scrollbar{display:none}
+  .hdr-r>*{flex:0 0 auto}
+  .nav-in{padding:0 14px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .nav-in::-webkit-scrollbar{display:none}
+  .sp,.nt{white-space:nowrap;flex:0 0 auto}
+  .body::before{width:240px;height:240px;opacity:.10}
+  /* Roomier tap targets. */
+  .fb{padding:9px 12px;font-size:12px}
+  .btn{padding:9px 13px;font-size:12px}
+  .theme-btn{width:38px;height:38px}
+  /* Parlay card header: the game list can't sit inline at this width. */
+  .pc-games{margin-left:0;width:100%;text-align:left}
+  .pc-h{padding:10px 12px;gap:8px}
+}
+@media(max-width:500px){
+  .lb td,.tw td{padding:9px 8px}
+  .lb th,.tw th{padding:6px 8px;font-size:8.5px;letter-spacing:.08em}
+  .detail-row td{padding:7px 8px!important}
+  .pn{font-size:12px}
+  .pg{font-size:9px}
+  .pp{font-size:10.5px;padding:3px 6px}
+  .lb-h{padding:10px 12px}
+  .lb-t{font-size:13px}
+  .st{padding:12px 13px}
+  .st-v{font-size:1.3rem}
+  .fbar{row-gap:6px}
+  .fl{width:100%}
+  /* Same overflow trap index.html hit: .bar-c uses flex:1, and flex items
+     won't shrink below their content, so 14 bars demand ~500px inside a
+     ~325px card and escape it, scrolling the whole document sideways.
+     Fixed basis + scroll within the chart. */
+  .bar-chart{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding-bottom:4px;height:96px}
+  .bar-chart::-webkit-scrollbar{display:none}
+  .bar-c{flex:0 0 38px;min-width:0}
+  .bar-v{font-size:8px}
+  .bar-l{font-size:8px}
+  /* Belt-and-braces: nothing inside a card widens the page. */
+  .card,.ch,.pc{overflow-x:hidden}
+  /* Leg rows: drop to player + prop + price, and let long props wrap. */
+  .pc-legs td{padding:8px 10px;font-size:12px}
+  .legno{width:22px;font-size:9px}
+  .pc-odds{font-size:14px}
+  .pc-h{gap:6px}
+  .est{font-size:7.5px;padding:2px 5px}
+  /* Performance's inline 2-col grids are fine at this width; the 4-col
+     homer summary is not. */
+  .pf-grid{grid-template-columns:repeat(2,1fr)}
+  .secth{flex-wrap:wrap;gap:6px}
+}
 </style>
 </head>
 <body>
