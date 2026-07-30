@@ -90,6 +90,18 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) var(--bg)}body{backgroun
   /* Stack the filter bar's search below the chips instead of squeezing it. */
   .fbar{row-gap:6px}
   .fl{width:100%}
+  /* Bar charts were the Performance tab's page-breaker. .bar-c uses flex:1,
+     and flex items default to min-width:auto — they refuse to shrink below
+     their content, and the value label ("+$1240") can't wrap. 14 bars then
+     demand ~500px inside a ~325px card, and .card has no overflow rule, so it
+     escaped and scrolled the entire document sideways (clipping the left edge
+     of every section). Give bars a fixed basis and scroll within the chart. */
+  .bar-chart{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding-bottom:4px}
+  .bar-chart::-webkit-scrollbar{display:none}
+  .bar-c{flex:0 0 38px;min-width:0}
+  .bar-v{font-size:8px}
+  /* Belt-and-braces: nothing inside a card should be able to widen the page. */
+  .card,.ch{overflow-x:hidden}
   /* Charts: keep bars legible rather than hair-thin. */
   .bar-chart{height:96px}
   .bar-l{font-size:8px}
@@ -296,9 +308,9 @@ function pgPf(st){const sp=SP[S.sp];if(!st.allDec)return`<div class="card" style
 
   // ROW 4: DAILY BREAKDOWN TABLE
   const sortedDayKeys=Object.keys(st.dayU).sort().reverse();
-  const dayRows=sortedDayKeys.map(d=>{const dy=st.dayU[d];const r=dy.dec?Math.round(dy.hits/dy.dec*100):0;return`<tr class="day-row" style="cursor:default"><td style="font-weight:600;white-space:nowrap">${fD(d)}</td><td style="text-align:center">${dy.picks}</td><td style="text-align:center">${dy.hits}</td><td style="text-align:center">${dy.miss}</td><td style="text-align:center;color:${rc(r)};font-weight:700">${dy.dec?r+'%':'—'}</td><td style="text-align:center;font-weight:700;color:${uc(dy.u)};font-family:'JetBrains Mono',monospace">${uFmt(dy.u)}</td></tr>`}).join('');
+  const dayRows=sortedDayKeys.map(d=>{const dy=st.dayU[d];const r=dy.dec?Math.round(dy.hits/dy.dec*100):0;return`<tr class="day-row" style="cursor:default"><td style="font-weight:600;white-space:nowrap">${fD(d)}</td><td style="text-align:center">${dy.picks}</td><td class="hs" style="text-align:center">${dy.hits}</td><td class="hs" style="text-align:center">${dy.miss}</td><td style="text-align:center;color:${rc(r)};font-weight:700">${dy.dec?r+'%':'—'}</td><td style="text-align:center;font-weight:700;color:${uc(dy.u)};font-family:'JetBrains Mono',monospace">${uFmt(dy.u)}</td></tr>`}).join('');
   const dailyBreakdown=`<div class="card"><div class="ct" style="margin-bottom:12px">📅 Daily Breakdown</div>
-    <div class="tw"><table><thead><tr><th>Date</th><th style="text-align:center">Picks</th><th style="text-align:center">Hits</th><th style="text-align:center">Miss</th><th style="text-align:center">Rate</th><th style="text-align:center">Units</th></tr></thead><tbody>${dayRows}</tbody></table></div></div>`;
+    <div class="tw"><table><thead><tr><th>Date</th><th style="text-align:center">Picks</th><th class="hs" style="text-align:center">Hits</th><th class="hs" style="text-align:center">Miss</th><th style="text-align:center">Rate</th><th style="text-align:center">Units</th></tr></thead><tbody>${dayRows}</tbody></table></div></div>`;
 
   // ROW 5: DAILY UNITS BAR CHART
   const plDays=Object.keys(st.dayU).sort().slice(-14);
