@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>SimpleOdds · Chasin Cheddar's Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root,[data-theme="light"]{--bg:#e8e6e1;--surface:#f0eeea;--surface-2:#e8e6e1;--surface-3:#e3e1dc;--border:#d4d0c8;--border-h:#c0bbb2;--text:#1a1d26;--text-2:#3d4250;--text-3:#6b7280;--text-4:#9ca3af;--ring:rgba(0,0,0,.02);--shadow:0 1px 2px rgba(0,0,0,.05);--shadow-md:0 2px 8px rgba(0,0,0,.08);--green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;--green-text:#15803d;--red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;--red-text:#b91c1c;--amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fde68a;--amber-text:#92400e;--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;--blue-text:#1d4ed8;--purple:#7c3aed;--over:#2563eb;--under:#b8860b;--conf:#16a34a;--gold:#b8860b;--gold-bg:#fdf6e3;--gold-border:#e8d080;--gold-text:#8b6914;--nba:#ea580c;--mlb:#dc2626}
+[data-theme="dark"]{--bg:#111318;--surface:#191c22;--surface-2:#21252c;--surface-3:#15171c;--border:#282d36;--border-h:#363c48;--text:#dce0e8;--text-2:#a8b0bc;--text-3:#707a8a;--text-4:#4a5464;--ring:rgba(255,255,255,.03);--shadow:0 1px 2px rgba(0,0,0,.3);--shadow-md:0 2px 8px rgba(0,0,0,.4);--green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.18);--green-text:#4ade80;--red:#f87171;--red-bg:rgba(248,113,113,.1);--red-border:rgba(248,113,113,.18);--red-text:#f87171;--amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.18);--amber-text:#fbbf24;--blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.18);--blue-text:#60a5fa;--over:#60a5fa;--under:#fbbf24;--conf:#4ade80;--gold:#fbbf24;--gold-bg:rgba(251,191,36,.1);--gold-border:rgba(251,191,36,.18);--gold-text:#fbbf24;--nba:#fb923c;--mlb:#f87171}
+html{scrollbar-width:thin;scrollbar-color:var(--border) var(--bg)}body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;min-height:100vh;transition:background .2s,color .2s}::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}::selection{background:rgba(22,163,74,.15)}[data-theme="dark"] ::selection{background:rgba(74,222,128,.2)}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;transition:background .2s,border-color .2s}.hdr-in{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;gap:12px}.logo-w{display:flex;align-items:center;gap:8px;text-decoration:none}.logo-mark{width:52px;height:52px;border-radius:8px;object-fit:contain}.logo-text{font-size:.95rem;font-weight:800;color:var(--text);letter-spacing:-.03em}.logo-text span{color:var(--green-text)}.logo-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-4);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}.hdr-r{display:flex;align-items:center;gap:6px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:4px 10px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;gap:4px;color:var(--text-3);transition:all .2s;white-space:nowrap}.chip .p{color:var(--green-text);font-weight:700}.chip .n{color:var(--red-text);font-weight:700}
+.chip-tap{cursor:pointer;user-select:none}.chip-tap:hover{border-color:var(--green-text);background:var(--surface)}.chip-tap:active{transform:scale(.96)}
+.unit-inp{font-family:'JetBrains Mono',monospace;font-size:10.5px;width:54px;padding:4px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);outline:none;transition:all .2s}.unit-inp:focus{border-color:var(--green-text)}.unit-inp::placeholder{color:var(--text-4)}
+.btn{padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);font-weight:600;font-size:11px;cursor:pointer;font-family:'Manrope',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:4px;text-decoration:none}.btn:hover{border-color:var(--border-h);background:var(--surface-2)}.btn:active{transform:scale(.97)}.btn-p{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700}.btn-p:hover{opacity:.85}
+.theme-btn{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;color:var(--text-3)}.theme-btn:hover{border-color:var(--border-h);background:var(--surface-2)}
+.nav{background:var(--surface);border-bottom:1px solid var(--border);transition:all .2s}.nav-in{max-width:1140px;margin:0 auto;display:flex;align-items:center;padding:0 24px;gap:0}.sp{padding:9px 14px;border:none;background:transparent;color:var(--text-3);cursor:pointer;font-weight:700;font-size:12.5px;font-family:'Manrope',sans-serif;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:5px}.sp.on{color:var(--text);border-bottom-color:var(--green)}.sp:hover:not(.on){color:var(--text-2)}.sp .badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;padding:1px 5px;border-radius:4px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-3)}.ndiv{width:1px;height:16px;background:var(--border);margin:0 6px}.nt{padding:9px 12px;border:none;background:transparent;color:var(--text-4);cursor:pointer;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-family:'Manrope',sans-serif;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}.nt.on{color:var(--text);border-bottom-color:var(--green)}.nt:hover:not(.on){color:var(--text-2)}
+.body{max-width:1140px;margin:0 auto;padding:20px 24px 80px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}.st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;transition:all .2s}.st:hover{box-shadow:var(--shadow-md)}.st-l{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4);margin-bottom:6px;font-family:'JetBrains Mono',monospace}.st-v{font-size:1.5rem;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.03em}.st-s{font-size:10px;color:var(--text-4);margin-top:4px;font-family:'JetBrains Mono',monospace}
+.fbar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;align-items:center}.fb{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface);color:var(--text-3);cursor:pointer;font-size:11px;font-weight:600;font-family:'Manrope',sans-serif;transition:all .12s}.fb.on{background:var(--text);color:var(--bg);border-color:var(--text)}.fb:hover:not(.on){border-color:var(--border-h);color:var(--text-2)}.fl{font-size:9px;font-weight:700;color:var(--text-4);letter-spacing:.14em;font-family:'JetBrains Mono',monospace;text-transform:uppercase}.fdot{color:var(--border-h);font-size:10px;margin:0 2px}.sinp{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:5px 9px;color:var(--text);font-size:11.5px;font-family:'Manrope',sans-serif;width:140px;transition:all .15s}.sinp:focus{outline:none;border-color:var(--text)}.sinp::placeholder{color:var(--text-4)}
+.lb{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;background:var(--surface);transition:all .2s}.lb-h{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:var(--surface-2)}.lb-t{font-weight:800;font-size:14px;color:var(--text);display:flex;align-items:center;gap:6px;letter-spacing:-.02em}.lb-s{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-4)}.lb table{width:100%;border-collapse:collapse}.lb th{text-align:left;padding:6px 12px;color:var(--text-4);font-size:9px;text-transform:uppercase;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;font-weight:600;border-bottom:1px solid var(--border);background:var(--surface-3)}.lb td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;transition:background .1s}.lb tr:last-child td{border-bottom:none}.lb tr:hover td{background:var(--ring)}
+.rk{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;font-weight:800;font-size:10px}.rk-1{background:var(--amber-bg);color:var(--amber-text);border:1px solid var(--amber-border)}.rk-2{background:var(--surface-2);color:var(--text-3);border:1px solid var(--border)}
+.pn{font-weight:700;color:var(--text);font-size:13px;line-height:1.2}.pg{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-4);margin-top:1px}.pp{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace}.pp-o{background:var(--blue-bg);color:var(--blue-text);border:1px solid var(--blue-border)}.pp-u{background:var(--gold-bg);color:var(--gold-text);border:1px solid var(--gold-border)}.pp .ln{color:var(--text);font-weight:800}
+.ev{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11.5px}.evh{color:var(--green-text)}.evw{color:var(--amber-text)}.evc{color:var(--text-2)}
+.gr{font-weight:800;font-size:10.5px;padding:3px 8px;border-radius:5px;white-space:nowrap}.gs{background:var(--amber-bg);color:var(--amber-text);border:1px solid var(--amber-border)}.ga{background:var(--green-bg);color:var(--green-text);border:1px solid var(--green-border)}.gb{background:var(--blue-bg);color:var(--blue-text);border:1px solid var(--blue-border)}.gc{background:var(--surface-2);color:var(--text-4);border:1px solid var(--border)}
+.tw{overflow-x:auto;border-radius:8px;border:1px solid var(--border);background:var(--surface)}.tw table{width:100%;border-collapse:collapse;font-size:13px}.tw th{text-align:left;padding:7px 12px;color:var(--text-4);font-size:9px;text-transform:uppercase;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;font-weight:600;border-bottom:1px solid var(--border);background:var(--surface-3)}.tw td{padding:9px 12px;border-bottom:1px solid var(--border)}.tw tr:hover td{background:var(--ring)}.day-row{cursor:pointer}.day-row:hover td{background:var(--surface-2)!important}.detail-row td{padding:7px 12px!important;font-size:12px;border-bottom:1px solid var(--border)!important;background:var(--surface-3)}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}.ch{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;transition:all .2s}.ct{font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--text-4);margin-bottom:12px;font-family:'JetBrains Mono',monospace}.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px}
+.bar-chart{display:flex;align-items:flex-end;gap:4px;height:110px;padding-top:8px}.bar-c{display:flex;flex-direction:column;align-items:center;flex:1;gap:3px}.bar{border-radius:3px 3px 0 0;min-height:3px;width:100%;transition:height .4s}.bar-l{font-size:8.5px;color:var(--text-4);font-family:'JetBrains Mono',monospace}.bar-v{font-size:9px;color:var(--text);font-family:'JetBrains Mono',monospace;font-weight:700}
+.pf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}.pf-stat{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;text-align:center;transition:all .2s}.pf-stat:hover{box-shadow:var(--shadow-md)}.pf-stat-l{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4);margin-bottom:4px;font-family:'JetBrains Mono',monospace}.pf-stat-v{font-size:1.25rem;font-weight:800;color:var(--text);letter-spacing:-.02em}
+.callout{border-radius:6px;padding:10px 12px;font-size:11px;margin-bottom:12px;border:1px solid var(--amber-border);background:var(--amber-bg);color:var(--amber-text);font-weight:500;line-height:1.5}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:8px;font-weight:700;font-size:12px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:300;max-width:380px;text-align:center;animation:ti .2s ease;background:var(--text);color:var(--bg)}@keyframes ti{from{transform:translateX(-50%) translateY(8px);opacity:0}to{transform:translateX(-50%);opacity:1}}
+
+/* ── SimpleOdds-specific ─────────────────────────────────────────────────── */
+.pc{border:1px solid var(--border);border-radius:8px;background:var(--surface);margin-bottom:10px;overflow:hidden;transition:all .2s}.pc:hover{box-shadow:var(--shadow-md)}
+.pc-h{padding:11px 14px;display:flex;align-items:center;gap:10px;background:var(--surface-2);border-bottom:1px solid var(--border);cursor:pointer;flex-wrap:wrap}
+.pc-odds{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:15px;color:var(--green-text);letter-spacing:-.02em}
+.pc-book{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--surface-3);border:1px solid var(--border);color:var(--text-2)}
+.pc-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-4);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pc-games{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-3);margin-left:auto;text-align:right}
+.est{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;background:var(--amber-bg);color:var(--amber-text);padding:2px 6px;border-radius:3px;border:1px solid var(--amber-border);letter-spacing:.06em;white-space:nowrap}
+.pc-legs{width:100%;border-collapse:collapse}
+.pc-legs td{padding:8px 14px;border-bottom:1px solid var(--border);font-size:12.5px}
+.pc-legs tr:last-child td{border-bottom:none}
+.legno{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-4);width:28px}
+.od{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;color:var(--text)}
+.res{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.04em}
+.res-w{background:var(--green-bg);color:var(--green-text);border:1px solid var(--green-border)}
+.res-l{background:var(--red-bg);color:var(--red-text);border:1px solid var(--red-border)}
+.res-v{background:var(--amber-bg);color:var(--amber-text);border:1px solid var(--amber-border)}
+.res-p{background:var(--surface-2);color:var(--text-4);border:1px solid var(--border)}
+.tierpill{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.06em}
+.tp-parlay{background:var(--green-bg);color:var(--green-text);border:1px solid var(--green-border)}
+.tp-sgp{background:var(--blue-bg);color:var(--blue-text);border:1px solid var(--blue-border)}
+.tp-sgpplus{background:var(--gold-bg);color:var(--gold-text);border:1px solid var(--gold-border)}
+.tp-hr{background:var(--red-bg);color:var(--red-text);border:1px solid var(--red-border)}
+.empty{text-align:center;padding:48px 20px;color:var(--text-4);font-size:13px}
+.empty-e{font-size:2rem;margin-bottom:10px}
+.secth{font-weight:800;font-size:13px;color:var(--text);margin:20px 0 10px;display:flex;align-items:center;gap:8px;letter-spacing:-.02em}
+.secth .sub{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-4);font-weight:500;letter-spacing:0}
+.hint{font-size:10.5px;color:var(--text-4);line-height:1.55;margin-bottom:14px;font-family:'JetBrains Mono',monospace}
+@media(max-width:900px){td.hm,th.hm{display:none}}
+@media(max-width:768px){.cg{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hdr-r .chip{display:none}.hdr-r .chip-tap{display:flex}.nav-in{overflow-x:auto}.ndiv{display:none}.pc-games{margin-left:0;width:100%;text-align:left}}
+@media(max-width:500px){td.hs,th.hs{display:none}.fbar{gap:3px}.body{padding:14px 16px 60px}.stats{grid-template-columns:1fr 1fr}.pf-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// SimpleOdds board — standalone. Reads simpleodds_log.json from the repo.
+// Deliberately shares NOTHING with index.html: own localStorage key, own
+// state, own math. Nothing here can affect the MKB numbers.
+// ═══════════════════════════════════════════════════════════════════════════
+const LS='ccso1';
+const GH_BASE='https://raw.githubusercontent.com/dohandley/cccenter/main';
+const SRC=`${GH_BASE}/simpleodds_log.json`;
+
+let S={theme:'light',v:'today',tier:'all',hrFilter:'all',hrSort:'edge',q:'',
+       unitSize:'',dollarMode:false,data:null};
+
+function ld(){try{const d=JSON.parse(localStorage.getItem(LS));if(d)S={...S,...d}}catch(e){}}
+function sv(){
+  const {data,...rest}=S;
+  try{localStorage.setItem(LS,JSON.stringify({...rest,data}))}catch(e){
+    // Payload can exceed the quota once history builds; keep prefs, drop data.
+    try{localStorage.setItem(LS,JSON.stringify(rest))}catch(e2){}
+  }
+}
+
+// ── formatting ─────────────────────────────────────────────────────────────
+const fO=v=>(v===null||v===undefined||v==='')?'—':(v>0?`+${v}`:`${v}`);
+const fD=(d,s)=>{const t=new Date(d+'T12:00:00');return s?t.toLocaleDateString('en-US',{month:'short',day:'numeric'}):t.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct=v=>v==null?'—':`${v>0?'+':''}${Number(v).toFixed(1)}%`;
+
+function fmtU(v,withSign=true){
+  const n=Number(v)||0,sz=parseFloat(S.unitSize);
+  if(S.dollarMode&&sz>0){
+    const d=n*sz,sign=d>=0?'+':'-',abs=Math.abs(d);
+    return `${withSign?sign:''}$${abs>=100?abs.toFixed(0):abs.toFixed(2)}`;
+  }
+  return `${withSign&&n>=0?'+':''}${n.toFixed(2)}u`;
+}
+window.toggleUnitMode=()=>{const sz=parseFloat(S.unitSize);if(!(sz>0)){toast('Enter a unit size first');return}S.dollarMode=!S.dollarMode;sv();render()};
+window.setUnitSize=v=>{S.unitSize=v;sv()};
+window.commitUnitSize=()=>{if(!(parseFloat(S.unitSize)>0))S.dollarMode=false;sv();render()};
+
+// American odds -> profit on a 1u stake.
+const prof=o=>{const n=Number(o);if(!n)return 0;return n>0?n/100:100/Math.abs(n)};
+
+let tT;function toast(m){clearTimeout(tT);document.querySelectorAll('.toast').forEach(e=>e.remove());const e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);tT=setTimeout(()=>e.remove(),3e3)}
+
+// ── tier helpers ───────────────────────────────────────────────────────────
+const TIERS=[['PARLAY','Parlays','tp-parlay'],['SGP','SGP','tp-sgp'],['SGP+','SGP+','tp-sgpplus']];
+const tierCls=t=>t==='PARLAY'?'tp-parlay':t==='SGP'?'tp-sgp':t==='SGP+'?'tp-sgpplus':'tp-hr';
+const groupKey=t=>t==='PARLAY'?'parlays':t==='SGP'?'sgp':'sgp_plus';
+
+// ── stats ──────────────────────────────────────────────────────────────────
+// Recomputed client-side rather than trusting summary{} in the file, so the
+// page stays correct if the publisher is ever a version behind.
+function tierStats(rows){
+  const o={n:0,w:0,l:0,void:0,units:0,est:false};
+  rows.forEach(r=>{
+    if(r.est)o.est=true;
+    if(r.verdict==='WIN'){o.n++;o.w++;o.units+=prof(r.combined_odds)}
+    else if(r.verdict==='LOSS'){o.n++;o.l++;o.units-=1}
+    else o.void++;
+  });
+  o.roi=o.n?o.units/o.n*100:0;
+  o.hit=o.n?o.w/o.n*100:0;
+  return o;
+}
+function hrStats(rows){
+  const o={n:0,w:0,units:0,void:0};
+  rows.forEach(r=>{
+    if(r.result==='WIN'){o.n++;o.w++;o.units+=prof(r.odds)}
+    else if(r.result==='LOSS'){o.n++;o.units-=1}
+    else o.void++;
+  });
+  o.roi=o.n?o.units/o.n*100:0;
+  o.hit=o.n?o.w/o.n*100:0;
+  return o;
+}
+const hist=()=>(S.data&&S.data.history)||[];
+const hrHist=()=>(S.data&&S.data.hr_history)||[];
+const legsFor=(d,t,r)=>((S.data&&S.data.legs)||[]).filter(l=>l.date===d&&l.tier===t&&l.rank===r);
+
+// ═══ TODAY ═════════════════════════════════════════════════════════════════
+function parlayCard(p,idx){
+  const est=p.odds_are_estimate;
+  const id=`${p.tier}-${p.rank}`;
+  const legs=(p.legs||[]).map((l,i)=>`<tr>
+      <td class="legno">${p.rank}.${i+1}</td>
+      <td><div class="pn">${esc(l.player)}</div><div class="pg">${esc(l.game)} · ${esc(l.game_time||'')}</div></td>
+      <td><span class="pp pp-o">${esc(l.prop)}</span></td>
+      <td class="od">${fO(l.odds_at_book!=null?l.odds_at_book:l.best_odds)}</td>
+      <td class="hs"><span class="ev evh">${pct(l.ev_pct)}</span></td>
+      <td class="hm">${l.grade?`<span class="gr g${String(l.grade).toLowerCase()}">${esc(l.grade)}</span>`:''}</td>
+      <td class="hm pg">${l.coverage!=null?l.coverage+' bks':''}</td>
+    </tr>`).join('');
+  return `<div class="pc">
+    <div class="pc-h" onclick="tgl('${id}')">
+      <span class="rk rk-${p.rank<=3?'1':'2'}">${p.rank}</span>
+      <span class="pc-odds">${fO(p.combined_odds)}</span>
+      <span class="pc-book">${esc(p.book)}</span>
+      ${est?'<span class="est">EST. PRICE</span>':''}
+      <span class="pc-meta">
+        <span>avg EV ${pct(p.avg_ev_pct)}</span>
+        <span>${(p.legs||[]).length} legs</span>
+      </span>
+      <span class="pc-games">${esc((p.games||[]).join('  /  '))}</span>
+    </div>
+    <table class="pc-legs" id="lg-${id}">${legs}</table>
+  </div>`;
+}
+window.tgl=id=>{const e=document.getElementById('lg-'+id);if(e)e.style.display=e.style.display==='none'?'table':'none'};
+
+function pgToday(){
+  const t=S.data&&S.data.today;
+  if(!t)return emptyState('No card loaded','Run publish_simpleodds.py, then hit Refresh.');
+  const show=TIERS.filter(([k])=>S.tier==='all'||S.tier===k);
+  let html='';
+  if(t.odds_last_update)html+=`<div class="hint">Odds last updated ${esc(t.odds_last_update)} · card generated ${esc((t.scraped_at||'').replace('T',' ').slice(0,16))}</div>`;
+  show.forEach(([key,label])=>{
+    const rows=t[groupKey(key)]||[];
+    if(!rows.length)return;
+    const est=rows.some(r=>r.odds_are_estimate);
+    html+=`<div class="secth"><span class="tierpill ${tierCls(key)}">${label}</span>
+      <span class="sub">${rows.length} built</span>
+      ${est?'<span class="est">COMBINED ODDS ARE ESTIMATES</span>':''}</div>`;
+    if(est)html+=`<div class="callout">These are raw multiplied prices. Same-game legs correlate, and the book applies a discount that isn't in the per-leg data — the real ticket will pay less than shown. Priced tiers are marked separately in Performance.</div>`;
+    html+=rows.map(parlayCard).join('');
+  });
+  return html||emptyState('Nothing built today','No parlays cleared the filters.');
+}
+
+// ═══ HOMERS ════════════════════════════════════════════════════════════════
+function pgHomers(){
+  const t=S.data&&S.data.today;
+  let plays=(t&&t.hr_plays)||[];
+  if(S.hrFilter==='bet')plays=plays.filter(p=>p.is_bet);
+  else if(S.hrFilter==='pos')plays=plays.filter(p=>Number(p.edge_pct)>0);
+  if(S.q){const q=S.q.toLowerCase();plays=plays.filter(p=>(p.player+' '+p.team+' '+p.game+' '+p.pitcher).toLowerCase().includes(q))}
+  plays=[...plays].sort((a,b)=>S.hrSort==='edge'?Number(b.edge_pct)-Number(a.edge_pct)
+    :S.hrSort==='score'?Number(b.score)-Number(a.score)
+    :Number(a.odds)-Number(b.odds));
+
+  const st=hrStats(hrHist());
+  const bar=`<div class="fbar">
+    <span class="fl">Show</span>
+    ${[['all','All'],['pos','+Edge only'],['bet','Model bets']].map(([k,l])=>`<button class="fb ${S.hrFilter===k?'on':''}" onclick="setHrF('${k}')">${l}</button>`).join('')}
+    <span class="fdot">·</span><span class="fl">Sort</span>
+    ${[['edge','Edge'],['score','Score'],['odds','Odds']].map(([k,l])=>`<button class="fb ${S.hrSort===k?'on':''}" onclick="setHrS('${k}')">${l}</button>`).join('')}
+    <span class="fdot">·</span>
+    <input class="sinp" placeholder="Search player…" value="${esc(S.q)}" oninput="setQ(this.value)">
+  </div>`;
+
+  const warn=st.n>=50&&st.roi<0?`<div class="callout"><strong>Track record check:</strong> ${st.n} graded plays, ${st.hit.toFixed(1)}% hit rate, ${fmtU(st.units)} (${pct(st.roi)} ROI). This list has not shown an edge yet. Treat it as a screen to research, not a bet slip.</div>`:'';
+
+  if(!plays.length)return bar+warn+emptyState('No homer plays','Nothing matches those filters.');
+
+  const rows=plays.map(p=>`<tr>
+    <td><div class="pn">${esc(p.player)}</div><div class="pg">${esc(p.team)} · ${esc(p.game)}</div></td>
+    <td class="hm pg">${esc(p.pitcher)}${p.pitcher_hand?' ('+esc(p.pitcher_hand)+')':''}</td>
+    <td class="hs"><span class="ev evc">${p.score!=null?Number(p.score).toFixed(1):'—'}</span></td>
+    <td class="od">${fO(p.odds)}</td>
+    <td><span class="pc-book">${esc(p.book)}</span></td>
+    <td class="hs pg">${p.true_prob!=null?Number(p.true_prob).toFixed(1)+'%':'—'}</td>
+    <td class="hs pg">${p.implied_prob!=null?Number(p.implied_prob).toFixed(1)+'%':'—'}</td>
+    <td><span class="ev ${Number(p.edge_pct)>0?'evh':'evc'}">${pct(p.edge_pct)}</span></td>
+    <td class="hm">${p.is_bet?'<span class="res res-w">BET</span>':''}</td>
+  </tr>`).join('');
+
+  return bar+warn+`<div class="lb">
+    <div class="lb-h"><div class="lb-t">💣 Homer List</div><div class="lb-s">${plays.length} plays</div></div>
+    <div class="tw"><table>
+      <thead><tr><th>Player</th><th class="hm">Pitcher</th><th class="hs">Score</th><th>Odds</th><th>Book</th><th class="hs">Model</th><th class="hs">Implied</th><th>Edge</th><th class="hm"></th></tr></thead>
+      <tbody>${rows}</tbody></table></div></div>`;
+}
+window.setHrF=k=>{S.hrFilter=k;sv();render()};
+window.setHrS=k=>{S.hrSort=k;sv();render()};
+window.setQ=v=>{S.q=v;sv();render()};
+
+// ═══ HISTORY ═══════════════════════════════════════════════════════════════
+function pgHistory(){
+  let rows=hist();
+  if(S.tier!=='all')rows=rows.filter(r=>r.tier===S.tier);
+  if(!rows.length)return emptyState('No graded history','Run grade_parlays.py, then publish.');
+
+  const byDate={};
+  rows.forEach(r=>{(byDate[r.date]=byDate[r.date]||[]).push(r)});
+  const dates=Object.keys(byDate).sort().reverse();
+
+  const body=dates.map(d=>{
+    const dr=byDate[d],ds=tierStats(dr);
+    const detail=dr.map(r=>{
+      const rc=r.verdict==='WIN'?'res-w':r.verdict==='LOSS'?'res-l':'res-v';
+      const lg=legsFor(r.date,r.tier,r.rank);
+      const legTxt=lg.length?lg.map(l=>`<span style="white-space:nowrap">${esc(l.player)} ${esc(l.prop)} <span class="res ${l.result==='WIN'?'res-w':l.result==='LOSS'?'res-l':'res-p'}">${esc(l.actual!==''&&l.actual!=null?l.actual:l.result[0])}</span></span>`).join(' &nbsp;·&nbsp; '):`<span class="pg">${esc(r.games)}</span>`;
+      return `<tr class="detail-row" data-day="${d}" style="display:none">
+        <td><span class="tierpill ${tierCls(r.tier)}">${esc(r.tier)}</span> <span class="pg">#${r.rank}</span></td>
+        <td class="od">${fO(r.combined_odds)} ${r.est?'<span class="est">EST</span>':''}</td>
+        <td><span class="pc-book">${esc(r.book)}</span></td>
+        <td class="hs pg">${r.n_legs} legs</td>
+        <td><span class="res ${rc}">${esc(r.verdict)}</span></td>
+        <td colspan="2" style="font-size:11px">${legTxt}</td>
+      </tr>`;
+    }).join('');
+    return `<tr class="day-row" onclick="toggleDay('${d}')">
+        <td><span id="arrow-${d}">▶</span> <strong>${fD(d)}</strong></td>
+        <td class="pg">${dr.length} tickets</td>
+        <td class="hs pg">${ds.w}-${ds.l}${ds.void?'-'+ds.void:''}</td>
+        <td class="hs pg">${ds.hit.toFixed(0)}%</td>
+        <td class="od" style="color:var(--${ds.units>=0?'green':'red'}-text)">${fmtU(ds.units)}</td>
+        <td class="hm pg">${pct(ds.roi)}</td>
+        <td></td>
+      </tr>${detail}`;
+  }).join('');
+
+  return `<div class="tw"><table>
+    <thead><tr><th>Date</th><th>Tickets</th><th class="hs">W-L</th><th class="hs">Hit</th><th>Units</th><th class="hm">ROI</th><th></th></tr></thead>
+    <tbody>${body}</tbody></table></div>`;
+}
+window.toggleDay=d=>{
+  const rows=document.querySelectorAll(`.detail-row[data-day="${d}"]`);
+  const arrow=document.getElementById('arrow-'+d);
+  const showing=rows[0]&&rows[0].style.display!=='none';
+  rows.forEach(r=>r.style.display=showing?'none':'table-row');
+  if(arrow)arrow.textContent=showing?'▶':'▼';
+};
+
+// ═══ PERFORMANCE ═══════════════════════════════════════════════════════════
+function pgPerf(){
+  const all=hist();
+  if(!all.length)return emptyState('Nothing graded yet','Performance fills in once grade_parlays.py has run.');
+
+  // Tier table — priced vs estimated kept visually distinct.
+  const tierRows=TIERS.map(([k,label])=>{
+    const s=tierStats(all.filter(r=>r.tier===k));
+    if(!s.n&&!s.void)return '';
+    return `<tr>
+      <td><span class="tierpill ${tierCls(k)}">${label}</span> ${s.est?'<span class="est">EST</span>':''}</td>
+      <td class="pg">${s.n}</td>
+      <td class="pg">${s.w}-${s.l}${s.void?'-'+s.void:''}</td>
+      <td class="pg">${s.hit.toFixed(1)}%</td>
+      <td class="od" style="color:var(--${s.units>=0?'green':'red'}-text)">${fmtU(s.units)}</td>
+      <td class="od" style="color:var(--${s.roi>=0?'green':'red'}-text)">${pct(s.roi)}</td>
+    </tr>`;
+  }).join('');
+
+  const priced=tierStats(all.filter(r=>!r.est));
+  const estd=tierStats(all.filter(r=>r.est));
+
+  // Daily P/L across whichever tiers are selected.
+  const sel=S.tier==='all'?all:all.filter(r=>r.tier===S.tier);
+  const byDay={};
+  sel.forEach(r=>{
+    if(r.verdict==='WIN')byDay[r.date]=(byDay[r.date]||0)+prof(r.combined_odds);
+    else if(r.verdict==='LOSS')byDay[r.date]=(byDay[r.date]||0)-1;
+  });
+  const days=Object.keys(byDay).sort().slice(-14);
+  const mx=Math.max(...days.map(d=>Math.abs(byDay[d])),1);
+  const bars=days.map(d=>{
+    const v=byDay[d],h=Math.abs(v)/mx*82;
+    return `<div class="bar-c"><div class="bar-v">${v>=0?'+':''}${v.toFixed(0)}</div>
+      <div class="bar" style="height:${h}px;background:var(--${v>=0?'green':'red'})"></div>
+      <div class="bar-l">${fD(d,1)}</div></div>`;
+  }).join('');
+
+  // Odds buckets — where does the money actually come from?
+  const buckets=[[0,500,'< +500'],[500,1000,'+500–1000'],[1000,2500,'+1000–2500'],[2500,1e9,'+2500 and up']];
+  const bRows=buckets.map(([lo,hi,label])=>{
+    const s=tierStats(sel.filter(r=>Math.abs(r.combined_odds)>=lo&&Math.abs(r.combined_odds)<hi));
+    if(!s.n)return '';
+    return `<tr><td class="pg">${label}</td><td class="pg">${s.n}</td><td class="pg">${s.hit.toFixed(1)}%</td>
+      <td class="od" style="color:var(--${s.units>=0?'green':'red'}-text)">${fmtU(s.units)}</td>
+      <td class="od" style="color:var(--${s.roi>=0?'green':'red'}-text)">${pct(s.roi)}</td></tr>`;
+  }).join('');
+
+  // Concentration: how much of the profit is one lucky ticket?
+  const wins=sel.filter(r=>r.verdict==='WIN').map(r=>prof(r.combined_odds)).sort((a,b)=>b-a);
+  const totalWon=wins.reduce((a,b)=>a+b,0);
+  const top1=totalWon?wins[0]/totalWon*100:0;
+  const top3=totalWon?wins.slice(0,3).reduce((a,b)=>a+b,0)/totalWon*100:0;
+
+  const hs=hrStats(hrHist());
+
+  return `<div class="cg">
+    <div class="ch"><div class="ct">By Tier</div>
+      <div class="tw"><table><thead><tr><th>Tier</th><th>N</th><th>W-L</th><th>Hit</th><th>Units</th><th>ROI</th></tr></thead><tbody>${tierRows}</tbody></table></div>
+    </div>
+    <div class="ch"><div class="ct">Priced vs Estimated</div>
+      <div class="pf-grid" style="grid-template-columns:1fr 1fr">
+        <div class="pf-stat"><div class="pf-stat-l">Real prices</div><div class="pf-stat-v" style="color:var(--${priced.roi>=0?'green':'red'}-text)">${pct(priced.roi)}</div><div class="st-s">${priced.n} tickets · ${fmtU(priced.units)}</div></div>
+        <div class="pf-stat"><div class="pf-stat-l">Estimated</div><div class="pf-stat-v" style="color:var(--text-3)">${pct(estd.roi)}</div><div class="st-s">${estd.n} tickets · not real</div></div>
+      </div>
+      <div class="hint" style="margin-top:12px;margin-bottom:0">Only the left number is a track record. SGP prices are raw multiplications; the book's correlation discount isn't in the leg data, so estimated ROI reads high.</div>
+    </div>
+  </div>
+
+  <div class="ch" style="margin-bottom:16px"><div class="ct">Daily P/L · last ${days.length} graded days${S.tier!=='all'?' · '+S.tier:''}</div>
+    <div class="bar-chart">${bars}</div></div>
+
+  <div class="cg">
+    <div class="ch"><div class="ct">By Price Bucket${S.tier!=='all'?' · '+S.tier:''}</div>
+      <div class="tw"><table><thead><tr><th>Odds</th><th>N</th><th>Hit</th><th>Units</th><th>ROI</th></tr></thead><tbody>${bRows||'<tr><td colspan="5" class="pg">No data</td></tr>'}</tbody></table></div>
+    </div>
+    <div class="ch"><div class="ct">Variance Check</div>
+      <div class="pf-grid" style="grid-template-columns:1fr 1fr">
+        <div class="pf-stat"><div class="pf-stat-l">Top win</div><div class="pf-stat-v">${top1.toFixed(0)}%</div><div class="st-s">of all winnings</div></div>
+        <div class="pf-stat"><div class="pf-stat-l">Top 3 wins</div><div class="pf-stat-v">${top3.toFixed(0)}%</div><div class="st-s">of all winnings</div></div>
+      </div>
+      <div class="hint" style="margin-top:12px;margin-bottom:0">High concentration means the record rests on a few tickets. At small n, that's variance, not proven edge.</div>
+    </div>
+  </div>
+
+  <div class="ch"><div class="ct">💣 Homer List</div>
+    <div class="pf-grid">
+      <div class="pf-stat"><div class="pf-stat-l">Graded</div><div class="pf-stat-v">${hs.n}</div></div>
+      <div class="pf-stat"><div class="pf-stat-l">Hit rate</div><div class="pf-stat-v">${hs.hit.toFixed(1)}%</div></div>
+      <div class="pf-stat"><div class="pf-stat-l">Units</div><div class="pf-stat-v" style="color:var(--${hs.units>=0?'green':'red'}-text)">${fmtU(hs.units)}</div></div>
+      <div class="pf-stat"><div class="pf-stat-l">ROI</div><div class="pf-stat-v" style="color:var(--${hs.roi>=0?'green':'red'}-text)">${pct(hs.roi)}</div></div>
+    </div>
+    <div class="hint" style="margin-top:12px;margin-bottom:0">Grades every play on the board, not a selected bet list — the model flags only a fraction as actual bets.</div>
+  </div>`;
+}
+
+function emptyState(t,s){return `<div class="empty"><div class="empty-e">⚾</div><div style="font-weight:700;color:var(--text-2);margin-bottom:4px">${esc(t)}</div><div>${esc(s)}</div></div>`}
+
+// ═══ RENDER ════════════════════════════════════════════════════════════════
+function render(){
+  document.documentElement.setAttribute('data-theme',S.theme);
+  const a=document.getElementById('app');
+  const t=S.data&&S.data.today;
+  const priced=tierStats(hist().filter(r=>!r.est));
+  const todayN=t?((t.parlays||[]).length+(t.sgp||[]).length+(t.sgp_plus||[]).length):0;
+  const hrN=t?(t.hr_plays||[]).length:0;
+  const themeIcon=S.theme==='dark'?'☀️':'🌙';
+  const ds=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+
+  const h=`<div class="hdr"><div class="hdr-in">
+    <div class="logo-w"><img class="logo-mark" src="logo.png" onerror="this.style.display='none'">
+      <div><div class="logo-text"><span>SimpleOdds</span> Parlays &amp; Homers</div>
+      <div class="logo-date">${ds.toUpperCase()}</div></div></div>
+    <div class="hdr-r">
+      <div class="chip">W-L <span class="${priced.roi>=0?'p':'n'}">${priced.w}-${priced.l}${priced.void?'-'+priced.void:''}</span></div>
+      <div class="chip">ROI <span class="${priced.roi>=0?'p':'n'}">${pct(priced.roi)}</span></div>
+      <div class="chip chip-tap" onclick="toggleUnitMode()" title="Tap to toggle units / dollars"><span>${S.dollarMode&&parseFloat(S.unitSize)>0?'$':'Units'}</span> <span class="${priced.units>=0?'p':'n'}">${fmtU(priced.units)}</span></div>
+      <input class="unit-inp" type="text" inputmode="decimal" placeholder="1u=$" value="${esc(S.unitSize||'')}" oninput="setUnitSize(this.value)" onblur="commitUnitSize()" onkeydown="if(event.key==='Enter')this.blur()" title="Set your unit size in dollars">
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">${themeIcon}</button>
+      <button class="btn" onclick="refreshLive()" title="Pull latest from GitHub">↻ Refresh</button>
+      <a class="btn btn-p" href="index.html">← MKB Board</a>
+    </div></div></div>`;
+
+  const nav=`<div class="nav"><div class="nav-in">
+    <button class="sp ${S.tier==='all'?'on':''}" onclick="setTier('all')">⚾ All${todayN?` <span class="badge">${todayN}</span>`:''}</button>
+    ${TIERS.map(([k,l])=>{const n=t?(t[groupKey(k)]||[]).length:0;return `<button class="sp ${S.tier===k?'on':''}" onclick="setTier('${k}')">${l}${n?` <span class="badge">${n}</span>`:''}</button>`}).join('')}
+    <div class="ndiv"></div>
+    ${[['today','Today'],['homers',`Homers${hrN?' ('+hrN+')':''}`],['history','History'],['performance','Performance']].map(([id,l])=>`<button class="nt ${S.v===id?'on':''}" onclick="setV('${id}')">${l}</button>`).join('')}
+  </div></div>`;
+
+  const page=S.v==='today'?pgToday():S.v==='homers'?pgHomers():S.v==='history'?pgHistory():pgPerf();
+  a.innerHTML=h+nav+`<div class="body">${page}</div>`;
+}
+window.setV=v=>{S.v=v;sv();render()};
+window.setTier=k=>{S.tier=k;sv();render()};
+window.toggleTheme=()=>{S.theme=S.theme==='dark'?'light':'dark';sv();render()};
+
+// ═══ LIVE FETCH ════════════════════════════════════════════════════════════
+window.refreshLive=async(opts={})=>{
+  try{
+    const r=await fetch(SRC+`?t=${Date.now()}`,{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(!d||!d.source)throw new Error('unrecognized payload');
+    S.data=d;sv();render();
+    if(!opts.silent)toast('SimpleOdds data refreshed');
+    return true;
+  }catch(e){
+    console.warn('SimpleOdds fetch failed',e);
+    if(!opts.silent)toast('Fetch failed — showing saved data');
+    render();
+    return false;
+  }
+};
+
+ld();
+render();
+refreshLive({silent:true});
+</script>
+</body>
+</html>
