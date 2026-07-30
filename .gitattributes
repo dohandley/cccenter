@@ -1,0 +1,27 @@
+# Line-ending policy for cccenter
+# ================================
+# This repo gets edited from two places that disagree about line endings:
+#   - Windows, via C:\DOH\cccenter (writes CRLF)
+#   - GitHub's web editor           (writes LF)
+#
+# Without a policy, every round trip between them rewrites every line of the
+# file. Git then reports the whole file as changed, so a one-line edit shows up
+# as an 872-line diff and real changes become impossible to spot in a review.
+#
+# `text=auto eol=lf` says: treat files as text, store them as LF in the repo,
+# AND check them out as LF in the working tree. Forcing both sides to LF means
+# no conversion ever happens, so no phantom diffs. Every editor involved here
+# (VS Code, Notepad++, browsers, Python) handles LF without complaint.
+#
+# Note: plain Windows Notepad on older builds renders LF-only files as one long
+# line. Use anything else and it's a non-issue.
+* text=auto eol=lf
+
+# Binary files must never be line-ending processed — doing so corrupts them.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.xlsx binary
+*.pdf  binary
