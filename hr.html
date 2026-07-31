@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HR Highlights &middot; Chasin Cheddar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+[data-theme="light"]{--bg:#e8e6e1;--surface:#f0eeea;--surface-2:#e8e6e1;--surface-3:#e3e1dc;--border:#d4d0c8;--border-h:#c0bbb2;--text:#1a1d26;--text-2:#3d4250;--text-3:#6b7280;--text-4:#9ca3af;--shadow:0 1px 2px rgba(0,0,0,.05);--green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;--green-text:#15803d;--amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fde68a;--amber-text:#92400e;--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;--blue-text:#1d4ed8;--mag:#c026d3;--mag-bg:#fdf4ff;--mag-border:#f5d0fe;--mag-text:#a21caf}
+[data-theme="dark"]{--bg:#111318;--surface:#191c22;--surface-2:#21252c;--surface-3:#15171c;--border:#282d36;--border-h:#363c48;--text:#dce0e8;--text-2:#a8b0bc;--text-3:#707a8a;--text-4:#4a5464;--shadow:0 1px 2px rgba(0,0,0,.3);--green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.18);--green-text:#4ade80;--amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.18);--amber-text:#fbbf24;--blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.18);--blue-text:#60a5fa;--mag:#e879f9;--mag-bg:rgba(232,121,249,.1);--mag-border:rgba(232,121,249,.18);--mag-text:#e879f9}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;min-height:100vh;transition:background .2s,color .2s}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.hdr-in{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;gap:12px}
+.h-t{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.h-t span{color:var(--green)}
+.h-d{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4);margin-top:3px}
+.hdr-r{display:flex;align-items:center;gap:8px}
+.kpi{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 11px;display:flex;align-items:center;gap:6px}
+.kpi-l{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4)}
+.kpi-v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--text)}
+.tbtn{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px;line-height:1;color:var(--text)}
+.nav{background:var(--surface);border-bottom:1px solid var(--border)}
+.nav-in{max-width:1140px;margin:0 auto;display:flex;align-items:center;padding:0 24px;gap:0;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nt{white-space:nowrap;flex:0 0 auto;background:none;border:0;border-bottom:2px solid transparent;color:var(--text-3);font-family:inherit;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:14px 12px;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:4px}
+.nt:hover{color:var(--text)} .nt.on{color:var(--text);border-bottom-color:var(--green)}
+.ndiv{width:1px;height:16px;background:var(--border);margin:0 6px;flex:0 0 auto}
+.body{max-width:1140px;margin:0 auto;padding:20px 24px 80px}
+.ct{font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--text-4);margin-bottom:12px;font-family:'JetBrains Mono',monospace}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;box-shadow:var(--shadow)}
+.st-l{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4);margin-bottom:6px;font-family:'JetBrains Mono',monospace}
+.st-v{font-size:1.5rem;font-weight:800;line-height:1;letter-spacing:-.03em}
+.st-s{font-size:11px;color:var(--text-3);margin-top:5px}
+.tv-N{color:var(--amber)}.tv-E{color:var(--mag)}.tv-C{color:var(--blue)}.tv-V{color:var(--green)}
+.fbar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.f-lab{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4);margin-right:4px}
+.fb{background:var(--surface);border:1px solid var(--border);color:var(--text-2);border-radius:6px;padding:9px 12px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer}
+.fb:hover{border-color:var(--border-h)}
+.fb.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.sep{width:1px;height:16px;background:var(--border);margin:0 8px}
+select{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px 10px;font-size:12px;font-weight:600;font-family:inherit}
+.cnt{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-4);margin-left:8px}
+.tw{overflow-x:auto;border-radius:8px;border:1px solid var(--border);background:var(--surface)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:6px 12px;color:var(--text-4);font-size:9px;text-transform:uppercase;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;font-weight:600;border-bottom:1px solid var(--border);background:var(--surface-3)}
+td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+.bn{font-weight:700;color:var(--text)}
+.bh{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-4);margin-left:5px}
+.tm{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-2)}
+.spn{color:var(--text-2);font-size:12.5px}
+.spg{color:var(--text-4);font-size:11px;font-family:'JetBrains Mono',monospace}
+.rcol{text-align:center;width:78px}
+.pill{display:inline-block;min-width:50px;padding:2px 8px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:1px solid}
+.pN{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber-text)}
+.pE{background:var(--mag-bg);border-color:var(--mag-border);color:var(--mag-text)}
+.pC{background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue-text)}
+.pV{background:var(--green-bg);border-color:var(--green-border);color:var(--green-text)}
+.dash{color:var(--text-4);opacity:.5}
+.notes{margin-top:20px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-3);font-size:11.5px}
+.notes ul{padding-left:16px;margin:8px 0 0}.notes li{margin-bottom:4px}
+.empty{padding:28px;color:var(--text-3);text-align:center;font-size:13px}
+@media(max-width:900px){.spg{display:none}}
+@media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}.hdr-r .kpi{display:none}.body{padding:16px 16px 60px}.hdr-in,.nav-in{padding:12px 16px}.nav-in{padding:0 16px}}
+@media(max-width:500px){td.hs,th.hs{display:none}.stats{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<div class="hdr"><div class="hdr-in">
+<div><div class="h-t"><span>HR</span> Matchup Highlights</div><div class="h-d">FRIDAY, JULY 31, 2026 &middot; Batted Ball Events</div></div>
+<div class="hdr-r">
+<div class="kpi"><span class="kpi-l">Batters</span><span class="kpi-v">116</span></div>
+<div class="kpi"><span class="kpi-l">Games</span><span class="kpi-v">15</span></div>
+<button class="tbtn" id="th" title="Toggle theme">&#9789;</button>
+</div></div></div>
+<div class="nav"><div class="nav-in">
+<a class="nt" href="index.html">&larr; Command Center</a><div class="ndiv"></div>
+<a class="nt" href="simpleodds.html">SimpleOdds</a>
+<a class="nt on" href="hr.html">HR Highlights</a>
+</div></div>
+<div class="body">
+<div class="ct">Tier totals &middot; L5 / L10 / L15 combined</div>
+<div class="stats"><div class="st"><div class="st-l">Nuke</div><div class="st-v tv-N">8</div><div class="st-s">5 as best tier</div></div><div class="st"><div class="st-l">Elite</div><div class="st-v tv-E">6</div><div class="st-s">5 as best tier</div></div><div class="st"><div class="st-l">Core</div><div class="st-v tv-C">89</div><div class="st-s">53 as best tier</div></div><div class="st"><div class="st-l">Value</div><div class="st-v tv-V">108</div><div class="st-s">53 as best tier</div></div></div>
+<div class="fbar">
+<span class="f-lab">Min tier</span>
+<button class="fb on" data-t="any">All</button><button class="fb" data-t="V">Value+</button>
+<button class="fb" data-t="C">Core+</button><button class="fb" data-t="E">Elite+</button>
+<div class="sep"></div><span class="f-lab">Hit in</span>
+<button class="fb on" data-r="any">Any</button><button class="fb" data-r="0">L5</button>
+<button class="fb" data-r="1">L10</button><button class="fb" data-r="2">L15</button>
+<div class="sep"></div>
+<select id="game"><option value="all">All 15 games</option><option value="ARI @ CLE">ARI @ CLE</option><option value="BOS @ LAD">BOS @ LAD</option><option value="CWS @ TB">CWS @ TB</option><option value="DET @ ATH">DET @ ATH</option><option value="KC @ COL">KC @ COL</option><option value="MIA @ NYM">MIA @ NYM</option><option value="MIL @ LAA">MIL @ LAA</option><option value="MIN @ SEA">MIN @ SEA</option><option value="NYY @ CHC">NYY @ CHC</option><option value="PHI @ BAL">PHI @ BAL</option><option value="PIT @ CIN">PIT @ CIN</option><option value="SF @ SD">SF @ SD</option><option value="STL @ TOR">STL @ TOR</option><option value="TEX @ HOU">TEX @ HOU</option><option value="WSH @ ATL">WSH @ ATL</option></select>
+<span class="cnt" id="cnt"></span>
+</div>
+<div class="tw"><table><thead><tr><th>Batter</th><th>Tm</th><th class="hs">Opposing SP</th>
+<th class="rcol">L5</th><th class="rcol">L10</th><th class="rcol">L15</th></tr></thead>
+<tbody id="tb"></tbody></table><div id="empty" class="empty" style="display:none">No batters match these filters.</div></div>
+<div class="notes"><strong>Notes</strong><ul>
+<li>Tier priority is Nuke &gt; Elite &gt; Core &gt; Value; only the highest tier a batter clears is shown at each range.</li>
+<li>A dot means no tier cleared at that range &mdash; not a missing batter.</li>
+<li>Batter pools follow confirmed lineups where posted.</li>
+<li>Games with no announced starter have no data on that side.</li>
+</ul></div></div>
+<script>
+// Inherit theme from the main dashboard (shared localStorage key 'cc7').
+function getTheme(){try{var s=JSON.parse(localStorage.getItem('cc7')||'{}');return s.theme||'light';}catch(e){return 'light';}}
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);
+ try{var s=JSON.parse(localStorage.getItem('cc7')||'{}');s.theme=t;localStorage.setItem('cc7',JSON.stringify(s));}catch(e){}}
+setTheme(getTheme());
+document.getElementById('th').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
+
+var DATA=[["BOS @ LAD", "LAD", "Enrique Hernandez", "RHB", "Ranger Suarez LHP", "N", "N", "N"], ["NYY @ CHC", "CHC", "Pete Crow-Armstrong", "LHB", "Will Warren RHP", "E", "N", "N"], ["MIN @ SEA", "MIN", "Kody Clemens", "LHB", "Bryce Miller RHP", "N", "C", "C"], ["WSH @ ATL", "WSH", "Luis Garcia Jr.", "LHB", "Bryce Elder RHP", "N", "C", "C"], ["MIN @ SEA", "SEA", "Mitch Garver", "RHB", "Zebby Matthews RHP", "N", "V", "C"], ["PIT @ CIN", "PIT", "Henry Davis", "RHB", "Hunter Greene RHP", "E", "V", "C"], ["CWS @ TB", "CWS", "Munetaka Murakami", "LHB", "Nick Martinez RHP", "E", "V", "C"], ["PIT @ CIN", "PIT", "Bryan Reynolds", "SHB", "Hunter Greene RHP", "C", "E", "-"], ["PHI @ BAL", "PHI", "Derek Hill", "RHB", "Brandon Young RHP", "C", "E", "-"], ["STL @ TOR", "TOR", "George Springer", "RHB", "Kyle Leahy RHP", "E", "V", "-"], ["STL @ TOR", "STL", "Alec Burleson", "LHB", "Dylan Cease RHP", "C", "C", "V"], ["PHI @ BAL", "PHI", "Bryce Harper", "LHB", "Brandon Young RHP", "V", "C", "C"], ["WSH @ ATL", "WSH", "Daylen Lile", "LHB", "Bryce Elder RHP", "V", "C", "C"], ["DET @ ATH", "DET", "Gleyber Torres", "RHB", "Jeffrey Springs LHP", "V", "C", "C"], ["KC @ COL", "COL", "Hunter Goodman", "RHB", "Michael Wacha RHP", "C", "C", "C"], ["DET @ ATH", "DET", "James Outman", "LHB", "Jeffrey Springs LHP", "C", "C", "C"], ["KC @ COL", "KC", "John Rave", "LHB", "Tomoyuki Sugano RHP", "C", "C", "C"], ["MIN @ SEA", "SEA", "Rob Refsnyder", "RHB", "Zebby Matthews RHP", "V", "C", "C"], ["PIT @ CIN", "PIT", "Ryan O'Hearn", "LHB", "Hunter Greene RHP", "V", "C", "C"], ["KC @ COL", "KC", "Salvador Perez", "RHB", "Tomoyuki Sugano RHP", "C", "C", "C"], ["TEX @ HOU", "HOU", "Taylor Trammell", "LHB", "Nathan Eovaldi RHP", "C", "C", "C"], ["MIL @ LAA", "LAA", "Travis d'Arnaud", "RHB", "Shane Drohan LHP", "C", "C", "C"], ["MIA @ NYM", "NYM", "Tyrone Taylor", "RHB", "Janson Junk RHP", "C", "C", "V"], ["KC @ COL", "COL", "Willi Castro", "SHB", "Michael Wacha RHP", "C", "C", "C"], ["PIT @ CIN", "PIT", "Brandon Lowe", "LHB", "Hunter Greene RHP", "C", "V", "V"], ["MIA @ NYM", "NYM", "Brett Baty", "LHB", "Janson Junk RHP", "C", "V", "C"], ["TEX @ HOU", "HOU", "Isaac Paredes", "RHB", "Nathan Eovaldi RHP", "V", "V", "C"], ["KC @ COL", "KC", "Jac Caglianone", "LHB", "Tomoyuki Sugano RHP", "C", "V", "V"], ["TEX @ HOU", "TEX", "Jake Burger", "RHB", "Hunter Brown RHP", "C", "V", "C"], ["WSH @ ATL", "ATL", "Austin Riley", "RHB", "Foster Griffin LHP", "-", "C", "C"], ["MIL @ LAA", "MIL", "Jake Bauers", "LHB", "Ryan Johnson RHP", "-", "C", "C"], ["STL @ TOR", "STL", "Jimmy Crooks", "LHB", "Dylan Cease RHP", "C", "C", "-"], ["PHI @ BAL", "PHI", "Kyle Schwarber", "LHB", "Brandon Young RHP", "-", "C", "C"], ["BOS @ LAD", "LAD", "Kyle Tucker", "LHB", "Ranger Suarez LHP", "V", "C", "-"], ["TEX @ HOU", "HOU", "Yordan Alvarez", "LHB", "Nathan Eovaldi RHP", "-", "C", "V"], ["BOS @ LAD", "LAD", "Alex Call", "RHB", "Ranger Suarez LHP", "C", "V", "-"], ["BOS @ LAD", "LAD", "Andy Pages", "RHB", "Ranger Suarez LHP", "-", "V", "C"], ["STL @ TOR", "TOR", "Brandon Valenzuela", "SHB", "Kyle Leahy RHP", "C", "V", "-"], ["ARI @ CLE", "ARI", "Corbin Carroll", "LHB", "Tanner Bibee RHP", "-", "V", "C"], ["STL @ TOR", "STL", "Jordan Walker", "RHB", "Dylan Cease RHP", "C", "V", "-"], ["MIL @ LAA", "LAA", "Jose Siri", "RHB", "Shane Drohan LHP", "-", "V", "C"], ["MIN @ SEA", "SEA", "Luke Raley", "LHB", "Zebby Matthews RHP", "-", "V", "C"], ["KC @ COL", "COL", "Mickey Moniak", "LHB", "Michael Wacha RHP", "C", "V", "-"], ["WSH @ ATL", "ATL", "Ozzie Albies", "SHB", "Foster Griffin LHP", "C", "V", "-"], ["NYY @ CHC", "NYY", "Paul Goldschmidt", "RHB", "Shota Imanaga LHP", "-", "V", "C"], ["ARI @ CLE", "CLE", "Rhys Hoskins", "RHB", "Mitch Bratt LHP", "-", "V", "C"], ["DET @ ATH", "DET", "Riley Greene", "LHB", "Jeffrey Springs LHP", "C", "V", "-"], ["MIN @ SEA", "MIN", "Ryan Jeffers", "RHB", "Bryce Miller RHP", "-", "V", "C"], ["PHI @ BAL", "PHI", "Trea Turner", "RHB", "Brandon Young RHP", "C", "V", "-"], ["BOS @ LAD", "BOS", "Willson Contreras", "RHB", "Edgardo Henriquez RHP", "-", "V", "C"], ["MIL @ LAA", "LAA", "Zach Neto", "RHB", "Shane Drohan LHP", "-", "V", "C"], ["PHI @ BAL", "PHI", "Bryson Stott", "LHB", "Brandon Young RHP", "C", "-", "V"], ["MIA @ NYM", "NYM", "Francisco Alvarez", "RHB", "Janson Junk RHP", "-", "C", "-"], ["MIL @ LAA", "MIL", "Christian Yelich", "LHB", "Ryan Johnson RHP", "C", "-", "-"], ["STL @ TOR", "TOR", "Davis Schneider", "RHB", "Kyle Leahy RHP", "C", "-", "-"], ["SF @ SD", "SF", "Grant McCray", "LHB", "Bradgley Rodriguez RHP", "C", "-", "-"], ["CWS @ TB", "TB", "Jonny DeLuca", "RHB", "Erick Fedde RHP", "C", "-", "-"], ["MIA @ NYM", "NYM", "Marcus Semien", "RHB", "Janson Junk RHP", "C", "-", "-"], ["BOS @ LAD", "LAD", "Mookie Betts", "RHB", "Ranger Suarez LHP", "C", "-", "-"], ["ARI @ CLE", "ARI", "Nolan Arenado", "RHB", "Tanner Bibee RHP", "-", "-", "C"], ["MIN @ SEA", "SEA", "Randy Arozarena", "RHB", "Zebby Matthews RHP", "C", "-", "-"], ["ARI @ CLE", "ARI", "Ryan Waldschmidt", "RHB", "Tanner Bibee RHP", "C", "-", "-"], ["PIT @ CIN", "CIN", "Tyler Stephenson", "RHB", "Paul Skenes RHP", "C", "-", "-"], ["WSH @ ATL", "WSH", "CJ Abrams", "LHB", "Bryce Elder RHP", "V", "V", "V"], ["DET @ ATH", "DET", "Eduardo Valencia", "RHB", "Jeffrey Springs LHP", "V", "V", "V"], ["NYY @ CHC", "NYY", "Spencer Jones", "LHB", "Shota Imanaga LHP", "V", "V", "V"], ["BOS @ LAD", "BOS", "Andruw Monasterio", "RHB", "Edgardo Henriquez RHP", "V", "V", "-"], ["KC @ COL", "KC", "Carter Jensen", "LHB", "Tomoyuki Sugano RHP", "-", "V", "V"], ["BOS @ LAD", "LAD", "Dalton Rushing", "LHB", "Ranger Suarez LHP", "-", "V", "V"], ["STL @ TOR", "TOR", "Daulton Varsho", "LHB", "Kyle Leahy RHP", "-", "V", "V"], ["PIT @ CIN", "CIN", "Eugenio Suarez", "RHB", "Paul Skenes RHP", "-", "V", "V"], ["ARI @ CLE", "ARI", "James McCann", "RHB", "Tanner Bibee RHP", "V", "V", "-"], ["MIN @ SEA", "SEA", "Josh Naylor", "LHB", "Zebby Matthews RHP", "V", "V", "-"], ["ARI @ CLE", "ARI", "Ketel Marte", "SHB", "Tanner Bibee RHP", "-", "V", "V"], ["SF @ SD", "SD", "Manny Machado", "RHB", "Carson Whisenhunt LHP", "-", "V", "V"], ["NYY @ CHC", "CHC", "Miguel Amaya", "RHB", "Will Warren RHP", "V", "V", "-"], ["MIN @ SEA", "MIN", "Royce Lewis", "RHB", "Bryce Miller RHP", "-", "V", "V"], ["MIL @ LAA", "MIL", "Andrew Vaughn", "RHB", "Ryan Johnson RHP", "-", "V", "-"], ["BOS @ LAD", "BOS", "Anthony Seigler", "SHB", "Edgardo Henriquez RHP", "-", "V", "-"], ["WSH @ ATL", "WSH", "Brady House", "RHB", "Bryce Elder RHP", "-", "V", "-"], ["PHI @ BAL", "PHI", "Brandon Marsh", "LHB", "Brandon Young RHP", "-", "V", "-"], ["ARI @ CLE", "CLE", "Brayan Rocchio", "SHB", "Mitch Bratt LHP", "-", "V", "-"], ["SF @ SD", "SF", "Bryce Eldridge", "LHB", "Bradgley Rodriguez RHP", "-", "V", "-"], ["TEX @ HOU", "HOU", "Cam Smith", "RHB", "Nathan Eovaldi RHP", "-", "V", "-"], ["MIN @ SEA", "SEA", "Cole Young", "LHB", "Zebby Matthews RHP", "-", "V", "-"], ["ARI @ CLE", "CLE", "David Fry", "RHB", "Mitch Bratt LHP", "-", "V", "-"], ["DET @ ATH", "DET", "Dillon Dingler", "RHB", "Jeffrey Springs LHP", "-", "V", "-"], ["WSH @ ATL", "WSH", "Dylan Crews", "RHB", "Bryce Elder RHP", "-", "V", "-"], ["CWS @ TB", "CWS", "Everson Pereira", "RHB", "Nick Martinez RHP", "-", "V", "-"], ["SF @ SD", "SD", "Fernando Tatis Jr.", "RHB", "Carson Whisenhunt LHP", "-", "V", "-"], ["MIL @ LAA", "LAA", "Jo Adell", "RHB", "Shane Drohan LHP", "-", "V", "-"], ["STL @ TOR", "STL", "Jose Fermin", "RHB", "Dylan Cease RHP", "-", "V", "-"], ["MIN @ SEA", "SEA", "Julio Rodriguez", "RHB", "Zebby Matthews RHP", "-", "V", "-"], ["STL @ TOR", "TOR", "Luis Urias", "RHB", "Kyle Leahy RHP", "-", "V", "-"], ["PIT @ CIN", "CIN", "Matt McLain", "RHB", "Paul Skenes RHP", "-", "V", "-"], ["NYY @ CHC", "CHC", "Michael Conforto", "LHB", "Will Warren RHP", "-", "V", "-"], ["SF @ SD", "SF", "Rafael Devers", "LHB", "Bradgley Rodriguez RHP", "-", "V", "-"], ["BOS @ LAD", "LAD", "Shohei Ohtani", "LHB", "Ranger Suarez LHP", "-", "V", "-"], ["KC @ COL", "KC", "Starling Marte", "RHB", "Tomoyuki Sugano RHP", "-", "V", "-"], ["ARI @ CLE", "ARI", "Tim Tawa", "RHB", "Tanner Bibee RHP", "-", "V", "-"], ["TEX @ HOU", "TEX", "Alejandro Osuna", "LHB", "Hunter Brown RHP", "V", "-", "-"], ["NYY @ CHC", "NYY", "Ben Rice", "LHB", "Shota Imanaga LHP", "-", "-", "V"], ["TEX @ HOU", "HOU", "Christian Walker", "RHB", "Nathan Eovaldi RHP", "-", "-", "V"], ["PIT @ CIN", "PIT", "Endy Rodriguez", "SHB", "Hunter Greene RHP", "V", "-", "-"], ["MIL @ LAA", "MIL", "Garrett Mitchell", "LHB", "Ryan Johnson RHP", "-", "-", "V"], ["MIL @ LAA", "MIL", "Gary Sanchez", "RHB", "Ryan Johnson RHP", "-", "-", "V"], ["ARI @ CLE", "ARI", "Geraldo Perdomo", "SHB", "Tanner Bibee RHP", "V", "-", "-"], ["DET @ ATH", "DET", "Hao-Yu Lee", "RHB", "Jeffrey Springs LHP", "V", "-", "-"], ["MIL @ LAA", "LAA", "Jorge Soler", "RHB", "Shane Drohan LHP", "-", "-", "V"], ["MIN @ SEA", "MIN", "Josh Bell", "SHB", "Bryce Miller RHP", "-", "-", "V"], ["CWS @ TB", "TB", "Junior Caminero", "RHB", "Erick Fedde RHP", "V", "-", "-"], ["MIA @ NYM", "NYM", "Luis Robert", "RHB", "Janson Junk RHP", "V", "-", "-"], ["MIL @ LAA", "LAA", "Nolan Schanuel", "LHB", "Shane Drohan LHP", "V", "-", "-"], ["MIN @ SEA", "MIN", "Ryan Kreidler", "RHB", "Bryce Miller RHP", "V", "-", "-"], ["MIN @ SEA", "MIN", "Tristan Gray", "LHB", "Bryce Miller RHP", "V", "-", "-"], ["KC @ COL", "KC", "Tyler Tolbert", "RHB", "Tomoyuki Sugano RHP", "V", "-", "-"]];
+var ORD={N:4,E:3,C:2,V:1,'-':0},LBL={N:'Nuke',E:'Elite',C:'Core',V:'Value'};
+var st={tier:'any',rng:'any',game:'all'};
+function pill(t){return t==='-'?'<span class="dash">&middot;</span>':'<span class="pill p'+t+'">'+LBL[t]+'</span>';}
+function render(){
+ var min=st.tier==='any'?0:ORD[st.tier],out=[],n=0;
+ for(var i=0;i<DATA.length;i++){var d=DATA[i];
+  if(st.game!=='all'&&d[0]!==st.game)continue;
+  var r=[d[5],d[6],d[7]];
+  if(st.rng==='any'){if(!r.some(function(t){return t!=='-'&&ORD[t]>=min}))continue;}
+  else{var t=r[+st.rng];if(t==='-'||ORD[t]<min)continue;}
+  n++;
+  out.push('<tr><td><span class="bn">'+d[2]+'</span><span class="bh">'+d[3]+'</span></td>'+
+   '<td><span class="tm">'+d[1]+'</span></td>'+
+   '<td class="hs"><span class="spn">'+d[4]+'</span> <span class="spg">'+d[0]+'</span></td>'+
+   '<td class="rcol">'+pill(r[0])+'</td><td class="rcol">'+pill(r[1])+'</td><td class="rcol">'+pill(r[2])+'</td></tr>');}
+ document.getElementById('tb').innerHTML=out.join('');
+ document.getElementById('empty').style.display=n?'none':'block';
+ document.getElementById('cnt').textContent=n+' of '+DATA.length;}
+document.querySelectorAll('.fb[data-t]').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('.fb[data-t]').forEach(function(x){x.classList.remove('on')});
+ b.classList.add('on');st.tier=b.dataset.t;save();render();};});
+document.querySelectorAll('.fb[data-r]').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('.fb[data-r]').forEach(function(x){x.classList.remove('on')});
+ b.classList.add('on');st.rng=b.dataset.r;save();render();};});
+document.getElementById('game').onchange=function(){st.game=this.value;save();render();};
+function save(){try{localStorage.setItem('ccHrState',JSON.stringify(st));}catch(e){}}
+try{var s=JSON.parse(localStorage.getItem('ccHrState')||'null');
+ if(s){var ok=s.game==='all'||DATA.some(function(d){return d[0]===s.game});
+  st.tier=s.tier||'any';st.rng=s.rng||'any';st.game=ok?s.game:'all';
+  document.querySelectorAll('.fb[data-t]').forEach(function(x){x.classList.toggle('on',x.dataset.t===st.tier)});
+  document.querySelectorAll('.fb[data-r]').forEach(function(x){x.classList.toggle('on',x.dataset.r===st.rng)});
+  document.getElementById('game').value=st.game;}}catch(e){}
+render();
+</script></body></html>
