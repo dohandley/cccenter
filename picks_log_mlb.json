@@ -13986,10 +13986,12 @@
     "miq_tier": "",
     "miq_qualifies": false,
     "actual_stat": 0,
-    "hit": "loss",
+    "hit": "dnp",
     "resolved": true,
     "source": "mkb",
-    "top_pick": true
+    "top_pick": true,
+    "void_reason": "voided by book",
+    "void_applied": "2026-08-27 12:51"
   },
   {
     "date": "2026-08-26",
