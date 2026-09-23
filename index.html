@@ -244,23 +244,40 @@ window.toggleTheme=()=>{S.theme=S.theme==='dark'?'light':'dark';document.documen
 function lR(p,i){const isUnder=(p.side||'').toLowerCase()==='under';const sc=isUnder?'pp-u':'pp-o';const sideLabel=isUnder?'Under':'Over';const ec=p.ev>=12?'evh':p.ev>=5?'evw':'evc';const gc=GM[p.grade.toLowerCase()]||'gc',rc=i<=3?`rk-${i}`:p.grade==='S'?'rk-s':p.grade==='A'?'rk-a':p.grade==='B'?'rk-b':'rk-c';const m=i===1?'🥇':i===2?'🥈':i===3?'🥉':i;const sclr=p.score>=68?'var(--amber)':p.score>=52?'var(--green)':p.score>=38?'var(--blue)':'var(--text-4)';const tc=p.resolved?(p.hit===true?'hx':'rx'):'';const confBadge=p.confirmed?'<span class="cf">CONF</span>':'';
   let rb='';if(p.resolved){const{c,l}=resPill(p);const si=!isVoid(p)&&p.actual_stat!=null&&p.actual_stat!=='DNP'&&p.actual_stat!=='NOT FOUND'?` ${p.actual_stat}`:'';rb=`<div class="rbs"><span class="rb ${c}">${l}${si}</span><button class="rb" onclick="event.stopPropagation();ur('${p.id}')">↩</button></div>`}
   else rb=`<div class="rbs"><button class="rb" onclick="event.stopPropagation();mr('${p.id}',true)">✓</button><button class="rb" onclick="event.stopPropagation();mr('${p.id}',false)">✗</button><button class="rb" onclick="event.stopPropagation();mr('${p.id}',null)">—</button></div>`;
-  return`<tr class="${tc}"><td style="width:36px;text-align:center"><span class="rk ${rc}">${m}</span></td><td><div class="pn">${p.player}${confBadge}</div><div class="pg">${p.game||'—'} · ${fTime(p.game_time)}</div></td><td><span class="pp ${sc}">${p.market} ${sideLabel} <span class="ln">${p.line}</span></span></td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fO(p.best_odds)}</td><td class="hs" style="color:var(--amber-text);font-weight:700;font-family:'JetBrains Mono',monospace">${(p.best_book||'—').toUpperCase()}</td><td class="hm"><span class="ev ${ec}">${p.ev>0?'+':''}${p.ev}%</span></td><td class="hm"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600">${p.score}</span><span class="sb"><span class="sf" style="width:${Math.min(100,p.score)}%;background:${sclr}"></span></span></td><td><span class="gr ${gc}">${p.grade==='S'?'🔥 S':p.grade==='A'?'✅ A':p.grade==='B'?'📊 B':'C'}</span></td><td class="hs">${rb}</td></tr>`}
+  return`<tr class="${tc}"><td style="width:36px;text-align:center"><span class="rk ${rc}">${m}</span></td><td><div class="pn">${p.player}${confBadge}</div><div class="pg">${p.game||'—'} · ${S.sp==='nfl'?fD(p.date,1)+' ':''}${fTime(p.game_time)}</div></td><td><span class="pp ${sc}">${p.market} ${sideLabel} <span class="ln">${p.line}</span></span></td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fO(p.best_odds)}</td><td class="hs" style="color:var(--amber-text);font-weight:700;font-family:'JetBrains Mono',monospace">${(p.best_book||'—').toUpperCase()}</td><td class="hm"><span class="ev ${ec}">${p.ev>0?'+':''}${p.ev}%</span></td><td class="hm"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600">${p.score}</span><span class="sb"><span class="sf" style="width:${Math.min(100,p.score)}%;background:${sclr}"></span></span></td><td><span class="gr ${gc}">${p.grade==='S'?'🔥 S':p.grade==='A'?'✅ A':p.grade==='B'?'📊 B':'C'}</span></td><td class="hs">${rb}</td></tr>`}
 
 function pgP(st){const t=td(),sp=SP[S.sp];let showDate=t;let all=sP((S.days[t]||{picks:[]}).picks);
-  // NFL is a weekly slate: picks are dated by game day, so show every upcoming date (Thu/Sun/Mon) together.
-  let slate=[];if(S.sp==='nfl'){slate=Object.keys(S.days).filter(d=>d>=t&&sP(S.days[d].picks).length>0).sort();if(slate.length){all=slate.flatMap(d=>sP(S.days[d].picks));showDate=t}}
-  if(!all.length){const recent=Object.keys(S.days).filter(d=>sP(S.days[d].picks).length>0).sort().reverse();if(recent.length){showDate=recent[0];all=sP(S.days[showDate].picks)}}if(S.sp==='nfl'&&!slate.length&&all.length)slate=[showDate];const isToday=showDate===t||(S.sp==='nfl'&&slate.length&&slate[0]>=t);const wk=all.find(p=>p.week)?.week;const dateLabel=S.sp==='nfl'&&slate.length?(wk?`Week ${wk} · `:'')+slate.map(d=>fD(d,1)).join(' / '):isToday?'Today':fD(showDate);
+  // NFL is a WEEKLY slate: one board per NFL week (Thu + Sun + Mon together), not one per day.
+  let slate=[],nflWeeks=[];
+  if(S.sp==='nfl'){
+    const allNfl=Object.values(S.days).flatMap(d=>sP(d.picks));
+    if(allNfl.length){
+      const wkOf=p=>p.week!=null?p.week:'?';
+      const upcoming=allNfl.filter(p=>p.date>=t);
+      let src=upcoming;
+      if(!src.length){const last=allNfl.map(p=>p.date).sort().pop();src=allNfl.filter(p=>p.date===last)}
+      nflWeeks=[...new Set(src.map(wkOf))];
+      all=allNfl.filter(p=>nflWeeks.includes(wkOf(p)));
+      slate=[...new Set(all.map(p=>p.date))].sort();
+      showDate=slate[0]||t;
+    }
+  }
+  if(!all.length){const recent=Object.keys(S.days).filter(d=>sP(S.days[d].picks).length>0).sort().reverse();if(recent.length){showDate=recent[0];all=sP(S.days[showDate].picks)}}if(S.sp==='nfl'&&!slate.length&&all.length)slate=[showDate];
+  const isToday=S.sp==='nfl'?slate.some(d=>d>=t):showDate===t;
+  const wkNums=nflWeeks.filter(w=>w!=='?');
+  const wkLabel=wkNums.length?`Week ${wkNums.sort((a,b)=>a-b).join(' + ')}`:'';
+  const dateRange=slate.length?(slate.length>1?`${fD(slate[0],1)}–${fD(slate[slate.length-1],1)}`:fD(slate[0],1)):'';
+  const dateLabel=S.sp==='nfl'?[wkLabel,dateRange].filter(Boolean).join(' · '):isToday?'Today':fD(showDate);
   if(!all.length)return`<div class="card" style="text-align:center;padding:48px"><img style="width:120px;height:120px;margin-bottom:16px;filter:drop-shadow(0 4px 12px rgba(0,0,0,.1))" src="logo.png"><div style="font-weight:800;font-size:1.1rem;margin-bottom:6px;letter-spacing:-.02em">No ${sp.l} picks yet</div><div style="color:var(--text-3);margin-bottom:18px;font-size:13px">Run your script, then paste the JSON here</div><div style="display:flex;gap:8px;justify-content:center"><button class="btn-p btn" onclick="showImp()">Import Picks</button><button class="btn" onclick="loadD()">Load Demo</button></div></div>`;
   let pk=[...all];if(S.f!=='all')pk=pk.filter(p=>p.grade.toUpperCase()===S.f.toUpperCase());if(S.sf!=='all')pk=pk.filter(p=>(p.side||'').toLowerCase()===S.sf);if(S.lf!=='all')pk=pk.filter(p=>p.list===S.lf);if(S.q){const q=S.q.toLowerCase();pk=pk.filter(p=>p.player.toLowerCase().includes(q)||(p.game||'').toLowerCase().includes(q)||(p.market||'').toLowerCase().includes(q))}
   const GO={S:0,A:1,B:2,C:3};const bbSort=(a,b)=>{const ga=GO[a.grade]!=null?GO[a.grade]:3;const gb=GO[b.grade]!=null?GO[b.grade]:3;if(ga!==gb)return ga-gb;return b.score-a.score};const bb=pk.filter(p=>p.list==='best_bets').sort(bbSort).slice(0,S.sp==='nfl'?30:10);const lot=pk.filter(p=>p.list===L2()).sort((a,b)=>b.score-a.score).slice(0,S.sp==='nfl'?30:5);const cf=all.filter(p=>p.confirmed).length;const ae=all.length?(all.reduce((s,p)=>s+p.ev,0)/all.length).toFixed(1):'—';const sorted=[...all].sort((a,b)=>b.score-a.score);const topPick=all.find(p=>p.top_pick)||bb[0]||sorted[0];
-  const dateBanner=isToday?'':`<div style="background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:6px;padding:8px 14px;margin-bottom:14px;font-size:12px;color:var(--amber-text);font-weight:600">Showing picks from ${dateLabel} — no picks imported for today yet</div>`;
+  const bannerTxt=S.sp==='nfl'?`Showing ${dateLabel} — every game is played; run the script to build the next week`:`Showing picks from ${dateLabel} — no picks imported for today yet`;
+  const dateBanner=isToday?'':`<div style="background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:6px;padding:8px 14px;margin-bottom:14px;font-size:12px;color:var(--amber-text);font-weight:600">${bannerTxt}</div>`;
   let o=dateBanner+`<div class="stats"><div class="st"><div class="st-l">${sp.l} picks</div><div class="st-v">${all.length}</div><div class="st-s">${all.filter(p=>p.list==='best_bets').length} best · ${all.filter(p=>p.list===L2()).length} ${L2N().toLowerCase()}</div></div><div class="st"><div class="st-l">Confirmed</div><div class="st-v" style="color:var(--amber-text)">${cf}</div><div class="st-s">Cross-tab</div></div><div class="st"><div class="st-l">Avg EV%</div><div class="st-v" style="color:var(--green-text)">+${ae}</div><div class="st-s">Expected value</div></div><div class="st"><div class="st-l">Top pick</div><div class="st-v" style="font-size:1rem">${topPick?.grade||'—'}</div><div class="st-s">${topPick?.player||'—'}</div></div></div>`;
   o+=`<div class="fbar"><span class="fl">Grade</span>${['all','S','A','B','C'].map(f=>`<button class="fb ${S.f===f.toLowerCase()||S.f===f?'on':''}" onclick="setF('f','${f}')">${f==='all'?'All':f}</button>`).join('')}<span class="fdot">·</span><span class="fl">Side</span>${['all','over','under'].map(f=>`<button class="fb ${f==='over'?'go ':''}${f==='under'?'ro ':''} ${S.sf===f?'on':''}" onclick="setF('sf','${f}')">${f==='all'?'All':f[0].toUpperCase()+f.slice(1)}</button>`).join('')}<span class="fdot">·</span>${['all','best_bets',L2()].map(f=>`<button class="fb ao ${S.lf===f?'on':''}" onclick="setF('lf','${f}')">${f==='all'?'All':f==='best_bets'?'Best Bets':L2N()}</button>`).join('')}<input class="sinp" placeholder="Search..." value="${S.q||''}" oninput="setF('q',this.value)"></div>`;
   const th='<thead><tr><th style="width:36px">#</th><th>Player</th><th>Prop</th><th>Odds</th><th class="hs">Book</th><th class="hm">EV%</th><th class="hm">Score</th><th>Grade</th><th class="hs">Result</th></tr></thead>';
-  if(bb.length&&S.sp==='nfl'){slate.forEach(d=>{const g=bb.filter(p=>p.date===d).sort(bbSort).slice(0,10);if(!g.length)return;o+=`<div class="lb"><div class="lb-h"><div class="lb-t">${sp.e} Top ${g.length} Best Bets</div><div class="lb-s">${sp.l} · ${d===t?'Today':fD(d)}${g[0].week?' · Wk '+g[0].week:''}</div></div><table>${th}<tbody>${g.map((p,i)=>lR(p,i+1)).join('')}</tbody></table></div>`})}
-  else if(bb.length)o+=`<div class="lb"><div class="lb-h"><div class="lb-t">${sp.e} Top ${bb.length} Best Bets</div><div class="lb-s">${sp.l} · ${dateLabel}</div></div><table>${th}<tbody>${bb.map((p,i)=>lR(p,i+1)).join('')}</tbody></table></div>`;
-  if(lot.length&&S.sp==='nfl'){slate.forEach(d=>{const g=lot.filter(p=>p.date===d).sort((a,b)=>b.score-a.score).slice(0,10);if(!g.length)return;o+=`<div class="lb"><div class="lb-h" style="border-left:3px solid var(--amber)"><div class="lb-t">🎯 Top ${g.length} TD Scorers</div><div class="lb-s">Separate record · ~20% hit rate · ${d===t?'Today':fD(d)}</div></div><table>${th}<tbody>${g.map((p,i)=>lR(p,i+1)).join('')}</tbody></table></div>`})}
-  else if(lot.length)o+=`<div class="lb"><div class="lb-h" style="border-left:3px solid var(--amber)"><div class="lb-t">🎰 Top ${lot.length} Lotto Plays</div><div class="lb-s">Long shots</div></div><table>${th}<tbody>${lot.map((p,i)=>lR(p,i+1)).join('')}</tbody></table></div>`;
+  if(bb.length)o+=`<div class="lb"><div class="lb-h"><div class="lb-t">${sp.e} Top ${bb.length} Best Bets</div><div class="lb-s">${sp.l} · ${dateLabel}</div></div><table>${th}<tbody>${bb.map((p,i)=>lR(p,i+1)).join('')}</tbody></table></div>`;
+  if(lot.length)o+=`<div class="lb"><div class="lb-h" style="border-left:3px solid var(--amber)"><div class="lb-t">${L2E()} Top ${lot.length} ${S.sp==='nfl'?'TD Scorers':'Lotto Plays'}</div><div class="lb-s">${S.sp==='nfl'?`Separate record · ~20% hit rate · ${dateLabel}`:'Long shots'}</div></div><table>${th}<tbody>${lot.map((p,i)=>lR(p,i+1)).join('')}</tbody></table></div>`;
   if(!bb.length&&!lot.length)o+=`<div class="card" style="text-align:center;padding:24px;color:var(--text-3)">No picks match filters</div>`;return o}
 
 function pgH(st){const ds=st.allD,sp=SP[S.sp];if(!ds.length)return`<div class="card" style="text-align:center;padding:36px;color:var(--text-3)">No ${sp.l} history.<br><br><button class="btn" onclick="loadD()">Load Demo</button></div>`;
@@ -364,7 +381,7 @@ window.importJSON=(raw,opts={})=>{
   function nH(h,r){if(!r)return{hit:null,resolved:false};if(h==='win'||h===true)return{hit:true,resolved:true};if(h==='loss'||h===false)return{hit:false,resolved:true};if(h==='dnp')return{hit:'dnp',resolved:true};return{hit:null,resolved:true}}
   let rc=0,matched=0;const byD={};
   data.forEach((p,i)=>{const d=p.date||td();if(!byD[d])byD[d]=[];let gr=p.grade||(p.score>=68?'S':p.score>=52?'A':p.score>=38?'B':'C');gr=gr.replace(/[🔥✅⚠️📊⭐\s]+/g,'').trim()||'C';if(gr==='FIRE')gr='S';if(gr==='SOLID')gr='A';if(gr==='LEAN')gr='B';const{hit,resolved}=nH(p.hit,p.resolved);if(resolved)rc++;let list=p.list||(Math.abs(p.best_odds||0)>=300?'lotto':'best_bets');if(list==='lotto_plays')list='lotto';
-    byD[d].push({id:p.id||`${d}-${p.sport||S.sp}-${i}`,sport:p.sport||S.sp,player:p.player||'?',game:p.game||'',game_time:p.game_time||'',market:p.market||'',side:p.side||'Over',line:p.line||0,best_odds:p.best_odds||0,best_book:p.best_book||'',ev:p.ev||0,kelly:p.kelly||0,coverage:p.coverage||0,score:p.score||0,grade:gr,list,dvp:p.dvp||0,boost:p.boost||1,proj_edge:p.proj_edge||0,confirmed:p.confirmed||false,actual_stat:p.actual_stat||null,hit,resolved,date:d,rank:p.rank||i+1,
+    byD[d].push({id:p.id||`${d}-${p.sport||S.sp}-${i}`,sport:p.sport||S.sp,player:p.player||'?',game:p.game||'',game_time:p.game_time||'',week:p.week!=null?p.week:null,market:p.market||'',side:p.side||'Over',line:p.line||0,best_odds:p.best_odds||0,best_book:p.best_book||'',ev:p.ev||0,kelly:p.kelly||0,coverage:p.coverage||0,score:p.score||0,grade:gr,list,dvp:p.dvp||0,boost:p.boost||1,proj_edge:p.proj_edge||0,confirmed:p.confirmed||false,actual_stat:p.actual_stat||null,hit,resolved,date:d,rank:p.rank||i+1,
       // Blend layer passthrough — needed for Analysis > Blend section
       blended_grade:p.blended_grade||null,blended_score:p.blended_score||null,blend_delta:p.blend_delta||null,matchup_score:p.matchup_score||null,opp_pitcher:p.opp_pitcher||'',source:(p.blend_delta||p.blended_grade)?'blended':(p.source||'mkb')})});
 
@@ -430,19 +447,48 @@ const LIVE_SOURCES=[
   `${GH_BASE}/picks_log_mlb.json`,           // MLB — MKB pipeline
   `${GH_BASE}/picks_log_nfl.json`,           // NFL — mkb_nfl.py pipeline (404 until first publish; ignored)
 ];
+// A published file is the source of truth for picks that HAVEN'T settled yet.
+// Import only ever merges, so a pick pulled from the file (bad price, corrected
+// board) used to live on forever in this browser's localStorage. After each
+// live fetch, drop unresolved picks of the sports that file covers, inside the
+// date range it covers, that are no longer in it. Resolved history is never
+// touched — that's the record, and it stays.
+function pruneMissing(raw){
+  let data;try{data=JSON.parse(raw)}catch(e){return 0}
+  if(!Array.isArray(data)||!data.length)return 0;
+  const key=p=>nK(p.player)+'|'+nK(p.market)+'|'+nK(p.side)+'|'+(p.line||0)+'|'+p.date;
+  const live=new Set(data.map(key));
+  const sports=new Set(data.map(p=>p.sport||'nba'));
+  const dates=data.map(p=>p.date).filter(Boolean).sort();
+  // Lower bound only: a pick pulled from the END of the range (a future game
+  // whose price was bad) is the whole point, so there is no upper bound.
+  const lo=dates[0];
+  let removed=0;
+  Object.keys(S.days).forEach(d=>{
+    if(d<lo)return;
+    const before=S.days[d].picks||[];
+    const after=before.filter(p=>!(sports.has(p.sport||'nba')&&!p.resolved&&!live.has(key(p))));
+    removed+=before.length-after.length;
+    S.days[d].picks=after;
+    if(!after.length)delete S.days[d];
+  });
+  if(removed)sv();
+  return removed;
+}
 window.refreshLive=async(opts={})=>{
-  let okCount=0,failCount=0;
+  let okCount=0,failCount=0,pruned=0;
   for(const url of LIVE_SOURCES){
     try{
       const r=await fetch(url+`?t=${Date.now()}`,{cache:'no-store'});
       if(!r.ok){failCount++;continue}
       const txt=await r.text();
-      if(importJSON(txt,{silent:true}))okCount++;
+      if(importJSON(txt,{silent:true})){okCount++;pruned+=pruneMissing(txt)}
     }catch(e){failCount++;console.warn('Live fetch failed for',url,e)}
   }
+  if(pruned)console.log(`Pruned ${pruned} pick(s) no longer published`);
   render();
   if(!opts.silent){
-    if(okCount)toast(`Live data refreshed (${okCount} source${okCount>1?'s':''})`);
+    if(okCount)toast(`Live data refreshed (${okCount} source${okCount>1?'s':''})${pruned?` · ${pruned} pulled`:''}`);
     else toast('Live fetch failed — showing saved data');
   }
   return okCount>0;
