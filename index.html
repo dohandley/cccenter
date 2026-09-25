@@ -31,7 +31,8 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) var(--bg)}body{backgroun
 .gr{font-weight:800;font-size:10.5px;padding:3px 8px;border-radius:5px;white-space:nowrap}.gs{background:var(--amber-bg);color:var(--amber-text);border:1px solid var(--amber-border)}.ga{background:var(--green-bg);color:var(--green-text);border:1px solid var(--green-border)}.gb{background:var(--blue-bg);color:var(--blue-text);border:1px solid var(--blue-border)}.gc{background:var(--surface-2);color:var(--text-4);border:1px solid var(--border)}
 .sb{width:44px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:4px}.sf{height:100%;border-radius:2px}
 .cf{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;background:var(--green-bg);color:var(--green-text);padding:1px 5px;border-radius:3px;border:1px solid var(--green-border);margin-left:3px;letter-spacing:.04em}
-.sm-only{display:none}@media(max-width:500px){.sm-only{display:inline}.lg-only{display:none}}
+.sm-only{display:none}@media(max-width:500px){.sm-only{display:inline-block;vertical-align:middle}.lg-only{display:none}}
+.dtag{display:inline-block;min-width:21px;margin-right:5px;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.06em;color:var(--text-4)}.wrng{font-weight:500;color:var(--text-4);font-size:11px;margin-left:4px}.wrng2{display:block;font-weight:500;color:var(--text-4);font-size:10px;margin-top:1px;font-family:'JetBrains Mono',monospace}
 .rbs{display:flex;gap:2px;justify-content:flex-end}.rb{white-space:nowrap;display:inline-block;padding:3px 7px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text-4);cursor:pointer;font-size:9.5px;font-weight:700;font-family:'JetBrains Mono',monospace;transition:all .1s}.rb:hover{border-color:var(--border-h);color:var(--text-2);background:var(--surface-2)}.rb.hit{background:var(--green-bg);color:var(--green-text);border-color:var(--green-border);cursor:default}.rb.miss{background:var(--red-bg);color:var(--red-text);border-color:var(--red-border);cursor:default}.rb.push{background:var(--amber-bg);color:var(--amber-text);border-color:var(--amber-border);cursor:default}
 .tw{overflow-x:auto;border-radius:8px;border:1px solid var(--border);background:var(--surface)}.tw table{width:100%;border-collapse:collapse;font-size:13px}.tw th{text-align:left;padding:7px 12px;color:var(--text-4);font-size:9px;text-transform:uppercase;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;font-weight:600;border-bottom:1px solid var(--border);background:var(--surface-3)}.tw td{padding:9px 12px;border-bottom:1px solid var(--border)}.tw tr:hover td{background:var(--ring)}.day-row:hover td{background:var(--surface-2)!important}.detail-row td{padding:7px 12px!important;font-size:12px;border-bottom:1px solid var(--border)!important}
 .cg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}.ch{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;transition:all .2s}.ct{font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--text-4);margin-bottom:12px;font-family:'JetBrains Mono',monospace}.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px}
@@ -174,6 +175,13 @@ ld();document.documentElement.setAttribute('data-theme',S.theme||'light');
 (function dedup(){let total=0;Object.keys(S.days).forEach(d=>{const pk=S.days[d].picks;if(!pk||!pk.length)return;const seen={};const clean=[];pk.forEach(p=>{const k=(p.player||'').toLowerCase().trim()+'|'+(p.market||'').toLowerCase().trim().replace(/[_\s]+/g,' ')+'|'+(p.side||'').toLowerCase()+'|'+(p.line||0)+'|'+p.date+'|'+(p.sport||'nba')+'|'+(p.source||'mkb');if(seen[k]){const prev=seen[k];if(p.resolved&&!prev.resolved){const idx=clean.indexOf(prev);clean[idx]=p;seen[k]=p}total++}else{seen[k]=p;clean.push(p)}});S.days[d].picks=clean;Object.keys(SP).forEach(sp=>{['best_bets','lotto','td'].forEach(ls=>{const GO={S:0,A:1,B:2,C:3};const g=clean.filter(p=>p.sport===sp&&p.list===ls).sort((a,b)=>{if(ls==='best_bets'){const ga=GO[a.grade]!=null?GO[a.grade]:3;const gb=GO[b.grade]!=null?GO[b.grade]:3;if(ga!==gb)return ga-gb}return b.score-a.score});g.forEach((p,i)=>p.rank=i+1)})})});if(total){sv();console.log(`Dedup: removed ${total} duplicate picks`)}})();
 const td=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const fD=(d,s)=>{const t=new Date(d+'T12:00:00');return s?t.toLocaleDateString('en-US',{month:'short',day:'numeric'}):t.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})};
+// NFL weeks run Tue→Mon, so Thu night + Sunday + Monday night are ONE betting
+// week. Picks saved before the dashboard stored a week number fall back to that
+// calendar bucket. Used by both the Picks board and History grouping.
+const calWk=d=>{const t=Date.parse(d+'T12:00:00Z');if(isNaN(t))return 'x';return 'c'+Math.floor((Math.floor(t/864e5)-5)/7)};
+const wkOf=p=>p.week!=null?p.week:calWk(p.date);
+const DOW=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+const dow=d=>DOW[new Date(d+'T12:00:00').getDay()];
 const fO=v=>!v||v===0?'—':v>0?`+${v}`:`${v}`;
 const fTime=t=>{if(!t)return'';const s=String(t).trim();if(/[ap]m/i.test(s))return s.replace(/\s*(ET|EST|EDT)$/i,'').trim()+' ET';const mt=s.match(/^(\d{1,2}):(\d{2})/);if(!mt)return s;let h=parseInt(mt[1]),min=mt[2],ampm='AM';if(h>=12){ampm='PM';if(h>12)h-=12}if(h===0)h=12;return`${h}:${min} ${ampm} ET`};
 const sP=dp=>(dp||[]).filter(p=>(p.sport||'nba')===S.sp);
@@ -273,8 +281,6 @@ function pgP(st){const t=td(),sp=SP[S.sp];let showDate=t;let all=sP((S.days[t]||
       // NFL weeks run Tue→Mon. Picks saved before the dashboard stored a week
       // number fall back to that calendar bucket, so Thu+Sun+Mon still group
       // together and the next Thursday starts a new board.
-      const calWk=d=>{const t=Date.parse(d+'T12:00:00Z');if(isNaN(t))return 'x';return 'c'+Math.floor((Math.floor(t/864e5)-5)/7)};
-      const wkOf=p=>p.week!=null?p.week:calWk(p.date);
       const upcoming=allNfl.filter(p=>p.date>=t);
       let src=upcoming;
       if(!src.length){const last=allNfl.map(p=>p.date).sort().pop();src=allNfl.filter(p=>p.date===last)}
@@ -302,12 +308,45 @@ function pgP(st){const t=td(),sp=SP[S.sp];let showDate=t;let all=sP((S.days[t]||
   if(lot.length)o+=`<div class="lb"><div class="lb-h" style="border-left:3px solid var(--amber)"><div class="lb-t">${L2E()} Top ${lot.length} ${S.sp==='nfl'?'TD Scorers':'Lotto Plays'}</div><div class="lb-s">${S.sp==='nfl'?`Separate record · ~20% hit rate · ${dateLabel}`:'Long shots'}</div></div><table>${th}<tbody>${lot.map((p,i)=>lR(p,i+1)).join('')}</tbody></table></div>`;
   if(!bb.length&&!lot.length)o+=`<div class="card" style="text-align:center;padding:24px;color:var(--text-3)">No picks match filters</div>`;return o}
 
+// History rows. NFL groups by BETTING WEEK (Thu + Sun + Mon are one slate, one
+// scrape, one board) and expands straight to the picks with a day tag, rather
+// than nesting week -> day -> picks. A single Monday-night pick standing alone
+// as its own row produced win rates over an n of 1. MLB/NBA keep one row/date.
 function pgH(st){const ds=st.allD,sp=SP[S.sp];if(!ds.length)return`<div class="card" style="text-align:center;padding:36px;color:var(--text-3)">No ${sp.l} history.<br><br><button class="btn" onclick="loadD()">Load Demo</button></div>`;
-  const rows=ds.map(d=>{const allpk=sP(S.days[d].picks),pk=allpk.filter(p=>p.list==='best_bets'),res=pk.filter(p=>isDecided(p)),hit=res.filter(p=>p.hit===true),voids=pk.filter(p=>isVoid(p)).length;const wr=res.length?Math.round(hit.length/res.length*100):null;const ae=pk.length?(pk.reduce((s,p)=>s+p.ev,0)/pk.length).toFixed(1):'0';const tg=pk.sort((a,b)=>b.score-a.score)[0]?.grade||'—';const pl=st.bbPL[d]||0;const it=d===td();const sorted=[...allpk].sort((a,b)=>b.score-a.score);
-    const detailRows=sorted.map(p=>{const isUnder=(p.side||'').toLowerCase()==='under';const sc=isUnder?'pp-u':'pp-o';const sideLabel=isUnder?'Under':'Over';const ec=p.ev>=12?'evh':p.ev>=5?'evw':'evc';const gc=GM[p.grade.toLowerCase()]||'gc';let res='';if(p.resolved){const{c,l}=resPill(p);const si=!isVoid(p)&&p.actual_stat!=null&&p.actual_stat!=='DNP'&&p.actual_stat!=='NOT FOUND'?' '+p.actual_stat:'';res=`<span class="rb ${c}" style="cursor:default">${l}${si}</span>`}else res=`<span style="color:var(--text-4);font-size:10px">pending</span>`;const tag=(p.list==='lotto'||p.list==='td')?`<span style="font-size:8px;color:var(--amber-text);font-family:'JetBrains Mono',monospace;font-weight:700;margin-left:4px">${p.list==='td'?'TD':'LOTTO'}</span>`:'';
-      return`<tr class="detail-row" data-day="${d}" style="display:none;background:var(--surface-2)"><td colspan="2" style="font-weight:600;font-size:12px;padding-left:22px">${p.player}${tag}</td><td><span class="pp ${sc}" style="font-size:10px">${p.market} ${sideLabel} <span class="ln">${p.line}</span></span></td><td style="font-family:'JetBrains Mono',monospace;font-size:12px">${fO(p.best_odds)}</td><td class="hs" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber-text)">${(p.best_book||'—').toUpperCase()}</td><td class="hs"><span class="ev ${ec}" style="font-size:11px">${p.ev>0?'+':''}${p.ev}%</span></td><td>${res}</td></tr>`}).join('');
-    return`<tr class="day-row" onclick="toggleDay('${d}')" style="cursor:pointer"><td style="font-weight:700"><span class="lg-only">${it?'Today':fD(d)}</span><span class="sm-only">${it?'Today':fD(d,1)}</span> <span id="arrow-${d}" style="font-size:10px;color:var(--text-4);margin-left:4px">▶</span></td><td>${pk.length}</td><td>${res.length?`<span style="color:${wr>=55?'var(--green-text)':wr>=45?'var(--amber-text)':'var(--red-text)'}"><strong>${wr}%</strong></span>`:'—'}</td><td>${hit.length}-${res.length-hit.length}${voids?'-'+voids:''}</td><td class="hs" style="color:var(--green-text);font-family:'JetBrains Mono',monospace;font-size:12px">+${ae}%</td><td class="hs"><span class="gr ${GM[tg.toLowerCase()]||'gc'}" style="font-size:9px;padding:2px 6px">${tg}</span></td><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${pl>=0?'var(--green-text)':'var(--red-text)'}">${fmtU(pl)}</td></tr>${detailRows}`}).join('');
-  return`<div class="ct">${sp.e} ${sp.l} History · ${ds.length} days</div><div class="tw"><table><thead><tr><th>Date</th><th>Picks</th><th>Win %</th><th>W-L</th><th class="hs">Avg EV</th><th class="hs">Top</th><th>P/L</th></tr></thead><tbody>${rows}</tbody></table></div>`}
+  const byWeek=S.sp==='nfl';
+  let groups;
+  if(byWeek){
+    const m=new Map();
+    ds.forEach(d=>{const pk=sP(S.days[d].picks);const w=pk.length?wkOf(pk[0]):calWk(d);const k=String(w);
+      if(!m.has(k))m.set(k,{key:'w'+k.replace(/[^\w]/g,''),wk:w,dates:[]});m.get(k).dates.push(d)});
+    groups=[...m.values()];
+    groups.forEach(g=>g.dates.sort());
+    groups.sort((a,b)=>b.dates[b.dates.length-1].localeCompare(a.dates[a.dates.length-1]));
+  }else groups=ds.map(d=>({key:d,dates:[d]}));
+  const rows=groups.map(g=>{
+    const allpk=g.dates.flatMap(d=>sP(S.days[d].picks));
+    const pk=allpk.filter(p=>p.list==='best_bets'),res=pk.filter(p=>isDecided(p)),hit=res.filter(p=>p.hit===true),voids=pk.filter(p=>isVoid(p)).length;
+    const wr=res.length?Math.round(hit.length/res.length*100):null;
+    const ae=pk.length?(pk.reduce((s,p)=>s+p.ev,0)/pk.length).toFixed(1):'0';
+    const tg=[...pk].sort((a,b)=>b.score-a.score)[0]?.grade||'—';
+    const pl=g.dates.reduce((s,d)=>s+(st.bbPL[d]||0),0);
+    // Week rows list picks day by day (Thu first); day rows just sort by score.
+    const sorted=byWeek?g.dates.flatMap(d=>sP(S.days[d].picks).sort((a,b)=>b.score-a.score)):[...allpk].sort((a,b)=>b.score-a.score);
+    const detailRows=sorted.map(p=>{const isUnder=(p.side||'').toLowerCase()==='under';const sc=isUnder?'pp-u':'pp-o';const sideLabel=isUnder?'Under':'Over';const ec=p.ev>=12?'evh':p.ev>=5?'evw':'evc';let res='';if(p.resolved){const{c,l}=resPill(p);const si=!isVoid(p)&&p.actual_stat!=null&&p.actual_stat!=='DNP'&&p.actual_stat!=='NOT FOUND'?' '+p.actual_stat:'';res=`<span class="rb ${c}" style="cursor:default">${l}${si}</span>`}else res=`<span style="color:var(--text-4);font-size:10px">pending</span>`;const tag=(p.list==='lotto'||p.list==='td')?`<span style="font-size:8px;color:var(--amber-text);font-family:'JetBrains Mono',monospace;font-weight:700;margin-left:4px">${p.list==='td'?'TD':'LOTTO'}</span>`:'';
+      const dayTag=byWeek?`<span class="dtag">${dow(p.date)}</span>`:'';
+      return`<tr class="detail-row" data-day="${g.key}" style="display:none;background:var(--surface-2)"><td colspan="2" style="font-weight:600;font-size:12px;padding-left:22px">${dayTag}${p.player}${tag}</td><td><span class="pp ${sc}" style="font-size:10px">${p.market} ${sideLabel} <span class="ln">${p.line}</span></span></td><td style="font-family:'JetBrains Mono',monospace;font-size:12px">${fO(p.best_odds)}</td><td class="hs" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber-text)">${(p.best_book||'—').toUpperCase()}</td><td class="hs"><span class="ev ${ec}" style="font-size:11px">${p.ev>0?'+':''}${p.ev}%</span></td><td>${res}</td></tr>`}).join('');
+    let lgL,smL;
+    if(byWeek){
+      const a=g.dates[0],b=g.dates[g.dates.length-1];
+      // "Sep 24–28" rather than "Sep 24–Sep 28" when the week doesn't cross a month.
+      const rng=a===b?fD(a,1):(a.slice(0,7)===b.slice(0,7)?`${fD(a,1)}–${b.slice(8).replace(/^0/,'')}`:`${fD(a,1)}–${fD(b,1)}`);
+      const wl=typeof g.wk==='number'?`Week ${g.wk}`:'Week —';
+      // Phone stacks the range under the week number to keep the column narrow.
+      lgL=`${wl} <span class="wrng">${rng}</span>`;smL=`${wl.replace('Week','Wk')}<span class="wrng2">${rng}</span>`;
+    }else{const d=g.dates[0],it=d===td();lgL=it?'Today':fD(d);smL=it?'Today':fD(d,1)}
+    return`<tr class="day-row" onclick="toggleDay('${g.key}')" style="cursor:pointer"><td style="font-weight:700"><span class="lg-only">${lgL}</span><span class="sm-only">${smL}</span> <span id="arrow-${g.key}" style="font-size:10px;color:var(--text-4);margin-left:4px">▶</span></td><td>${pk.length}</td><td>${res.length?`<span style="color:${wr>=55?'var(--green-text)':wr>=45?'var(--amber-text)':'var(--red-text)'}"><strong>${wr}%</strong></span>`:'—'}</td><td>${hit.length}-${res.length-hit.length}${voids?'-'+voids:''}</td><td class="hs" style="color:var(--green-text);font-family:'JetBrains Mono',monospace;font-size:12px">+${ae}%</td><td class="hs"><span class="gr ${GM[tg.toLowerCase()]||'gc'}" style="font-size:9px;padding:2px 6px">${tg}</span></td><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${pl>=0?'var(--green-text)':'var(--red-text)'}">${fmtU(pl)}</td></tr>${detailRows}`}).join('');
+  const unit=byWeek?`${groups.length} week${groups.length===1?'':'s'}`:`${ds.length} days`;
+  return`<div class="ct">${sp.e} ${sp.l} History · ${unit}</div><div class="tw"><table><thead><tr><th>${byWeek?'Week':'Date'}</th><th>Picks</th><th>Win %</th><th>W-L</th><th class="hs">Avg EV</th><th class="hs">Top</th><th>P/L</th></tr></thead><tbody>${rows}</tbody></table></div>`}
 
 function pgPf(st){const sp=SP[S.sp];if(!st.allDec)return`<div class="card" style="text-align:center;padding:40px"><div style="color:var(--text-3)">No resolved ${sp.l} picks yet.</div><br><button class="btn" onclick="loadD()">Load Demo</button></div>`;
   const wr=st.wr;const sc=st.stT==='W'?'var(--green-text)':'var(--red-text)';
