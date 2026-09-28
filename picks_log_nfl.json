@@ -838,9 +838,9 @@
     "confirmed": false,
     "top_pick": true,
     "published": "2026-09-24",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 49,
+    "hit": "win",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -869,9 +869,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-09-24",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 3,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -900,9 +900,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-09-24",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 7,
+    "hit": "win",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -931,9 +931,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-09-24",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 1,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -962,9 +962,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-09-24",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 3,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -993,9 +993,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-09-24",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": "NOT FOUND",
+    "hit": "dnp",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -1024,9 +1024,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-09-24",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 0,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   },
   {
