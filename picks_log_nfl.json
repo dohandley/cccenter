@@ -1055,9 +1055,9 @@
     "confirmed": false,
     "top_pick": true,
     "published": "2026-09-24",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 1,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   }
 ]
