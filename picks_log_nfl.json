@@ -1086,9 +1086,9 @@
     "confirmed": false,
     "top_pick": true,
     "published": "2026-10-02",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 81,
+    "hit": "win",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -1117,9 +1117,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-10-02",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 2,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -1148,9 +1148,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-10-02",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 8,
+    "hit": "win",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -1179,9 +1179,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-10-02",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 27,
+    "hit": "win",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -1210,9 +1210,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-10-02",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 148,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -1241,9 +1241,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-10-02",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 40,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -1272,9 +1272,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-10-02",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 222,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -1303,9 +1303,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-10-02",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 4,
+    "hit": "loss",
+    "resolved": true,
     "source": "mkb"
   },
   {
@@ -1334,9 +1334,9 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-10-02",
-    "actual_stat": null,
-    "hit": null,
-    "resolved": false,
+    "actual_stat": 2,
+    "hit": "win",
+    "resolved": true,
     "source": "mkb"
   },
   {
