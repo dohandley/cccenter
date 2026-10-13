@@ -184,7 +184,16 @@ const DOW=['SUN','MON','TUE','WED','THU','FRI','SAT'];
 const dow=d=>DOW[new Date(d+'T12:00:00').getDay()];
 const fO=v=>!v||v===0?'—':v>0?`+${v}`:`${v}`;
 const fTime=t=>{if(!t)return'';const s=String(t).trim();if(/[ap]m/i.test(s))return s.replace(/\s*(ET|EST|EDT)$/i,'').trim()+' ET';const mt=s.match(/^(\d{1,2}):(\d{2})/);if(!mt)return s;let h=parseInt(mt[1]),min=mt[2],ampm='AM';if(h>=12){ampm='PM';if(h>12)h-=12}if(h===0)h=12;return`${h}:${min} ${ampm} ET`};
-const sP=dp=>(dp||[]).filter(p=>(p.sport||'nba')===S.sp);
+// NBA seasons are separate tracks: 2025-26 is a closed book, 2026-27 starts at 0-0.
+// Season = the pick's own `season` field, else derived from its date (Aug-Jul).
+// Every view reads picks through sP(), so filtering here keeps the header record,
+// board, History, Performance and Analysis all on one season. MLB/NFL unaffected.
+const seasonOf=p=>{if(p.season)return p.season;const d=p.date||'';const y=+d.slice(0,4),m=+d.slice(5,7);if(!y)return'';const s=m>=8?y:y-1;return`${s}-${String(s+1).slice(2)}`};
+const curSeason=()=>seasonOf({date:td()});
+const nbaSeasons=()=>{const s=new Set([curSeason()]);Object.values(S.days).forEach(d=>(d.picks||[]).forEach(p=>{if((p.sport||'nba')==='nba')s.add(seasonOf(p))}));return[...s].filter(Boolean).sort().reverse()};
+const selSeason=()=>S.nbaSeason||curSeason();
+const inSeason=p=>(p.sport||'nba')!=='nba'||seasonOf(p)===selSeason();
+const sP=dp=>(dp||[]).filter(p=>(p.sport||'nba')===S.sp&&inSeason(p));
 const srcF=picks=>S.src==='all'?picks:picks.filter(p=>(p.source||'mkb')===S.src);
 const aS=()=>srcF(Object.values(S.days).flatMap(d=>sP(d.picks)));
 const rS=()=>aS().filter(p=>p.resolved);
@@ -193,7 +202,7 @@ const sC=()=>{const c={};Object.values(S.days).forEach(d=>(d.picks||[]).forEach(
 // Nav-badge count: best_bets only, so the badge matches the universe the W-L /
 // ROI header actually reports on. sC() (all picks incl. lotto) is still used by
 // the Clear-sport buttons, which genuinely remove everything.
-const sCB=()=>{const c={};Object.values(S.days).forEach(d=>(d.picks||[]).forEach(p=>{if((p.list||'best_bets')!=='best_bets')return;const s=p.sport||'nba';c[s]=(c[s]||0)+1}));return c};
+const sCB=()=>{const c={};Object.values(S.days).forEach(d=>(d.picks||[]).forEach(p=>{if((p.list||'best_bets')!=='best_bets'||!inSeason(p))return;const s=p.sport||'nba';c[s]=(c[s]||0)+1}));return c};
 
 // ═══ NORMALIZE HELPERS FOR ROBUST MATCHING ═══
 // Lowercase, trim, collapse whitespace/underscores so "batter_total_bases" matches "Batter Total Bases"
@@ -262,7 +271,9 @@ function render(){const st=stats(),sp=SP[S.sp],sc=sCB(),a=document.getElementByI
   const h=`<div class="hdr"><div class="hdr-in"><div class="logo-w"><img class="logo-mark" src="logo.png"><div><div class="logo-text"><span>Chasin Cheddar's</span> Command Center</div><div class="logo-date">${ds.toUpperCase()}</div></div></div>
     <div class="hdr-r"><div class="chip">W-L <span class="${st.roi>=0?'p':'n'}">${st.hits}-${st.total-st.hits}${st.bbVoids?'-'+st.bbVoids:''}</span></div><div class="chip">ROI <span class="${st.roi>=0?'p':'n'}">${st.roi>=0?'+':''}${st.roi}%</span></div><div class="chip chip-tap" onclick="toggleUnitMode()" title="Tap to toggle units / dollars"><span id="unitLabel">${S.dollarMode&&parseFloat(S.unitSize)>0?'$':'Units'}</span> <span id="unitVal" data-uval="${st.bbU}" class="${st.bbU>=0?'p':'n'}">${fmtU(st.bbU)}</span></div><input class="unit-inp" type="text" inputmode="decimal" placeholder="1u=$" value="${S.unitSize||''}" oninput="setUnitSize(this.value)" onblur="commitUnitSize()" onkeydown="if(event.key==='Enter')this.blur()" title="Set your unit size in dollars (press Enter to apply)"><div class="chip">Streak <span class="${st.stT==='W'?'p':'n'}">${st.stk}${st.stT||'—'}</span></div><button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">${themeIcon}</button><button class="btn" onclick="refreshLive()" title="Pull latest from GitHub">↻ Refresh</button><button class="btn" onclick="showImp()">Import</button></div></div></div>`;
   const nav=`<div class="nav"><div class="nav-in">${Object.entries(SP).map(([k,v])=>`<button class="sp ${S.sp===k?'on':''}" onclick="setSp('${k}')">${v.e} ${v.l}${sc[k]?` <span class="badge">${sc[k]}</span>`:''}</button>`).join('')}<div class="ndiv"></div>${[['picks','Picks'],['history','History'],['performance','Performance'],['analysis','Analysis']].map(([id,l])=>`<button class="nt ${S.v===id?'on':''}" onclick="setV('${id}')">${l}</button>`).join('')}<a class="nt" href="simpleodds.html" style="margin-left:auto;text-decoration:none;display:flex;align-items:center;gap:4px">SimpleOdds →</a><a class="nt" href="hr.html" style="text-decoration:none;display:flex;align-items:center;gap:4px">HR Highlights →</a></div></div>`;
-  a.innerHTML=h+nav+`<div class="body">${S.v==='picks'?pgP(st):S.v==='history'?pgH(st):S.v==='performance'?pgPf(st):pgA(st)}</div>`}
+  a.innerHTML=h+nav+`<div class="body">${S.sp==='nba'?seasonBar():''}${S.v==='picks'?pgP(st):S.v==='history'?pgH(st):S.v==='performance'?pgPf(st):pgA(st)}</div>`}
+const seasonBar=()=>`<div class="fbar"><span class="fl">Season</span>${nbaSeasons().map(x=>`<button class="fb ${selSeason()===x?'on':''}" onclick="setSeason('${x}')">${x}${x===curSeason()?' · current':''}</button>`).join('')}</div>`;
+window.setSeason=x=>{S.nbaSeason=x===curSeason()?null:x;sv();render()};
 window.setV=v=>{S.v=v;sv();render()};window.setSp=s=>{S.sp=s;sv();render()};
 window.toggleDay=d=>{const rows=document.querySelectorAll(`.detail-row[data-day="${d}"]`);const arrow=document.getElementById('arrow-'+d);const showing=rows[0]&&rows[0].style.display!=='none';rows.forEach(r=>r.style.display=showing?'none':'table-row');if(arrow)arrow.textContent=showing?'▶':'▼'};
 window.toggleTheme=()=>{S.theme=S.theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',S.theme);sv();render()};
@@ -417,7 +428,7 @@ window.mr=(id,hit)=>{for(const d of Object.values(S.days)){const p=(d.picks||[])
 window.ur=id=>{for(const d of Object.values(S.days)){const p=(d.picks||[]).find(p=>p.id===id);if(p){p.resolved=false;p.hit=null;break}}sv();render()};
 window.loadD=()=>{S.days=genD();sv();render();toast('Demo loaded — 14 days!')};
 
-window.clrSport=sp=>{const label=SP[sp]?.l||sp.toUpperCase();const other=Object.entries(SP).filter(([k])=>k!==sp).map(([,v])=>v.l).join(' / ');if(!confirm(`Clear all ${label} picks? ${other} data will NOT be affected.`))return;let removed=0;for(const d of Object.keys(S.days)){const before=S.days[d].picks?.length||0;S.days[d].picks=(S.days[d].picks||[]).filter(p=>(p.sport||'nba')!==sp);removed+=before-(S.days[d].picks?.length||0);if(!S.days[d].picks.length)delete S.days[d]}sv();document.getElementById('imp')?.remove();render();toast(`Cleared ${removed} ${label} picks`)};
+window.clrSport=sp=>{const label=SP[sp]?.l||sp.toUpperCase();const other=Object.entries(SP).filter(([k])=>k!==sp).map(([,v])=>v.l).join(' / ');const scope=sp==='nba'?` ${selSeason()}`:'';if(!confirm(`Clear all${scope} ${label} picks? ${other}${scope?' and other NBA seasons':''} will NOT be affected.`))return;let removed=0;for(const d of Object.keys(S.days)){const before=S.days[d].picks?.length||0;S.days[d].picks=(S.days[d].picks||[]).filter(p=>!((p.sport||'nba')===sp&&inSeason(p)));removed+=before-(S.days[d].picks?.length||0);if(!S.days[d].picks.length)delete S.days[d]}sv();document.getElementById('imp')?.remove();render();toast(`Cleared ${removed} ${label} picks`)};
 
 window.showImp=()=>{const m=document.createElement('div');m.className='mbg';m.id='imp';m.onclick=e=>{if(e.target===m)m.remove()};
   const sportCounts=sC();
@@ -442,7 +453,7 @@ window.importJSON=(raw,opts={})=>{
   function nH(h,r){if(!r)return{hit:null,resolved:false};if(h==='win'||h===true)return{hit:true,resolved:true};if(h==='loss'||h===false)return{hit:false,resolved:true};if(h==='dnp')return{hit:'dnp',resolved:true};return{hit:null,resolved:true}}
   let rc=0,matched=0;const byD={};
   data.forEach((p,i)=>{const d=p.date||td();if(!byD[d])byD[d]=[];let gr=p.grade||(p.score>=68?'S':p.score>=52?'A':p.score>=38?'B':'C');gr=gr.replace(/[🔥✅⚠️📊⭐\s]+/g,'').trim()||'C';if(gr==='FIRE')gr='S';if(gr==='SOLID')gr='A';if(gr==='LEAN')gr='B';const{hit,resolved}=nH(p.hit,p.resolved);if(resolved)rc++;let list=p.list||(Math.abs(p.best_odds||0)>=300?'lotto':'best_bets');if(list==='lotto_plays')list='lotto';
-    byD[d].push({id:p.id||`${d}-${p.sport||S.sp}-${i}`,sport:p.sport||S.sp,player:p.player||'?',game:p.game||'',game_time:p.game_time||'',week:p.week!=null?p.week:null,market:p.market||'',side:p.side||'Over',line:p.line||0,best_odds:p.best_odds||0,best_book:p.best_book||'',ev:p.ev||0,kelly:p.kelly||0,coverage:p.coverage||0,score:p.score||0,grade:gr,list,dvp:p.dvp||0,boost:p.boost||1,proj_edge:p.proj_edge||0,confirmed:p.confirmed||false,actual_stat:p.actual_stat||null,hit,resolved,date:d,rank:p.rank||i+1,
+    byD[d].push({id:p.id||`${d}-${p.sport||S.sp}-${i}`,sport:p.sport||S.sp,season:p.season||null,player:p.player||'?',game:p.game||'',game_time:p.game_time||'',week:p.week!=null?p.week:null,market:p.market||'',side:p.side||'Over',line:p.line||0,best_odds:p.best_odds||0,best_book:p.best_book||'',ev:p.ev||0,kelly:p.kelly||0,coverage:p.coverage||0,score:p.score||0,grade:gr,list,dvp:p.dvp||0,boost:p.boost||1,proj_edge:p.proj_edge||0,confirmed:p.confirmed||false,actual_stat:p.actual_stat||null,hit,resolved,date:d,rank:p.rank||i+1,
       // Blend layer passthrough — needed for Analysis > Blend section
       blended_grade:p.blended_grade||null,blended_score:p.blended_score||null,blend_delta:p.blend_delta||null,matchup_score:p.matchup_score||null,opp_pitcher:p.opp_pitcher||'',source:(p.blend_delta||p.blended_grade)?'blended':(p.source||'mkb')})});
 
@@ -508,6 +519,8 @@ const GH_BASE='https://raw.githubusercontent.com/dohandley/cccenter/main';
 const LIVE_SOURCES=[
   `${GH_BASE}/picks_log_mlb.json`,           // MLB — MKB pipeline
   `${GH_BASE}/picks_log_nfl.json`,           // NFL — mkb_nfl.py pipeline (404 until first publish; ignored)
+  `${GH_BASE}/picks_log_nba_2025-26.json`,   // NBA 2025-26 — closed season, frozen archive
+  `${GH_BASE}/picks_log_nba.json`,           // NBA 2026-27 — mkb_nba.py pipeline (404 until first publish; ignored)
 ];
 // A published file is the source of truth for picks that HAVEN'T settled yet.
 // Import only ever merges, so a pick pulled from the file (bad price, corrected
@@ -521,6 +534,7 @@ function pruneMissing(raw){
   const key=p=>nK(p.player)+'|'+nK(p.market)+'|'+nK(p.side)+'|'+(p.line||0)+'|'+p.date;
   const live=new Set(data.map(key));
   const sports=new Set(data.map(p=>p.sport||'nba'));
+  const seasons=new Set(data.map(seasonOf));
   const dates=data.map(p=>p.date).filter(Boolean).sort();
   // Lower bound only: a pick pulled from the END of the range (a future game
   // whose price was bad) is the whole point, so there is no upper bound.
@@ -529,7 +543,7 @@ function pruneMissing(raw){
   Object.keys(S.days).forEach(d=>{
     if(d<lo)return;
     const before=S.days[d].picks||[];
-    const after=before.filter(p=>!(sports.has(p.sport||'nba')&&!p.resolved&&!live.has(key(p))));
+    const after=before.filter(p=>!(sports.has(p.sport||'nba')&&((p.sport||'nba')!=='nba'||seasons.has(seasonOf(p)))&&!p.resolved&&!live.has(key(p))));
     removed+=before.length-after.length;
     S.days[d].picks=after;
     if(!after.length)delete S.days[d];
