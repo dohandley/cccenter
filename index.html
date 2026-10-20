@@ -233,13 +233,15 @@ function stats(){const allRes=rS().filter(p=>p.hit===true||p.hit===false),res=al
   const dayPL={};res.forEach(p=>{if(!dayPL[p.date])dayPL[p.date]=0;const o=p.best_odds;if(p.hit){dayPL[p.date]+=o>0?(10*o/100):(10*100/Math.abs(o))}else dayPL[p.date]-=10});
   const sortedDays=Object.entries(dayPL).sort((a,b)=>b[0].localeCompare(a[0]));
   for(const[d,pl]of sortedDays){if(pl===0)continue;if(!stk){stT=pl>0?'W':'L';stk=1}else if((pl>0&&stT==='W')||(pl<0&&stT==='L'))stk++;else break}
-  const bG={};allRes.forEach(p=>{if(!bG[p.grade])bG[p.grade]={t:0,h:0};bG[p.grade].t++;if(p.hit)bG[p.grade].h++});
-  const bM={};allRes.forEach(p=>{if(!bM[p.market])bM[p.market]={t:0,h:0};bM[p.market].t++;if(p.hit)bM[p.market].h++});
-  const bS={Over:{t:0,h:0},Under:{t:0,h:0}};allRes.forEach(p=>{const k=(p.side||'Over')[0].toUpperCase()+(p.side||'over').slice(1).toLowerCase();if(bS[k]){bS[k].t++;if(p.hit)bS[k].h++}});
-  const dPL={};allRes.forEach(p=>{if(!dPL[p.date])dPL[p.date]=0;const o=p.best_odds;if(p.hit===true){dPL[p.date]+=o>0?(o/100):(100/Math.abs(o))}else if(p.hit===false)dPL[p.date]-=1});
+  // Breakdowns below are Best Bets only — the record. Other lists (lotto/td) are
+  // graded separately via bL / lot* and are never pooled into a headline number.
+  const bG={};res.forEach(p=>{if(!bG[p.grade])bG[p.grade]={t:0,h:0};bG[p.grade].t++;if(p.hit)bG[p.grade].h++});
+  const bM={};res.forEach(p=>{if(!bM[p.market])bM[p.market]={t:0,h:0};bM[p.market].t++;if(p.hit)bM[p.market].h++});
+  const bS={Over:{t:0,h:0},Under:{t:0,h:0}};res.forEach(p=>{const k=(p.side||'Over')[0].toUpperCase()+(p.side||'over').slice(1).toLowerCase();if(bS[k]){bS[k].t++;if(p.hit)bS[k].h++}});
+  const dPL={};res.forEach(p=>{if(!dPL[p.date])dPL[p.date]=0;const o=p.best_odds;if(p.hit===true){dPL[p.date]+=o>0?(o/100):(100/Math.abs(o))}else if(p.hit===false)dPL[p.date]-=1});
   const bbPL={};res.forEach(p=>{if(!bbPL[p.date])bbPL[p.date]=0;const o=p.best_odds;if(p.hit===true){bbPL[p.date]+=o>0?(o/100):(100/Math.abs(o))}else if(p.hit===false)bbPL[p.date]-=1});
   const bL={best_bets:{t:0,h:0},lotto:{t:0,h:0},td:{t:0,h:0}};allRes.forEach(p=>{const k=p.list||'best_bets';if(bL[k]){bL[k].t++;if(p.hit)bL[k].h++}});
-  const cR=allRes.filter(p=>p.confirmed),nR=allRes.filter(p=>!p.confirmed);
+  const cR=res.filter(p=>p.confirmed),nR=res.filter(p=>!p.confirmed);
   const allD=Object.keys(S.days).filter(d=>sP(S.days[d].picks).length>0).sort().reverse();
   // ═══ UNIT CALCULATIONS (1u per bet, payout based on odds) ═══
   const calcU=picks=>{let u=0;picks.forEach(p=>{const o=p.best_odds;if(p.hit===true)u+=o>0?o/100:100/Math.abs(o);else if(p.hit===false)u-=1});return Math.round(u*10)/10};
@@ -247,8 +249,9 @@ function stats(){const allRes=rS().filter(p=>p.hit===true||p.hit===false),res=al
   const bbU=calcU(bbRes),lotU=calcU(lotRes),totalU=calcU(allRes);
   const bbHits=bbRes.filter(p=>p.hit===true).length,bbDec=bbRes.filter(p=>p.hit===true||p.hit===false).length;
   const lotHits=lotRes.filter(p=>p.hit===true).length,lotDec=lotRes.filter(p=>p.hit===true||p.hit===false).length;
-  const gU={};['S','A','B','C'].forEach(g=>{const gp=allRes.filter(p=>p.grade===g);const dec=gp.filter(p=>p.hit===true||p.hit===false);gU[g]={u:calcU(gp),dec:dec.length,hits:gp.filter(p=>p.hit===true).length}});
-  const dayU={};Object.keys(S.days).forEach(d=>{const dp=sP(S.days[d].picks).filter(p=>isDecided(p));if(dp.length)dayU[d]={u:calcU(dp),picks:sP(S.days[d].picks).length,hits:dp.filter(p=>p.hit===true).length,miss:dp.filter(p=>p.hit===false).length,dec:dp.filter(p=>p.hit===true||p.hit===false).length}});
+  const gU={};['S','A','B','C'].forEach(g=>{const gp=res.filter(p=>p.grade===g);const dec=gp.filter(p=>p.hit===true||p.hit===false);gU[g]={u:calcU(gp),dec:dec.length,hits:gp.filter(p=>p.hit===true).length}});
+  const isBB=p=>(p.list||'best_bets')==='best_bets';
+  const dayU={};Object.keys(S.days).forEach(d=>{const dp=sP(S.days[d].picks).filter(p=>isBB(p)&&isDecided(p));if(dp.length)dayU[d]={u:calcU(dp),picks:sP(S.days[d].picks).filter(isBB).length,hits:dp.filter(p=>p.hit===true).length,miss:dp.filter(p=>p.hit===false).length,dec:dp.filter(p=>p.hit===true||p.hit===false).length}});
   return{wr,roi,stk,stT,tp,hits:hits.length,total:res.length,bbVoids,bG,bM,bS,dPL,bL,cW:cR.length?Math.round(cR.filter(p=>p.hit===true).length/cR.length*100):0,nW:nR.length?Math.round(nR.filter(p=>p.hit===true).length/nR.length*100):0,cN:cR.length,nN:nR.length,allD,bbPL,bbU,lotU,totalU,bbHits,bbDec,lotHits,lotDec,gU,dayU,allResCount:allRes.length,allHits:allRes.filter(p=>p.hit===true).length,allDec:allRes.filter(p=>p.hit===true||p.hit===false).length}}
 function genD(){const nP=[{n:'Luka Doncic',g:'Mavs @ Lakers',t:'7:30 PM'},{n:'Jayson Tatum',g:'Celtics @ Bucks',t:'8:00 PM'},{n:'Nikola Jokic',g:'Nuggets @ Warriors',t:'10:00 PM'},{n:'Anthony Edwards',g:'Wolves @ Suns',t:'9:00 PM'},{n:'Shai Gilgeous-Alexander',g:'Thunder @ Kings',t:'10:30 PM'},{n:'Tyrese Haliburton',g:'Pacers @ Knicks',t:'7:00 PM'},{n:'Donovan Mitchell',g:'Cavs @ Heat',t:'7:30 PM'},{n:'Jalen Brunson',g:'Knicks @ Pacers',t:'7:00 PM'},{n:'Trae Young',g:'Hawks @ Magic',t:'7:30 PM'},{n:'Ja Morant',g:'Grizz @ Pelicans',t:'8:00 PM'},{n:'Devin Booker',g:'Suns @ Wolves',t:'9:00 PM'},{n:'LaMelo Ball',g:'Hornets @ Raptors',t:'7:00 PM'}];
   const mP=[{n:'Aaron Judge',g:'NYY @ BOS',t:'7:10 PM'},{n:'Shohei Ohtani',g:'LAD @ SF',t:'9:45 PM'},{n:'Mookie Betts',g:'LAD @ SF',t:'9:45 PM'},{n:'Ronald Acuna Jr.',g:'ATL @ PHI',t:'7:05 PM'},{n:'Corey Seager',g:'TEX @ HOU',t:'8:10 PM'},{n:'Bobby Witt Jr.',g:'KC @ MIN',t:'7:40 PM'},{n:'Gunnar Henderson',g:'BAL @ TB',t:'6:50 PM'},{n:'Bryce Harper',g:'PHI @ ATL',t:'7:20 PM'},{n:'Juan Soto',g:'NYM @ WSH',t:'7:05 PM'},{n:'Elly De La Cruz',g:'CIN @ MIL',t:'8:10 PM'}];
@@ -370,12 +373,12 @@ function pgPf(st){const sp=SP[S.sp];if(!st.allDec)return`<div class="card" style
   const daysTracked=Object.keys(st.dayU).length;
 
   // ROW 1: OVERALL + DONUT
-  const overall=`<div class="ch"><div class="ct">${sp.e} Overall — ${sp.l} (${daysTracked} days)</div>
+  const overall=`<div class="ch"><div class="ct">${sp.e} Best Bets — ${sp.l} (${daysTracked} days)</div>
     <div class="pf-grid">
-      <div class="pf-stat"><div class="pf-stat-l">Picks</div><div class="pf-stat-v">${st.allResCount}</div></div>
-      <div class="pf-stat"><div class="pf-stat-l">Decided</div><div class="pf-stat-v">${st.allDec}</div></div>
-      <div class="pf-stat"><div class="pf-stat-l">Hit Rate</div><div class="pf-stat-v" style="color:${rc(allWr)}">${allWr}%</div></div>
-      <div class="pf-stat"><div class="pf-stat-l">Units</div><div class="pf-stat-v" style="color:${uc(st.totalU)}">${uFmt(st.totalU)}</div></div>
+      <div class="pf-stat"><div class="pf-stat-l">Picks</div><div class="pf-stat-v">${st.bbDec+st.bbVoids}</div></div>
+      <div class="pf-stat"><div class="pf-stat-l">Decided</div><div class="pf-stat-v">${st.bbDec}</div></div>
+      <div class="pf-stat"><div class="pf-stat-l">Hit Rate</div><div class="pf-stat-v" style="color:${rc(bbWr)}">${bbWr}%</div></div>
+      <div class="pf-stat"><div class="pf-stat-l">Units</div><div class="pf-stat-v" style="color:${uc(st.bbU)}">${uFmt(st.bbU)}</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
       <div class="strk"><div class="strk-n" style="color:${sc}">${st.stk}${st.stT||'—'}</div><div class="strk-l">${st.stT==='W'?'Win':'Loss'} Streak</div></div>
@@ -389,28 +392,28 @@ function pgPf(st){const sp=SP[S.sp];if(!st.allDec)return`<div class="card" style
 
   // ROW 2: BY SECTION
   const secRow=(lbl,emoji,h,d,u)=>{const r=d?Math.round(h/d*100):0;return`<tr><td style="font-weight:700">${emoji} ${lbl}</td><td style="text-align:center">${d}</td><td style="text-align:center;color:${rc(r)};font-weight:700">${d?r+'%':'—'}</td><td style="text-align:center;font-weight:700;color:${uc(u)};font-family:'JetBrains Mono',monospace">${uFmt(u)}</td></tr>`};
-  const bySection=`<div class="ch" style="grid-column:span 2"><div class="ct">${sp.e} By Section</div>
+  const bySection=`<div class="ch" style="grid-column:span 2"><div class="ct">${sp.e} By List</div>
     <div class="tw"><table><thead><tr><th>Section</th><th style="text-align:center">Decided</th><th style="text-align:center">Hit Rate</th><th style="text-align:center">Units</th></tr></thead><tbody>
     ${secRow('Best Bets',sp.e,st.bbHits,st.bbDec,st.bbU)}
-    ${secRow(S.sp==='nfl'?'TD Scorers':'Lotto Plays',L2E(),st.lotHits,st.lotDec,st.lotU)}
-    <tr style="border-top:2px solid var(--border)"><td style="font-weight:800">📊 Overall</td><td style="text-align:center;font-weight:700">${st.allDec}</td><td style="text-align:center;font-weight:800;color:${rc(allWr)}">${allWr}%</td><td style="text-align:center;font-weight:800;color:${uc(st.totalU)};font-family:'JetBrains Mono',monospace">${uFmt(st.totalU)}</td></tr>
-    </tbody></table></div></div>`;
+    ${st.lotDec?secRow((S.sp==='nfl'?'TD Scorers':'Lotto Plays')+' <span style="font-weight:500;color:var(--text-4);font-size:10px">· tracked separately</span>',L2E(),st.lotHits,st.lotDec,st.lotU):''}
+    
+    </tbody></table></div><div style="font-size:10.5px;color:var(--text-4);margin-top:8px">The record is Best Bets only. Other lists are graded for reference and never added into it.</div></div>`;
 
   // ROW 3: BY GRADE table + bar chart
   const gradeRows=['S','A','B','C'].map(g=>{const gd=st.gU[g]||{u:0,dec:0,hits:0};if(!gd.dec)return'';const r=Math.round(gd.hits/gd.dec*100);const emoji=g==='S'?'🔥':g==='A'?'✅':g==='B'?'📊':'⚠️';return`<tr><td><span class="gr g${g.toLowerCase()}">${emoji} ${g}</span></td><td style="text-align:center">${gd.dec}</td><td style="text-align:center;color:${rc(r)};font-weight:700">${r}%</td><td style="text-align:center;font-weight:700;color:${uc(gd.u)};font-family:'JetBrains Mono',monospace">${uFmt(gd.u)}</td></tr>`}).join('');
-  const byGrade=`<div class="ch"><div class="ct">By Grade</div>
+  const byGrade=`<div class="ch"><div class="ct">By Grade (Best Bets)</div>
     <div class="tw"><table><thead><tr><th>Grade</th><th style="text-align:center">Decided</th><th style="text-align:center">Hit Rate</th><th style="text-align:center">Units</th></tr></thead><tbody>${gradeRows}</tbody></table></div></div>`;
   const gradeChart=`<div class="ch"><div class="ct">Units by Grade</div><div class="bar-chart">${['S','A','B','C'].map(g=>{const gd=st.gU[g]||{u:0,dec:0};const mx=Math.max(...['S','A','B','C'].map(x=>Math.abs((st.gU[x]||{u:0}).u)),0.1);const c=g==='S'?'var(--amber)':g==='A'?'var(--green)':g==='B'?'var(--blue)':'var(--text-4)';const isNeg=gd.u<0;return`<div class="bar-c"><div class="bar-v" style="color:${uc(gd.u)}">${uFmt(gd.u)}</div><div class="bar" style="height:${Math.max(4,Math.abs(gd.u)/mx*85)}px;background:${isNeg?'var(--red)':c}"></div><div class="bar-l">${g} (${gd.dec})</div></div>`}).join('')}</div></div>`;
 
   // ROW 4: DAILY BREAKDOWN TABLE
   const sortedDayKeys=Object.keys(st.dayU).sort().reverse();
   const dayRows=sortedDayKeys.map(d=>{const dy=st.dayU[d];const r=dy.dec?Math.round(dy.hits/dy.dec*100):0;return`<tr class="day-row" style="cursor:default"><td style="font-weight:600;white-space:nowrap">${fD(d)}</td><td style="text-align:center">${dy.picks}</td><td class="hs" style="text-align:center">${dy.hits}</td><td class="hs" style="text-align:center">${dy.miss}</td><td style="text-align:center;color:${rc(r)};font-weight:700">${dy.dec?r+'%':'—'}</td><td style="text-align:center;font-weight:700;color:${uc(dy.u)};font-family:'JetBrains Mono',monospace">${uFmt(dy.u)}</td></tr>`}).join('');
-  const dailyBreakdown=`<div class="card"><div class="ct" style="margin-bottom:12px">📅 Daily Breakdown</div>
+  const dailyBreakdown=`<div class="card"><div class="ct" style="margin-bottom:12px">📅 Daily Breakdown (Best Bets)</div>
     <div class="tw"><table><thead><tr><th>Date</th><th style="text-align:center">Picks</th><th class="hs" style="text-align:center">Hits</th><th class="hs" style="text-align:center">Miss</th><th style="text-align:center">Rate</th><th style="text-align:center">Units</th></tr></thead><tbody>${dayRows}</tbody></table></div></div>`;
 
   // ROW 5: DAILY UNITS BAR CHART
   const plDays=Object.keys(st.dayU).sort().slice(-14);
-  const plChart=`<div class="card"><div class="ct" style="margin-bottom:12px">📊 Daily Units (Last 14 Days)</div><div class="bar-chart" style="height:130px">${plDays.map(d=>{const v=st.dayU[d].u;const mx=Math.max(...plDays.map(x=>Math.abs(st.dayU[x].u)),0.1);return`<div class="bar-c"><div class="bar-v" style="color:${uc(v)}">${uFmt(v)}</div><div class="bar" style="height:${Math.max(4,Math.abs(v)/mx*100)}px;background:${v>=0?'var(--green)':'var(--red)'}"></div><div class="bar-l">${fD(d,1)}</div></div>`}).join('')}</div></div>`;
+  const plChart=`<div class="card"><div class="ct" style="margin-bottom:12px">📊 Daily Units — Best Bets (Last 14 Days)</div><div class="bar-chart" style="height:130px">${plDays.map(d=>{const v=st.dayU[d].u;const mx=Math.max(...plDays.map(x=>Math.abs(st.dayU[x].u)),0.1);return`<div class="bar-c"><div class="bar-v" style="color:${uc(v)}">${uFmt(v)}</div><div class="bar" style="height:${Math.max(4,Math.abs(v)/mx*100)}px;background:${v>=0?'var(--green)':'var(--red)'}"></div><div class="bar-l">${fD(d,1)}</div></div>`}).join('')}</div></div>`;
 
   return`<div class="cg">${overall}${donut}</div><div class="cg">${bySection}</div><div class="cg">${byGrade}${gradeChart}</div>${dailyBreakdown}${plChart}`}
 
