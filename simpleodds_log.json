@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-20T10:37:57",
+ "generated_at": "2026-10-20T10:52:27",
  "source": "simpleodds",
  "sport": "MLB+NFL",
  "window_days": 60,
@@ -2242,7 +2242,7 @@
    "total_ev_pct": 69.3,
    "avg_ev_pct": 17.3,
    "n_legs": 4,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "Dallas Cowboys@Green Bay Packers / Houston Texans@Jacksonville Jaguars / New Orleans Saints@New York Giants / Washington Commanders@San Francisco 49ers",
    "sport": "NFL"
   },
@@ -2256,7 +2256,7 @@
    "total_ev_pct": 71,
    "avg_ev_pct": 17.8,
    "n_legs": 4,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "Houston Texans@Jacksonville Jaguars / New York Jets@New England Patriots / Washington Commanders@San Francisco 49ers",
    "sport": "NFL"
   },
@@ -2452,7 +2452,7 @@
    "total_ev_pct": 34.5,
    "avg_ev_pct": 17.2,
    "n_legs": 2,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "New Orleans Saints@New York Giants / Washington Commanders@San Francisco 49ers",
    "sport": "NFL"
   },
@@ -2494,7 +2494,7 @@
    "total_ev_pct": 35.8,
    "avg_ev_pct": 17.9,
    "n_legs": 2,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "Houston Texans@Jacksonville Jaguars / Washington Commanders@San Francisco 49ers",
    "sport": "NFL"
   },
@@ -25215,8 +25215,8 @@
    "prop": "REC Over 5.5",
    "odds": -103,
    "ev_pct": 18,
-   "result": "NODATA",
-   "actual": "",
+   "result": "LOSS",
+   "actual": "5.0",
    "sport": "NFL"
   },
   {
@@ -25306,8 +25306,8 @@
    "prop": "RUSHYD Over 24.5",
    "odds": 194,
    "ev_pct": 17.2,
-   "result": "NODATA",
-   "actual": "",
+   "result": "WIN",
+   "actual": "28.0",
    "sport": "NFL"
   },
   {
@@ -25800,8 +25800,8 @@
    "prop": "REC Over 5.5",
    "odds": 130,
    "ev_pct": 18,
-   "result": "NODATA",
-   "actual": "",
+   "result": "LOSS",
+   "actual": "5.0",
    "sport": "NFL"
   },
   {
@@ -25891,8 +25891,8 @@
    "prop": "RUSHYD Over 24.5",
    "odds": 150,
    "ev_pct": 17.2,
-   "result": "NODATA",
-   "actual": "",
+   "result": "WIN",
+   "actual": "28.0",
    "sport": "NFL"
   },
   {
@@ -70814,11 +70814,11 @@
    "NFL": {
     "tiers": {
      "SGP+": {
-      "n": 8,
+      "n": 10,
       "w": 0,
-      "l": 8,
-      "void": 2,
-      "units": -8.0,
+      "l": 10,
+      "void": 0,
+      "units": -10.0,
       "est": true,
       "roi": -100.0,
       "hit": 0.0
@@ -70834,11 +70834,11 @@
       "hit": 0.0
      },
      "PARLAY": {
-      "n": 10,
+      "n": 12,
       "w": 0,
-      "l": 10,
-      "void": 2,
-      "units": -10.0,
+      "l": 12,
+      "void": 0,
+      "units": -12.0,
       "est": false,
       "roi": -100.0,
       "hit": 0.0
