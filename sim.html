@@ -137,7 +137,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 <div class="kpi"><span class="kpi-l">Units</span><span class="kpi-v" id="k-u">&mdash;</span></div>
 <button class="tbtn" id="th" title="Toggle theme" aria-label="Toggle theme">&#9789;</button>
 </div></div></div>
-<div class="nav"><div class="nav-in">
+<div class="nav" id="ownernav" hidden><div class="nav-in">
 <a class="nt" href="index.html">&larr; Command Center</a><div class="ndiv"></div>
 <a class="nt" href="simpleodds.html">SimpleOdds</a>
 <a class="nt" href="hr.html">HR Highlights</a>
@@ -163,6 +163,8 @@ function getTheme(){try{var s=JSON.parse(localStorage.getItem('cc7')||'{}');retu
 function setTheme(t){document.documentElement.setAttribute('data-theme',t);
  try{var s=JSON.parse(localStorage.getItem('cc7')||'{}');s.theme=t;localStorage.setItem('cc7',JSON.stringify(s));}catch(e){}}
 setTheme(getTheme());
+// The site nav is for Dylan only: show it when signed in (the cc_in cookie is set at sign-in and grants nothing by itself).
+if (/(?:^|;\s*)cc_in=1/.test(document.cookie)) document.getElementById('ownernav').hidden = false;
 document.getElementById('th').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
 
 const $ = id => document.getElementById(id);

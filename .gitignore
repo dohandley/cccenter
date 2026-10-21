@@ -1,2 +1,3 @@
 *.bak 
 *.bak_void 
+node_modules/
