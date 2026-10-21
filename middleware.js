@@ -3,7 +3,6 @@
 // Everything else (dashboard, SimpleOdds, HR Highlights, the picks logs) needs the password.
 // The password lives only in the Vercel environment variable CC_PASSWORD, never in this repo.
 import { next } from '@vercel/functions';
-import { createHmac, timingSafeEqual } from 'node:crypto';
 
 export const config = { matcher: '/:path*' };
 
@@ -11,8 +10,15 @@ const PUBLIC = [/^\/sim(\.html)?$/, /^\/sim\//, /^\/logo\.png$/, /^\/favicon\.ic
 const COOKIE = 'cc_auth';
 const MAX_AGE = 60 * 60 * 24 * 180; // stay signed in for 180 days per device
 
-const token = pw => createHmac('sha256', pw).update('cc-center-auth-v1').digest('hex');
-const same = (a, b) => { const x = Buffer.from(a), y = Buffer.from(b); return x.length === y.length && timingSafeEqual(x, y); };
+// Signed-in token = HMAC-SHA256(password, fixed label). Web Crypto, so it runs in Vercel's edge runtime.
+const enc = new TextEncoder();
+async function token(pw) {
+  const key = await crypto.subtle.importKey('raw', enc.encode(pw), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const sig = new Uint8Array(await crypto.subtle.sign('HMAC', key, enc.encode('cc-center-auth-v1')));
+  return Array.from(sig, b => b.toString(16).padStart(2, '0')).join('');
+}
+// constant-time string compare
+const same = (a, b) => { if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; };
 const cookie = (req, name) => {
   const m = (req.headers.get('cookie') || '').match(new RegExp('(?:^|;\\s*)' + name + '=([^;]+)'));
   return m ? decodeURIComponent(m[1]) : '';
@@ -39,7 +45,7 @@ export default async function middleware(req) {
     const to = safeNext(String((form && form.get('next')) || '/'));
     if (pw && given && same(given, pw)) {
       return redirect(to, [
-        `${COOKIE}=${token(pw)}; Path=/; Max-Age=${MAX_AGE}; HttpOnly; Secure; SameSite=Lax`,
+        `${COOKIE}=${await token(pw)}; Path=/; Max-Age=${MAX_AGE}; HttpOnly; Secure; SameSite=Lax`,
         `cc_in=1; Path=/; Max-Age=${MAX_AGE}; Secure; SameSite=Lax`, // lets pages show the owner's nav; grants nothing
       ]);
     }
@@ -48,7 +54,7 @@ export default async function middleware(req) {
 
   if (PUBLIC.some(r => r.test(path))) return next();
 
-  if (pw && same(cookie(req, COOKIE), token(pw))) return next();
+  if (pw && same(cookie(req, COOKIE), await token(pw))) return next();
 
   return redirect(`/login?next=${encodeURIComponent(path + url.search)}`);
 }
