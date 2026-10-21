@@ -36,7 +36,7 @@ export default async function middleware(req) {
   const pw = process.env.CC_PASSWORD || '';
 
   if (path === '/logout') {
-    return redirect('/login', [`${COOKIE}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax`, 'cc_in=; Path=/; Max-Age=0; Secure; SameSite=Lax']);
+    return redirect('/login.html', [`${COOKIE}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax`, 'cc_in=; Path=/; Max-Age=0; Secure; SameSite=Lax']);
   }
 
   if (path === '/login' && req.method === 'POST') {
@@ -49,12 +49,12 @@ export default async function middleware(req) {
         `cc_in=1; Path=/; Max-Age=${MAX_AGE}; Secure; SameSite=Lax`, // lets pages show the owner's nav; grants nothing
       ]);
     }
-    return redirect(`/login?e=1&next=${encodeURIComponent(to)}`);
+    return redirect(`/login.html?e=1&next=${encodeURIComponent(to)}`);
   }
 
   if (PUBLIC.some(r => r.test(path))) return next();
 
   if (pw && same(cookie(req, COOKIE), await token(pw))) return next();
 
-  return redirect(`/login?next=${encodeURIComponent(path + url.search)}`);
+  return redirect(`/login.html?next=${encodeURIComponent(path + url.search)}`);
 }
