@@ -4,7 +4,7 @@
 // The password lives only in the Vercel environment variable CC_PASSWORD, never in this repo.
 import { next } from '@vercel/functions';
 
-export const config = { matcher: '/:path*' };
+export const config = { matcher: ['/', '/:path*'] }; // '/' listed on its own: '/:path*' alone skipped the home page
 
 const PUBLIC = [/^\/sim(\.html)?$/, /^\/sim\//, /^\/logo\.png$/, /^\/favicon\.ico$/, /^\/login(\.html)?$/, /^\/robots\.txt$/];
 const COOKIE = 'cc_auth';
