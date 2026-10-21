@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Sim Slate &middot; Chasin Cheddar</title>
-<meta name="description" content="NBA possession sim: every game simulated 4,000 times, with projections, fair lines, picks and results.">
-<meta property="og:title" content="Sim Slate · Chasin Cheddar's Command Center">
-<meta property="og:description" content="Every NBA game simulated 4,000 times: projections, fair lines vs the market, picks and graded results.">
+<title>Sim Ledger &middot; Chasin Cheddar</title>
+<meta name="description" content="NBA and NFL sims: every game simulated thousands of times, with projections, fair lines, every pick and graded results.">
+<meta property="og:title" content="Sim Ledger · Chasin Cheddar's Command Center">
+<meta property="og:description" content="NBA and NFL games simulated thousands of times: projections, fair lines vs the market, every pick and graded results.">
 <meta property="og:image" content="https://cccenter.vercel.app/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,14 +110,30 @@ summary{cursor:pointer;font-weight:800;font-size:13px;text-transform:uppercase;l
 .notes{padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-3);font-size:11.5px}
 .notes ul{padding-left:16px;margin:8px 0 0}.notes li{margin-bottom:4px}
 .empty{padding:28px;color:var(--text-3);text-align:center;font-size:13px;background:var(--surface);border:1px dashed var(--border);border-radius:10px}
+.lg{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.lgb{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 14px;cursor:pointer;font-family:inherit;color:var(--text);box-shadow:var(--shadow)}
+.lgb b{font-weight:800;font-size:15px;letter-spacing:-.01em}
+.lgb span{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-3)}
+.lgb.on{border-color:var(--text);box-shadow:inset 0 -3px 0 var(--green)}
+.vw{margin-left:auto;display:flex;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:3px}
+.vw button{background:none;border:0;border-radius:6px;padding:7px 14px;font-family:inherit;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);cursor:pointer}
+.vw button.on{background:var(--text);color:var(--bg)}
+.lgb:focus-visible,.vw button:focus-visible,tr.go:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+tr.go{cursor:pointer} tr.go:hover td{background:var(--surface-2)}
+td.pk{font-weight:700;white-space:normal;min-width:180px}
+.grp{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-3);background:var(--surface-2)}
+.flash{animation:fl 1.6s ease}
+@keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
+.game{scroll-margin-top:96px}.mo{display:none}
+@media(max-width:768px){.vw{margin-left:0;width:100%}.vw button{flex:1}.hm{display:none}.mo{display:inline}.sub.mo{display:block}td.pk{min-width:120px}td,th{padding:8px 7px}}
 @media(max-width:768px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats>.st:last-child:nth-child(odd){grid-column:span 2}.hdr-r .kpi{display:none}.body{padding:16px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}.hdr-in{padding:12px 16px}.nav-in{padding:0 16px}.lines{grid-template-columns:repeat(2,minmax(0,1fr))}.meters{grid-template-columns:1fr;gap:8px}.box2{grid-template-columns:1fr}.game{padding:14px}}
 @media(prefers-reduced-motion:no-preference){.bar i{transition:width .4s ease}}
 </style></head>
 <body>
 <div class="hdr"><div class="hdr-in">
-<div><div class="h-t"><span>Sim</span> Slate</div><div class="h-d" id="hd">NBA &middot; every game simulated 4,000 times</div></div>
+<div><div class="h-t"><span>Sim</span> Ledger</div><div class="h-d" id="hd">NBA &amp; NFL &middot; every game simulated thousands of times</div></div>
 <div class="hdr-r">
-<div class="kpi"><span class="kpi-l">Season</span><span class="kpi-v" id="k-rec">&mdash;</span></div>
+<div class="kpi"><span class="kpi-l">All bets</span><span class="kpi-v" id="k-rec">&mdash;</span></div>
 <div class="kpi"><span class="kpi-l">Units</span><span class="kpi-v" id="k-u">&mdash;</span></div>
 <button class="tbtn" id="th" title="Toggle theme" aria-label="Toggle theme">&#9789;</button>
 </div></div></div>
@@ -125,17 +141,20 @@ summary{cursor:pointer;font-weight:800;font-size:13px;text-transform:uppercase;l
 <a class="nt" href="index.html">&larr; Command Center</a><div class="ndiv"></div>
 <a class="nt" href="simpleodds.html">SimpleOdds</a>
 <a class="nt" href="hr.html">HR Highlights</a>
-<a class="nt on" href="sim.html">Sim Slate</a>
+<a class="nt on" href="sim.html">Sim Ledger</a>
 </div></div>
 <div class="body">
+  <div class="lg">
+    <div class="lg" id="leagues" role="group" aria-label="League"></div>
+    <div class="vw" role="group" aria-label="View"><button type="button" data-v="slate">Slate</button><button type="button" data-v="ledger">Ledger</button></div>
+  </div>
   <div class="stats" id="season"></div>
-  <div class="fbar" id="dates" role="group" aria-label="Choose a night"><span class="f-lab">Night</span></div>
-  <div class="stats" id="night"></div>
-  <div id="games"><div class="empty">Loading the slate&hellip;</div></div>
+  <div id="view"><div class="empty">Loading&hellip;</div></div>
   <div class="notes"><strong>How to read this</strong><ul>
-    <li>Every game is simulated possession by possession, 4,000 times, with that day's injury report and projected rotations. The big numbers are the average simulated score.</li>
-    <li><b>Bets</b> are 1 unit each and need the model to beat the no-vig market by 6 points on totals or 7 on props, and still clear breakeven in the stress test, which reruns the game with every team and player edge cut in half. <b>Leans</b> are edges that didn't qualify, tracked for reference.</li>
-    <li>Each meter is a win probability; the dark tick is breakeven at the posted price. In the box score, actuals are green when they beat the projection and red when they fell short.</li>
+    <li>Every game is simulated play by play thousands of times (possessions for the NBA, snaps for the NFL), using that day's injury report and projected rotations. The big numbers are the average simulated score.</li>
+    <li><b>Bets</b> are 1 unit each. A bet needs the model to beat the no-vig market by 6 points on totals or 7 on props, and it still has to clear breakeven in the stress test, which reruns the game with every team and player edge cut in half. <b>Leans</b> are edges that didn't qualify, tracked to see whether they would have paid.</li>
+    <li>Each meter is a win probability, and the dark tick is breakeven at the posted price. In the box score, actuals are green when they beat the projection and red when they fell short.</li>
+    <li>Sides (spreads and moneylines) are tracked as leans only. In backtesting the model didn't beat the closing spread, so they aren't staked.</li>
     <li>Prices are from when the game was priced. For entertainment; not betting advice.</li>
   </ul></div>
 </div>
@@ -152,57 +171,79 @@ const pct = v => (v * 100).toFixed(1) + '%';
 const odds = v => (v > 0 ? '+' : '') + v;
 const un = v => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2) + 'u';
 const sgn = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(1);
-const TEAMS = {ATL:'Hawks',BKN:'Nets',BOS:'Celtics',CHA:'Hornets',CHI:'Bulls',CLE:'Cavaliers',DAL:'Mavericks',DEN:'Nuggets',DET:'Pistons',GS:'Warriors',HOU:'Rockets',IND:'Pacers',LAC:'Clippers',LAL:'Lakers',MEM:'Grizzlies',MIA:'Heat',MIL:'Bucks',MIN:'Timberwolves',NO:'Pelicans',NY:'Knicks',OKC:'Thunder',ORL:'Magic',PHI:'76ers',PHX:'Suns',POR:'Trail Blazers',SA:'Spurs',SAC:'Kings',TOR:'Raptors',UTAH:'Jazz',WSH:'Wizards'};
-const STAT = {pts:'points',reb:'rebounds',ast:'assists',fg3m:'threes',pra:'pts+reb+ast',pr:'pts+reb',pa:'pts+ast',ra:'reb+ast'};
-const nick = t => TEAMS[t] || t;
-let IDX = null, DATE = null; const CACHE = {};
-try { const h = location.hash.slice(1); if (/^\d{4}-\d{2}-\d{2}$/.test(h)) DATE = h; } catch (e) {}
-const day = (d, long) => new Date(d + 'T12:00:00').toLocaleDateString('en-US', long ? {weekday:'long', month:'long', day:'numeric'} : {weekday:'short', month:'short', day:'numeric'});
-const tip = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/New_York'}) + ' ET'; };
-const st = (l, v, s, cls) => `<div class="st"><div class="st-l">${l}</div><div class="st-v ${cls || ''}">${v}</div>${s ? `<div class="st-s">${s}</div>` : ''}</div>`;
 const ucls = v => v > 0 ? 'pos' : v < 0 ? 'neg' : '';
+const rec = r => r ? `${r.w}–${r.l}${r.p ? '–' + r.p : ''}` : '—';
+const st = (l, v, s, cls) => `<div class="st"><div class="st-l">${l}</div><div class="st-v ${cls || ''}">${v}</div>${s ? `<div class="st-s">${s}</div>` : ''}</div>`;
+const LEAGUES = {nba: 'NBA', nfl: 'NFL'};
+const NICK = {
+  nba: {ATL:'Hawks',BKN:'Nets',BOS:'Celtics',CHA:'Hornets',CHI:'Bulls',CLE:'Cavaliers',DAL:'Mavericks',DEN:'Nuggets',DET:'Pistons',GS:'Warriors',HOU:'Rockets',IND:'Pacers',LAC:'Clippers',LAL:'Lakers',MEM:'Grizzlies',MIA:'Heat',MIL:'Bucks',MIN:'Timberwolves',NO:'Pelicans',NY:'Knicks',OKC:'Thunder',ORL:'Magic',PHI:'76ers',PHX:'Suns',POR:'Trail Blazers',SA:'Spurs',SAC:'Kings',TOR:'Raptors',UTAH:'Jazz',WSH:'Wizards'},
+  nfl: {ARI:'Cardinals',ATL:'Falcons',BAL:'Ravens',BUF:'Bills',CAR:'Panthers',CHI:'Bears',CIN:'Bengals',CLE:'Browns',DAL:'Cowboys',DEN:'Broncos',DET:'Lions',GB:'Packers',HOU:'Texans',IND:'Colts',JAX:'Jaguars',KC:'Chiefs',LA:'Rams',LAC:'Chargers',LV:'Raiders',MIA:'Dolphins',MIN:'Vikings',NE:'Patriots',NO:'Saints',NYG:'Giants',NYJ:'Jets',PHI:'Eagles',PIT:'Steelers',SEA:'Seahawks',SF:'49ers',TB:'Buccaneers',TEN:'Titans',WAS:'Commanders'}
+};
+const IDX = {}, NIGHT = {}, LEDGER = {};
+let LG = 'nba', VIEW = 'slate', NID = null, FOCUS = null, FILT = {kind: 'all', mkt: 'all'};
+const nick = t => (NICK[LG] || {})[t] || t;
+const tip = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', timeZone:'America/New_York'}) + ' · ' + d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/New_York'}) + ' ET'; };
+const shortDate = s => new Date(s).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'America/New_York'});
+const getJSON = async u => { const r = await fetch(u, {cache: 'no-cache'}); if (!r.ok) throw new Error(u); return r.json(); };
 
-function projOf(g, p) {
-  const r = (g.proj[p.team] || []).find(x => x.player === p.player); if (!r) return null;
-  const v = {pra: r.pts + r.reb + r.ast, pr: r.pts + r.reb, pa: r.pts + r.ast, ra: r.reb + r.ast}[p.stat] ?? r[p.stat];
-  return {v, min: r.min};
+/* ---------- routing: #nba/slate/2026-10-20 , #nfl/ledger ---------- */
+function readHash() {
+  const [lg, v, n] = location.hash.slice(1).split('/');
+  if (LEAGUES[lg]) LG = lg;
+  if (v === 'slate' || v === 'ledger') VIEW = v;
+  NID = n || null;
 }
-function why(g, p) {
-  if (p.market === 'total') return `Fair total ${g.fair_total.toFixed(1)} against a posted ${p.line}. Projected ${g.away} ${g.away_mean.toFixed(1)}, ${g.home} ${g.home_mean.toFixed(1)}.`;
-  if (p.market === 'prop') { const r = projOf(g, p); if (r) return `Projected ${r.v.toFixed(1)} ${STAT[p.stat] || p.stat} in ${r.min.toFixed(0)} minutes against a line of ${p.line}.`; }
-  return `Model makes it ${g.home} ${sgn(g.fair_spread_home)}, ${g.home} wins ${pct(g.home_win)}.`;
-}
+function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'slate' && NID ? '/' + NID : ''}`); } catch (e) {} }
+
+/* ---------- slate ---------- */
 const meter = (l, v, be, mkt) => `<div><div class="mt-l"><span>${l}</span><b>${pct(v)}</b></div><div class="bar${mkt ? ' mkt' : ''}"><i style="width:${Math.max(0, Math.min(1, v)) * 100}%"></i>${be != null ? `<s style="left:calc(${(be * 100).toFixed(1)}% - 1px)" title="Breakeven ${pct(be)}"></s>` : ''}</div></div>`;
 function finishLine(p) {
   if (p.actual == null) return '';
-  return p.market === 'prop' ? `Finished with ${p.actual}` : p.market === 'total' ? `Final total ${p.actual}` : `Final ${esc(p.actual)}`;
+  return p.market === 'prop' ? `Finished with ${esc(p.actual)}` : p.market === 'total' ? `Final total ${esc(p.actual)}` : `Final: ${esc(p.actual)}`;
 }
 function pickCard(g, p) {
   const res = p.result ? `<div class="res"><span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span>${finishLine(p)}</span><span class="u ${ucls(p.units)}">${un(p.units)}</span></div>`
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
   return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
-    <div class="why">${esc(why(g, p))}</div>
+    ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
     <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${res}</div>`;
 }
-function leans(g, ls) {
+function leanTable(ls) {
   if (!ls.length) return '';
-  const rows = ls.map(p => `<tr><td class="w">${esc(p.selection)}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${p.actual}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span></td>
+  const rows = ls.map(p => `<tr><td class="w">${esc(p.selection)}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span></td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : '<span class="pill p-open">pending</span>'}</td></tr>`).join('');
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
     <div class="tw"><table><thead><tr><th>Lean</th><th class="r">Price</th><th class="r">Model</th><th class="r">Result</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
+const YDS = /yds|min/;
+const fmt = (k, v) => typeof v === 'number' ? v.toFixed(YDS.test(k) ? 0 : 1) : '';
 function box(g, t) {
-  const act = g.final && g.final.box && g.final.box[t];
-  const cell = (r, k) => {
-    const v = r[k], shown = typeof v === 'number' ? v.toFixed(k === 'min' ? 0 : 1) : '';
-    if (!act) return `<td class="r">${shown}</td>`;
-    const a = act[r.player], av = a ? (a.dnp ? 'DNP' : a[k]) : '';
-    const tone = av === '' ? '' : av === 'DNP' ? ' miss' : (av > +shown ? ' hit' : av < +shown ? ' miss' : '');
-    return `<td class="r">${shown}<span class="act${tone}">${av === '' ? '' : (k === 'min' && typeof av === 'number' ? Math.round(av) : av)}</span></td>`;
-  };
-  const rows = (g.proj[t] || []).map(r => `<tr><td>${esc(r.player)}</td>${['min','pts','reb','ast','fg3m'].map(k => cell(r, k)).join('')}</tr>`).join('');
-  return `<div><div class="ct">${esc(nick(t))} &middot; ${act ? 'projected, actual below' : 'projected'}</div><div class="tw"><table><thead><tr><th>Player</th><th class="r">Min</th><th class="r">Pts</th><th class="r">Reb</th><th class="r">Ast</th><th class="r">3PM</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  const act = g.final && g.final.box ? (g.final.box[t] || {}) : null;
+  const groups = g.box_groups || [];
+  const ncol = Math.max(...groups.map(x => x.cols.length));
+  let body = '', head = '';
+  for (const grp of groups) {
+    const rows = ((g.proj[t] || {})[grp.key]) || [];
+    if (!rows.length) continue;
+    const hdr = `<tr><th>${esc(grp.label || 'Player')}</th>${grp.cols.map(c => `<th class="r">${esc(c[1])}</th>`).join('')}${'<th></th>'.repeat(ncol - grp.cols.length)}</tr>`;
+    if (groups.length === 1) head = hdr; else body += hdr.replace(/<th/g, '<th class="grp"').replace(/class="grp" class="r"/g, 'class="grp r"');
+    for (const r of rows) {
+      const a = act ? act[r.player] : undefined;
+      const cells = grp.cols.map(([k]) => {
+        const shown = fmt(k, r[k]);
+        if (!act) return `<td class="r">${shown}</td>`;
+        let av, tone = '';
+        if (a === undefined) { av = '—'; }
+        else if (a.dnp) { av = 'DNP'; tone = ' miss'; }
+        else { const v = a[k] ?? 0; av = k === 'min' ? Math.round(v) : v; tone = v > +shown ? ' hit' : v < +shown ? ' miss' : ''; }
+        return `<td class="r">${shown}<span class="act${tone}">${esc(av)}</span></td>`;
+      }).join('');
+      const actv = r.active != null && r.active < 0.99 ? ` <span class="dim">(${Math.round(r.active * 100)}%)</span>` : '';
+      body += `<tr><td>${esc(r.player)}${actv}</td>${cells}${'<td></td>'.repeat(ncol - grp.cols.length)}</tr>`;
+    }
+  }
+  return `<div><div class="ct">${esc(nick(t))} &middot; ${act ? 'projected, actual below' : 'projected'}</div><div class="tw"><table>${head ? `<thead>${head}</thead>` : ''}<tbody>${body}</tbody></table></div></div>`;
 }
 function card(g) {
   const bets = g.picks.filter(p => p.kind === 'bet'), ls = g.picks.filter(p => p.kind === 'lean');
@@ -212,7 +253,7 @@ function card(g) {
   const fs = g.fair_spread_home, sl = g.spread_line;
   const outs = [g.away, g.home].filter(t => (g.out[t] || []).length).map(t => `<b>${esc(t)}</b> ${esc(g.out[t].join(', '))}`).join(' &middot; ');
   return `<article class="game" id="g-${esc(g.game_id)}">
-    <div class="g-top"><span class="ct">${esc(day(g.date))} &middot; ${esc(tip(g.tipoff))} &middot; lines ${esc(g.line_source || '')}</span>${state}</div>
+    <div class="g-top"><span class="ct">${esc(tip(g.tipoff))} &middot; ${(g.sims || 4000).toLocaleString()} sims${g.line_source ? ' &middot; lines ' + esc(g.line_source) : ''}</span>${state}</div>
     <div class="score">
       <div class="tm${homeFav ? '' : ' fav'}"><span class="tm-n">${esc(nick(g.away))}</span><span class="tm-p">${g.away_mean.toFixed(1)}</span>${f ? `<span class="tm-f">Final <b>${f.away_score}</b></span>` : ''}</div>
       <div class="mid">at<br>avg sim</div>
@@ -227,49 +268,86 @@ function card(g) {
     ${outs ? `<div class="out">Out: ${outs}</div>` : ''}
     <div class="sec"><span class="tag t-bet">Bet</span> 1 unit each <span class="cnt">${bets.length || 'none cleared the bar'}</span></div>
     ${bets.length ? `<div class="picks">${bets.map(p => pickCard(g, p)).join('')}</div>` : ''}
-    ${leans(g, ls)}
-    <details><summary>Projected box score</summary><div class="box2">${box(g, g.away)}${box(g, g.home)}</div></details>
+    ${leanTable(ls)}
+    <details${FOCUS === g.game_id ? ' open' : ''}><summary>${f ? 'Box score: projected vs actual' : 'Projected box score'}</summary><div class="box2">${box(g, g.away)}${box(g, g.home)}</div></details>
   </article>`;
 }
-function renderSeason() {
-  const s = IDX.season, b = s.bets, l = s.leans, m = s.by_market || {};
-  $('k-rec').textContent = `${b.w}–${b.l}`; $('k-u').textContent = un(b.units); $('k-u').className = 'kpi-v ' + ucls(b.units);
-  $('season').innerHTML = st('Season bets', `${b.w}–${b.l}${b.p ? '–' + b.p : ''}`, 'NBA 2026–27')
-    + st('Units', un(b.units), b.roi != null ? `${b.roi > 0 ? '+' : ''}${b.roi}% ROI` : '', ucls(b.units))
-    + st('Totals', m.total ? `${m.total.w}–${m.total.l}` : '—', m.total ? un(m.total.units) : '')
-    + st('Props', m.prop ? `${m.prop.w}–${m.prop.l}` : '—', m.prop ? un(m.prop.units) : '')
-    + st('Leans', `${l.w}–${l.l}`, `${un(l.units)} if bet`);
-  const datesHtml = IDX.dates.map(d => `<button type="button" class="fb${d === DATE ? ' on' : ''}" data-d="${d}" aria-pressed="${d === DATE}">${esc(day(d))}</button>`).join('');
-  $('dates').innerHTML = '<span class="f-lab">Night</span>' + datesHtml;
-}
-async function load(d) {
-  if (!CACHE[d]) { const r = await fetch(`sim/nba/${d}.json`, {cache: 'no-cache'}); CACHE[d] = await r.json(); }
-  return CACHE[d];
-}
-async function render() {
-  renderSeason();
-  const data = await load(DATE), gs = data.games;
-  $('hd').textContent = `NBA · ${day(DATE, true)} · every game simulated 4,000 times`;
+async function renderSlate() {
+  const idx = IDX[LG];
+  if (!idx.nights.length) { $('view').innerHTML = `<div class="empty">No ${LEAGUES[LG]} games priced yet.</div>`; return; }
+  if (!NID || !idx.nights.some(n => n.id === NID)) NID = idx.nights[0].id;
+  const key = LG + '/' + NID;
+  if (!NIGHT[key]) NIGHT[key] = await getJSON(`sim/${LG}/${NID}.json`);
+  const data = NIGHT[key], gs = data.games, r = data.record;
   let nb = 0, nl = 0;
   for (const g of gs) for (const p of g.picks) p.kind === 'bet' ? nb++ : nl++;
-  const r = data.record;
-  $('night').innerHTML = st('Games', gs.length) + st('Bets', nb) + st('Leans', nl)
-    + st('Night W–L', r ? `${r.w}–${r.l}${r.p ? '–' + r.p : ''}` : '—', r ? '' : 'graded next morning')
-    + st('Night units', r ? un(r.units) : '—', '', r ? ucls(r.units) : '');
-  $('games').innerHTML = gs.length ? `<div style="display:grid;gap:16px">${gs.map(card).join('')}</div>` : '<div class="empty">No games priced for this night.</div>';
+  const unit = LG === 'nfl' ? 'Week' : 'Night';
+  $('view').innerHTML = `<div style="display:grid;gap:16px">
+    <div class="fbar" id="nights" role="group" aria-label="Choose a ${unit.toLowerCase()}"><span class="f-lab">${unit}</span>${idx.nights.map(n => `<button type="button" class="fb${n.id === NID ? ' on' : ''}" data-n="${esc(n.id)}" aria-pressed="${n.id === NID}">${esc(n.label)}</button>`).join('')}</div>
+    <div class="stats">${st('Games', gs.length) + st('Bets', nb) + st('Leans', nl) + st(unit + ' W–L', rec(r), r ? '' : 'graded the next morning') + st(unit + ' units', r ? un(r.units) : '—', '', r ? ucls(r.units) : '')}</div>
+    ${gs.length ? gs.map(card).join('') : '<div class="empty">No games priced.</div>'}</div>`;
+  $('nights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; NID = b.dataset.n; FOCUS = null; go(); window.scrollTo({top: 0}); };
+  if (FOCUS) { const el = document.getElementById('g-' + FOCUS); if (el) { el.scrollIntoView({block: 'start'}); el.classList.add('flash'); } FOCUS = null; }
 }
-$('dates').addEventListener('click', e => {
-  const b = e.target.closest('button[data-d]'); if (!b) return;
-  DATE = b.dataset.d; try { history.replaceState(null, '', '#' + DATE); } catch (err) {}
-  render(); window.scrollTo({top: 0});
-});
+
+/* ---------- ledger ---------- */
+async function renderLedger() {
+  if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`);
+  const all = LEDGER[LG].rows;
+  const mk = m => m === 'prop' ? 'props' : m === 'total' ? 'totals' : 'sides';
+  const rows = all.filter(r => (FILT.kind === 'all' || r.kind === FILT.kind) && (FILT.mkt === 'all' || mk(r.market) === FILT.mkt));
+  const chip = (grp, v, l) => `<button type="button" class="fb${FILT[grp] === v ? ' on' : ''}" data-g="${grp}" data-v="${v}" aria-pressed="${FILT[grp] === v}">${l}</button>`;
+  const body = rows.map(r => `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
+      <td>${esc(shortDate(r.tipoff))}<span class="sub">${esc(r.matchup)}</span></td>
+      <td class="pk">${esc(r.selection)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}</td>
+      <td class="hm"><span class="tag ${r.kind === 'bet' ? 't-bet' : 't-lean'}">${r.kind}</span></td>
+      <td class="r">${odds(r.price)}<span class="sub bk">${esc(r.book)}</span></td>
+      <td class="r hm">${pct(r.model_p)}<span class="sub">mkt ${pct(r.book_p)}</span></td>
+      <td class="r hm">${r.result ? `<span class="pill p-${esc(r.result)}">${esc(r.result)}</span>` : '<span class="pill p-open">pending</span>'}</td>
+      <td class="r u ${ucls(r.units)}">${r.result ? un(r.units) : '<span class="dim">pending</span>'}<span class="sub mo" style="font-weight:600">${esc(r.result || '')}</span></td></tr>`).join('');
+  $('view').innerHTML = `<div style="display:grid;gap:12px">
+    <div class="fbar" id="lf"><span class="f-lab">Show</span>${chip('kind', 'all', 'All')}${chip('kind', 'bet', 'Bets')}${chip('kind', 'lean', 'Leans')}
+      <span class="ndiv"></span>${chip('mkt', 'all', 'Every market')}${chip('mkt', 'totals', 'Totals')}${chip('mkt', 'props', 'Props')}${chip('mkt', 'sides', 'Sides')}</div>
+    <div class="tw"><table><thead><tr><th>Game</th><th>Pick</th><th class="hm"></th><th class="r">Price</th><th class="r hm">Model</th><th class="r hm">Result</th><th class="r">Units</th></tr></thead>
+    <tbody>${body || '<tr><td colspan="7" class="dim">Nothing matches.</td></tr>'}</tbody></table></div>
+    <div class="dim" style="font-size:11.5px">${rows.length} of ${all.length} picks. Tap a row to open that game's card and box score.</div></div>`;
+  $('lf').onclick = e => { const b = e.target.closest('button[data-g]'); if (!b) return; FILT[b.dataset.g] = b.dataset.v; renderLedger(); };
+  const open = tr => { NID = tr.dataset.n; FOCUS = tr.dataset.g; VIEW = 'slate'; go(); };
+  $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = () => open(tr); tr.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(tr); } }; });
+}
+
+/* ---------- shell ---------- */
+function renderTop() {
+  $('leagues').innerHTML = Object.entries(LEAGUES).filter(([k]) => IDX[k]).map(([k, l]) => {
+    const b = IDX[k].season.bets;
+    return `<button type="button" class="lgb${k === LG ? ' on' : ''}" data-l="${k}" aria-pressed="${k === LG}"><b>${l}</b><span>${rec(b)} &middot; <span class="${ucls(b.units)}">${un(b.units)}</span></span></button>`;
+  }).join('');
+  document.querySelectorAll('.vw button').forEach(b => { b.classList.toggle('on', b.dataset.v === VIEW); b.setAttribute('aria-pressed', b.dataset.v === VIEW); });
+  const s = IDX[LG].season, b = s.bets, l = s.leans, m = s.by_market || {};
+  $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'slate' ? 'every game simulated thousands of times' : 'every pick, graded'}`;
+  $('season').innerHTML = st('Season bets', rec(b), IDX[LG].season_label)
+    + st('Units', un(b.units), b.roi != null ? `${b.roi > 0 ? '+' : ''}${b.roi}% ROI` : '', ucls(b.units))
+    + st('Totals', m.total ? rec(m.total) : '—', m.total ? un(m.total.units) : '')
+    + st('Props', m.prop ? rec(m.prop) : '—', m.prop ? un(m.prop.units) : '')
+    + st('Leans', rec(l), l.w + l.l ? `${un(l.units)} if bet` : '');
+  // header KPIs: all leagues combined
+  let w = 0, ls = 0, u = 0;
+  for (const k in IDX) { const x = IDX[k].season.bets; w += x.w; ls += x.l; u += x.units; }
+  $('k-rec').textContent = `${w}–${ls}`; $('k-u').textContent = un(Math.round(u * 100) / 100); $('k-u').className = 'kpi-v ' + ucls(u);
+}
+async function go() {
+  writeHash(); renderTop();
+  try { await (VIEW === 'slate' ? renderSlate() : renderLedger()); writeHash(); }
+  catch (e) { $('view').innerHTML = '<div class="empty">This couldn’t load. Refresh to try again.</div>'; }
+}
+$('leagues').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b || b.dataset.l === LG) return; LG = b.dataset.l; NID = null; FOCUS = null; go(); });
+document.querySelector('.vw').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (!b) return; VIEW = b.dataset.v; FOCUS = null; go(); });
 (async () => {
-  try {
-    const r = await fetch('sim/nba/index.json', {cache: 'no-cache'}); IDX = await r.json();
-    if (!IDX.dates.length) { $('games').innerHTML = '<div class="empty">The first slate posts at 5:25 PM ET on game days.</div>'; return; }
-    if (!DATE || !IDX.dates.includes(DATE)) DATE = IDX.dates[0];
-    await render();
-  } catch (e) { $('games').innerHTML = '<div class="empty">The slate couldn’t load. Refresh to try again.</div>'; }
+  readHash();
+  await Promise.all(Object.keys(LEAGUES).map(async k => { try { IDX[k] = await getJSON(`sim/${k}/index.json`); } catch (e) {} }));
+  if (!Object.keys(IDX).length) { $('view').innerHTML = '<div class="empty">The ledger couldn’t load. Refresh to try again.</div>'; return; }
+  if (!IDX[LG]) LG = Object.keys(IDX)[0];
+  go();
 })();
 </script>
 </body></html>
