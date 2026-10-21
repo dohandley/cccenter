@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Sign in &middot; Chasin Cheddar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+[data-theme="light"]{--bg:#e8e6e1;--surface:#f0eeea;--surface-2:#e8e6e1;--border:#d4d0c8;--text:#1a1d26;--text-3:#6b7280;--text-4:#9ca3af;--green:#16a34a;--red-text:#b91c1c}
+[data-theme="dark"]{--bg:#111318;--surface:#191c22;--surface-2:#21252c;--border:#282d36;--text:#dce0e8;--text-3:#707a8a;--text-4:#4a5464;--green:#4ade80;--red-text:#f87171;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,sans-serif;padding:16px}
+form{width:100%;max-width:340px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:26px 24px;display:grid;gap:14px}
+img{width:44px;height:44px;border-radius:8px}
+h1{margin:0;font-size:20px;font-weight:800;letter-spacing:-.02em} h1 span{color:var(--green)}
+p{margin:0;font-size:13px;color:var(--text-3)}
+label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4)}
+input{width:100%;margin-top:6px;padding:11px 12px;border-radius:7px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font:inherit;font-size:15px}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+button{padding:11px;border:0;border-radius:7px;background:var(--text);color:var(--bg);font:inherit;font-weight:700;cursor:pointer}
+.err{color:var(--red-text);font-size:13px;font-weight:600}
+a{color:var(--text-3);font-size:12.5px}
+</style></head>
+<body>
+<form method="post" action="/login">
+  <img src="logo.png" alt="">
+  <h1><span>Chasin</span> Cheddar</h1>
+  <p>This part of the site is private.</p>
+  <div class="err" id="err" hidden>That password didn't work. Try again.</div>
+  <label>Password<input type="password" name="password" autocomplete="current-password" required autofocus></label>
+  <input type="hidden" name="next" id="next">
+  <button type="submit">Sign in</button>
+  <a href="sim.html">Looking for the Sim Ledger? It's open to everyone &rarr;</a>
+</form>
+<script>
+try{var s=JSON.parse(localStorage.getItem('cc7')||'{}');if(s.theme)document.documentElement.setAttribute('data-theme',s.theme);}catch(e){}
+var q=new URLSearchParams(location.search);
+document.getElementById('next').value=q.get('next')||'/';
+if(q.get('e'))document.getElementById('err').hidden=false;
+</script>
+</body></html>
