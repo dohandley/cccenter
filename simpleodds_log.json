@@ -1,77 +1,81 @@
 {
- "generated_at": "2026-10-21T16:18:00",
+ "generated_at": "2026-10-22T16:16:16",
  "source": "simpleodds",
  "sport": "MLB+NBA+NFL",
  "window_days": 60,
  "today": {
-  "date": "2026-10-21",
+  "date": "2026-10-22",
   "parlays": [
    {
     "tier": "PARLAY",
     "rank": 1,
     "book": "FD",
-    "combined_odds": 1286,
-    "combined_decimal": 13.86,
-    "avg_ev_pct": 19.9,
-    "total_ev_pct": 39.8,
+    "combined_odds": 623,
+    "combined_decimal": 7.234,
+    "avg_ev_pct": 18.5,
+    "total_ev_pct": 37.0,
     "games": [
-     "CHI@TOR",
-     "PHX@POR"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
-    "next_book": "PX",
-    "next_odds": 1106,
-    "pct_vs_next": 14.9,
-    "n_books": 4,
+    "next_book": "BO",
+    "next_odds": 620,
+    "pct_vs_next": 0.5,
+    "n_books": 6,
     "alt_books": [
      [
       "FD",
-      1286
+      623
      ],
      [
-      "PX",
-      1106
-     ],
-     [
-      "FN",
-      954
+      "BO",
+      620
      ],
      [
       "CZ",
-      845
+      548
+     ],
+     [
+      "FN",
+      499
+     ],
+     [
+      "BR",
+      459
      ]
     ],
     "legs": [
      {
-      "player": "Leonard Miller",
-      "team": "CHI",
+      "player": "Shai Gilgeous-Alexander",
+      "team": "OKC",
       "market_short": "PTS",
-      "prop": "PTS Over 12.5",
-      "point": 12.5,
-      "odds_at_book": 260,
-      "best_odds": 260,
+      "prop": "PTS Over 33.5",
+      "point": 33.5,
+      "odds_at_book": 174,
+      "best_odds": 174,
       "best_book": "FD",
-      "ev_pct": 20.0,
+      "ev_pct": 19.2,
       "grade": "S",
-      "game": "CHI@TOR",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 6,
       "is_alt": false
      },
      {
-      "player": "Jalen Green",
-      "team": "PHX",
+      "player": "Peyton Watson",
+      "team": "CLE",
       "market_short": "PTS",
-      "prop": "PTS Over 24.5",
-      "point": 24.5,
-      "odds_at_book": 285,
-      "best_odds": 350,
-      "best_book": "365",
-      "ev_pct": 19.8,
+      "prop": "PTS Over 15.5",
+      "point": 15.5,
+      "odds_at_book": 164,
+      "best_odds": 200,
+      "best_book": "BO",
+      "ev_pct": 17.8,
       "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 13,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 6,
       "is_alt": false
      }
     ],
@@ -80,73 +84,73 @@
    {
     "tier": "PARLAY",
     "rank": 2,
-    "book": "NOV",
-    "combined_odds": 1065,
-    "combined_decimal": 11.648,
-    "avg_ev_pct": 19.8,
-    "total_ev_pct": 39.5,
+    "book": "FD",
+    "combined_odds": 2292,
+    "combined_decimal": 23.92,
+    "avg_ev_pct": 17.1,
+    "total_ev_pct": 34.3,
     "games": [
-     "PHX@POR",
-     "SAC@LAC"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
-    "next_book": "FD",
-    "next_odds": 1043,
-    "pct_vs_next": 1.9,
+    "next_book": "NOV",
+    "next_odds": 1970,
+    "pct_vs_next": 15.6,
     "n_books": 8,
     "alt_books": [
      [
-      "NOV",
-      1065
-     ],
-     [
       "FD",
-      1043
+      2292
      ],
      [
-      "PX",
-      925
+      "NOV",
+      1970
      ],
      [
-      "DK",
-      855
+      "CZ",
+      1878
      ],
      [
       "HR",
-      854
+      1812
+     ],
+     [
+      "EB",
+      1748
      ]
     ],
     "legs": [
      {
-      "player": "Keaton Wagler",
-      "team": "LAC",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 355,
-      "best_odds": 350,
+      "player": "Cameron Johnson",
+      "team": "DEN",
+      "market_short": "AST",
+      "prop": "AST Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 420,
+      "best_odds": 420,
       "best_book": "FD",
-      "ev_pct": 19.8,
+      "ev_pct": 17.8,
       "grade": "S",
-      "game": "SAC@LAC",
-      "game_time": "10:30 PM ET",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
       "coverage": 10,
       "is_alt": false
      },
      {
-      "player": "Robert Williams III",
-      "team": "POR",
-      "market_short": "REB",
-      "prop": "REB Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 156,
-      "best_odds": 205,
+      "player": "Jaylon Tyson",
+      "team": "CLE",
+      "market_short": "PTS",
+      "prop": "PTS Over 14.5",
+      "point": 14.5,
+      "odds_at_book": 360,
+      "best_odds": 450,
       "best_book": "365",
-      "ev_pct": 19.7,
+      "ev_pct": 16.5,
       "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 10,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 11,
       "is_alt": false
      }
     ],
@@ -156,68 +160,72 @@
     "tier": "PARLAY",
     "rank": 3,
     "book": "FD",
-    "combined_odds": 1022,
-    "combined_decimal": 11.223,
-    "avg_ev_pct": 19.6,
-    "total_ev_pct": 39.2,
+    "combined_odds": 1280,
+    "combined_decimal": 13.8,
+    "avg_ev_pct": 15.2,
+    "total_ev_pct": 30.5,
     "games": [
-     "ATL@ORL",
-     "MIN@MIA"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
-    "next_book": "PX",
-    "next_odds": 1022,
-    "pct_vs_next": 0.0,
-    "n_books": 4,
+    "next_book": "BR",
+    "next_odds": 1115,
+    "pct_vs_next": 13.6,
+    "n_books": 6,
     "alt_books": [
      [
       "FD",
-      1022
+      1280
      ],
      [
-      "PX",
-      1022
+      "BR",
+      1115
      ],
      [
-      "FN",
-      741
+      "BB",
+      1115
      ],
      [
-      "CZ",
-      729
+      "NOV",
+      1018
+     ],
+     [
+      "EB",
+      1013
      ]
     ],
     "legs": [
      {
-      "player": "Jalen Johnson",
-      "team": "ATL",
-      "market_short": "PTS",
-      "prop": "PTS Over 25.5",
-      "point": 25.5,
-      "odds_at_book": 235,
-      "best_odds": 235,
-      "best_book": "FD",
-      "ev_pct": 19.6,
+      "player": "Donovan Mitchell",
+      "team": "CLE",
+      "market_short": "PRA",
+      "prop": "PRA Over 44.5",
+      "point": 44.5,
+      "odds_at_book": 360,
+      "best_odds": 425,
+      "best_book": "MG",
+      "ev_pct": 16.1,
       "grade": "S",
-      "game": "ATL@ORL",
+      "game": "CLE@PHI",
       "game_time": "7:00 PM ET",
-      "coverage": 4,
+      "coverage": 7,
       "is_alt": false
      },
      {
-      "player": "Jonathan Kuminga",
-      "team": "MIN",
-      "market_short": "PTS",
-      "prop": "PTS Over 15.5",
-      "point": 15.5,
-      "odds_at_book": 235,
-      "best_odds": 235,
+      "player": "Jalen Williams",
+      "team": "OKC",
+      "market_short": "REB",
+      "prop": "REB Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 200,
+      "best_odds": 200,
       "best_book": "FD",
-      "ev_pct": 19.6,
+      "ev_pct": 14.4,
       "grade": "S",
-      "game": "MIN@MIA",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 11,
       "is_alt": false
      }
     ],
@@ -226,73 +234,69 @@
    {
     "tier": "PARLAY",
     "rank": 4,
-    "book": "DK",
-    "combined_odds": 1934,
-    "combined_decimal": 20.335,
-    "avg_ev_pct": 19.3,
-    "total_ev_pct": 38.6,
+    "book": "PX",
+    "combined_odds": 1085,
+    "combined_decimal": 11.85,
+    "avg_ev_pct": 14.1,
+    "total_ev_pct": 28.2,
     "games": [
-     "DAL@HOU",
-     "IND@NO"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
-    "next_book": "MG",
-    "next_odds": 1860,
-    "pct_vs_next": 3.8,
-    "n_books": 7,
+    "next_book": "FD",
+    "next_odds": 1059,
+    "pct_vs_next": 2.2,
+    "n_books": 4,
     "alt_books": [
      [
-      "DK",
-      1934
-     ],
-     [
-      "MG",
-      1860
-     ],
-     [
-      "BO",
-      1622
-     ],
-     [
-      "HR",
-      1500
-     ],
-     [
       "PX",
-      1499
+      1085
+     ],
+     [
+      "FD",
+      1059
+     ],
+     [
+      "CZ",
+      972
+     ],
+     [
+      "FN",
+      725
      ]
     ],
     "legs": [
      {
-      "player": "Andrew Nembhard",
-      "team": "IND",
-      "market_short": "REB",
-      "prop": "REB Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 390,
-      "best_odds": 390,
-      "best_book": "DK",
-      "ev_pct": 19.3,
+      "player": "Joel Embiid",
+      "team": "PHI",
+      "market_short": "AST",
+      "prop": "AST Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 295,
+      "best_odds": 280,
+      "best_book": "BB,BR",
+      "ev_pct": 14.2,
       "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 7,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 10,
       "is_alt": false
      },
      {
-      "player": "Amen Thompson",
-      "team": "HOU",
-      "market_short": "AST",
-      "prop": "AST Over 6.5",
-      "point": 6.5,
-      "odds_at_book": 315,
-      "best_odds": 390,
-      "best_book": "MG",
-      "ev_pct": 19.3,
+      "player": "Aaron Gordon",
+      "team": "DEN",
+      "market_short": "PTS",
+      "prop": "PTS Over 18.5",
+      "point": 18.5,
+      "odds_at_book": 200,
+      "best_odds": 205,
+      "best_book": "FD",
+      "ev_pct": 14.0,
       "grade": "S",
-      "game": "DAL@HOU",
-      "game_time": "8:30 PM ET",
-      "coverage": 9,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 4,
       "is_alt": false
      }
     ],
@@ -301,72 +305,72 @@
    {
     "tier": "PARLAY",
     "rank": 5,
-    "book": "MG",
-    "combined_odds": 586,
-    "combined_decimal": 6.86,
-    "avg_ev_pct": 19.2,
-    "total_ev_pct": 38.4,
+    "book": "FD",
+    "combined_odds": 1197,
+    "combined_decimal": 12.972,
+    "avg_ev_pct": 13.9,
+    "total_ev_pct": 27.7,
     "games": [
-     "GS@LAL",
-     "IND@NO"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
-    "next_book": "NOV",
-    "next_odds": 488,
-    "pct_vs_next": 16.7,
-    "n_books": 11,
+    "next_book": "PX",
+    "next_odds": 922,
+    "pct_vs_next": 26.9,
+    "n_books": 9,
     "alt_books": [
      [
-      "MG",
-      586
-     ],
-     [
-      "NOV",
-      488
+      "FD",
+      1197
      ],
      [
       "PX",
-      481
+      922
      ],
      [
-      "FD",
-      476
+      "CZ",
+      880
      ],
      [
-      "HR",
-      476
+      "FN",
+      860
+     ],
+     [
+      "DK",
+      843
      ]
     ],
     "legs": [
      {
-      "player": "Herbert Jones",
-      "team": "NO",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 145,
-      "best_odds": 180,
-      "best_book": "365",
-      "ev_pct": 19.2,
+      "player": "VJ Edgecombe",
+      "team": "PHI",
+      "market_short": "REB",
+      "prop": "REB Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 176,
+      "best_odds": 176,
+      "best_book": "FD",
+      "ev_pct": 13.9,
       "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 13,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 11,
       "is_alt": false
      },
      {
-      "player": "Ziaire Williams",
-      "team": "LAL",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 180,
-      "best_odds": 180,
-      "best_book": "MG",
-      "ev_pct": 19.2,
+      "player": "Ajay Mitchell",
+      "team": "OKC",
+      "market_short": "REB",
+      "prop": "REB Over 4.5",
+      "point": 4.5,
+      "odds_at_book": 370,
+      "best_odds": 370,
+      "best_book": "FD",
+      "ev_pct": 13.8,
       "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
       "coverage": 11,
       "is_alt": false
      }
@@ -377,72 +381,72 @@
     "tier": "PARLAY",
     "rank": 6,
     "book": "FD",
-    "combined_odds": 634,
-    "combined_decimal": 7.336,
-    "avg_ev_pct": 19.2,
-    "total_ev_pct": 38.4,
+    "combined_odds": 1252,
+    "combined_decimal": 13.524,
+    "avg_ev_pct": 13.2,
+    "total_ev_pct": 26.5,
     "games": [
-     "GS@LAL",
-     "SAC@LAC"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
-    "next_book": "NOV",
-    "next_odds": 592,
-    "pct_vs_next": 6.0,
+    "next_book": "BR",
+    "next_odds": 1227,
+    "pct_vs_next": 1.9,
     "n_books": 6,
     "alt_books": [
      [
       "FD",
-      634
-     ],
-     [
-      "NOV",
-      592
-     ],
-     [
-      "DK",
-      575
-     ],
-     [
-      "BB",
-      573
+      1252
      ],
      [
       "BR",
-      573
+      1227
+     ],
+     [
+      "BB",
+      1227
+     ],
+     [
+      "EB",
+      1110
+     ],
+     [
+      "DK",
+      1066
      ]
     ],
     "legs": [
      {
-      "player": "Austin Reaves",
-      "team": "LAL",
-      "market_short": "STL",
-      "prop": "STL Over 1.5",
-      "point": 1.5,
-      "odds_at_book": 162,
-      "best_odds": 240,
-      "best_book": "365",
-      "ev_pct": 19.2,
+      "player": "DeMar DeRozan",
+      "team": "DEN",
+      "market_short": "AST",
+      "prop": "AST Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 176,
+      "best_odds": 205,
+      "best_book": "BB,BR",
+      "ev_pct": 13.5,
       "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 10,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 11,
       "is_alt": false
      },
      {
-      "player": "Domantas Sabonis",
-      "team": "SAC",
-      "market_short": "PRA",
-      "prop": "PRA Over 39.5",
-      "point": 39.5,
-      "odds_at_book": 180,
-      "best_odds": 180,
+      "player": "LeBron James",
+      "team": "PHI",
+      "market_short": "PR",
+      "prop": "PR Over 29.5",
+      "point": 29.5,
+      "odds_at_book": 390,
+      "best_odds": 390,
       "best_book": "FD",
-      "ev_pct": 19.2,
+      "ev_pct": 13.0,
       "grade": "S",
-      "game": "SAC@LAC",
-      "game_time": "10:30 PM ET",
-      "coverage": 6,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 7,
       "is_alt": false
      }
     ],
@@ -451,68 +455,64 @@
    {
     "tier": "PARLAY",
     "rank": 7,
-    "book": "PX",
-    "combined_odds": 851,
-    "combined_decimal": 9.506,
-    "avg_ev_pct": 18.8,
-    "total_ev_pct": 37.6,
+    "book": "NOV",
+    "combined_odds": 1123,
+    "combined_decimal": 12.229,
+    "avg_ev_pct": 12.4,
+    "total_ev_pct": 24.9,
     "games": [
-     "DAL@HOU",
-     "IND@NO"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
-    "next_book": "DK",
-    "next_odds": 765,
-    "pct_vs_next": 9.9,
-    "n_books": 4,
+    "next_book": "HR",
+    "next_odds": 771,
+    "pct_vs_next": 40.4,
+    "n_books": 3,
     "alt_books": [
      [
+      "NOV",
+      1123
+     ],
+     [
+      "HR",
+      771
+     ],
+     [
       "PX",
-      851
-     ],
-     [
-      "DK",
-      765
-     ],
-     [
-      "FN",
-      761
-     ],
-     [
-      "EB",
-      755
+      284
      ]
     ],
     "legs": [
      {
-      "player": "Yves Missi",
-      "team": "NO",
-      "market_short": "RA",
-      "prop": "RA Over 8.5",
-      "point": 8.5,
-      "odds_at_book": -126,
-      "best_odds": 105,
-      "best_book": "FN",
-      "ev_pct": 18.9,
+      "player": "Jamal Murray",
+      "team": "DEN",
+      "market_short": "BLK",
+      "prop": "BLK Over 0.5",
+      "point": 0.5,
+      "odds_at_book": 163,
+      "best_odds": 123,
+      "best_book": "BB,BR",
+      "ev_pct": 13.0,
       "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 4,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 6,
       "is_alt": false
      },
      {
-      "player": "Kyrie Irving",
-      "team": "DAL",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 430,
-      "best_odds": 470,
-      "best_book": "FD",
-      "ev_pct": 18.7,
+      "player": "Sam Merrill",
+      "team": "CLE",
+      "market_short": "3PT",
+      "prop": "3PT Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 365,
+      "best_odds": 425,
+      "best_book": "365",
+      "ev_pct": 11.9,
       "grade": "S",
-      "game": "DAL@HOU",
-      "game_time": "8:30 PM ET",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
       "coverage": 10,
       "is_alt": false
      }
@@ -522,73 +522,73 @@
    {
     "tier": "PARLAY",
     "rank": 8,
-    "book": "365",
-    "combined_odds": 2156,
-    "combined_decimal": 22.562,
-    "avg_ev_pct": 18.4,
-    "total_ev_pct": 36.8,
+    "book": "BR",
+    "combined_odds": 464,
+    "combined_decimal": 5.64,
+    "avg_ev_pct": 11.6,
+    "total_ev_pct": 23.1,
     "games": [
-     "CHA@BKN",
-     "MIL@WSH"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
-    "next_book": "DK",
-    "next_odds": 1499,
-    "pct_vs_next": 41.1,
-    "n_books": 7,
+    "next_book": "BB",
+    "next_odds": 464,
+    "pct_vs_next": 0.0,
+    "n_books": 13,
     "alt_books": [
      [
-      "365",
-      2156
+      "BR",
+      464
      ],
      [
-      "DK",
-      1499
+      "BB",
+      464
      ],
      [
-      "BO",
-      1437
-     ],
-     [
-      "HR",
-      1400
+      "NOV",
+      447
      ],
      [
       "MG",
-      1340
+      423
+     ],
+     [
+      "BO",
+      406
      ]
     ],
     "legs": [
      {
-      "player": "Jaime Jaquez Jr.",
-      "team": "MIL",
-      "market_short": "REB",
-      "prop": "REB Over 6.5",
-      "point": 6.5,
-      "odds_at_book": 375,
-      "best_odds": 375,
-      "best_book": "365",
-      "ev_pct": 18.4,
+      "player": "Isaiah Hartenstein",
+      "team": "OKC",
+      "market_short": "PTS",
+      "prop": "PTS Over 9.5",
+      "point": 9.5,
+      "odds_at_book": 135,
+      "best_odds": 155,
+      "best_book": "MG",
+      "ev_pct": 11.7,
       "grade": "S",
-      "game": "MIL@WSH",
-      "game_time": "7:00 PM ET",
-      "coverage": 8,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 13,
       "is_alt": false
      },
      {
-      "player": "Michael Porter Jr.",
-      "team": "BKN",
-      "market_short": "3PT",
-      "prop": "3PT Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 375,
-      "best_odds": 375,
-      "best_book": "365",
-      "ev_pct": 18.4,
+      "player": "James Harden",
+      "team": "CLE",
+      "market_short": "PTS",
+      "prop": "PTS Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 140,
+      "best_odds": 140,
+      "best_book": "BB,BR",
+      "ev_pct": 11.4,
       "grade": "S",
-      "game": "CHA@BKN",
-      "game_time": "7:30 PM ET",
-      "coverage": 12,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 13,
       "is_alt": false
      }
     ],
@@ -597,72 +597,72 @@
    {
     "tier": "PARLAY",
     "rank": 9,
-    "book": "PX",
-    "combined_odds": 1454,
-    "combined_decimal": 15.54,
-    "avg_ev_pct": 18.4,
-    "total_ev_pct": 36.7,
+    "book": "FD",
+    "combined_odds": 1663,
+    "combined_decimal": 17.63,
+    "avg_ev_pct": 9.8,
+    "total_ev_pct": 19.7,
     "games": [
-     "ATL@ORL",
-     "GS@LAL"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
-    "next_book": "HR",
-    "next_odds": 1306,
-    "pct_vs_next": 10.5,
-    "n_books": 6,
+    "next_book": "NOV",
+    "next_odds": 1468,
+    "pct_vs_next": 12.4,
+    "n_books": 7,
     "alt_books": [
      [
-      "PX",
-      1454
+      "FD",
+      1663
+     ],
+     [
+      "NOV",
+      1468
      ],
      [
       "HR",
-      1306
+      1340
      ],
      [
-      "FN",
-      1158
+      "CZ",
+      1304
      ],
      [
-      "DK",
-      1075
-     ],
-     [
-      "BO",
-      1038
+      "EB",
+      1286
      ]
     ],
     "legs": [
      {
-      "player": "Luka Doncic",
-      "team": "LAL",
-      "market_short": "PTS",
-      "prop": "PTS Over 39.5",
-      "point": 39.5,
-      "odds_at_book": 270,
-      "best_odds": 375,
-      "best_book": "365",
-      "ev_pct": 18.4,
+      "player": "Jaylen Brown",
+      "team": "PHI",
+      "market_short": "AST",
+      "prop": "AST Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 310,
+      "best_odds": 310,
+      "best_book": "FD",
+      "ev_pct": 11.0,
       "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 12,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 10,
       "is_alt": false
      },
      {
-      "player": "Nickeil Alexander-Walker",
-      "team": "ATL",
-      "market_short": "AST",
-      "prop": "AST Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 320,
-      "best_odds": 333,
-      "best_book": "MG",
-      "ev_pct": 18.3,
+      "player": "Marvin Bagley III",
+      "team": "DEN",
+      "market_short": "REB",
+      "prop": "REB Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 330,
+      "best_odds": 330,
+      "best_book": "FD",
+      "ev_pct": 8.7,
       "grade": "S",
-      "game": "ATL@ORL",
-      "game_time": "7:00 PM ET",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
       "coverage": 7,
       "is_alt": false
      }
@@ -672,199 +672,73 @@
    {
     "tier": "PARLAY",
     "rank": 10,
-    "book": "BO",
-    "combined_odds": 330,
-    "combined_decimal": 4.295,
-    "avg_ev_pct": 18.2,
-    "total_ev_pct": 36.4,
+    "book": "365",
+    "combined_odds": 1325,
+    "combined_decimal": 14.25,
+    "avg_ev_pct": 5.7,
+    "total_ev_pct": 11.3,
     "games": [
-     "GS@LAL",
-     "PHX@POR"
-    ],
-    "odds_are_estimate": false,
-    "next_book": "BB",
-    "next_odds": 316,
-    "pct_vs_next": 3.3,
-    "n_books": 3,
-    "alt_books": [
-     [
-      "BO",
-      330
-     ],
-     [
-      "BB",
-      316
-     ],
-     [
-      "BR",
-      316
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Al Horford",
-      "team": "GS",
-      "market_short": "RA",
-      "prop": "RA Over 6.5",
-      "point": 6.5,
-      "odds_at_book": -105,
-      "best_odds": 120,
-      "best_book": "BR,BB",
-      "ev_pct": 18.2,
-      "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 7,
-      "is_alt": false
-     },
-     {
-      "player": "Collin Gillespie",
-      "team": "PHX",
-      "market_short": "PRA",
-      "prop": "PRA Over 17.5",
-      "point": 17.5,
-      "odds_at_book": 120,
-      "best_odds": 120,
-      "best_book": "BO",
-      "ev_pct": 18.2,
-      "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 6,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "PARLAY",
-    "rank": 11,
-    "book": "NOV",
-    "combined_odds": 840,
-    "combined_decimal": 9.402,
-    "avg_ev_pct": 18.0,
-    "total_ev_pct": 36.0,
-    "games": [
-     "IND@NO",
-     "UTAH@MEM"
-    ],
-    "odds_are_estimate": false,
-    "next_book": "",
-    "next_odds": 0,
-    "pct_vs_next": 0.0,
-    "n_books": 1,
-    "alt_books": [
-     [
-      "NOV",
-      840
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Keyonte George",
-      "team": "UTAH",
-      "market_short": "PRA",
-      "prop": "PRA Over 39.5",
-      "point": 39.5,
-      "odds_at_book": 426,
-      "best_odds": 480,
-      "best_book": "FD",
-      "ev_pct": 18.0,
-      "grade": "S",
-      "game": "UTAH@MEM",
-      "game_time": "8:00 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Jarace Walker",
-      "team": "IND",
-      "market_short": "PRA",
-      "prop": "PRA Over 17.5",
-      "point": 17.5,
-      "odds_at_book": -127,
-      "best_odds": 130,
-      "best_book": "BO",
-      "ev_pct": 18.0,
-      "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "PARLAY",
-    "rank": 12,
-    "book": "NOV",
-    "combined_odds": 1999,
-    "combined_decimal": 20.992,
-    "avg_ev_pct": 18.0,
-    "total_ev_pct": 36.0,
-    "games": [
-     "GS@LAL",
-     "MIN@MIA"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": false,
     "next_book": "FD",
-    "next_odds": 1959,
-    "pct_vs_next": 2.0,
-    "n_books": 7,
+    "next_odds": 1320,
+    "pct_vs_next": 0.4,
+    "n_books": 9,
     "alt_books": [
      [
-      "NOV",
-      1999
+      "365",
+      1325
      ],
      [
       "FD",
-      1959
+      1320
      ],
      [
-      "PX",
-      1755
+      "DK",
+      1237
      ],
      [
-      "EB",
-      1419
+      "BO",
+      1190
      ],
      [
-      "HR",
-      1400
+      "NOV",
+      1176
      ]
     ],
     "legs": [
      {
-      "player": "De'Anthony Melton",
-      "team": "GS",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 488,
-      "best_odds": 480,
-      "best_book": "FD",
-      "ev_pct": 18.0,
+      "player": "Tyrese Maxey",
+      "team": "PHI",
+      "market_short": "3PT",
+      "prop": "3PT Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 275,
+      "best_odds": 275,
+      "best_book": "365",
+      "ev_pct": 6.7,
       "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 8,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 11,
       "is_alt": false
      },
      {
-      "player": "Andrew Wiggins",
-      "team": "MIA",
-      "market_short": "3PT",
-      "prop": "3PT Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 257,
-      "best_odds": 255,
+      "player": "Jared McCain",
+      "team": "OKC",
+      "market_short": "PTS",
+      "prop": "PTS Over 14.5",
+      "point": 14.5,
+      "odds_at_book": 280,
+      "best_odds": 300,
       "best_book": "FD",
-      "ev_pct": 18.0,
-      "grade": "S",
-      "game": "MIN@MIA",
-      "game_time": "7:30 PM ET",
-      "coverage": 12,
+      "ev_pct": 4.6,
+      "grade": "A",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 11,
       "is_alt": false
      }
     ],
@@ -876,83 +750,71 @@
     "tier": "SGP",
     "rank": 1,
     "book": "FD",
-    "combined_odds": 5797,
-    "combined_decimal": 58.968,
+    "combined_odds": 3043,
+    "combined_decimal": 31.428,
     "avg_ev_pct": 19.2,
-    "total_ev_pct": 57.7,
+    "total_ev_pct": 57.6,
     "games": [
-     "CHI@TOR"
+     "DEN@OKC"
     ],
     "odds_are_estimate": true,
-    "next_book": "PX",
-    "next_odds": 4543,
-    "pct_vs_next": 27.0,
-    "n_books": 4,
+    "next_book": "",
+    "next_odds": 0,
+    "pct_vs_next": 0.0,
+    "n_books": 1,
     "alt_books": [
      [
       "FD",
-      5797
-     ],
-     [
-      "PX",
-      4543
-     ],
-     [
-      "FN",
-      3694
-     ],
-     [
-      "CZ",
-      3418
+      3043
      ]
     ],
     "legs": [
      {
-      "player": "Leonard Miller",
-      "team": "CHI",
+      "player": "Shai Gilgeous-Alexander",
+      "team": "OKC",
       "market_short": "PTS",
-      "prop": "PTS Over 12.5",
-      "point": 12.5,
-      "odds_at_book": 260,
-      "best_odds": 260,
+      "prop": "PTS Over 33.5",
+      "point": 33.5,
+      "odds_at_book": 174,
+      "best_odds": 174,
       "best_book": "FD",
-      "ev_pct": 20.0,
+      "ev_pct": 19.2,
       "grade": "S",
-      "game": "CHI@TOR",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 6,
       "is_alt": false
      },
      {
-      "player": "Kawhi Leonard",
-      "team": "TOR",
-      "market_short": "PTS",
-      "prop": "PTS Over 31.5",
-      "point": 31.5,
-      "odds_at_book": 320,
-      "best_odds": 320,
-      "best_book": "FD",
-      "ev_pct": 19.9,
+      "player": "Chet Holmgren",
+      "team": "OKC",
+      "market_short": "PRA",
+      "prop": "PRA Over 29.5",
+      "point": 29.5,
+      "odds_at_book": 210,
+      "best_odds": 270,
+      "best_book": "MG",
+      "ev_pct": 19.2,
       "grade": "S",
-      "game": "CHI@TOR",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 5,
       "is_alt": false
      },
      {
-      "player": "Josh Giddey",
-      "team": "CHI",
-      "market_short": "PTS",
-      "prop": "PTS Over 18.5",
-      "point": 18.5,
-      "odds_at_book": 290,
-      "best_odds": 290,
+      "player": "Cason Wallace",
+      "team": "OKC",
+      "market_short": "STL",
+      "prop": "STL Over 2.5",
+      "point": 2.5,
+      "odds_at_book": 270,
+      "best_odds": 270,
       "best_book": "FD",
-      "ev_pct": 17.8,
+      "ev_pct": 19.2,
       "grade": "S",
-      "game": "CHI@TOR",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 6,
       "is_alt": false
      }
     ],
@@ -961,666 +823,72 @@
    {
     "tier": "SGP",
     "rank": 2,
-    "book": "NOV",
-    "combined_odds": 2196,
-    "combined_decimal": 22.964,
-    "avg_ev_pct": 19.2,
-    "total_ev_pct": 57.7,
-    "games": [
-     "PHX@POR"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "BO",
-    "next_odds": 1824,
-    "pct_vs_next": 19.4,
-    "n_books": 3,
-    "alt_books": [
-     [
-      "NOV",
-      2196
-     ],
-     [
-      "BO",
-      1824
-     ],
-     [
-      "PX",
-      1771
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Jalen Green",
-      "team": "PHX",
-      "market_short": "PTS",
-      "prop": "PTS Over 24.5",
-      "point": 24.5,
-      "odds_at_book": 285,
-      "best_odds": 350,
-      "best_book": "365",
-      "ev_pct": 19.8,
-      "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 13,
-      "is_alt": false
-     },
-     {
-      "player": "Robert Williams III",
-      "team": "POR",
-      "market_short": "REB",
-      "prop": "REB Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 156,
-      "best_odds": 205,
-      "best_book": "365",
-      "ev_pct": 19.7,
-      "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Collin Gillespie",
-      "team": "PHX",
-      "market_short": "PRA",
-      "prop": "PRA Over 17.5",
-      "point": 17.5,
-      "odds_at_book": 133,
-      "best_odds": 120,
-      "best_book": "BO",
-      "ev_pct": 18.2,
-      "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 6,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP",
-    "rank": 3,
-    "book": "DK",
-    "combined_odds": 1972,
-    "combined_decimal": 20.719,
-    "avg_ev_pct": 19.1,
-    "total_ev_pct": 57.4,
-    "games": [
-     "IND@NO"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "FN",
-    "next_odds": 1779,
-    "pct_vs_next": 10.3,
-    "n_books": 3,
-    "alt_books": [
-     [
-      "DK",
-      1972
-     ],
-     [
-      "FN",
-      1779
-     ],
-     [
-      "PX",
-      1565
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Andrew Nembhard",
-      "team": "IND",
-      "market_short": "REB",
-      "prop": "REB Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 390,
-      "best_odds": 390,
-      "best_book": "DK",
-      "ev_pct": 19.3,
-      "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 7,
-      "is_alt": false
-     },
-     {
-      "player": "Herbert Jones",
-      "team": "NO",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 139,
-      "best_odds": 180,
-      "best_book": "365",
-      "ev_pct": 19.2,
-      "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 13,
-      "is_alt": false
-     },
-     {
-      "player": "Yves Missi",
-      "team": "NO",
-      "market_short": "RA",
-      "prop": "RA Over 8.5",
-      "point": 8.5,
-      "odds_at_book": -130,
-      "best_odds": 105,
-      "best_book": "FN",
-      "ev_pct": 18.9,
-      "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP",
-    "rank": 4,
     "book": "FD",
-    "combined_odds": 2748,
-    "combined_decimal": 28.476,
-    "avg_ev_pct": 19.0,
-    "total_ev_pct": 56.9,
+    "combined_odds": 5486,
+    "combined_decimal": 55.862,
+    "avg_ev_pct": 16.8,
+    "total_ev_pct": 50.4,
     "games": [
-     "SAC@LAC"
+     "CLE@PHI"
     ],
     "odds_are_estimate": true,
-    "next_book": "NOV",
-    "next_odds": 2616,
-    "pct_vs_next": 4.8,
-    "n_books": 4,
+    "next_book": "",
+    "next_odds": 0,
+    "pct_vs_next": 0.0,
+    "n_books": 1,
     "alt_books": [
      [
       "FD",
-      2748
-     ],
-     [
-      "NOV",
-      2616
-     ],
-     [
-      "EB",
-      1884
-     ],
-     [
-      "DK",
-      1789
+      5486
      ]
     ],
     "legs": [
      {
-      "player": "Keaton Wagler",
-      "team": "LAC",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 350,
-      "best_odds": 350,
-      "best_book": "FD",
-      "ev_pct": 19.8,
-      "grade": "S",
-      "game": "SAC@LAC",
-      "game_time": "10:30 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Domantas Sabonis",
-      "team": "SAC",
-      "market_short": "PRA",
-      "prop": "PRA Over 39.5",
-      "point": 39.5,
-      "odds_at_book": 180,
-      "best_odds": 180,
-      "best_book": "FD",
-      "ev_pct": 19.2,
-      "grade": "S",
-      "game": "SAC@LAC",
-      "game_time": "10:30 PM ET",
-      "coverage": 6,
-      "is_alt": false
-     },
-     {
-      "player": "Precious Achiuwa",
-      "team": "SAC",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 126,
-      "best_odds": 155,
-      "best_book": "365",
-      "ev_pct": 17.9,
-      "grade": "S",
-      "game": "SAC@LAC",
-      "game_time": "10:30 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP",
-    "rank": 5,
-    "book": "365",
-    "combined_odds": 3211,
-    "combined_decimal": 33.107,
-    "avg_ev_pct": 18.9,
-    "total_ev_pct": 56.8,
-    "games": [
-     "GS@LAL"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "FD",
-    "next_odds": 2500,
-    "pct_vs_next": 27.3,
-    "n_books": 8,
-    "alt_books": [
-     [
-      "365",
-      3211
-     ],
-     [
-      "FD",
-      2500
-     ],
-     [
-      "NOV",
-      2467
-     ],
-     [
-      "PX",
-      2356
-     ],
-     [
-      "EB",
-      2302
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Ziaire Williams",
-      "team": "LAL",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 105,
-      "best_odds": 180,
-      "best_book": "MG",
-      "ev_pct": 19.2,
-      "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     },
-     {
-      "player": "Austin Reaves",
-      "team": "LAL",
-      "market_short": "STL",
-      "prop": "STL Over 1.5",
-      "point": 1.5,
-      "odds_at_book": 240,
-      "best_odds": 240,
-      "best_book": "365",
-      "ev_pct": 19.2,
-      "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Luka Doncic",
-      "team": "LAL",
-      "market_short": "PTS",
-      "prop": "PTS Over 39.5",
-      "point": 39.5,
-      "odds_at_book": 375,
-      "best_odds": 375,
-      "best_book": "365",
-      "ev_pct": 18.4,
-      "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 12,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP",
-    "rank": 6,
-    "book": "FD",
-    "combined_odds": 13067,
-    "combined_decimal": 131.67,
-    "avg_ev_pct": 18.6,
-    "total_ev_pct": 55.9,
-    "games": [
-     "DAL@HOU"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "PX",
-    "next_odds": 10765,
-    "pct_vs_next": 21.2,
-    "n_books": 4,
-    "alt_books": [
-     [
-      "FD",
-      13067
-     ],
-     [
-      "PX",
-      10765
-     ],
-     [
-      "FN",
-      7282
-     ],
-     [
-      "CZ",
-      6676
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Amen Thompson",
-      "team": "HOU",
-      "market_short": "AST",
-      "prop": "AST Over 6.5",
-      "point": 6.5,
-      "odds_at_book": 320,
-      "best_odds": 390,
-      "best_book": "MG",
-      "ev_pct": 19.3,
-      "grade": "S",
-      "game": "DAL@HOU",
-      "game_time": "8:30 PM ET",
-      "coverage": 9,
-      "is_alt": false
-     },
-     {
-      "player": "Kyrie Irving",
-      "team": "DAL",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 470,
-      "best_odds": 470,
-      "best_book": "FD",
-      "ev_pct": 18.7,
-      "grade": "S",
-      "game": "DAL@HOU",
-      "game_time": "8:30 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Alperen Sengun",
-      "team": "HOU",
-      "market_short": "PTS",
-      "prop": "PTS Over 26.5",
-      "point": 26.5,
-      "odds_at_book": 450,
-      "best_odds": 450,
-      "best_book": "FD",
-      "ev_pct": 17.9,
-      "grade": "S",
-      "game": "DAL@HOU",
-      "game_time": "8:30 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP",
-    "rank": 7,
-    "book": "FD",
-    "combined_odds": 6917,
-    "combined_decimal": 70.166,
-    "avg_ev_pct": 18.4,
-    "total_ev_pct": 55.2,
-    "games": [
-     "MIN@MIA"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "PX",
-    "next_odds": 6642,
-    "pct_vs_next": 4.1,
-    "n_books": 2,
-    "alt_books": [
-     [
-      "FD",
-      6917
-     ],
-     [
-      "PX",
-      6642
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Jonathan Kuminga",
-      "team": "MIN",
+      "player": "Peyton Watson",
+      "team": "CLE",
       "market_short": "PTS",
       "prop": "PTS Over 15.5",
       "point": 15.5,
-      "odds_at_book": 235,
-      "best_odds": 235,
-      "best_book": "FD",
-      "ev_pct": 19.6,
+      "odds_at_book": 164,
+      "best_odds": 200,
+      "best_book": "BO",
+      "ev_pct": 17.8,
       "grade": "S",
-      "game": "MIN@MIA",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Andrew Wiggins",
-      "team": "MIA",
-      "market_short": "3PT",
-      "prop": "3PT Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 255,
-      "best_odds": 255,
-      "best_book": "FD",
-      "ev_pct": 18.0,
-      "grade": "S",
-      "game": "MIN@MIA",
-      "game_time": "7:30 PM ET",
-      "coverage": 12,
-      "is_alt": false
-     },
-     {
-      "player": "Bam Adebayo",
-      "team": "MIA",
-      "market_short": "STL",
-      "prop": "STL Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 490,
-      "best_odds": 490,
-      "best_book": "FD",
-      "ev_pct": 17.6,
-      "grade": "S",
-      "game": "MIN@MIA",
-      "game_time": "7:30 PM ET",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
       "coverage": 6,
       "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP",
-    "rank": 8,
-    "book": "PX",
-    "combined_odds": 6935,
-    "combined_decimal": 70.35,
-    "avg_ev_pct": 18.3,
-    "total_ev_pct": 54.8,
-    "games": [
-     "ATL@ORL"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "FN",
-    "next_odds": 4337,
-    "pct_vs_next": 58.6,
-    "n_books": 3,
-    "alt_books": [
-     [
-      "PX",
-      6935
-     ],
-     [
-      "FN",
-      4337
-     ],
-     [
-      "CZ",
-      3798
-     ]
-    ],
-    "legs": [
+     },
      {
-      "player": "Jalen Johnson",
-      "team": "ATL",
+      "player": "Jaylon Tyson",
+      "team": "CLE",
       "market_short": "PTS",
-      "prop": "PTS Over 25.5",
-      "point": 25.5,
-      "odds_at_book": 235,
-      "best_odds": 235,
-      "best_book": "FD",
-      "ev_pct": 19.6,
+      "prop": "PTS Over 14.5",
+      "point": 14.5,
+      "odds_at_book": 360,
+      "best_odds": 450,
+      "best_book": "365",
+      "ev_pct": 16.5,
       "grade": "S",
-      "game": "ATL@ORL",
+      "game": "CLE@PHI",
       "game_time": "7:00 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Nickeil Alexander-Walker",
-      "team": "ATL",
-      "market_short": "AST",
-      "prop": "AST Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 320,
-      "best_odds": 333,
-      "best_book": "MG",
-      "ev_pct": 18.3,
-      "grade": "S",
-      "game": "ATL@ORL",
-      "game_time": "7:00 PM ET",
-      "coverage": 7,
-      "is_alt": false
-     },
-     {
-      "player": "Jock Landale",
-      "team": "ATL",
-      "market_short": "REB",
-      "prop": "REB Over 6.5",
-      "point": 6.5,
-      "odds_at_book": 400,
-      "best_odds": 475,
-      "best_book": "MG",
-      "ev_pct": 16.9,
-      "grade": "S",
-      "game": "ATL@ORL",
-      "game_time": "7:00 PM ET",
-      "coverage": 8,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP",
-    "rank": 9,
-    "book": "NOV",
-    "combined_odds": 4482,
-    "combined_decimal": 45.819,
-    "avg_ev_pct": 17.8,
-    "total_ev_pct": 53.5,
-    "games": [
-     "UTAH@MEM"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "EB",
-    "next_odds": 3350,
-    "pct_vs_next": 32.8,
-    "n_books": 3,
-    "alt_books": [
-     [
-      "NOV",
-      4482
-     ],
-     [
-      "EB",
-      3350
-     ],
-     [
-      "DK",
-      2971
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Keyonte George",
-      "team": "UTAH",
-      "market_short": "PRA",
-      "prop": "PRA Over 39.5",
-      "point": 39.5,
-      "odds_at_book": 426,
-      "best_odds": 480,
-      "best_book": "FD",
-      "ev_pct": 18.0,
-      "grade": "S",
-      "game": "UTAH@MEM",
-      "game_time": "8:00 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Jaren Jackson Jr.",
-      "team": "UTAH",
-      "market_short": "REB",
-      "prop": "REB Over 7.5",
-      "point": 7.5,
-      "odds_at_book": 257,
-      "best_odds": 255,
-      "best_book": "FD",
-      "ev_pct": 18.0,
-      "grade": "S",
-      "game": "UTAH@MEM",
-      "game_time": "8:00 PM ET",
       "coverage": 11,
       "is_alt": false
      },
      {
-      "player": "Cam Spencer",
-      "team": "MEM",
-      "market_short": "REB",
-      "prop": "REB Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 144,
-      "best_odds": 165,
+      "player": "Donovan Mitchell",
+      "team": "CLE",
+      "market_short": "PRA",
+      "prop": "PRA Over 44.5",
+      "point": 44.5,
+      "odds_at_book": 360,
+      "best_odds": 425,
       "best_book": "MG",
-      "ev_pct": 17.5,
+      "ev_pct": 16.1,
       "grade": "S",
-      "game": "UTAH@MEM",
-      "game_time": "8:00 PM ET",
-      "coverage": 10,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 7,
       "is_alt": false
      }
     ],
@@ -1632,328 +900,13 @@
     "tier": "SGP+",
     "rank": 1,
     "book": "FD",
-    "combined_odds": 26095,
-    "combined_decimal": 261.954,
-    "avg_ev_pct": 19.9,
-    "total_ev_pct": 79.5,
+    "combined_odds": 8197,
+    "combined_decimal": 82.969,
+    "avg_ev_pct": 18.9,
+    "total_ev_pct": 75.4,
     "games": [
-     "CHI@TOR",
-     "PHX@POR",
-     "SAC@LAC"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "PX",
-    "next_odds": 19401,
-    "pct_vs_next": 34.3,
-    "n_books": 4,
-    "alt_books": [
-     [
-      "FD",
-      26095
-     ],
-     [
-      "PX",
-      19401
-     ],
-     [
-      "FN",
-      13939
-     ],
-     [
-      "CZ",
-      11642
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Leonard Miller",
-      "team": "CHI",
-      "market_short": "PTS",
-      "prop": "PTS Over 12.5",
-      "point": 12.5,
-      "odds_at_book": 260,
-      "best_odds": 260,
-      "best_book": "FD",
-      "ev_pct": 20.0,
-      "grade": "S",
-      "game": "CHI@TOR",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Kawhi Leonard",
-      "team": "TOR",
-      "market_short": "PTS",
-      "prop": "PTS Over 31.5",
-      "point": 31.5,
-      "odds_at_book": 320,
-      "best_odds": 320,
-      "best_book": "FD",
-      "ev_pct": 19.9,
-      "grade": "S",
-      "game": "CHI@TOR",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Jalen Green",
-      "team": "PHX",
-      "market_short": "PTS",
-      "prop": "PTS Over 24.5",
-      "point": 24.5,
-      "odds_at_book": 285,
-      "best_odds": 350,
-      "best_book": "365",
-      "ev_pct": 19.8,
-      "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 13,
-      "is_alt": false
-     },
-     {
-      "player": "Keaton Wagler",
-      "team": "LAC",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 350,
-      "best_odds": 350,
-      "best_book": "FD",
-      "ev_pct": 19.8,
-      "grade": "S",
-      "game": "SAC@LAC",
-      "game_time": "10:30 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 2,
-    "book": "PX",
-    "combined_odds": 10579,
-    "combined_decimal": 106.793,
-    "avg_ev_pct": 19.6,
-    "total_ev_pct": 78.2,
-    "games": [
-     "ATL@ORL",
-     "IND@NO",
-     "MIN@MIA",
-     "PHX@POR"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "FN",
-    "next_odds": 8264,
-    "pct_vs_next": 27.7,
-    "n_books": 3,
-    "alt_books": [
-     [
-      "PX",
-      10579
-     ],
-     [
-      "FN",
-      8264
-     ],
-     [
-      "CZ",
-      7789
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Robert Williams III",
-      "team": "POR",
-      "market_short": "REB",
-      "prop": "REB Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 144,
-      "best_odds": 205,
-      "best_book": "365",
-      "ev_pct": 19.7,
-      "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Jalen Johnson",
-      "team": "ATL",
-      "market_short": "PTS",
-      "prop": "PTS Over 25.5",
-      "point": 25.5,
-      "odds_at_book": 235,
-      "best_odds": 235,
-      "best_book": "FD",
-      "ev_pct": 19.6,
-      "grade": "S",
-      "game": "ATL@ORL",
-      "game_time": "7:00 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Jonathan Kuminga",
-      "team": "MIN",
-      "market_short": "PTS",
-      "prop": "PTS Over 15.5",
-      "point": 15.5,
-      "odds_at_book": 235,
-      "best_odds": 235,
-      "best_book": "FD",
-      "ev_pct": 19.6,
-      "grade": "S",
-      "game": "MIN@MIA",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Andrew Nembhard",
-      "team": "IND",
-      "market_short": "REB",
-      "prop": "REB Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 290,
-      "best_odds": 390,
-      "best_book": "DK",
-      "ev_pct": 19.3,
-      "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 7,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 3,
-    "book": "365",
-    "combined_odds": 7511,
-    "combined_decimal": 76.112,
-    "avg_ev_pct": 19.2,
-    "total_ev_pct": 76.9,
-    "games": [
-     "DAL@HOU",
-     "GS@LAL",
-     "IND@NO"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "PX",
-    "next_odds": 6376,
-    "pct_vs_next": 17.5,
-    "n_books": 6,
-    "alt_books": [
-     [
-      "365",
-      7511
-     ],
-     [
-      "PX",
-      6376
-     ],
-     [
-      "DK",
-      6345
-     ],
-     [
-      "FD",
-      6238
-     ],
-     [
-      "FN",
-      4889
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Amen Thompson",
-      "team": "HOU",
-      "market_short": "AST",
-      "prop": "AST Over 6.5",
-      "point": 6.5,
-      "odds_at_book": 290,
-      "best_odds": 390,
-      "best_book": "MG",
-      "ev_pct": 19.3,
-      "grade": "S",
-      "game": "DAL@HOU",
-      "game_time": "8:30 PM ET",
-      "coverage": 9,
-      "is_alt": false
-     },
-     {
-      "player": "Herbert Jones",
-      "team": "NO",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 180,
-      "best_odds": 180,
-      "best_book": "365",
-      "ev_pct": 19.2,
-      "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 13,
-      "is_alt": false
-     },
-     {
-      "player": "Ziaire Williams",
-      "team": "LAL",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 105,
-      "best_odds": 180,
-      "best_book": "MG",
-      "ev_pct": 19.2,
-      "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     },
-     {
-      "player": "Austin Reaves",
-      "team": "LAL",
-      "market_short": "STL",
-      "prop": "STL Over 1.5",
-      "point": 1.5,
-      "odds_at_book": 240,
-      "best_odds": 240,
-      "best_book": "365",
-      "ev_pct": 19.2,
-      "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 4,
-    "book": "DK",
-    "combined_odds": 8266,
-    "combined_decimal": 83.657,
-    "avg_ev_pct": 18.8,
-    "total_ev_pct": 75.2,
-    "games": [
-     "DAL@HOU",
-     "IND@NO",
-     "MIL@WSH",
-     "SAC@LAC"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": true,
     "next_book": "",
@@ -1962,73 +915,378 @@
     "n_books": 1,
     "alt_books": [
      [
-      "DK",
-      8266
+      "FD",
+      8197
      ]
     ],
     "legs": [
      {
-      "player": "Domantas Sabonis",
-      "team": "SAC",
-      "market_short": "PRA",
-      "prop": "PRA Over 39.5",
-      "point": 39.5,
-      "odds_at_book": 137,
-      "best_odds": 180,
+      "player": "Shai Gilgeous-Alexander",
+      "team": "OKC",
+      "market_short": "PTS",
+      "prop": "PTS Over 33.5",
+      "point": 33.5,
+      "odds_at_book": 174,
+      "best_odds": 174,
       "best_book": "FD",
       "ev_pct": 19.2,
       "grade": "S",
-      "game": "SAC@LAC",
-      "game_time": "10:30 PM ET",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
       "coverage": 6,
       "is_alt": false
      },
      {
-      "player": "Yves Missi",
-      "team": "NO",
-      "market_short": "RA",
-      "prop": "RA Over 8.5",
-      "point": 8.5,
-      "odds_at_book": -130,
-      "best_odds": 105,
-      "best_book": "FN",
-      "ev_pct": 18.9,
+      "player": "Chet Holmgren",
+      "team": "OKC",
+      "market_short": "PRA",
+      "prop": "PRA Over 29.5",
+      "point": 29.5,
+      "odds_at_book": 210,
+      "best_odds": 270,
+      "best_book": "MG",
+      "ev_pct": 19.2,
       "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 4,
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 5,
       "is_alt": false
      },
      {
-      "player": "Kyrie Irving",
-      "team": "DAL",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 389,
-      "best_odds": 470,
+      "player": "Cason Wallace",
+      "team": "OKC",
+      "market_short": "STL",
+      "prop": "STL Over 2.5",
+      "point": 2.5,
+      "odds_at_book": 270,
+      "best_odds": 270,
       "best_book": "FD",
-      "ev_pct": 18.7,
+      "ev_pct": 19.2,
       "grade": "S",
-      "game": "DAL@HOU",
-      "game_time": "8:30 PM ET",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 6,
+      "is_alt": false
+     },
+     {
+      "player": "Peyton Watson",
+      "team": "CLE",
+      "market_short": "PTS",
+      "prop": "PTS Over 15.5",
+      "point": 15.5,
+      "odds_at_book": 164,
+      "best_odds": 200,
+      "best_book": "BO",
+      "ev_pct": 17.8,
+      "grade": "S",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 6,
+      "is_alt": false
+     }
+    ],
+    "sport": "NBA"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 2,
+    "book": "FD",
+    "combined_odds": 52620,
+    "combined_decimal": 527.197,
+    "avg_ev_pct": 17.7,
+    "total_ev_pct": 70.7,
+    "games": [
+     "CLE@PHI",
+     "DEN@OKC"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "NOV",
+    "next_odds": 40436,
+    "pct_vs_next": 30.1,
+    "n_books": 7,
+    "alt_books": [
+     [
+      "FD",
+      52620
+     ],
+     [
+      "NOV",
+      40436
+     ],
+     [
+      "HR",
+      29878
+     ],
+     [
+      "CZ",
+      29026
+     ],
+     [
+      "EB",
+      27990
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Nikola Jokic",
+      "team": "DEN",
+      "market_short": "AST",
+      "prop": "AST Over 11.5",
+      "point": 11.5,
+      "odds_at_book": 280,
+      "best_odds": 280,
+      "best_book": "FD",
+      "ev_pct": 18.4,
+      "grade": "S",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
       "coverage": 10,
       "is_alt": false
      },
      {
-      "player": "Jaime Jaquez Jr.",
-      "team": "MIL",
-      "market_short": "REB",
-      "prop": "REB Over 6.5",
-      "point": 6.5,
-      "odds_at_book": 308,
-      "best_odds": 375,
-      "best_book": "365",
-      "ev_pct": 18.4,
+      "player": "Christian Braun",
+      "team": "DEN",
+      "market_short": "AST",
+      "prop": "AST Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 480,
+      "best_odds": 480,
+      "best_book": "FD",
+      "ev_pct": 18.0,
       "grade": "S",
-      "game": "MIL@WSH",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 9,
+      "is_alt": false
+     },
+     {
+      "player": "Cameron Johnson",
+      "team": "DEN",
+      "market_short": "AST",
+      "prop": "AST Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 420,
+      "best_odds": 420,
+      "best_book": "FD",
+      "ev_pct": 17.8,
+      "grade": "S",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Jaylon Tyson",
+      "team": "CLE",
+      "market_short": "PTS",
+      "prop": "PTS Over 14.5",
+      "point": 14.5,
+      "odds_at_book": 360,
+      "best_odds": 450,
+      "best_book": "365",
+      "ev_pct": 16.5,
+      "grade": "S",
+      "game": "CLE@PHI",
       "game_time": "7:00 PM ET",
-      "coverage": 8,
+      "coverage": 11,
+      "is_alt": false
+     }
+    ],
+    "sport": "NBA"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 3,
+    "book": "NOV",
+    "combined_odds": 6998,
+    "combined_decimal": 70.979,
+    "avg_ev_pct": 15.9,
+    "total_ev_pct": 63.6,
+    "games": [
+     "CLE@PHI",
+     "DEN@OKC"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "DK",
+    "next_odds": 5724,
+    "pct_vs_next": 21.9,
+    "n_books": 2,
+    "alt_books": [
+     [
+      "NOV",
+      6998
+     ],
+     [
+      "DK",
+      5724
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Alex Caruso",
+      "team": "OKC",
+      "market_short": "PTS",
+      "prop": "PTS Over 7.5",
+      "point": 7.5,
+      "odds_at_book": 122,
+      "best_odds": 115,
+      "best_book": "FN",
+      "ev_pct": 17.7,
+      "grade": "S",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 6,
+      "is_alt": false
+     },
+     {
+      "player": "Donovan Mitchell",
+      "team": "CLE",
+      "market_short": "PRA",
+      "prop": "PRA Over 44.5",
+      "point": 44.5,
+      "odds_at_book": 308,
+      "best_odds": 425,
+      "best_book": "MG",
+      "ev_pct": 16.1,
+      "grade": "S",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     },
+     {
+      "player": "Anfernee Simons",
+      "team": "PHI",
+      "market_short": "AST",
+      "prop": "AST Over 2.5",
+      "point": 2.5,
+      "odds_at_book": 186,
+      "best_odds": 208,
+      "best_book": "DK",
+      "ev_pct": 15.4,
+      "grade": "S",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 5,
+      "is_alt": false
+     },
+     {
+      "player": "Jalen Williams",
+      "team": "OKC",
+      "market_short": "REB",
+      "prop": "REB Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 174,
+      "best_odds": 200,
+      "best_book": "FD",
+      "ev_pct": 14.4,
+      "grade": "S",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     }
+    ],
+    "sport": "NBA"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 4,
+    "book": "FD",
+    "combined_odds": 14935,
+    "combined_decimal": 150.345,
+    "avg_ev_pct": 14.0,
+    "total_ev_pct": 55.9,
+    "games": [
+     "CLE@PHI",
+     "DEN@OKC"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "PX",
+    "next_odds": 12015,
+    "pct_vs_next": 24.1,
+    "n_books": 4,
+    "alt_books": [
+     [
+      "FD",
+      14935
+     ],
+     [
+      "PX",
+      12015
+     ],
+     [
+      "CZ",
+      10407
+     ],
+     [
+      "FN",
+      7820
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Joel Embiid",
+      "team": "PHI",
+      "market_short": "AST",
+      "prop": "AST Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 280,
+      "best_odds": 280,
+      "best_book": "BB,BR",
+      "ev_pct": 14.2,
+      "grade": "S",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Aaron Gordon",
+      "team": "DEN",
+      "market_short": "PTS",
+      "prop": "PTS Over 18.5",
+      "point": 18.5,
+      "odds_at_book": 205,
+      "best_odds": 205,
+      "best_book": "FD",
+      "ev_pct": 14.0,
+      "grade": "S",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 4,
+      "is_alt": false
+     },
+     {
+      "player": "VJ Edgecombe",
+      "team": "PHI",
+      "market_short": "REB",
+      "prop": "REB Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 176,
+      "best_odds": 176,
+      "best_book": "FD",
+      "ev_pct": 13.9,
+      "grade": "S",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "Ajay Mitchell",
+      "team": "OKC",
+      "market_short": "REB",
+      "prop": "REB Over 4.5",
+      "point": 4.5,
+      "odds_at_book": 370,
+      "best_odds": 370,
+      "best_book": "FD",
+      "ev_pct": 13.8,
+      "grade": "S",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 11,
       "is_alt": false
      }
     ],
@@ -2037,116 +1295,14 @@
    {
     "tier": "SGP+",
     "rank": 5,
-    "book": "HR",
-    "combined_odds": 9967,
-    "combined_decimal": 100.675,
-    "avg_ev_pct": 18.3,
-    "total_ev_pct": 73.3,
-    "games": [
-     "ATL@ORL",
-     "CHA@BKN",
-     "GS@LAL"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "DK",
-    "next_odds": 8895,
-    "pct_vs_next": 11.9,
-    "n_books": 3,
-    "alt_books": [
-     [
-      "HR",
-      9967
-     ],
-     [
-      "DK",
-      8895
-     ],
-     [
-      "BO",
-      8235
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Michael Porter Jr.",
-      "team": "BKN",
-      "market_short": "3PT",
-      "prop": "3PT Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 275,
-      "best_odds": 375,
-      "best_book": "365",
-      "ev_pct": 18.4,
-      "grade": "S",
-      "game": "CHA@BKN",
-      "game_time": "7:30 PM ET",
-      "coverage": 12,
-      "is_alt": false
-     },
-     {
-      "player": "Luka Doncic",
-      "team": "LAL",
-      "market_short": "PTS",
-      "prop": "PTS Over 39.5",
-      "point": 39.5,
-      "odds_at_book": 275,
-      "best_odds": 375,
-      "best_book": "365",
-      "ev_pct": 18.4,
-      "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 12,
-      "is_alt": false
-     },
-     {
-      "player": "Nickeil Alexander-Walker",
-      "team": "ATL",
-      "market_short": "AST",
-      "prop": "AST Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 275,
-      "best_odds": 333,
-      "best_book": "MG",
-      "ev_pct": 18.3,
-      "grade": "S",
-      "game": "ATL@ORL",
-      "game_time": "7:00 PM ET",
-      "coverage": 7,
-      "is_alt": false
-     },
-     {
-      "player": "Al Horford",
-      "team": "GS",
-      "market_short": "RA",
-      "prop": "RA Over 6.5",
-      "point": 6.5,
-      "odds_at_book": -110,
-      "best_odds": 120,
-      "best_book": "BR,BB",
-      "ev_pct": 18.2,
-      "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 7,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 6,
     "book": "NOV",
-    "combined_odds": 12781,
-    "combined_decimal": 128.807,
-    "avg_ev_pct": 18.1,
-    "total_ev_pct": 72.2,
+    "combined_odds": 7495,
+    "combined_decimal": 75.945,
+    "avg_ev_pct": 12.8,
+    "total_ev_pct": 51.4,
     "games": [
-     "GS@LAL",
-     "IND@NO",
-     "PHX@POR",
-     "UTAH@MEM"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": true,
     "next_book": "",
@@ -2156,72 +1312,179 @@
     "alt_books": [
      [
       "NOV",
-      12781
+      7495
      ]
     ],
     "legs": [
      {
-      "player": "Collin Gillespie",
-      "team": "PHX",
-      "market_short": "PRA",
-      "prop": "PRA Over 17.5",
-      "point": 17.5,
-      "odds_at_book": 133,
-      "best_odds": 120,
-      "best_book": "BO",
-      "ev_pct": 18.2,
+      "player": "DeMar DeRozan",
+      "team": "DEN",
+      "market_short": "AST",
+      "prop": "AST Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 170,
+      "best_odds": 205,
+      "best_book": "BB,BR",
+      "ev_pct": 13.5,
       "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "LeBron James",
+      "team": "PHI",
+      "market_short": "PR",
+      "prop": "PR Over 29.5",
+      "point": 29.5,
+      "odds_at_book": 130,
+      "best_odds": 390,
+      "best_book": "FD",
+      "ev_pct": 13.0,
+      "grade": "S",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     },
+     {
+      "player": "Jamal Murray",
+      "team": "DEN",
+      "market_short": "BLK",
+      "prop": "BLK Over 0.5",
+      "point": 0.5,
+      "odds_at_book": 163,
+      "best_odds": 123,
+      "best_book": "BB,BR",
+      "ev_pct": 13.0,
+      "grade": "S",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
       "coverage": 6,
       "is_alt": false
      },
      {
-      "player": "Keyonte George",
-      "team": "UTAH",
-      "market_short": "PRA",
-      "prop": "PRA Over 39.5",
-      "point": 39.5,
-      "odds_at_book": 426,
-      "best_odds": 480,
-      "best_book": "FD",
-      "ev_pct": 18.0,
+      "player": "Sam Merrill",
+      "team": "CLE",
+      "market_short": "3PT",
+      "prop": "3PT Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 365,
+      "best_odds": 425,
+      "best_book": "365",
+      "ev_pct": 11.9,
       "grade": "S",
-      "game": "UTAH@MEM",
-      "game_time": "8:00 PM ET",
-      "coverage": 4,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     }
+    ],
+    "sport": "NBA"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 6,
+    "book": "NOV",
+    "combined_odds": 11746,
+    "combined_decimal": 118.457,
+    "avg_ev_pct": 10.9,
+    "total_ev_pct": 43.7,
+    "games": [
+     "CLE@PHI",
+     "DEN@OKC"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "FD",
+    "next_odds": 11625,
+    "pct_vs_next": 1.0,
+    "n_books": 7,
+    "alt_books": [
+     [
+      "NOV",
+      11746
+     ],
+     [
+      "FD",
+      11625
+     ],
+     [
+      "BR",
+      10052
+     ],
+     [
+      "BB",
+      10052
+     ],
+     [
+      "CZ",
+      9780
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Isaiah Hartenstein",
+      "team": "OKC",
+      "market_short": "PTS",
+      "prop": "PTS Over 9.5",
+      "point": 9.5,
+      "odds_at_book": 138,
+      "best_odds": 155,
+      "best_book": "MG",
+      "ev_pct": 11.7,
+      "grade": "S",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 13,
       "is_alt": false
      },
      {
-      "player": "Jarace Walker",
-      "team": "IND",
-      "market_short": "PRA",
-      "prop": "PRA Over 17.5",
-      "point": 17.5,
-      "odds_at_book": -127,
-      "best_odds": 130,
-      "best_book": "BO",
-      "ev_pct": 18.0,
+      "player": "James Harden",
+      "team": "CLE",
+      "market_short": "PTS",
+      "prop": "PTS Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 130,
+      "best_odds": 140,
+      "best_book": "BB,BR",
+      "ev_pct": 11.4,
       "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 4,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 13,
       "is_alt": false
      },
      {
-      "player": "De'Anthony Melton",
-      "team": "GS",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
+      "player": "Jaylen Brown",
+      "team": "PHI",
+      "market_short": "AST",
+      "prop": "AST Over 5.5",
       "point": 5.5,
-      "odds_at_book": 488,
-      "best_odds": 480,
+      "odds_at_book": 300,
+      "best_odds": 310,
       "best_book": "FD",
-      "ev_pct": 18.0,
+      "ev_pct": 11.0,
       "grade": "S",
-      "game": "GS@LAL",
-      "game_time": "10:00 PM ET",
-      "coverage": 8,
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Kentavious Caldwell-Pope",
+      "team": "PHI",
+      "market_short": "3PT",
+      "prop": "3PT Over 2.5",
+      "point": 2.5,
+      "odds_at_book": 441,
+      "best_odds": 470,
+      "best_book": "FD",
+      "ev_pct": 9.6,
+      "grade": "S",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 10,
       "is_alt": false
      }
     ],
@@ -2231,400 +1494,100 @@
     "tier": "SGP+",
     "rank": 7,
     "book": "FD",
-    "combined_odds": 15565,
-    "combined_decimal": 156.649,
-    "avg_ev_pct": 17.9,
-    "total_ev_pct": 71.8,
+    "combined_odds": 12306,
+    "combined_decimal": 124.059,
+    "avg_ev_pct": 7.1,
+    "total_ev_pct": 28.3,
     "games": [
-     "DAL@HOU",
-     "MIN@MIA",
-     "SAC@LAC",
-     "UTAH@MEM"
+     "CLE@PHI",
+     "DEN@OKC"
     ],
     "odds_are_estimate": true,
-    "next_book": "PX",
-    "next_odds": 12622,
-    "pct_vs_next": 23.1,
-    "n_books": 3,
+    "next_book": "EB",
+    "next_odds": 10699,
+    "pct_vs_next": 14.9,
+    "n_books": 4,
     "alt_books": [
      [
       "FD",
-      15565
+      12306
      ],
      [
-      "PX",
-      12622
+      "EB",
+      10699
      ],
      [
-      "CZ",
-      6731
+      "DK",
+      10529
+     ],
+     [
+      "NOV",
+      10051
      ]
     ],
     "legs": [
      {
-      "player": "Andrew Wiggins",
-      "team": "MIA",
-      "market_short": "3PT",
-      "prop": "3PT Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 255,
-      "best_odds": 255,
+      "player": "Marvin Bagley III",
+      "team": "DEN",
+      "market_short": "REB",
+      "prop": "REB Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 330,
+      "best_odds": 330,
       "best_book": "FD",
-      "ev_pct": 18.0,
+      "ev_pct": 8.7,
       "grade": "S",
-      "game": "MIN@MIA",
-      "game_time": "7:30 PM ET",
+      "game": "DEN@OKC",
+      "game_time": "9:30 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     },
+     {
+      "player": "Tyrese Maxey",
+      "team": "PHI",
+      "market_short": "3PT",
+      "prop": "3PT Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 255,
+      "best_odds": 275,
+      "best_book": "365",
+      "ev_pct": 6.7,
+      "grade": "S",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "Jarrett Allen",
+      "team": "CLE",
+      "market_short": "REB",
+      "prop": "REB Over 9.5",
+      "point": 9.5,
+      "odds_at_book": 158,
+      "best_odds": 200,
+      "best_book": "MG",
+      "ev_pct": 6.7,
+      "grade": "S",
+      "game": "CLE@PHI",
+      "game_time": "7:00 PM ET",
       "coverage": 12,
       "is_alt": false
      },
      {
-      "player": "Jaren Jackson Jr.",
-      "team": "UTAH",
-      "market_short": "REB",
-      "prop": "REB Over 7.5",
-      "point": 7.5,
-      "odds_at_book": 255,
-      "best_odds": 255,
+      "player": "Evan Mobley",
+      "team": "CLE",
+      "market_short": "PRA",
+      "prop": "PRA Over 34.5",
+      "point": 34.5,
+      "odds_at_book": 215,
+      "best_odds": 215,
       "best_book": "FD",
-      "ev_pct": 18.0,
+      "ev_pct": 6.2,
       "grade": "S",
-      "game": "UTAH@MEM",
-      "game_time": "8:00 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     },
-     {
-      "player": "Alperen Sengun",
-      "team": "HOU",
-      "market_short": "PTS",
-      "prop": "PTS Over 26.5",
-      "point": 26.5,
-      "odds_at_book": 450,
-      "best_odds": 450,
-      "best_book": "FD",
-      "ev_pct": 17.9,
-      "grade": "S",
-      "game": "DAL@HOU",
-      "game_time": "8:30 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Precious Achiuwa",
-      "team": "SAC",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 126,
-      "best_odds": 155,
-      "best_book": "365",
-      "ev_pct": 17.9,
-      "grade": "S",
-      "game": "SAC@LAC",
-      "game_time": "10:30 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 8,
-    "book": "FN",
-    "combined_odds": 6782,
-    "combined_decimal": 68.816,
-    "avg_ev_pct": 17.6,
-    "total_ev_pct": 70.4,
-    "games": [
-     "CHI@TOR",
-     "DAL@HOU",
-     "IND@NO",
-     "UTAH@MEM"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "",
-    "next_odds": 0,
-    "pct_vs_next": 0.0,
-    "n_books": 1,
-    "alt_books": [
-     [
-      "FN",
-      6782
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Josh Giddey",
-      "team": "CHI",
-      "market_short": "PTS",
-      "prop": "PTS Over 18.5",
-      "point": 18.5,
-      "odds_at_book": 240,
-      "best_odds": 290,
-      "best_book": "FD",
-      "ev_pct": 17.8,
-      "grade": "S",
-      "game": "CHI@TOR",
-      "game_time": "7:30 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Obi Toppin",
-      "team": "IND",
-      "market_short": "PR",
-      "prop": "PR Over 16.5",
-      "point": 16.5,
-      "odds_at_book": 120,
-      "best_odds": 120,
-      "best_book": "FN",
-      "ev_pct": 17.6,
-      "grade": "S",
-      "game": "IND@NO",
-      "game_time": "8:00 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     },
-     {
-      "player": "Cam Spencer",
-      "team": "MEM",
-      "market_short": "REB",
-      "prop": "REB Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 130,
-      "best_odds": 165,
-      "best_book": "MG",
-      "ev_pct": 17.5,
-      "grade": "S",
-      "game": "UTAH@MEM",
-      "game_time": "8:00 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Reed Sheppard",
-      "team": "HOU",
-      "market_short": "PTS",
-      "prop": "PTS Over 13.5",
-      "point": 13.5,
-      "odds_at_book": 300,
-      "best_odds": 360,
-      "best_book": "FD",
-      "ev_pct": 17.5,
-      "grade": "S",
-      "game": "DAL@HOU",
-      "game_time": "8:30 PM ET",
-      "coverage": 4,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 9,
-    "book": "DK",
-    "combined_odds": 29405,
-    "combined_decimal": 295.054,
-    "avg_ev_pct": 17.4,
-    "total_ev_pct": 69.8,
-    "games": [
-     "MIN@MIA",
-     "PHX@POR",
-     "SAC@LAC",
-     "UTAH@MEM"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "BB",
-    "next_odds": 29151,
-    "pct_vs_next": 0.9,
-    "n_books": 4,
-    "alt_books": [
-     [
-      "DK",
-      29405
-     ],
-     [
-      "BB",
-      29151
-     ],
-     [
-      "BR",
-      29151
-     ],
-     [
-      "EB",
-      27972
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Bam Adebayo",
-      "team": "MIA",
-      "market_short": "STL",
-      "prop": "STL Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 398,
-      "best_odds": 490,
-      "best_book": "FD",
-      "ev_pct": 17.6,
-      "grade": "S",
-      "game": "MIN@MIA",
-      "game_time": "7:30 PM ET",
-      "coverage": 6,
-      "is_alt": false
-     },
-     {
-      "player": "Darius Acuff Jr.",
-      "team": "SAC",
-      "market_short": "3PT",
-      "prop": "3PT Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 351,
-      "best_odds": 420,
-      "best_book": "FD",
-      "ev_pct": 17.5,
-      "grade": "S",
-      "game": "SAC@LAC",
-      "game_time": "10:30 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Lauri Markkanen",
-      "team": "UTAH",
-      "market_short": "STL",
-      "prop": "STL Over 1.5",
-      "point": 1.5,
-      "odds_at_book": 190,
-      "best_odds": 230,
-      "best_book": "BB,BR",
-      "ev_pct": 17.4,
-      "grade": "S",
-      "game": "UTAH@MEM",
-      "game_time": "8:00 PM ET",
-      "coverage": 6,
-      "is_alt": false
-     },
-     {
-      "player": "Damian Lillard",
-      "team": "POR",
-      "market_short": "3PT",
-      "prop": "3PT Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 353,
-      "best_odds": 430,
-      "best_book": "FD",
-      "ev_pct": 17.3,
-      "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 10,
-    "book": "FD",
-    "combined_odds": 27176,
-    "combined_decimal": 272.764,
-    "avg_ev_pct": 17.1,
-    "total_ev_pct": 68.6,
-    "games": [
-     "ATL@ORL",
-     "CHI@TOR",
-     "PHX@POR"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "PX",
-    "next_odds": 22256,
-    "pct_vs_next": 22.0,
-    "n_books": 4,
-    "alt_books": [
-     [
-      "FD",
-      27176
-     ],
-     [
-      "PX",
-      22256
-     ],
-     [
-      "DK",
-      14411
-     ],
-     [
-      "CZ",
-      11276
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Toumani Camara",
-      "team": "POR",
-      "market_short": "3PT",
-      "prop": "3PT Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 430,
-      "best_odds": 430,
-      "best_book": "FD",
-      "ev_pct": 17.3,
-      "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     },
-     {
-      "player": "Devin Booker",
-      "team": "PHX",
-      "market_short": "AST",
-      "prop": "AST Over 7.5",
-      "point": 7.5,
-      "odds_at_book": 265,
-      "best_odds": 265,
-      "best_book": "FD",
-      "ev_pct": 17.3,
-      "grade": "S",
-      "game": "PHX@POR",
-      "game_time": "10:00 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Jakob Poeltl",
-      "team": "TOR",
-      "market_short": "PTS",
-      "prop": "PTS Over 11.5",
-      "point": 11.5,
-      "odds_at_book": 182,
-      "best_odds": 182,
-      "best_book": "FD",
-      "ev_pct": 17.1,
-      "grade": "S",
-      "game": "CHI@TOR",
-      "game_time": "7:30 PM ET",
-      "coverage": 6,
-      "is_alt": false
-     },
-     {
-      "player": "Jock Landale",
-      "team": "ATL",
-      "market_short": "REB",
-      "prop": "REB Over 6.5",
-      "point": 6.5,
-      "odds_at_book": 400,
-      "best_odds": 475,
-      "best_book": "MG",
-      "ev_pct": 16.9,
-      "grade": "S",
-      "game": "ATL@ORL",
+      "game": "CLE@PHI",
       "game_time": "7:00 PM ET",
-      "coverage": 8,
+      "coverage": 7,
       "is_alt": false
      }
     ],
@@ -2632,13 +1595,447 @@
    }
   ],
   "hr_plays": [],
-  "_file": "nba_parlays_2026-10-21.json",
-  "scraped_at": "2026-10-21T16:17:58.956371",
-  "odds_last_update": "2026-10-21 09:24:00 AM EDT",
+  "_file": "nba_parlays_2026-10-22.json",
+  "scraped_at": "2026-10-22T16:16:13.129992",
+  "odds_last_update": "2026-10-22 04:12:00 PM EDT",
   "note": "PARLAY combined_odds are exact (independent cross-game legs). SGP combined_odds are RAW MULTIPLIED estimates — same-game legs correlate and the book applies a discount not in the per-leg data. SGP+ is EV-optimized across >=2 games (more dispersed = lower shared failure risk, higher all-legs-hit probability); its odds are still flagged estimate because it may include same-game legs that correlate.",
   "hr_note": "HR plays come from SimpleOdds' own Dinger Report model. edge_pct = modelProb - impliedProb. is_bet is SimpleOdds' own recommended flag. Graded separately from parlays."
  },
  "history": [
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 10,
+   "book": "FD",
+   "combined_odds": 27176,
+   "est": true,
+   "total_ev_pct": 68.6,
+   "avg_ev_pct": 17.1,
+   "n_legs": 4,
+   "verdict": "LOSS",
+   "games": "ATL@ORL / CHI@TOR / PHX@POR",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 9,
+   "book": "DK",
+   "combined_odds": 29405,
+   "est": true,
+   "total_ev_pct": 69.8,
+   "avg_ev_pct": 17.4,
+   "n_legs": 4,
+   "verdict": "UNGRADED",
+   "games": "MIN@MIA / PHX@POR / SAC@LAC / UTAH@MEM",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 8,
+   "book": "FN",
+   "combined_odds": 6782,
+   "est": true,
+   "total_ev_pct": 70.4,
+   "avg_ev_pct": 17.6,
+   "n_legs": 4,
+   "verdict": "LOSS",
+   "games": "CHI@TOR / DAL@HOU / IND@NO / UTAH@MEM",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 7,
+   "book": "FD",
+   "combined_odds": 15565,
+   "est": true,
+   "total_ev_pct": 71.8,
+   "avg_ev_pct": 17.9,
+   "n_legs": 4,
+   "verdict": "LOSS",
+   "games": "DAL@HOU / MIN@MIA / SAC@LAC / UTAH@MEM",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 6,
+   "book": "NOV",
+   "combined_odds": 12781,
+   "est": true,
+   "total_ev_pct": 72.2,
+   "avg_ev_pct": 18.1,
+   "n_legs": 4,
+   "verdict": "LOSS",
+   "games": "GS@LAL / IND@NO / PHX@POR / UTAH@MEM",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 5,
+   "book": "HR",
+   "combined_odds": 9967,
+   "est": true,
+   "total_ev_pct": 73.3,
+   "avg_ev_pct": 18.3,
+   "n_legs": 4,
+   "verdict": "LOSS",
+   "games": "ATL@ORL / CHA@BKN / GS@LAL",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 4,
+   "book": "DK",
+   "combined_odds": 8266,
+   "est": true,
+   "total_ev_pct": 75.2,
+   "avg_ev_pct": 18.8,
+   "n_legs": 4,
+   "verdict": "LOSS",
+   "games": "DAL@HOU / IND@NO / MIL@WSH / SAC@LAC",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 3,
+   "book": "365",
+   "combined_odds": 7511,
+   "est": true,
+   "total_ev_pct": 76.9,
+   "avg_ev_pct": 19.2,
+   "n_legs": 4,
+   "verdict": "LOSS",
+   "games": "DAL@HOU / GS@LAL / IND@NO",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 2,
+   "book": "PX",
+   "combined_odds": 10579,
+   "est": true,
+   "total_ev_pct": 78.2,
+   "avg_ev_pct": 19.6,
+   "n_legs": 4,
+   "verdict": "UNGRADED",
+   "games": "ATL@ORL / IND@NO / MIN@MIA / PHX@POR",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 1,
+   "book": "FD",
+   "combined_odds": 26095,
+   "est": true,
+   "total_ev_pct": 79.5,
+   "avg_ev_pct": 19.9,
+   "n_legs": 4,
+   "verdict": "UNGRADED",
+   "games": "CHI@TOR / PHX@POR / SAC@LAC",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 9,
+   "book": "NOV",
+   "combined_odds": 4482,
+   "est": true,
+   "total_ev_pct": 53.5,
+   "avg_ev_pct": 17.8,
+   "n_legs": 3,
+   "verdict": "LOSS",
+   "games": "UTAH@MEM",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 8,
+   "book": "PX",
+   "combined_odds": 6935,
+   "est": true,
+   "total_ev_pct": 54.8,
+   "avg_ev_pct": 18.3,
+   "n_legs": 3,
+   "verdict": "LOSS",
+   "games": "ATL@ORL",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 7,
+   "book": "FD",
+   "combined_odds": 6917,
+   "est": true,
+   "total_ev_pct": 55.2,
+   "avg_ev_pct": 18.4,
+   "n_legs": 3,
+   "verdict": "LOSS",
+   "games": "MIN@MIA",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 6,
+   "book": "FD",
+   "combined_odds": 13067,
+   "est": true,
+   "total_ev_pct": 55.9,
+   "avg_ev_pct": 18.6,
+   "n_legs": 3,
+   "verdict": "LOSS",
+   "games": "DAL@HOU",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 5,
+   "book": "365",
+   "combined_odds": 3211,
+   "est": true,
+   "total_ev_pct": 56.8,
+   "avg_ev_pct": 18.9,
+   "n_legs": 3,
+   "verdict": "LOSS",
+   "games": "GS@LAL",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 4,
+   "book": "FD",
+   "combined_odds": 2748,
+   "est": true,
+   "total_ev_pct": 56.9,
+   "avg_ev_pct": 19,
+   "n_legs": 3,
+   "verdict": "UNGRADED",
+   "games": "SAC@LAC",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 3,
+   "book": "DK",
+   "combined_odds": 1972,
+   "est": true,
+   "total_ev_pct": 57.4,
+   "avg_ev_pct": 19.1,
+   "n_legs": 3,
+   "verdict": "LOSS",
+   "games": "IND@NO",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 2,
+   "book": "NOV",
+   "combined_odds": 2196,
+   "est": true,
+   "total_ev_pct": 57.7,
+   "avg_ev_pct": 19.2,
+   "n_legs": 3,
+   "verdict": "UNGRADED",
+   "games": "PHX@POR",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 1,
+   "book": "FD",
+   "combined_odds": 5797,
+   "est": true,
+   "total_ev_pct": 57.7,
+   "avg_ev_pct": 19.2,
+   "n_legs": 3,
+   "verdict": "LOSS",
+   "games": "CHI@TOR",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 12,
+   "book": "NOV",
+   "combined_odds": 1999,
+   "est": false,
+   "total_ev_pct": 36,
+   "avg_ev_pct": 18,
+   "n_legs": 2,
+   "verdict": "LOSS",
+   "games": "GS@LAL / MIN@MIA",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 11,
+   "book": "NOV",
+   "combined_odds": 840,
+   "est": false,
+   "total_ev_pct": 36,
+   "avg_ev_pct": 18,
+   "n_legs": 2,
+   "verdict": "LOSS",
+   "games": "IND@NO / UTAH@MEM",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 10,
+   "book": "BO",
+   "combined_odds": 330,
+   "est": false,
+   "total_ev_pct": 36.4,
+   "avg_ev_pct": 18.2,
+   "n_legs": 2,
+   "verdict": "LOSS",
+   "games": "GS@LAL / PHX@POR",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 9,
+   "book": "PX",
+   "combined_odds": 1454,
+   "est": false,
+   "total_ev_pct": 36.7,
+   "avg_ev_pct": 18.4,
+   "n_legs": 2,
+   "verdict": "LOSS",
+   "games": "ATL@ORL / GS@LAL",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 8,
+   "book": "365",
+   "combined_odds": 2156,
+   "est": false,
+   "total_ev_pct": 36.8,
+   "avg_ev_pct": 18.4,
+   "n_legs": 2,
+   "verdict": "WIN",
+   "games": "CHA@BKN / MIL@WSH",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 7,
+   "book": "PX",
+   "combined_odds": 851,
+   "est": false,
+   "total_ev_pct": 37.6,
+   "avg_ev_pct": 18.8,
+   "n_legs": 2,
+   "verdict": "LOSS",
+   "games": "DAL@HOU / IND@NO",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 6,
+   "book": "FD",
+   "combined_odds": 634,
+   "est": false,
+   "total_ev_pct": 38.4,
+   "avg_ev_pct": 19.2,
+   "n_legs": 2,
+   "verdict": "WIN",
+   "games": "GS@LAL / SAC@LAC",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 5,
+   "book": "MG",
+   "combined_odds": 586,
+   "est": false,
+   "total_ev_pct": 38.4,
+   "avg_ev_pct": 19.2,
+   "n_legs": 2,
+   "verdict": "LOSS",
+   "games": "GS@LAL / IND@NO",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 4,
+   "book": "DK",
+   "combined_odds": 1934,
+   "est": false,
+   "total_ev_pct": 38.6,
+   "avg_ev_pct": 19.3,
+   "n_legs": 2,
+   "verdict": "LOSS",
+   "games": "DAL@HOU / IND@NO",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 3,
+   "book": "FD",
+   "combined_odds": 1022,
+   "est": false,
+   "total_ev_pct": 39.2,
+   "avg_ev_pct": 19.6,
+   "n_legs": 2,
+   "verdict": "LOSS",
+   "games": "ATL@ORL / MIN@MIA",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 2,
+   "book": "NOV",
+   "combined_odds": 1065,
+   "est": false,
+   "total_ev_pct": 39.5,
+   "avg_ev_pct": 19.8,
+   "n_legs": 2,
+   "verdict": "UNGRADED",
+   "games": "PHX@POR / SAC@LAC",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 1,
+   "book": "FD",
+   "combined_odds": 1286,
+   "est": false,
+   "total_ev_pct": 39.8,
+   "avg_ev_pct": 19.9,
+   "n_legs": 2,
+   "verdict": "LOSS",
+   "games": "CHI@TOR / PHX@POR",
+   "sport": "NBA"
+  },
   {
    "date": "2026-10-20",
    "tier": "SGP+",
@@ -27995,6 +27392,1189 @@
    "ev_pct": 6.9,
    "result": "LOSS",
    "actual": "7",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 1,
+   "player": "Leonard Miller",
+   "market": "PTS",
+   "prop": "PTS Over 12.5",
+   "odds": 260,
+   "ev_pct": 20,
+   "result": "LOSS",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 1,
+   "player": "Jalen Green",
+   "market": "PTS",
+   "prop": "PTS Over 24.5",
+   "odds": 285,
+   "ev_pct": 19.8,
+   "result": "LOSS",
+   "actual": "10",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 2,
+   "player": "Keaton Wagler",
+   "market": "REB",
+   "prop": "REB Over 5.5",
+   "odds": 355,
+   "ev_pct": 19.8,
+   "result": "NODATA",
+   "actual": "",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 2,
+   "player": "Robert Williams III",
+   "market": "REB",
+   "prop": "REB Over 9.5",
+   "odds": 156,
+   "ev_pct": 19.7,
+   "result": "NODATA",
+   "actual": "",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 3,
+   "player": "Jalen Johnson",
+   "market": "PTS",
+   "prop": "PTS Over 25.5",
+   "odds": 235,
+   "ev_pct": 19.6,
+   "result": "LOSS",
+   "actual": "20",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 3,
+   "player": "Jonathan Kuminga",
+   "market": "PTS",
+   "prop": "PTS Over 15.5",
+   "odds": 235,
+   "ev_pct": 19.6,
+   "result": "LOSS",
+   "actual": "12",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 4,
+   "player": "Andrew Nembhard",
+   "market": "REB",
+   "prop": "REB Over 4.5",
+   "odds": 390,
+   "ev_pct": 19.3,
+   "result": "LOSS",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 4,
+   "player": "Amen Thompson",
+   "market": "AST",
+   "prop": "AST Over 6.5",
+   "odds": 315,
+   "ev_pct": 19.3,
+   "result": "LOSS",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 5,
+   "player": "Herbert Jones",
+   "market": "PTS",
+   "prop": "PTS Over 9.5",
+   "odds": 145,
+   "ev_pct": 19.2,
+   "result": "LOSS",
+   "actual": "5",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 5,
+   "player": "Ziaire Williams",
+   "market": "PTS",
+   "prop": "PTS Over 9.5",
+   "odds": 180,
+   "ev_pct": 19.2,
+   "result": "LOSS",
+   "actual": "9",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 6,
+   "player": "Austin Reaves",
+   "market": "STL",
+   "prop": "STL Over 1.5",
+   "odds": 162,
+   "ev_pct": 19.2,
+   "result": "WIN",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 6,
+   "player": "Domantas Sabonis",
+   "market": "PRA",
+   "prop": "PRA Over 39.5",
+   "odds": 180,
+   "ev_pct": 19.2,
+   "result": "WIN",
+   "actual": "40",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 7,
+   "player": "Yves Missi",
+   "market": "RA",
+   "prop": "RA Over 8.5",
+   "odds": -126,
+   "ev_pct": 18.9,
+   "result": "WIN",
+   "actual": "19",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 7,
+   "player": "Kyrie Irving",
+   "market": "REB",
+   "prop": "REB Over 5.5",
+   "odds": 430,
+   "ev_pct": 18.7,
+   "result": "LOSS",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 8,
+   "player": "Jaime Jaquez Jr.",
+   "market": "REB",
+   "prop": "REB Over 6.5",
+   "odds": 375,
+   "ev_pct": 18.4,
+   "result": "WIN",
+   "actual": "7",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 8,
+   "player": "Michael Porter Jr.",
+   "market": "3PT",
+   "prop": "3PT Over 4.5",
+   "odds": 375,
+   "ev_pct": 18.4,
+   "result": "WIN",
+   "actual": "5",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 9,
+   "player": "Luka Doncic",
+   "market": "PTS",
+   "prop": "PTS Over 39.5",
+   "odds": 270,
+   "ev_pct": 18.4,
+   "result": "LOSS",
+   "actual": "28",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 9,
+   "player": "Nickeil Alexander-Walker",
+   "market": "AST",
+   "prop": "AST Over 4.5",
+   "odds": 320,
+   "ev_pct": 18.3,
+   "result": "LOSS",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 10,
+   "player": "Al Horford",
+   "market": "RA",
+   "prop": "RA Over 6.5",
+   "odds": -105,
+   "ev_pct": 18.2,
+   "result": "LOSS",
+   "actual": "6",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 10,
+   "player": "Collin Gillespie",
+   "market": "PRA",
+   "prop": "PRA Over 17.5",
+   "odds": 120,
+   "ev_pct": 18.2,
+   "result": "LOSS",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 11,
+   "player": "Keyonte George",
+   "market": "PRA",
+   "prop": "PRA Over 39.5",
+   "odds": 426,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "30",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 11,
+   "player": "Jarace Walker",
+   "market": "PRA",
+   "prop": "PRA Over 17.5",
+   "odds": -127,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "11",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 12,
+   "player": "De'Anthony Melton",
+   "market": "REB",
+   "prop": "REB Over 5.5",
+   "odds": 488,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "PARLAY",
+   "rank": 12,
+   "player": "Andrew Wiggins",
+   "market": "3PT",
+   "prop": "3PT Over 2.5",
+   "odds": 257,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "1",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 1,
+   "player": "Leonard Miller",
+   "market": "PTS",
+   "prop": "PTS Over 12.5",
+   "odds": 260,
+   "ev_pct": 20,
+   "result": "LOSS",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 1,
+   "player": "Kawhi Leonard",
+   "market": "PTS",
+   "prop": "PTS Over 31.5",
+   "odds": 320,
+   "ev_pct": 19.9,
+   "result": "LOSS",
+   "actual": "23",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 1,
+   "player": "Josh Giddey",
+   "market": "PTS",
+   "prop": "PTS Over 18.5",
+   "odds": 290,
+   "ev_pct": 17.8,
+   "result": "LOSS",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 2,
+   "player": "Jalen Green",
+   "market": "PTS",
+   "prop": "PTS Over 24.5",
+   "odds": 285,
+   "ev_pct": 19.8,
+   "result": "LOSS",
+   "actual": "10",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 2,
+   "player": "Robert Williams III",
+   "market": "REB",
+   "prop": "REB Over 9.5",
+   "odds": 156,
+   "ev_pct": 19.7,
+   "result": "NODATA",
+   "actual": "",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 2,
+   "player": "Collin Gillespie",
+   "market": "PRA",
+   "prop": "PRA Over 17.5",
+   "odds": 133,
+   "ev_pct": 18.2,
+   "result": "LOSS",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 3,
+   "player": "Andrew Nembhard",
+   "market": "REB",
+   "prop": "REB Over 4.5",
+   "odds": 390,
+   "ev_pct": 19.3,
+   "result": "LOSS",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 3,
+   "player": "Herbert Jones",
+   "market": "PTS",
+   "prop": "PTS Over 9.5",
+   "odds": 139,
+   "ev_pct": 19.2,
+   "result": "LOSS",
+   "actual": "5",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 3,
+   "player": "Yves Missi",
+   "market": "RA",
+   "prop": "RA Over 8.5",
+   "odds": -130,
+   "ev_pct": 18.9,
+   "result": "WIN",
+   "actual": "19",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 4,
+   "player": "Keaton Wagler",
+   "market": "REB",
+   "prop": "REB Over 5.5",
+   "odds": 350,
+   "ev_pct": 19.8,
+   "result": "NODATA",
+   "actual": "",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 4,
+   "player": "Domantas Sabonis",
+   "market": "PRA",
+   "prop": "PRA Over 39.5",
+   "odds": 180,
+   "ev_pct": 19.2,
+   "result": "WIN",
+   "actual": "40",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 4,
+   "player": "Precious Achiuwa",
+   "market": "PTS",
+   "prop": "PTS Over 9.5",
+   "odds": 126,
+   "ev_pct": 17.9,
+   "result": "WIN",
+   "actual": "15",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 5,
+   "player": "Ziaire Williams",
+   "market": "PTS",
+   "prop": "PTS Over 9.5",
+   "odds": 105,
+   "ev_pct": 19.2,
+   "result": "LOSS",
+   "actual": "9",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 5,
+   "player": "Austin Reaves",
+   "market": "STL",
+   "prop": "STL Over 1.5",
+   "odds": 240,
+   "ev_pct": 19.2,
+   "result": "WIN",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 5,
+   "player": "Luka Doncic",
+   "market": "PTS",
+   "prop": "PTS Over 39.5",
+   "odds": 375,
+   "ev_pct": 18.4,
+   "result": "LOSS",
+   "actual": "28",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 6,
+   "player": "Amen Thompson",
+   "market": "AST",
+   "prop": "AST Over 6.5",
+   "odds": 320,
+   "ev_pct": 19.3,
+   "result": "LOSS",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 6,
+   "player": "Kyrie Irving",
+   "market": "REB",
+   "prop": "REB Over 5.5",
+   "odds": 470,
+   "ev_pct": 18.7,
+   "result": "LOSS",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 6,
+   "player": "Alperen Sengun",
+   "market": "PTS",
+   "prop": "PTS Over 26.5",
+   "odds": 450,
+   "ev_pct": 17.9,
+   "result": "LOSS",
+   "actual": "23",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 7,
+   "player": "Jonathan Kuminga",
+   "market": "PTS",
+   "prop": "PTS Over 15.5",
+   "odds": 235,
+   "ev_pct": 19.6,
+   "result": "LOSS",
+   "actual": "12",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 7,
+   "player": "Andrew Wiggins",
+   "market": "3PT",
+   "prop": "3PT Over 2.5",
+   "odds": 255,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "1",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 7,
+   "player": "Bam Adebayo",
+   "market": "STL",
+   "prop": "STL Over 2.5",
+   "odds": 490,
+   "ev_pct": 17.6,
+   "result": "WIN",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 8,
+   "player": "Jalen Johnson",
+   "market": "PTS",
+   "prop": "PTS Over 25.5",
+   "odds": 235,
+   "ev_pct": 19.6,
+   "result": "LOSS",
+   "actual": "20",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 8,
+   "player": "Nickeil Alexander-Walker",
+   "market": "AST",
+   "prop": "AST Over 4.5",
+   "odds": 320,
+   "ev_pct": 18.3,
+   "result": "LOSS",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 8,
+   "player": "Jock Landale",
+   "market": "REB",
+   "prop": "REB Over 6.5",
+   "odds": 400,
+   "ev_pct": 16.9,
+   "result": "LOSS",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 9,
+   "player": "Keyonte George",
+   "market": "PRA",
+   "prop": "PRA Over 39.5",
+   "odds": 426,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "30",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 9,
+   "player": "Jaren Jackson Jr.",
+   "market": "REB",
+   "prop": "REB Over 7.5",
+   "odds": 257,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "5",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP",
+   "rank": 9,
+   "player": "Cam Spencer",
+   "market": "REB",
+   "prop": "REB Over 2.5",
+   "odds": 144,
+   "ev_pct": 17.5,
+   "result": "WIN",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 1,
+   "player": "Leonard Miller",
+   "market": "PTS",
+   "prop": "PTS Over 12.5",
+   "odds": 260,
+   "ev_pct": 20,
+   "result": "LOSS",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 1,
+   "player": "Kawhi Leonard",
+   "market": "PTS",
+   "prop": "PTS Over 31.5",
+   "odds": 320,
+   "ev_pct": 19.9,
+   "result": "LOSS",
+   "actual": "23",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 1,
+   "player": "Jalen Green",
+   "market": "PTS",
+   "prop": "PTS Over 24.5",
+   "odds": 285,
+   "ev_pct": 19.8,
+   "result": "LOSS",
+   "actual": "10",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 1,
+   "player": "Keaton Wagler",
+   "market": "REB",
+   "prop": "REB Over 5.5",
+   "odds": 350,
+   "ev_pct": 19.8,
+   "result": "NODATA",
+   "actual": "",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 2,
+   "player": "Robert Williams III",
+   "market": "REB",
+   "prop": "REB Over 9.5",
+   "odds": 144,
+   "ev_pct": 19.7,
+   "result": "NODATA",
+   "actual": "",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 2,
+   "player": "Jalen Johnson",
+   "market": "PTS",
+   "prop": "PTS Over 25.5",
+   "odds": 235,
+   "ev_pct": 19.6,
+   "result": "LOSS",
+   "actual": "20",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 2,
+   "player": "Jonathan Kuminga",
+   "market": "PTS",
+   "prop": "PTS Over 15.5",
+   "odds": 235,
+   "ev_pct": 19.6,
+   "result": "LOSS",
+   "actual": "12",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 2,
+   "player": "Andrew Nembhard",
+   "market": "REB",
+   "prop": "REB Over 4.5",
+   "odds": 290,
+   "ev_pct": 19.3,
+   "result": "LOSS",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 3,
+   "player": "Amen Thompson",
+   "market": "AST",
+   "prop": "AST Over 6.5",
+   "odds": 290,
+   "ev_pct": 19.3,
+   "result": "LOSS",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 3,
+   "player": "Herbert Jones",
+   "market": "PTS",
+   "prop": "PTS Over 9.5",
+   "odds": 180,
+   "ev_pct": 19.2,
+   "result": "LOSS",
+   "actual": "5",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 3,
+   "player": "Ziaire Williams",
+   "market": "PTS",
+   "prop": "PTS Over 9.5",
+   "odds": 105,
+   "ev_pct": 19.2,
+   "result": "LOSS",
+   "actual": "9",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 3,
+   "player": "Austin Reaves",
+   "market": "STL",
+   "prop": "STL Over 1.5",
+   "odds": 240,
+   "ev_pct": 19.2,
+   "result": "WIN",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 4,
+   "player": "Domantas Sabonis",
+   "market": "PRA",
+   "prop": "PRA Over 39.5",
+   "odds": 137,
+   "ev_pct": 19.2,
+   "result": "WIN",
+   "actual": "40",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 4,
+   "player": "Yves Missi",
+   "market": "RA",
+   "prop": "RA Over 8.5",
+   "odds": -130,
+   "ev_pct": 18.9,
+   "result": "WIN",
+   "actual": "19",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 4,
+   "player": "Kyrie Irving",
+   "market": "REB",
+   "prop": "REB Over 5.5",
+   "odds": 389,
+   "ev_pct": 18.7,
+   "result": "LOSS",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 4,
+   "player": "Jaime Jaquez Jr.",
+   "market": "REB",
+   "prop": "REB Over 6.5",
+   "odds": 308,
+   "ev_pct": 18.4,
+   "result": "WIN",
+   "actual": "7",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 5,
+   "player": "Michael Porter Jr.",
+   "market": "3PT",
+   "prop": "3PT Over 4.5",
+   "odds": 275,
+   "ev_pct": 18.4,
+   "result": "WIN",
+   "actual": "5",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 5,
+   "player": "Luka Doncic",
+   "market": "PTS",
+   "prop": "PTS Over 39.5",
+   "odds": 275,
+   "ev_pct": 18.4,
+   "result": "LOSS",
+   "actual": "28",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 5,
+   "player": "Nickeil Alexander-Walker",
+   "market": "AST",
+   "prop": "AST Over 4.5",
+   "odds": 275,
+   "ev_pct": 18.3,
+   "result": "LOSS",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 5,
+   "player": "Al Horford",
+   "market": "RA",
+   "prop": "RA Over 6.5",
+   "odds": -110,
+   "ev_pct": 18.2,
+   "result": "LOSS",
+   "actual": "6",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 6,
+   "player": "Collin Gillespie",
+   "market": "PRA",
+   "prop": "PRA Over 17.5",
+   "odds": 133,
+   "ev_pct": 18.2,
+   "result": "LOSS",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 6,
+   "player": "Keyonte George",
+   "market": "PRA",
+   "prop": "PRA Over 39.5",
+   "odds": 426,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "30",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 6,
+   "player": "Jarace Walker",
+   "market": "PRA",
+   "prop": "PRA Over 17.5",
+   "odds": -127,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "11",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 6,
+   "player": "De'Anthony Melton",
+   "market": "REB",
+   "prop": "REB Over 5.5",
+   "odds": 488,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 7,
+   "player": "Andrew Wiggins",
+   "market": "3PT",
+   "prop": "3PT Over 2.5",
+   "odds": 255,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "1",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 7,
+   "player": "Jaren Jackson Jr.",
+   "market": "REB",
+   "prop": "REB Over 7.5",
+   "odds": 255,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "5",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 7,
+   "player": "Alperen Sengun",
+   "market": "PTS",
+   "prop": "PTS Over 26.5",
+   "odds": 450,
+   "ev_pct": 17.9,
+   "result": "LOSS",
+   "actual": "23",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 7,
+   "player": "Precious Achiuwa",
+   "market": "PTS",
+   "prop": "PTS Over 9.5",
+   "odds": 126,
+   "ev_pct": 17.9,
+   "result": "WIN",
+   "actual": "15",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 8,
+   "player": "Josh Giddey",
+   "market": "PTS",
+   "prop": "PTS Over 18.5",
+   "odds": 240,
+   "ev_pct": 17.8,
+   "result": "LOSS",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 8,
+   "player": "Obi Toppin",
+   "market": "PR",
+   "prop": "PR Over 16.5",
+   "odds": 120,
+   "ev_pct": 17.6,
+   "result": "WIN",
+   "actual": "23",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 8,
+   "player": "Cam Spencer",
+   "market": "REB",
+   "prop": "REB Over 2.5",
+   "odds": 130,
+   "ev_pct": 17.5,
+   "result": "WIN",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 8,
+   "player": "Reed Sheppard",
+   "market": "PTS",
+   "prop": "PTS Over 13.5",
+   "odds": 300,
+   "ev_pct": 17.5,
+   "result": "LOSS",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 9,
+   "player": "Bam Adebayo",
+   "market": "STL",
+   "prop": "STL Over 2.5",
+   "odds": 398,
+   "ev_pct": 17.6,
+   "result": "WIN",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 9,
+   "player": "Darius Acuff Jr.",
+   "market": "3PT",
+   "prop": "3PT Over 3.5",
+   "odds": 351,
+   "ev_pct": 17.5,
+   "result": "NODATA",
+   "actual": "",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 9,
+   "player": "Lauri Markkanen",
+   "market": "STL",
+   "prop": "STL Over 1.5",
+   "odds": 190,
+   "ev_pct": 17.4,
+   "result": "LOSS",
+   "actual": "0",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 9,
+   "player": "Damian Lillard",
+   "market": "3PT",
+   "prop": "3PT Over 4.5",
+   "odds": 353,
+   "ev_pct": 17.3,
+   "result": "WIN",
+   "actual": "6",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 10,
+   "player": "Toumani Camara",
+   "market": "3PT",
+   "prop": "3PT Over 3.5",
+   "odds": 430,
+   "ev_pct": 17.3,
+   "result": "WIN",
+   "actual": "4",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 10,
+   "player": "Devin Booker",
+   "market": "AST",
+   "prop": "AST Over 7.5",
+   "odds": 265,
+   "ev_pct": 17.3,
+   "result": "LOSS",
+   "actual": "2",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 10,
+   "player": "Jakob Poeltl",
+   "market": "PTS",
+   "prop": "PTS Over 11.5",
+   "odds": 182,
+   "ev_pct": 17.1,
+   "result": "LOSS",
+   "actual": "3",
+   "sport": "NBA"
+  },
+  {
+   "date": "2026-10-21",
+   "tier": "SGP+",
+   "rank": 10,
+   "player": "Jock Landale",
+   "market": "REB",
+   "prop": "REB Over 6.5",
+   "odds": 400,
+   "ev_pct": 16.9,
+   "result": "LOSS",
+   "actual": "2",
    "sport": "NBA"
   }
  ],
@@ -72604,34 +73184,34 @@
    "NBA": {
     "tiers": {
      "SGP+": {
-      "n": 10,
+      "n": 17,
       "w": 0,
-      "l": 10,
-      "void": 0,
-      "units": -10.0,
+      "l": 17,
+      "void": 3,
+      "units": -17.0,
       "est": true,
       "roi": -100.0,
       "hit": 0.0
      },
      "SGP": {
-      "n": 3,
+      "n": 10,
       "w": 0,
-      "l": 3,
-      "void": 0,
-      "units": -3.0,
+      "l": 10,
+      "void": 2,
+      "units": -10.0,
       "est": true,
       "roi": -100.0,
       "hit": 0.0
      },
      "PARLAY": {
-      "n": 12,
-      "w": 1,
-      "l": 11,
-      "void": 0,
-      "units": 5.64,
+      "n": 23,
+      "w": 3,
+      "l": 20,
+      "void": 1,
+      "units": 24.54,
       "est": false,
-      "roi": 47.0,
-      "hit": 8.3
+      "roi": 106.7,
+      "hit": 13.0
      }
     }
    },
