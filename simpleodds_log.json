@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-22T16:16:16",
+ "generated_at": "2026-10-22T16:23:09",
  "source": "simpleodds",
  "sport": "MLB+NBA+NFL",
  "window_days": 60,
@@ -1626,7 +1626,7 @@
    "total_ev_pct": 69.8,
    "avg_ev_pct": 17.4,
    "n_legs": 4,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "MIN@MIA / PHX@POR / SAC@LAC / UTAH@MEM",
    "sport": "NBA"
   },
@@ -1724,7 +1724,7 @@
    "total_ev_pct": 78.2,
    "avg_ev_pct": 19.6,
    "n_legs": 4,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "ATL@ORL / IND@NO / MIN@MIA / PHX@POR",
    "sport": "NBA"
   },
@@ -1738,7 +1738,7 @@
    "total_ev_pct": 79.5,
    "avg_ev_pct": 19.9,
    "n_legs": 4,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "CHI@TOR / PHX@POR / SAC@LAC",
    "sport": "NBA"
   },
@@ -1822,7 +1822,7 @@
    "total_ev_pct": 56.9,
    "avg_ev_pct": 19,
    "n_legs": 3,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "SAC@LAC",
    "sport": "NBA"
   },
@@ -1850,7 +1850,7 @@
    "total_ev_pct": 57.7,
    "avg_ev_pct": 19.2,
    "n_legs": 3,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "PHX@POR",
    "sport": "NBA"
   },
@@ -2018,7 +2018,7 @@
    "total_ev_pct": 39.5,
    "avg_ev_pct": 19.8,
    "n_legs": 2,
-   "verdict": "UNGRADED",
+   "verdict": "LOSS",
    "games": "PHX@POR / SAC@LAC",
    "sport": "NBA"
   },
@@ -27429,8 +27429,8 @@
    "prop": "REB Over 5.5",
    "odds": 355,
    "ev_pct": 19.8,
-   "result": "NODATA",
-   "actual": "",
+   "result": "LOSS",
+   "actual": "5",
    "sport": "NBA"
   },
   {
@@ -27442,8 +27442,8 @@
    "prop": "REB Over 9.5",
    "odds": 156,
    "ev_pct": 19.7,
-   "result": "NODATA",
-   "actual": "",
+   "result": "WIN",
+   "actual": "10",
    "sport": "NBA"
   },
   {
@@ -27638,7 +27638,7 @@
    "odds": -105,
    "ev_pct": 18.2,
    "result": "LOSS",
-   "actual": "6",
+   "actual": "5",
    "sport": "NBA"
   },
   {
@@ -27767,8 +27767,8 @@
    "prop": "REB Over 9.5",
    "odds": 156,
    "ev_pct": 19.7,
-   "result": "NODATA",
-   "actual": "",
+   "result": "WIN",
+   "actual": "10",
    "sport": "NBA"
   },
   {
@@ -27832,8 +27832,8 @@
    "prop": "REB Over 5.5",
    "odds": 350,
    "ev_pct": 19.8,
-   "result": "NODATA",
-   "actual": "",
+   "result": "LOSS",
+   "actual": "5",
    "sport": "NBA"
   },
   {
@@ -28105,8 +28105,8 @@
    "prop": "REB Over 5.5",
    "odds": 350,
    "ev_pct": 19.8,
-   "result": "NODATA",
-   "actual": "",
+   "result": "LOSS",
+   "actual": "5",
    "sport": "NBA"
   },
   {
@@ -28118,8 +28118,8 @@
    "prop": "REB Over 9.5",
    "odds": 144,
    "ev_pct": 19.7,
-   "result": "NODATA",
-   "actual": "",
+   "result": "WIN",
+   "actual": "10",
    "sport": "NBA"
   },
   {
@@ -28314,7 +28314,7 @@
    "odds": -110,
    "ev_pct": 18.2,
    "result": "LOSS",
-   "actual": "6",
+   "actual": "5",
    "sport": "NBA"
   },
   {
@@ -28495,8 +28495,8 @@
    "prop": "3PT Over 3.5",
    "odds": 351,
    "ev_pct": 17.5,
-   "result": "NODATA",
-   "actual": "",
+   "result": "LOSS",
+   "actual": "0",
    "sport": "NBA"
   },
   {
@@ -73184,34 +73184,34 @@
    "NBA": {
     "tiers": {
      "SGP+": {
-      "n": 17,
+      "n": 20,
       "w": 0,
-      "l": 17,
-      "void": 3,
-      "units": -17.0,
+      "l": 20,
+      "void": 0,
+      "units": -20.0,
       "est": true,
       "roi": -100.0,
       "hit": 0.0
      },
      "SGP": {
-      "n": 10,
+      "n": 12,
       "w": 0,
-      "l": 10,
-      "void": 2,
-      "units": -10.0,
+      "l": 12,
+      "void": 0,
+      "units": -12.0,
       "est": true,
       "roi": -100.0,
       "hit": 0.0
      },
      "PARLAY": {
-      "n": 23,
+      "n": 24,
       "w": 3,
-      "l": 20,
-      "void": 1,
-      "units": 24.54,
+      "l": 21,
+      "void": 0,
+      "units": 23.54,
       "est": false,
-      "roi": 106.7,
-      "hit": 13.0
+      "roi": 98.1,
+      "hit": 12.5
      }
     }
    },

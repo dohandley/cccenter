@@ -234,8 +234,8 @@
     "confirmed": false,
     "top_pick": false,
     "published": "2026-10-21",
-    "actual_stat": "NOT FOUND",
-    "hit": null,
+    "actual_stat": 0,
+    "hit": "loss",
     "resolved": true,
     "source": "mkb"
   },
