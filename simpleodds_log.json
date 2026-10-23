@@ -1,1308 +1,2151 @@
 {
- "generated_at": "2026-10-22T16:23:09",
+ "generated_at": "2026-10-23T13:10:34",
  "source": "simpleodds",
  "sport": "MLB+NBA+NFL",
  "window_days": 60,
  "today": {
-  "date": "2026-10-22",
+  "date": "2026-10-23",
   "parlays": [
    {
     "tier": "PARLAY",
     "rank": 1,
-    "book": "FD",
-    "combined_odds": 623,
-    "combined_decimal": 7.234,
-    "avg_ev_pct": 18.5,
-    "total_ev_pct": 37.0,
+    "book": "BR",
+    "combined_odds": 1412,
+    "combined_decimal": 15.12,
+    "avg_ev_pct": 19.9,
+    "total_ev_pct": 39.9,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Los Angeles Rams@Las Vegas Raiders",
+     "New York Giants@Houston Texans"
     ],
     "odds_are_estimate": false,
-    "next_book": "BO",
-    "next_odds": 620,
-    "pct_vs_next": 0.5,
-    "n_books": 6,
+    "next_book": "BB",
+    "next_odds": 1412,
+    "pct_vs_next": 0.0,
+    "n_books": 9,
     "alt_books": [
      [
+      "BR",
+      1412
+     ],
+     [
+      "BB",
+      1412
+     ],
+     [
       "FD",
-      623
+      885
      ],
      [
-      "BO",
-      620
-     ],
-     [
-      "CZ",
-      548
+      "365",
+      861
      ],
      [
       "FN",
-      499
-     ],
-     [
-      "BR",
-      459
+      845
      ]
     ],
     "legs": [
      {
-      "player": "Shai Gilgeous-Alexander",
-      "team": "OKC",
-      "market_short": "PTS",
-      "prop": "PTS Over 33.5",
-      "point": 33.5,
-      "odds_at_book": 174,
-      "best_odds": 174,
-      "best_book": "FD",
-      "ev_pct": 19.2,
+      "player": "Blake Corum",
+      "team": "LAR",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 260,
+      "best_odds": 260,
+      "best_book": "BB,BR",
+      "ev_pct": 20.0,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 6,
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
+      "coverage": 9,
       "is_alt": false
      },
      {
-      "player": "Peyton Watson",
-      "team": "CLE",
-      "market_short": "PTS",
-      "prop": "PTS Over 15.5",
-      "point": 15.5,
-      "odds_at_book": 164,
-      "best_odds": 200,
-      "best_book": "BO",
-      "ev_pct": 17.8,
+      "player": "C.J. Stroud",
+      "team": "HOU",
+      "market_short": "PASSYD",
+      "prop": "PASSYD Over 299.5",
+      "point": 299.5,
+      "odds_at_book": 320,
+      "best_odds": 320,
+      "best_book": "BB,BR",
+      "ev_pct": 19.9,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 6,
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 13,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "PARLAY",
     "rank": 2,
-    "book": "FD",
-    "combined_odds": 2292,
-    "combined_decimal": 23.92,
-    "avg_ev_pct": 17.1,
-    "total_ev_pct": 34.3,
+    "book": "BR",
+    "combined_odds": 526,
+    "combined_decimal": 6.262,
+    "avg_ev_pct": 19.3,
+    "total_ev_pct": 38.6,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Green Bay Packers@Detroit Lions",
+     "Miami Dolphins@New York Jets"
     ],
     "odds_are_estimate": false,
-    "next_book": "NOV",
-    "next_odds": 1970,
-    "pct_vs_next": 15.6,
-    "n_books": 8,
+    "next_book": "BB",
+    "next_odds": 526,
+    "pct_vs_next": 0.0,
+    "n_books": 6,
     "alt_books": [
      [
-      "FD",
-      2292
+      "BR",
+      526
+     ],
+     [
+      "BB",
+      526
      ],
      [
       "NOV",
-      1970
+      336
      ],
      [
-      "CZ",
-      1878
+      "DK",
+      326
      ],
      [
-      "HR",
-      1812
-     ],
-     [
-      "EB",
-      1748
+      "FN",
+      318
      ]
     ],
     "legs": [
      {
-      "player": "Cameron Johnson",
-      "team": "DEN",
-      "market_short": "AST",
-      "prop": "AST Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 420,
-      "best_odds": 420,
-      "best_book": "FD",
-      "ev_pct": 17.8,
+      "player": "Geno Smith",
+      "team": "NYJ",
+      "market_short": "CMP",
+      "prop": "CMP Over 20.5",
+      "point": 20.5,
+      "odds_at_book": 102,
+      "best_odds": 102,
+      "best_book": "BR,BB",
+      "ev_pct": 19.4,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
+      "game": "Miami Dolphins@New York Jets",
+      "game_time": "1:00 PM ET",
       "coverage": 10,
       "is_alt": false
      },
      {
-      "player": "Jaylon Tyson",
-      "team": "CLE",
-      "market_short": "PTS",
-      "prop": "PTS Over 14.5",
-      "point": 14.5,
-      "odds_at_book": 360,
-      "best_odds": 450,
-      "best_book": "365",
-      "ev_pct": 16.5,
+      "player": "Savion Williams",
+      "team": "GB",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 29.5",
+      "point": 29.5,
+      "odds_at_book": 210,
+      "best_odds": 210,
+      "best_book": "BB,BR",
+      "ev_pct": 19.2,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 11,
+      "game": "Green Bay Packers@Detroit Lions",
+      "game_time": "4:25 PM ET",
+      "coverage": 9,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "PARLAY",
     "rank": 3,
-    "book": "FD",
-    "combined_odds": 1280,
-    "combined_decimal": 13.8,
-    "avg_ev_pct": 15.2,
-    "total_ev_pct": 30.5,
+    "book": "365",
+    "combined_odds": 1962,
+    "combined_decimal": 20.625,
+    "avg_ev_pct": 18.8,
+    "total_ev_pct": 37.5,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Kansas City Chiefs@Seattle Seahawks",
+     "Los Angeles Rams@Las Vegas Raiders"
     ],
     "odds_are_estimate": false,
     "next_book": "BR",
-    "next_odds": 1115,
-    "pct_vs_next": 13.6,
-    "n_books": 6,
+    "next_odds": 1632,
+    "pct_vs_next": 19.1,
+    "n_books": 9,
     "alt_books": [
      [
-      "FD",
-      1280
+      "365",
+      1962
      ],
      [
       "BR",
-      1115
+      1632
      ],
      [
       "BB",
-      1115
+      1632
      ],
      [
-      "NOV",
-      1018
+      "DK",
+      1415
      ],
      [
       "EB",
-      1013
+      1395
      ]
     ],
     "legs": [
      {
-      "player": "Donovan Mitchell",
-      "team": "CLE",
-      "market_short": "PRA",
-      "prop": "PRA Over 44.5",
-      "point": 44.5,
-      "odds_at_book": 360,
-      "best_odds": 425,
-      "best_book": "MG",
-      "ev_pct": 16.1,
+      "player": "Ashton Jeanty",
+      "team": "LV",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 69.5",
+      "point": 69.5,
+      "odds_at_book": 275,
+      "best_odds": 275,
+      "best_book": "365",
+      "ev_pct": 18.8,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 7,
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
+      "coverage": 10,
       "is_alt": false
      },
      {
-      "player": "Jalen Williams",
-      "team": "OKC",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 200,
-      "best_odds": 200,
-      "best_book": "FD",
-      "ev_pct": 14.4,
+      "player": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "market_short": "REC",
+      "prop": "REC Over 9.5",
+      "point": 9.5,
+      "odds_at_book": 450,
+      "best_odds": 450,
+      "best_book": "BB,BR",
+      "ev_pct": 18.7,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 11,
+      "game": "Kansas City Chiefs@Seattle Seahawks",
+      "game_time": "8:20 PM ET",
+      "coverage": 10,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "PARLAY",
     "rank": 4,
-    "book": "PX",
-    "combined_odds": 1085,
-    "combined_decimal": 11.85,
-    "avg_ev_pct": 14.1,
-    "total_ev_pct": 28.2,
+    "book": "FD",
+    "combined_odds": 1062,
+    "combined_decimal": 11.622,
+    "avg_ev_pct": 18.3,
+    "total_ev_pct": 36.6,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Denver Broncos@Arizona Cardinals",
+     "Pittsburgh Steelers@New Orleans Saints"
     ],
     "odds_are_estimate": false,
-    "next_book": "FD",
-    "next_odds": 1059,
-    "pct_vs_next": 2.2,
+    "next_book": "NOV",
+    "next_odds": 883,
+    "pct_vs_next": 18.2,
     "n_books": 4,
     "alt_books": [
      [
-      "PX",
-      1085
-     ],
-     [
       "FD",
-      1059
+      1062
      ],
      [
-      "CZ",
-      972
+      "NOV",
+      883
      ],
      [
-      "FN",
-      725
+      "DK",
+      814
+     ],
+     [
+      "PX",
+      131
      ]
     ],
     "legs": [
      {
-      "player": "Joel Embiid",
-      "team": "PHI",
-      "market_short": "AST",
-      "prop": "AST Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 295,
-      "best_odds": 280,
-      "best_book": "BB,BR",
-      "ev_pct": 14.2,
+      "player": "Rico Dowdle",
+      "team": "PIT",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 14.5",
+      "point": 14.5,
+      "odds_at_book": 198,
+      "best_odds": 198,
+      "best_book": "FD",
+      "ev_pct": 18.6,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 10,
+      "game": "Pittsburgh Steelers@New Orleans Saints",
+      "game_time": "9:30 AM ET",
+      "coverage": 4,
       "is_alt": false
      },
      {
-      "player": "Aaron Gordon",
+      "player": "Evan Engram",
       "team": "DEN",
-      "market_short": "PTS",
-      "prop": "PTS Over 18.5",
-      "point": 18.5,
-      "odds_at_book": 200,
-      "best_odds": 205,
-      "best_book": "FD",
-      "ev_pct": 14.0,
+      "market_short": "RECYD",
+      "prop": "RECYD Over 39.5",
+      "point": 39.5,
+      "odds_at_book": 290,
+      "best_odds": 350,
+      "best_book": "365",
+      "ev_pct": 18.0,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 4,
+      "game": "Denver Broncos@Arizona Cardinals",
+      "game_time": "4:05 PM ET",
+      "coverage": 11,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "PARLAY",
     "rank": 5,
-    "book": "FD",
-    "combined_odds": 1197,
-    "combined_decimal": 12.972,
-    "avg_ev_pct": 13.9,
-    "total_ev_pct": 27.7,
+    "book": "365",
+    "combined_odds": 1925,
+    "combined_decimal": 20.25,
+    "avg_ev_pct": 17.9,
+    "total_ev_pct": 35.8,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Dallas Cowboys@Philadelphia Eagles",
+     "Los Angeles Rams@Las Vegas Raiders"
     ],
     "odds_are_estimate": false,
-    "next_book": "PX",
-    "next_odds": 922,
-    "pct_vs_next": 26.9,
+    "next_book": "BR",
+    "next_odds": 1668,
+    "pct_vs_next": 14.5,
     "n_books": 9,
     "alt_books": [
      [
-      "FD",
-      1197
+      "365",
+      1925
      ],
      [
-      "PX",
-      922
+      "BR",
+      1668
      ],
      [
-      "CZ",
-      880
-     ],
-     [
-      "FN",
-      860
+      "BB",
+      1668
      ],
      [
       "DK",
-      843
+      1604
+     ],
+     [
+      "EB",
+      1588
      ]
     ],
     "legs": [
      {
-      "player": "VJ Edgecombe",
-      "team": "PHI",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 176,
-      "best_odds": 176,
-      "best_book": "FD",
-      "ev_pct": 13.9,
+      "player": "Dak Prescott",
+      "team": "DAL",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 350,
+      "best_odds": 350,
+      "best_book": "365",
+      "ev_pct": 18.0,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
+      "game": "Dallas Cowboys@Philadelphia Eagles",
+      "game_time": "8:15 PM ET",
       "coverage": 11,
       "is_alt": false
      },
      {
-      "player": "Ajay Mitchell",
-      "team": "OKC",
-      "market_short": "REB",
-      "prop": "REB Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 370,
-      "best_odds": 370,
-      "best_book": "FD",
-      "ev_pct": 13.8,
+      "player": "Brock Bowers",
+      "team": "LV",
+      "market_short": "REC",
+      "prop": "REC Over 8.5",
+      "point": 8.5,
+      "odds_at_book": 350,
+      "best_odds": 420,
+      "best_book": "BB,BR",
+      "ev_pct": 17.8,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 11,
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
+      "coverage": 9,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "PARLAY",
     "rank": 6,
-    "book": "FD",
-    "combined_odds": 1252,
-    "combined_decimal": 13.524,
-    "avg_ev_pct": 13.2,
-    "total_ev_pct": 26.5,
+    "book": "DK",
+    "combined_odds": 1514,
+    "combined_decimal": 16.142,
+    "avg_ev_pct": 17.5,
+    "total_ev_pct": 34.9,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
-    ],
-    "odds_are_estimate": false,
-    "next_book": "BR",
-    "next_odds": 1227,
-    "pct_vs_next": 1.9,
-    "n_books": 6,
-    "alt_books": [
-     [
-      "FD",
-      1252
-     ],
-     [
-      "BR",
-      1227
-     ],
-     [
-      "BB",
-      1227
-     ],
-     [
-      "EB",
-      1110
-     ],
-     [
-      "DK",
-      1066
-     ]
-    ],
-    "legs": [
-     {
-      "player": "DeMar DeRozan",
-      "team": "DEN",
-      "market_short": "AST",
-      "prop": "AST Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 176,
-      "best_odds": 205,
-      "best_book": "BB,BR",
-      "ev_pct": 13.5,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     },
-     {
-      "player": "LeBron James",
-      "team": "PHI",
-      "market_short": "PR",
-      "prop": "PR Over 29.5",
-      "point": 29.5,
-      "odds_at_book": 390,
-      "best_odds": 390,
-      "best_book": "FD",
-      "ev_pct": 13.0,
-      "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 7,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "PARLAY",
-    "rank": 7,
-    "book": "NOV",
-    "combined_odds": 1123,
-    "combined_decimal": 12.229,
-    "avg_ev_pct": 12.4,
-    "total_ev_pct": 24.9,
-    "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Cleveland Browns@Tennessee Titans",
+     "Pittsburgh Steelers@New Orleans Saints"
     ],
     "odds_are_estimate": false,
     "next_book": "HR",
-    "next_odds": 771,
-    "pct_vs_next": 40.4,
-    "n_books": 3,
+    "next_odds": 1295,
+    "pct_vs_next": 15.7,
+    "n_books": 6,
     "alt_books": [
      [
-      "NOV",
-      1123
+      "DK",
+      1514
      ],
      [
       "HR",
-      771
+      1295
      ],
      [
-      "PX",
-      284
+      "MG",
+      1234
+     ],
+     [
+      "NOV",
+      1228
+     ],
+     [
+      "FD",
+      1225
      ]
     ],
     "legs": [
      {
-      "player": "Jamal Murray",
-      "team": "DEN",
-      "market_short": "BLK",
-      "prop": "BLK Over 0.5",
-      "point": 0.5,
-      "odds_at_book": 163,
-      "best_odds": 123,
-      "best_book": "BB,BR",
-      "ev_pct": 13.0,
+      "player": "Elic Ayomanor",
+      "team": "TEN",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 24.5",
+      "point": 24.5,
+      "odds_at_book": 254,
+      "best_odds": 254,
+      "best_book": "DK",
+      "ev_pct": 17.6,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
       "coverage": 6,
       "is_alt": false
      },
      {
-      "player": "Sam Merrill",
-      "team": "CLE",
-      "market_short": "3PT",
-      "prop": "3PT Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 365,
-      "best_odds": 425,
-      "best_book": "365",
-      "ev_pct": 11.9,
+      "player": "Jaylen Warren",
+      "team": "PIT",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 49.5",
+      "point": 49.5,
+      "odds_at_book": 356,
+      "best_odds": 430,
+      "best_book": "BR,BB",
+      "ev_pct": 17.3,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 10,
+      "game": "Pittsburgh Steelers@New Orleans Saints",
+      "game_time": "9:30 AM ET",
+      "coverage": 12,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
+   },
+   {
+    "tier": "PARLAY",
+    "rank": 7,
+    "book": "EB",
+    "combined_odds": 960,
+    "combined_decimal": 10.6,
+    "avg_ev_pct": 17.1,
+    "total_ev_pct": 34.3,
+    "games": [
+     "Cleveland Browns@Tennessee Titans",
+     "Dallas Cowboys@Philadelphia Eagles"
+    ],
+    "odds_are_estimate": false,
+    "next_book": "FN",
+    "next_odds": 828,
+    "pct_vs_next": 14.2,
+    "n_books": 5,
+    "alt_books": [
+     [
+      "EB",
+      960
+     ],
+     [
+      "FN",
+      828
+     ],
+     [
+      "HR",
+      801
+     ],
+     [
+      "NOV",
+      792
+     ],
+     [
+      "FD",
+      784
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Dallas Goedert",
+      "team": "PHI",
+      "market_short": "REC",
+      "prop": "REC Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 165,
+      "best_odds": 200,
+      "best_book": "BB,BR",
+      "ev_pct": 17.2,
+      "grade": "S",
+      "game": "Dallas Cowboys@Philadelphia Eagles",
+      "game_time": "8:15 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Cam Ward",
+      "team": "TEN",
+      "market_short": "PASSYD",
+      "prop": "PASSYD Over 224.5",
+      "point": 224.5,
+      "odds_at_book": 300,
+      "best_odds": 300,
+      "best_book": "EB",
+      "ev_pct": 17.1,
+      "grade": "S",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
    },
    {
     "tier": "PARLAY",
     "rank": 8,
     "book": "BR",
-    "combined_odds": 464,
-    "combined_decimal": 5.64,
-    "avg_ev_pct": 11.6,
-    "total_ev_pct": 23.1,
+    "combined_odds": 2060,
+    "combined_decimal": 21.6,
+    "avg_ev_pct": 17.0,
+    "total_ev_pct": 34.0,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Kansas City Chiefs@Seattle Seahawks",
+     "New York Giants@Houston Texans"
     ],
     "odds_are_estimate": false,
     "next_book": "BB",
-    "next_odds": 464,
+    "next_odds": 2060,
     "pct_vs_next": 0.0,
-    "n_books": 13,
+    "n_books": 9,
     "alt_books": [
      [
       "BR",
-      464
+      2060
      ],
      [
       "BB",
-      464
+      2060
      ],
      [
-      "NOV",
-      447
+      "EB",
+      1510
      ],
      [
-      "MG",
-      423
+      "FD",
+      1498
      ],
      [
-      "BO",
-      406
+      "DK",
+      1493
      ]
     ],
     "legs": [
      {
-      "player": "Isaiah Hartenstein",
-      "team": "OKC",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 135,
-      "best_odds": 155,
-      "best_book": "MG",
-      "ev_pct": 11.7,
+      "player": "Marvin Harrison Jr.",
+      "team": "HOU",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 49.5",
+      "point": 49.5,
+      "odds_at_book": 300,
+      "best_odds": 300,
+      "best_book": "BB,BR",
+      "ev_pct": 17.1,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 13,
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 11,
       "is_alt": false
      },
      {
-      "player": "James Harden",
-      "team": "CLE",
-      "market_short": "PTS",
-      "prop": "PTS Over 19.5",
-      "point": 19.5,
-      "odds_at_book": 140,
-      "best_odds": 140,
+      "player": "Kenneth Walker III",
+      "team": "KC",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 39.5",
+      "point": 39.5,
+      "odds_at_book": 440,
+      "best_odds": 440,
       "best_book": "BB,BR",
-      "ev_pct": 11.4,
+      "ev_pct": 16.9,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 13,
+      "game": "Kansas City Chiefs@Seattle Seahawks",
+      "game_time": "8:20 PM ET",
+      "coverage": 10,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "PARLAY",
     "rank": 9,
-    "book": "FD",
-    "combined_odds": 1663,
-    "combined_decimal": 17.63,
-    "avg_ev_pct": 9.8,
-    "total_ev_pct": 19.7,
+    "book": "BR",
+    "combined_odds": 1506,
+    "combined_decimal": 16.06,
+    "avg_ev_pct": 16.8,
+    "total_ev_pct": 33.6,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "New York Giants@Houston Texans",
+     "San Francisco 49ers@Atlanta Falcons"
     ],
     "odds_are_estimate": false,
-    "next_book": "NOV",
-    "next_odds": 1468,
-    "pct_vs_next": 12.4,
+    "next_book": "BB",
+    "next_odds": 1506,
+    "pct_vs_next": 0.0,
     "n_books": 7,
     "alt_books": [
      [
-      "FD",
-      1663
+      "BR",
+      1506
+     ],
+     [
+      "BB",
+      1506
+     ],
+     [
+      "FN",
+      1132
+     ],
+     [
+      "DK",
+      1065
      ],
      [
       "NOV",
-      1468
-     ],
-     [
-      "HR",
-      1340
-     ],
-     [
-      "CZ",
-      1304
-     ],
-     [
-      "EB",
-      1286
+      1021
      ]
     ],
     "legs": [
      {
-      "player": "Jaylen Brown",
-      "team": "PHI",
-      "market_short": "AST",
-      "prop": "AST Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 310,
-      "best_odds": 310,
-      "best_book": "FD",
-      "ev_pct": 11.0,
+      "player": "Bijan Robinson",
+      "team": "ATL",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 119.5",
+      "point": 119.5,
+      "odds_at_book": 340,
+      "best_odds": 340,
+      "best_book": "BR,BB",
+      "ev_pct": 16.8,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 10,
+      "game": "San Francisco 49ers@Atlanta Falcons",
+      "game_time": "1:00 PM ET",
+      "coverage": 7,
       "is_alt": false
      },
      {
-      "player": "Marvin Bagley III",
-      "team": "DEN",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 330,
-      "best_odds": 330,
-      "best_book": "FD",
-      "ev_pct": 8.7,
+      "player": "Tank Dell",
+      "team": "HOU",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 265,
+      "best_odds": 265,
+      "best_book": "BB,BR",
+      "ev_pct": 16.8,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 7,
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 9,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "PARLAY",
     "rank": 10,
     "book": "365",
-    "combined_odds": 1325,
-    "combined_decimal": 14.25,
-    "avg_ev_pct": 5.7,
-    "total_ev_pct": 11.3,
+    "combined_odds": 2375,
+    "combined_decimal": 24.75,
+    "avg_ev_pct": 16.5,
+    "total_ev_pct": 33.0,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Dallas Cowboys@Philadelphia Eagles",
+     "New York Giants@Houston Texans"
     ],
     "odds_are_estimate": false,
-    "next_book": "FD",
-    "next_odds": 1320,
-    "pct_vs_next": 0.4,
-    "n_books": 9,
+    "next_book": "FN",
+    "next_odds": 1820,
+    "pct_vs_next": 28.9,
+    "n_books": 7,
     "alt_books": [
      [
       "365",
-      1325
+      2375
+     ],
+     [
+      "FN",
+      1820
      ],
      [
       "FD",
-      1320
+      1742
      ],
      [
-      "DK",
-      1237
-     ],
-     [
-      "BO",
-      1190
+      "CZ",
+      1525
      ],
      [
       "NOV",
-      1176
+      1485
      ]
     ],
     "legs": [
      {
-      "player": "Tyrese Maxey",
-      "team": "PHI",
-      "market_short": "3PT",
-      "prop": "3PT Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 275,
-      "best_odds": 275,
+      "player": "Tyrone Tracy Jr.",
+      "team": "NYG",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 39.5",
+      "point": 39.5,
+      "odds_at_book": 450,
+      "best_odds": 450,
       "best_book": "365",
-      "ev_pct": 6.7,
+      "ev_pct": 16.5,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
       "coverage": 11,
       "is_alt": false
      },
      {
-      "player": "Jared McCain",
-      "team": "OKC",
-      "market_short": "PTS",
-      "prop": "PTS Over 14.5",
-      "point": 14.5,
-      "odds_at_book": 280,
-      "best_odds": 300,
+      "player": "Tanner McKee",
+      "team": "PHI",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 350,
+      "best_odds": 450,
       "best_book": "FD",
-      "ev_pct": 4.6,
-      "grade": "A",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 11,
+      "ev_pct": 16.5,
+      "grade": "S",
+      "game": "Dallas Cowboys@Philadelphia Eagles",
+      "game_time": "8:15 PM ET",
+      "coverage": 8,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
+   },
+   {
+    "tier": "PARLAY",
+    "rank": 11,
+    "book": "365",
+    "combined_odds": 2600,
+    "combined_decimal": 27.0,
+    "avg_ev_pct": 16.4,
+    "total_ev_pct": 32.8,
+    "games": [
+     "Indianapolis Colts@Minnesota Vikings",
+     "San Francisco 49ers@Atlanta Falcons"
+    ],
+    "odds_are_estimate": false,
+    "next_book": "DK",
+    "next_odds": 1814,
+    "pct_vs_next": 41.1,
+    "n_books": 5,
+    "alt_books": [
+     [
+      "365",
+      2600
+     ],
+     [
+      "DK",
+      1814
+     ],
+     [
+      "CZ",
+      1738
+     ],
+     [
+      "NOV",
+      1615
+     ],
+     [
+      "FN",
+      1556
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Drake London",
+      "team": "ATL",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 129.5",
+      "point": 129.5,
+      "odds_at_book": 500,
+      "best_odds": 500,
+      "best_book": "365",
+      "ev_pct": 16.5,
+      "grade": "S",
+      "game": "San Francisco 49ers@Atlanta Falcons",
+      "game_time": "1:00 PM ET",
+      "coverage": 5,
+      "is_alt": false
+     },
+     {
+      "player": "Josh Downs",
+      "team": "IND",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 69.5",
+      "point": 69.5,
+      "odds_at_book": 350,
+      "best_odds": 350,
+      "best_book": "365",
+      "ev_pct": 16.3,
+      "grade": "S",
+      "game": "Indianapolis Colts@Minnesota Vikings",
+      "game_time": "1:00 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "PARLAY",
+    "rank": 12,
+    "book": "EB",
+    "combined_odds": 1475,
+    "combined_decimal": 15.75,
+    "avg_ev_pct": 16.1,
+    "total_ev_pct": 32.3,
+    "games": [
+     "Cincinnati Bengals@Baltimore Ravens",
+     "Cleveland Browns@Tennessee Titans"
+    ],
+    "odds_are_estimate": false,
+    "next_book": "FD",
+    "next_odds": 1280,
+    "pct_vs_next": 14.1,
+    "n_books": 6,
+    "alt_books": [
+     [
+      "EB",
+      1475
+     ],
+     [
+      "FD",
+      1280
+     ],
+     [
+      "NOV",
+      1260
+     ],
+     [
+      "FN",
+      1250
+     ],
+     [
+      "HR",
+      1250
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Harold Fannin Jr.",
+      "team": "CLE",
+      "market_short": "REC",
+      "prop": "REC Over 4.5",
+      "point": 4.5,
+      "odds_at_book": 200,
+      "best_odds": 240,
+      "best_book": "BR,BB",
+      "ev_pct": 16.2,
+      "grade": "S",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "Joe Burrow",
+      "team": "CIN",
+      "market_short": "PASSYD",
+      "prop": "PASSYD Over 324.5",
+      "point": 324.5,
+      "odds_at_book": 425,
+      "best_odds": 425,
+      "best_book": "EB",
+      "ev_pct": 16.1,
+      "grade": "S",
+      "game": "Cincinnati Bengals@Baltimore Ravens",
+      "game_time": "1:00 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
    }
   ],
   "sgp": [
    {
     "tier": "SGP",
     "rank": 1,
-    "book": "FD",
-    "combined_odds": 3043,
-    "combined_decimal": 31.428,
-    "avg_ev_pct": 19.2,
-    "total_ev_pct": 57.6,
+    "book": "BR",
+    "combined_odds": 5797,
+    "combined_decimal": 58.968,
+    "avg_ev_pct": 18.9,
+    "total_ev_pct": 56.6,
     "games": [
-     "DEN@OKC"
+     "Los Angeles Rams@Las Vegas Raiders"
     ],
     "odds_are_estimate": true,
-    "next_book": "",
-    "next_odds": 0,
-    "pct_vs_next": 0.0,
-    "n_books": 1,
+    "next_book": "BB",
+    "next_odds": 5797,
+    "pct_vs_next": -0.0,
+    "n_books": 8,
     "alt_books": [
      [
+      "BR",
+      5797
+     ],
+     [
+      "BB",
+      5797
+     ],
+     [
+      "365",
+      5131
+     ],
+     [
+      "FN",
+      3641
+     ],
+     [
       "FD",
-      3043
+      3530
      ]
     ],
     "legs": [
      {
-      "player": "Shai Gilgeous-Alexander",
-      "team": "OKC",
-      "market_short": "PTS",
-      "prop": "PTS Over 33.5",
-      "point": 33.5,
-      "odds_at_book": 174,
-      "best_odds": 174,
-      "best_book": "FD",
-      "ev_pct": 19.2,
+      "player": "Blake Corum",
+      "team": "LAR",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 260,
+      "best_odds": 260,
+      "best_book": "BB,BR",
+      "ev_pct": 20.0,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 6,
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
+      "coverage": 9,
       "is_alt": false
      },
      {
-      "player": "Chet Holmgren",
-      "team": "OKC",
-      "market_short": "PRA",
-      "prop": "PRA Over 29.5",
-      "point": 29.5,
-      "odds_at_book": 210,
-      "best_odds": 270,
-      "best_book": "MG",
-      "ev_pct": 19.2,
+      "player": "Ashton Jeanty",
+      "team": "LV",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 69.5",
+      "point": 69.5,
+      "odds_at_book": 215,
+      "best_odds": 275,
+      "best_book": "365",
+      "ev_pct": 18.8,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 5,
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
+      "coverage": 10,
       "is_alt": false
      },
      {
-      "player": "Cason Wallace",
-      "team": "OKC",
-      "market_short": "STL",
-      "prop": "STL Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 270,
-      "best_odds": 270,
-      "best_book": "FD",
-      "ev_pct": 19.2,
+      "player": "Brock Bowers",
+      "team": "LV",
+      "market_short": "REC",
+      "prop": "REC Over 8.5",
+      "point": 8.5,
+      "odds_at_book": 420,
+      "best_odds": 420,
+      "best_book": "BB,BR",
+      "ev_pct": 17.8,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 6,
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
+      "coverage": 9,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "SGP",
     "rank": 2,
-    "book": "FD",
-    "combined_odds": 5486,
-    "combined_decimal": 55.862,
-    "avg_ev_pct": 16.8,
-    "total_ev_pct": 50.4,
+    "book": "BR",
+    "combined_odds": 6032,
+    "combined_decimal": 61.32,
+    "avg_ev_pct": 17.9,
+    "total_ev_pct": 53.8,
     "games": [
-     "CLE@PHI"
+     "New York Giants@Houston Texans"
     ],
     "odds_are_estimate": true,
-    "next_book": "",
-    "next_odds": 0,
+    "next_book": "BB",
+    "next_odds": 6032,
     "pct_vs_next": 0.0,
-    "n_books": 1,
+    "n_books": 8,
     "alt_books": [
      [
-      "FD",
-      5486
+      "BR",
+      6032
+     ],
+     [
+      "BB",
+      6032
+     ],
+     [
+      "DK",
+      3875
+     ],
+     [
+      "FN",
+      3428
+     ],
+     [
+      "NOV",
+      3377
      ]
     ],
     "legs": [
      {
-      "player": "Peyton Watson",
-      "team": "CLE",
-      "market_short": "PTS",
-      "prop": "PTS Over 15.5",
-      "point": 15.5,
-      "odds_at_book": 164,
-      "best_odds": 200,
-      "best_book": "BO",
-      "ev_pct": 17.8,
+      "player": "C.J. Stroud",
+      "team": "HOU",
+      "market_short": "PASSYD",
+      "prop": "PASSYD Over 299.5",
+      "point": 299.5,
+      "odds_at_book": 320,
+      "best_odds": 320,
+      "best_book": "BB,BR",
+      "ev_pct": 19.9,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 6,
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 13,
       "is_alt": false
      },
      {
-      "player": "Jaylon Tyson",
-      "team": "CLE",
-      "market_short": "PTS",
-      "prop": "PTS Over 14.5",
-      "point": 14.5,
-      "odds_at_book": 360,
-      "best_odds": 450,
-      "best_book": "365",
-      "ev_pct": 16.5,
+      "player": "Marvin Harrison Jr.",
+      "team": "HOU",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 49.5",
+      "point": 49.5,
+      "odds_at_book": 300,
+      "best_odds": 300,
+      "best_book": "BB,BR",
+      "ev_pct": 17.1,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
       "coverage": 11,
       "is_alt": false
      },
      {
-      "player": "Donovan Mitchell",
-      "team": "CLE",
-      "market_short": "PRA",
-      "prop": "PRA Over 44.5",
-      "point": 44.5,
-      "odds_at_book": 360,
-      "best_odds": 425,
-      "best_book": "MG",
-      "ev_pct": 16.1,
+      "player": "Tank Dell",
+      "team": "HOU",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 265,
+      "best_odds": 265,
+      "best_book": "BB,BR",
+      "ev_pct": 16.8,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 7,
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 9,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP",
+    "rank": 3,
+    "book": "FD",
+    "combined_odds": 5563,
+    "combined_decimal": 56.628,
+    "avg_ev_pct": 17.2,
+    "total_ev_pct": 51.7,
+    "games": [
+     "Dallas Cowboys@Philadelphia Eagles"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "CZ",
+    "next_odds": 4736,
+    "pct_vs_next": 17.1,
+    "n_books": 6,
+    "alt_books": [
+     [
+      "FD",
+      5563
+     ],
+     [
+      "CZ",
+      4736
+     ],
+     [
+      "DK",
+      4698
+     ],
+     [
+      "EB",
+      4620
+     ],
+     [
+      "NOV",
+      4620
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Dak Prescott",
+      "team": "DAL",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 290,
+      "best_odds": 350,
+      "best_book": "365",
+      "ev_pct": 18.0,
+      "grade": "S",
+      "game": "Dallas Cowboys@Philadelphia Eagles",
+      "game_time": "8:15 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "Dallas Goedert",
+      "team": "PHI",
+      "market_short": "REC",
+      "prop": "REC Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 164,
+      "best_odds": 200,
+      "best_book": "BB,BR",
+      "ev_pct": 17.2,
+      "grade": "S",
+      "game": "Dallas Cowboys@Philadelphia Eagles",
+      "game_time": "8:15 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Tanner McKee",
+      "team": "PHI",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 450,
+      "best_odds": 450,
+      "best_book": "FD",
+      "ev_pct": 16.5,
+      "grade": "S",
+      "game": "Dallas Cowboys@Philadelphia Eagles",
+      "game_time": "8:15 PM ET",
+      "coverage": 8,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP",
+    "rank": 4,
+    "book": "HR",
+    "combined_odds": 3062,
+    "combined_decimal": 31.62,
+    "avg_ev_pct": 17.0,
+    "total_ev_pct": 50.9,
+    "games": [
+     "Cleveland Browns@Tennessee Titans"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "NOV",
+    "next_odds": 2931,
+    "pct_vs_next": 4.3,
+    "n_books": 3,
+    "alt_books": [
+     [
+      "HR",
+      3062
+     ],
+     [
+      "NOV",
+      2931
+     ],
+     [
+      "FD",
+      2794
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Elic Ayomanor",
+      "team": "TEN",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 24.5",
+      "point": 24.5,
+      "odds_at_book": 210,
+      "best_odds": 254,
+      "best_book": "DK",
+      "ev_pct": 17.6,
+      "grade": "S",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
+      "coverage": 6,
+      "is_alt": false
+     },
+     {
+      "player": "Cam Ward",
+      "team": "TEN",
+      "market_short": "PASSYD",
+      "prop": "PASSYD Over 224.5",
+      "point": 224.5,
+      "odds_at_book": 240,
+      "best_odds": 300,
+      "best_book": "EB",
+      "ev_pct": 17.1,
+      "grade": "S",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     },
+     {
+      "player": "Harold Fannin Jr.",
+      "team": "CLE",
+      "market_short": "REC",
+      "prop": "REC Over 4.5",
+      "point": 4.5,
+      "odds_at_book": 200,
+      "best_odds": 240,
+      "best_book": "BR,BB",
+      "ev_pct": 16.2,
+      "grade": "S",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP",
+    "rank": 5,
+    "book": "FD",
+    "combined_odds": 6118,
+    "combined_decimal": 62.181,
+    "avg_ev_pct": 16.6,
+    "total_ev_pct": 49.9,
+    "games": [
+     "Kansas City Chiefs@Seattle Seahawks"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "DK",
+    "next_odds": 5604,
+    "pct_vs_next": 9.0,
+    "n_books": 5,
+    "alt_books": [
+     [
+      "FD",
+      6118
+     ],
+     [
+      "DK",
+      5604
+     ],
+     [
+      "NOV",
+      5323
+     ],
+     [
+      "CZ",
+      5314
+     ],
+     [
+      "FN",
+      4797
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "market_short": "REC",
+      "prop": "REC Over 9.5",
+      "point": 9.5,
+      "odds_at_book": 350,
+      "best_odds": 450,
+      "best_book": "BB,BR",
+      "ev_pct": 18.7,
+      "grade": "S",
+      "game": "Kansas City Chiefs@Seattle Seahawks",
+      "game_time": "8:20 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Kenneth Walker III",
+      "team": "KC",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 39.5",
+      "point": 39.5,
+      "odds_at_book": 370,
+      "best_odds": 440,
+      "best_book": "BB,BR",
+      "ev_pct": 16.9,
+      "grade": "S",
+      "game": "Kansas City Chiefs@Seattle Seahawks",
+      "game_time": "8:20 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Sam Darnold",
+      "team": "SEA",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 9.5",
+      "point": 9.5,
+      "odds_at_book": 194,
+      "best_odds": 194,
+      "best_book": "FD",
+      "ev_pct": 14.3,
+      "grade": "S",
+      "game": "Kansas City Chiefs@Seattle Seahawks",
+      "game_time": "8:20 PM ET",
+      "coverage": 6,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP",
+    "rank": 6,
+    "book": "DK",
+    "combined_odds": 8310,
+    "combined_decimal": 84.103,
+    "avg_ev_pct": 16.0,
+    "total_ev_pct": 48.0,
+    "games": [
+     "San Francisco 49ers@Atlanta Falcons"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "FN",
+    "next_odds": 7338,
+    "pct_vs_next": 13.1,
+    "n_books": 2,
+    "alt_books": [
+     [
+      "DK",
+      8310
+     ],
+     [
+      "FN",
+      7338
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Bijan Robinson",
+      "team": "ATL",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 119.5",
+      "point": 119.5,
+      "odds_at_book": 263,
+      "best_odds": 340,
+      "best_book": "BR,BB",
+      "ev_pct": 16.8,
+      "grade": "S",
+      "game": "San Francisco 49ers@Atlanta Falcons",
+      "game_time": "1:00 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     },
+     {
+      "player": "Drake London",
+      "team": "ATL",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 129.5",
+      "point": 129.5,
+      "odds_at_book": 423,
+      "best_odds": 500,
+      "best_book": "365",
+      "ev_pct": 16.5,
+      "grade": "S",
+      "game": "San Francisco 49ers@Atlanta Falcons",
+      "game_time": "1:00 PM ET",
+      "coverage": 5,
+      "is_alt": false
+     },
+     {
+      "player": "Austin Hooper",
+      "team": "ATL",
+      "market_short": "REC",
+      "prop": "REC Over 1.5",
+      "point": 1.5,
+      "odds_at_book": 343,
+      "best_odds": 400,
+      "best_book": "365",
+      "ev_pct": 14.7,
+      "grade": "S",
+      "game": "San Francisco 49ers@Atlanta Falcons",
+      "game_time": "1:00 PM ET",
+      "coverage": 5,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP",
+    "rank": 7,
+    "book": "DK",
+    "combined_odds": 5899,
+    "combined_decimal": 59.985,
+    "avg_ev_pct": 14.8,
+    "total_ev_pct": 44.3,
+    "games": [
+     "Tampa Bay Buccaneers@Carolina Panthers"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "NOV",
+    "next_odds": 4900,
+    "pct_vs_next": 20.0,
+    "n_books": 3,
+    "alt_books": [
+     [
+      "DK",
+      5899
+     ],
+     [
+      "NOV",
+      4900
+     ],
+     [
+      "PX",
+      281
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Kenny Gainwell",
+      "team": "TB",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 24.5",
+      "point": 24.5,
+      "odds_at_book": 263,
+      "best_odds": 310,
+      "best_book": "FD",
+      "ev_pct": 15.4,
+      "grade": "S",
+      "game": "Tampa Bay Buccaneers@Carolina Panthers",
+      "game_time": "1:00 PM ET",
+      "coverage": 5,
+      "is_alt": false
+     },
+     {
+      "player": "Ted Hurst III",
+      "team": "TB",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 59.5",
+      "point": 59.5,
+      "odds_at_book": 287,
+      "best_odds": 335,
+      "best_book": "BB",
+      "ev_pct": 14.6,
+      "grade": "S",
+      "game": "Tampa Bay Buccaneers@Carolina Panthers",
+      "game_time": "1:00 PM ET",
+      "coverage": 9,
+      "is_alt": false
+     },
+     {
+      "player": "Chuba Hubbard",
+      "team": "CAR",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 99.5",
+      "point": 99.5,
+      "odds_at_book": 327,
+      "best_odds": 380,
+      "best_book": "BR,BB",
+      "ev_pct": 14.3,
+      "grade": "S",
+      "game": "Tampa Bay Buccaneers@Carolina Panthers",
+      "game_time": "1:00 PM ET",
+      "coverage": 12,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
    }
   ],
   "sgp_plus": [
    {
     "tier": "SGP+",
     "rank": 1,
-    "book": "FD",
-    "combined_odds": 8197,
-    "combined_decimal": 82.969,
-    "avg_ev_pct": 18.9,
-    "total_ev_pct": 75.4,
+    "book": "BR",
+    "combined_odds": 9368,
+    "combined_decimal": 94.681,
+    "avg_ev_pct": 19.6,
+    "total_ev_pct": 78.5,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Green Bay Packers@Detroit Lions",
+     "Los Angeles Rams@Las Vegas Raiders",
+     "Miami Dolphins@New York Jets",
+     "New York Giants@Houston Texans"
     ],
     "odds_are_estimate": true,
-    "next_book": "",
-    "next_odds": 0,
+    "next_book": "BB",
+    "next_odds": 9368,
     "pct_vs_next": 0.0,
-    "n_books": 1,
+    "n_books": 6,
     "alt_books": [
      [
-      "FD",
-      8197
+      "BR",
+      9368
+     ],
+     [
+      "BB",
+      9368
+     ],
+     [
+      "FN",
+      3848
+     ],
+     [
+      "NOV",
+      3744
+     ],
+     [
+      "DK",
+      3737
      ]
     ],
     "legs": [
      {
-      "player": "Shai Gilgeous-Alexander",
-      "team": "OKC",
-      "market_short": "PTS",
-      "prop": "PTS Over 33.5",
-      "point": 33.5,
-      "odds_at_book": 174,
-      "best_odds": 174,
-      "best_book": "FD",
-      "ev_pct": 19.2,
+      "player": "Blake Corum",
+      "team": "LAR",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 260,
+      "best_odds": 260,
+      "best_book": "BB,BR",
+      "ev_pct": 20.0,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 6,
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
+      "coverage": 9,
       "is_alt": false
      },
      {
-      "player": "Chet Holmgren",
-      "team": "OKC",
-      "market_short": "PRA",
-      "prop": "PRA Over 29.5",
+      "player": "C.J. Stroud",
+      "team": "HOU",
+      "market_short": "PASSYD",
+      "prop": "PASSYD Over 299.5",
+      "point": 299.5,
+      "odds_at_book": 320,
+      "best_odds": 320,
+      "best_book": "BB,BR",
+      "ev_pct": 19.9,
+      "grade": "S",
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 13,
+      "is_alt": false
+     },
+     {
+      "player": "Geno Smith",
+      "team": "NYJ",
+      "market_short": "CMP",
+      "prop": "CMP Over 20.5",
+      "point": 20.5,
+      "odds_at_book": 102,
+      "best_odds": 102,
+      "best_book": "BR,BB",
+      "ev_pct": 19.4,
+      "grade": "S",
+      "game": "Miami Dolphins@New York Jets",
+      "game_time": "1:00 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Savion Williams",
+      "team": "GB",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 29.5",
       "point": 29.5,
       "odds_at_book": 210,
-      "best_odds": 270,
-      "best_book": "MG",
+      "best_odds": 210,
+      "best_book": "BB,BR",
       "ev_pct": 19.2,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 5,
-      "is_alt": false
-     },
-     {
-      "player": "Cason Wallace",
-      "team": "OKC",
-      "market_short": "STL",
-      "prop": "STL Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 270,
-      "best_odds": 270,
-      "best_book": "FD",
-      "ev_pct": 19.2,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 6,
-      "is_alt": false
-     },
-     {
-      "player": "Peyton Watson",
-      "team": "CLE",
-      "market_short": "PTS",
-      "prop": "PTS Over 15.5",
-      "point": 15.5,
-      "odds_at_book": 164,
-      "best_odds": 200,
-      "best_book": "BO",
-      "ev_pct": 17.8,
-      "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 6,
+      "game": "Green Bay Packers@Detroit Lions",
+      "game_time": "4:25 PM ET",
+      "coverage": 9,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "SGP+",
     "rank": 2,
     "book": "FD",
-    "combined_odds": 52620,
-    "combined_decimal": 527.197,
-    "avg_ev_pct": 17.7,
-    "total_ev_pct": 70.7,
+    "combined_odds": 15276,
+    "combined_decimal": 153.759,
+    "avg_ev_pct": 18.5,
+    "total_ev_pct": 74.1,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "NOV",
-    "next_odds": 40436,
-    "pct_vs_next": 30.1,
-    "n_books": 7,
-    "alt_books": [
-     [
-      "FD",
-      52620
-     ],
-     [
-      "NOV",
-      40436
-     ],
-     [
-      "HR",
-      29878
-     ],
-     [
-      "CZ",
-      29026
-     ],
-     [
-      "EB",
-      27990
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Nikola Jokic",
-      "team": "DEN",
-      "market_short": "AST",
-      "prop": "AST Over 11.5",
-      "point": 11.5,
-      "odds_at_book": 280,
-      "best_odds": 280,
-      "best_book": "FD",
-      "ev_pct": 18.4,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Christian Braun",
-      "team": "DEN",
-      "market_short": "AST",
-      "prop": "AST Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 480,
-      "best_odds": 480,
-      "best_book": "FD",
-      "ev_pct": 18.0,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 9,
-      "is_alt": false
-     },
-     {
-      "player": "Cameron Johnson",
-      "team": "DEN",
-      "market_short": "AST",
-      "prop": "AST Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 420,
-      "best_odds": 420,
-      "best_book": "FD",
-      "ev_pct": 17.8,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     },
-     {
-      "player": "Jaylon Tyson",
-      "team": "CLE",
-      "market_short": "PTS",
-      "prop": "PTS Over 14.5",
-      "point": 14.5,
-      "odds_at_book": 360,
-      "best_odds": 450,
-      "best_book": "365",
-      "ev_pct": 16.5,
-      "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 3,
-    "book": "NOV",
-    "combined_odds": 6998,
-    "combined_decimal": 70.979,
-    "avg_ev_pct": 15.9,
-    "total_ev_pct": 63.6,
-    "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Denver Broncos@Arizona Cardinals",
+     "Kansas City Chiefs@Seattle Seahawks",
+     "Los Angeles Rams@Las Vegas Raiders",
+     "Pittsburgh Steelers@New Orleans Saints"
     ],
     "odds_are_estimate": true,
     "next_book": "DK",
-    "next_odds": 5724,
-    "pct_vs_next": 21.9,
-    "n_books": 2,
-    "alt_books": [
-     [
-      "NOV",
-      6998
-     ],
-     [
-      "DK",
-      5724
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Alex Caruso",
-      "team": "OKC",
-      "market_short": "PTS",
-      "prop": "PTS Over 7.5",
-      "point": 7.5,
-      "odds_at_book": 122,
-      "best_odds": 115,
-      "best_book": "FN",
-      "ev_pct": 17.7,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 6,
-      "is_alt": false
-     },
-     {
-      "player": "Donovan Mitchell",
-      "team": "CLE",
-      "market_short": "PRA",
-      "prop": "PRA Over 44.5",
-      "point": 44.5,
-      "odds_at_book": 308,
-      "best_odds": 425,
-      "best_book": "MG",
-      "ev_pct": 16.1,
-      "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 7,
-      "is_alt": false
-     },
-     {
-      "player": "Anfernee Simons",
-      "team": "PHI",
-      "market_short": "AST",
-      "prop": "AST Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 186,
-      "best_odds": 208,
-      "best_book": "DK",
-      "ev_pct": 15.4,
-      "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 5,
-      "is_alt": false
-     },
-     {
-      "player": "Jalen Williams",
-      "team": "OKC",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 174,
-      "best_odds": 200,
-      "best_book": "FD",
-      "ev_pct": 14.4,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 4,
-    "book": "FD",
-    "combined_odds": 14935,
-    "combined_decimal": 150.345,
-    "avg_ev_pct": 14.0,
-    "total_ev_pct": 55.9,
-    "games": [
-     "CLE@PHI",
-     "DEN@OKC"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "PX",
-    "next_odds": 12015,
-    "pct_vs_next": 24.1,
-    "n_books": 4,
+    "next_odds": 13741,
+    "pct_vs_next": 11.1,
+    "n_books": 3,
     "alt_books": [
      [
       "FD",
-      14935
+      15276
      ],
      [
-      "PX",
-      12015
+      "DK",
+      13741
      ],
      [
-      "CZ",
-      10407
-     ],
-     [
-      "FN",
-      7820
+      "NOV",
+      12298
      ]
     ],
     "legs": [
      {
-      "player": "Joel Embiid",
-      "team": "PHI",
-      "market_short": "AST",
-      "prop": "AST Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 280,
-      "best_odds": 280,
-      "best_book": "BB,BR",
-      "ev_pct": 14.2,
+      "player": "Ashton Jeanty",
+      "team": "LV",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 69.5",
+      "point": 69.5,
+      "odds_at_book": 194,
+      "best_odds": 275,
+      "best_book": "365",
+      "ev_pct": 18.8,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
       "coverage": 10,
       "is_alt": false
      },
      {
-      "player": "Aaron Gordon",
-      "team": "DEN",
-      "market_short": "PTS",
-      "prop": "PTS Over 18.5",
-      "point": 18.5,
-      "odds_at_book": 205,
-      "best_odds": 205,
-      "best_book": "FD",
-      "ev_pct": 14.0,
+      "player": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "market_short": "REC",
+      "prop": "REC Over 9.5",
+      "point": 9.5,
+      "odds_at_book": 350,
+      "best_odds": 450,
+      "best_book": "BB,BR",
+      "ev_pct": 18.7,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
+      "game": "Kansas City Chiefs@Seattle Seahawks",
+      "game_time": "8:20 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Rico Dowdle",
+      "team": "PIT",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 14.5",
+      "point": 14.5,
+      "odds_at_book": 198,
+      "best_odds": 198,
+      "best_book": "FD",
+      "ev_pct": 18.6,
+      "grade": "S",
+      "game": "Pittsburgh Steelers@New Orleans Saints",
+      "game_time": "9:30 AM ET",
       "coverage": 4,
       "is_alt": false
      },
      {
-      "player": "VJ Edgecombe",
-      "team": "PHI",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 176,
-      "best_odds": 176,
-      "best_book": "FD",
-      "ev_pct": 13.9,
+      "player": "Evan Engram",
+      "team": "DEN",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 39.5",
+      "point": 39.5,
+      "odds_at_book": 290,
+      "best_odds": 350,
+      "best_book": "365",
+      "ev_pct": 18.0,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     },
-     {
-      "player": "Ajay Mitchell",
-      "team": "OKC",
-      "market_short": "REB",
-      "prop": "REB Over 4.5",
-      "point": 4.5,
-      "odds_at_book": 370,
-      "best_odds": 370,
-      "best_book": "FD",
-      "ev_pct": 13.8,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
+      "game": "Denver Broncos@Arizona Cardinals",
+      "game_time": "4:05 PM ET",
       "coverage": 11,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 3,
+    "book": "DK",
+    "combined_odds": 27402,
+    "combined_decimal": 275.021,
+    "avg_ev_pct": 17.7,
+    "total_ev_pct": 70.7,
+    "games": [
+     "Cleveland Browns@Tennessee Titans",
+     "Dallas Cowboys@Philadelphia Eagles",
+     "Los Angeles Rams@Las Vegas Raiders",
+     "Pittsburgh Steelers@New Orleans Saints"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "FD",
+    "next_odds": 21600,
+    "pct_vs_next": 26.7,
+    "n_books": 3,
+    "alt_books": [
+     [
+      "DK",
+      27402
+     ],
+     [
+      "FD",
+      21600
+     ],
+     [
+      "NOV",
+      20770
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Dak Prescott",
+      "team": "DAL",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 282,
+      "best_odds": 350,
+      "best_book": "365",
+      "ev_pct": 18.0,
+      "grade": "S",
+      "game": "Dallas Cowboys@Philadelphia Eagles",
+      "game_time": "8:15 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "Brock Bowers",
+      "team": "LV",
+      "market_short": "REC",
+      "prop": "REC Over 8.5",
+      "point": 8.5,
+      "odds_at_book": 346,
+      "best_odds": 420,
+      "best_book": "BB,BR",
+      "ev_pct": 17.8,
+      "grade": "S",
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
+      "coverage": 9,
+      "is_alt": false
+     },
+     {
+      "player": "Elic Ayomanor",
+      "team": "TEN",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 24.5",
+      "point": 24.5,
+      "odds_at_book": 254,
+      "best_odds": 254,
+      "best_book": "DK",
+      "ev_pct": 17.6,
+      "grade": "S",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
+      "coverage": 6,
+      "is_alt": false
+     },
+     {
+      "player": "Jaylen Warren",
+      "team": "PIT",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 49.5",
+      "point": 49.5,
+      "odds_at_book": 356,
+      "best_odds": 430,
+      "best_book": "BR,BB",
+      "ev_pct": 17.3,
+      "grade": "S",
+      "game": "Pittsburgh Steelers@New Orleans Saints",
+      "game_time": "9:30 AM ET",
+      "coverage": 12,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 4,
+    "book": "EB",
+    "combined_odds": 16966,
+    "combined_decimal": 170.66,
+    "avg_ev_pct": 17.1,
+    "total_ev_pct": 68.3,
+    "games": [
+     "Cleveland Browns@Tennessee Titans",
+     "Dallas Cowboys@Philadelphia Eagles",
+     "Kansas City Chiefs@Seattle Seahawks",
+     "New York Giants@Houston Texans"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "FN",
+    "next_odds": 14184,
+    "pct_vs_next": 19.5,
+    "n_books": 5,
+    "alt_books": [
+     [
+      "EB",
+      16966
+     ],
+     [
+      "FN",
+      14184
+     ],
+     [
+      "FD",
+      14033
+     ],
+     [
+      "NOV",
+      13409
+     ],
+     [
+      "HR",
+      12154
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Dallas Goedert",
+      "team": "PHI",
+      "market_short": "REC",
+      "prop": "REC Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 165,
+      "best_odds": 200,
+      "best_book": "BB,BR",
+      "ev_pct": 17.2,
+      "grade": "S",
+      "game": "Dallas Cowboys@Philadelphia Eagles",
+      "game_time": "8:15 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Cam Ward",
+      "team": "TEN",
+      "market_short": "PASSYD",
+      "prop": "PASSYD Over 224.5",
+      "point": 224.5,
+      "odds_at_book": 300,
+      "best_odds": 300,
+      "best_book": "EB",
+      "ev_pct": 17.1,
+      "grade": "S",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     },
+     {
+      "player": "Marvin Harrison Jr.",
+      "team": "HOU",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 49.5",
+      "point": 49.5,
+      "odds_at_book": 250,
+      "best_odds": 300,
+      "best_book": "BB,BR",
+      "ev_pct": 17.1,
+      "grade": "S",
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "Kenneth Walker III",
+      "team": "KC",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 39.5",
+      "point": 39.5,
+      "odds_at_book": 360,
+      "best_odds": 440,
+      "best_book": "BB,BR",
+      "ev_pct": 16.9,
+      "grade": "S",
+      "game": "Kansas City Chiefs@Seattle Seahawks",
+      "game_time": "8:20 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
    },
    {
     "tier": "SGP+",
     "rank": 5,
-    "book": "NOV",
-    "combined_odds": 7495,
-    "combined_decimal": 75.945,
-    "avg_ev_pct": 12.8,
-    "total_ev_pct": 51.4,
+    "book": "FN",
+    "combined_odds": 23554,
+    "combined_decimal": 236.544,
+    "avg_ev_pct": 16.6,
+    "total_ev_pct": 66.6,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Dallas Cowboys@Philadelphia Eagles",
+     "New York Giants@Houston Texans",
+     "San Francisco 49ers@Atlanta Falcons"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "DK",
+    "next_odds": 18237,
+    "pct_vs_next": 29.0,
+    "n_books": 4,
+    "alt_books": [
+     [
+      "FN",
+      23554
+     ],
+     [
+      "DK",
+      18237
+     ],
+     [
+      "NOV",
+      17671
+     ],
+     [
+      "CZ",
+      17456
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Bijan Robinson",
+      "team": "ATL",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 119.5",
+      "point": 119.5,
+      "odds_at_book": 285,
+      "best_odds": 340,
+      "best_book": "BR,BB",
+      "ev_pct": 16.8,
+      "grade": "S",
+      "game": "San Francisco 49ers@Atlanta Falcons",
+      "game_time": "1:00 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     },
+     {
+      "player": "Tank Dell",
+      "team": "HOU",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 220,
+      "best_odds": 265,
+      "best_book": "BB,BR",
+      "ev_pct": 16.8,
+      "grade": "S",
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 9,
+      "is_alt": false
+     },
+     {
+      "player": "Tyrone Tracy Jr.",
+      "team": "NYG",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 39.5",
+      "point": 39.5,
+      "odds_at_book": 300,
+      "best_odds": 450,
+      "best_book": "365",
+      "ev_pct": 16.5,
+      "grade": "S",
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "Tanner McKee",
+      "team": "PHI",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 380,
+      "best_odds": 450,
+      "best_book": "FD",
+      "ev_pct": 16.5,
+      "grade": "S",
+      "game": "Dallas Cowboys@Philadelphia Eagles",
+      "game_time": "8:15 PM ET",
+      "coverage": 8,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 6,
+    "book": "365",
+    "combined_odds": 30140,
+    "combined_decimal": 302.4,
+    "avg_ev_pct": 16.3,
+    "total_ev_pct": 65.1,
+    "games": [
+     "Cincinnati Bengals@Baltimore Ravens",
+     "Cleveland Browns@Tennessee Titans",
+     "Indianapolis Colts@Minnesota Vikings",
+     "San Francisco 49ers@Atlanta Falcons"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "NOV",
+    "next_odds": 23236,
+    "pct_vs_next": 29.6,
+    "n_books": 3,
+    "alt_books": [
+     [
+      "365",
+      30140
+     ],
+     [
+      "NOV",
+      23236
+     ],
+     [
+      "FN",
+      22256
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Drake London",
+      "team": "ATL",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 129.5",
+      "point": 129.5,
+      "odds_at_book": 500,
+      "best_odds": 500,
+      "best_book": "365",
+      "ev_pct": 16.5,
+      "grade": "S",
+      "game": "San Francisco 49ers@Atlanta Falcons",
+      "game_time": "1:00 PM ET",
+      "coverage": 5,
+      "is_alt": false
+     },
+     {
+      "player": "Josh Downs",
+      "team": "IND",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 69.5",
+      "point": 69.5,
+      "odds_at_book": 350,
+      "best_odds": 350,
+      "best_book": "365",
+      "ev_pct": 16.3,
+      "grade": "S",
+      "game": "Indianapolis Colts@Minnesota Vikings",
+      "game_time": "1:00 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Harold Fannin Jr.",
+      "team": "CLE",
+      "market_short": "REC",
+      "prop": "REC Over 4.5",
+      "point": 4.5,
+      "odds_at_book": 180,
+      "best_odds": 240,
+      "best_book": "BR,BB",
+      "ev_pct": 16.2,
+      "grade": "S",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "Joe Burrow",
+      "team": "CIN",
+      "market_short": "PASSYD",
+      "prop": "PASSYD Over 324.5",
+      "point": 324.5,
+      "odds_at_book": 300,
+      "best_odds": 425,
+      "best_book": "EB",
+      "ev_pct": 16.1,
+      "grade": "S",
+      "game": "Cincinnati Bengals@Baltimore Ravens",
+      "game_time": "1:00 PM ET",
+      "coverage": 7,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 7,
+    "book": "DK",
+    "combined_odds": 7069,
+    "combined_decimal": 71.693,
+    "avg_ev_pct": 15.6,
+    "total_ev_pct": 62.3,
+    "games": [
+     "Cleveland Browns@Tennessee Titans",
+     "Denver Broncos@Arizona Cardinals",
+     "Green Bay Packers@Detroit Lions",
+     "Los Angeles Rams@Las Vegas Raiders"
     ],
     "odds_are_estimate": true,
     "next_book": "",
@@ -1311,293 +2154,396 @@
     "n_books": 1,
     "alt_books": [
      [
-      "NOV",
-      7495
+      "DK",
+      7069
      ]
     ],
     "legs": [
      {
-      "player": "DeMar DeRozan",
-      "team": "DEN",
-      "market_short": "AST",
-      "prop": "AST Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 170,
-      "best_odds": 205,
-      "best_book": "BB,BR",
-      "ev_pct": 13.5,
+      "player": "Deshaun Watson",
+      "team": "CLE",
+      "market_short": "CMP",
+      "prop": "CMP Over 19.5",
+      "point": 19.5,
+      "odds_at_book": 135,
+      "best_odds": 135,
+      "best_book": "DK,EB",
+      "ev_pct": 15.7,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 11,
-      "is_alt": false
-     },
-     {
-      "player": "LeBron James",
-      "team": "PHI",
-      "market_short": "PR",
-      "prop": "PR Over 29.5",
-      "point": 29.5,
-      "odds_at_book": 130,
-      "best_odds": 390,
-      "best_book": "FD",
-      "ev_pct": 13.0,
-      "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 7,
-      "is_alt": false
-     },
-     {
-      "player": "Jamal Murray",
-      "team": "DEN",
-      "market_short": "BLK",
-      "prop": "BLK Over 0.5",
-      "point": 0.5,
-      "odds_at_book": 163,
-      "best_odds": 123,
-      "best_book": "BB,BR",
-      "ev_pct": 13.0,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
       "coverage": 6,
       "is_alt": false
      },
      {
-      "player": "Sam Merrill",
-      "team": "CLE",
-      "market_short": "3PT",
-      "prop": "3PT Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 365,
-      "best_odds": 425,
-      "best_book": "365",
-      "ev_pct": 11.9,
-      "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 10,
-      "is_alt": false
-     }
-    ],
-    "sport": "NBA"
-   },
-   {
-    "tier": "SGP+",
-    "rank": 6,
-    "book": "NOV",
-    "combined_odds": 11746,
-    "combined_decimal": 118.457,
-    "avg_ev_pct": 10.9,
-    "total_ev_pct": 43.7,
-    "games": [
-     "CLE@PHI",
-     "DEN@OKC"
-    ],
-    "odds_are_estimate": true,
-    "next_book": "FD",
-    "next_odds": 11625,
-    "pct_vs_next": 1.0,
-    "n_books": 7,
-    "alt_books": [
-     [
-      "NOV",
-      11746
-     ],
-     [
-      "FD",
-      11625
-     ],
-     [
-      "BR",
-      10052
-     ],
-     [
-      "BB",
-      10052
-     ],
-     [
-      "CZ",
-      9780
-     ]
-    ],
-    "legs": [
-     {
-      "player": "Isaiah Hartenstein",
-      "team": "OKC",
-      "market_short": "PTS",
-      "prop": "PTS Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 138,
-      "best_odds": 155,
-      "best_book": "MG",
-      "ev_pct": 11.7,
-      "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 13,
-      "is_alt": false
-     },
-     {
-      "player": "James Harden",
-      "team": "CLE",
-      "market_short": "PTS",
-      "prop": "PTS Over 19.5",
+      "player": "Jordan Love",
+      "team": "GB",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 19.5",
       "point": 19.5,
-      "odds_at_book": 130,
-      "best_odds": 140,
-      "best_book": "BB,BR",
-      "ev_pct": 11.4,
-      "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 13,
-      "is_alt": false
-     },
-     {
-      "player": "Jaylen Brown",
-      "team": "PHI",
-      "market_short": "AST",
-      "prop": "AST Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 300,
-      "best_odds": 310,
+      "odds_at_book": 328,
+      "best_odds": 400,
       "best_book": "FD",
-      "ev_pct": 11.0,
+      "ev_pct": 15.6,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
+      "game": "Green Bay Packers@Detroit Lions",
+      "game_time": "4:25 PM ET",
       "coverage": 10,
       "is_alt": false
      },
      {
-      "player": "Kentavious Caldwell-Pope",
-      "team": "PHI",
-      "market_short": "3PT",
-      "prop": "3PT Over 2.5",
-      "point": 2.5,
-      "odds_at_book": 441,
-      "best_odds": 470,
+      "player": "Jacoby Brissett",
+      "team": "ARI",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 14.5",
+      "point": 14.5,
+      "odds_at_book": 224,
+      "best_odds": 265,
       "best_book": "FD",
-      "ev_pct": 9.6,
+      "ev_pct": 15.5,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 10,
+      "game": "Denver Broncos@Arizona Cardinals",
+      "game_time": "4:05 PM ET",
+      "coverage": 4,
+      "is_alt": false
+     },
+     {
+      "player": "Tyler Higbee",
+      "team": "LAR",
+      "market_short": "REC",
+      "prop": "REC Over 4.5",
+      "point": 4.5,
+      "odds_at_book": 120,
+      "best_odds": 144,
+      "best_book": "BO",
+      "ev_pct": 15.5,
+      "grade": "S",
+      "game": "Los Angeles Rams@Las Vegas Raiders",
+      "game_time": "4:25 PM ET",
+      "coverage": 6,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    },
    {
     "tier": "SGP+",
-    "rank": 7,
+    "rank": 8,
     "book": "FD",
-    "combined_odds": 12306,
-    "combined_decimal": 124.059,
-    "avg_ev_pct": 7.1,
-    "total_ev_pct": 28.3,
+    "combined_odds": 31192,
+    "combined_decimal": 312.918,
+    "avg_ev_pct": 15.1,
+    "total_ev_pct": 60.3,
     "games": [
-     "CLE@PHI",
-     "DEN@OKC"
+     "Cleveland Browns@Tennessee Titans",
+     "New York Giants@Houston Texans",
+     "San Francisco 49ers@Atlanta Falcons",
+     "Tampa Bay Buccaneers@Carolina Panthers"
     ],
     "odds_are_estimate": true,
-    "next_book": "EB",
-    "next_odds": 10699,
-    "pct_vs_next": 14.9,
-    "n_books": 4,
+    "next_book": "DK",
+    "next_odds": 21869,
+    "pct_vs_next": 42.4,
+    "n_books": 3,
     "alt_books": [
      [
       "FD",
-      12306
-     ],
-     [
-      "EB",
-      10699
+      31192
      ],
      [
       "DK",
-      10529
+      21869
      ],
      [
-      "NOV",
-      10051
+      "HR",
+      19790
      ]
     ],
     "legs": [
      {
-      "player": "Marvin Bagley III",
-      "team": "DEN",
-      "market_short": "REB",
-      "prop": "REB Over 5.5",
-      "point": 5.5,
-      "odds_at_book": 330,
-      "best_odds": 330,
+      "player": "Kenny Gainwell",
+      "team": "TB",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 24.5",
+      "point": 24.5,
+      "odds_at_book": 310,
+      "best_odds": 310,
       "best_book": "FD",
-      "ev_pct": 8.7,
+      "ev_pct": 15.4,
       "grade": "S",
-      "game": "DEN@OKC",
-      "game_time": "9:30 PM ET",
-      "coverage": 7,
+      "game": "Tampa Bay Buccaneers@Carolina Panthers",
+      "game_time": "1:00 PM ET",
+      "coverage": 5,
       "is_alt": false
      },
      {
-      "player": "Tyrese Maxey",
-      "team": "PHI",
-      "market_short": "3PT",
-      "prop": "3PT Over 3.5",
-      "point": 3.5,
-      "odds_at_book": 255,
-      "best_odds": 275,
-      "best_book": "365",
-      "ev_pct": 6.7,
+      "player": "Isaiah Likely",
+      "team": "NYG",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 79.5",
+      "point": 79.5,
+      "odds_at_book": 410,
+      "best_odds": 410,
+      "best_book": "FD,BB",
+      "ev_pct": 15.2,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 10,
+      "is_alt": false
+     },
+     {
+      "player": "Gunnar Helm",
+      "team": "TEN",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 24.5",
+      "point": 24.5,
+      "odds_at_book": 265,
+      "best_odds": 265,
+      "best_book": "FD",
+      "ev_pct": 15.0,
+      "grade": "S",
+      "game": "Cleveland Browns@Tennessee Titans",
+      "game_time": "1:00 PM ET",
+      "coverage": 5,
+      "is_alt": false
+     },
+     {
+      "player": "Austin Hooper",
+      "team": "ATL",
+      "market_short": "REC",
+      "prop": "REC Over 1.5",
+      "point": 1.5,
+      "odds_at_book": 310,
+      "best_odds": 400,
+      "best_book": "365",
+      "ev_pct": 14.7,
+      "grade": "S",
+      "game": "San Francisco 49ers@Atlanta Falcons",
+      "game_time": "1:00 PM ET",
+      "coverage": 5,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 9,
+    "book": "BB",
+    "combined_odds": 27879,
+    "combined_decimal": 279.792,
+    "avg_ev_pct": 14.5,
+    "total_ev_pct": 58.1,
+    "games": [
+     "New York Giants@Houston Texans",
+     "Tampa Bay Buccaneers@Carolina Panthers"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "BR",
+    "next_odds": 23377,
+    "pct_vs_next": 19.2,
+    "n_books": 9,
+    "alt_books": [
+     [
+      "BB",
+      27879
+     ],
+     [
+      "BR",
+      23377
+     ],
+     [
+      "DK",
+      16615
+     ],
+     [
+      "365",
+      16280
+     ],
+     [
+      "EB",
+      15798
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Ted Hurst III",
+      "team": "TB",
+      "market_short": "RECYD",
+      "prop": "RECYD Over 59.5",
+      "point": 59.5,
+      "odds_at_book": 335,
+      "best_odds": 335,
+      "best_book": "BB",
+      "ev_pct": 14.6,
+      "grade": "S",
+      "game": "Tampa Bay Buccaneers@Carolina Panthers",
+      "game_time": "1:00 PM ET",
+      "coverage": 9,
+      "is_alt": false
+     },
+     {
+      "player": "Woody Marks",
+      "team": "HOU",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 79.5",
+      "point": 79.5,
+      "odds_at_book": 235,
+      "best_odds": 235,
+      "best_book": "BB,BR",
+      "ev_pct": 14.6,
+      "grade": "S",
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
       "coverage": 11,
       "is_alt": false
      },
      {
-      "player": "Jarrett Allen",
-      "team": "CLE",
-      "market_short": "REB",
-      "prop": "REB Over 9.5",
-      "point": 9.5,
-      "odds_at_book": 158,
-      "best_odds": 200,
-      "best_book": "MG",
-      "ev_pct": 6.7,
+      "player": "Jaylin Noel",
+      "team": "HOU",
+      "market_short": "REC",
+      "prop": "REC Over 3.5",
+      "point": 3.5,
+      "odds_at_book": 300,
+      "best_odds": 350,
+      "best_book": "365",
+      "ev_pct": 14.6,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
+      "game": "New York Giants@Houston Texans",
+      "game_time": "1:00 PM ET",
+      "coverage": 11,
+      "is_alt": false
+     },
+     {
+      "player": "Chuba Hubbard",
+      "team": "CAR",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 99.5",
+      "point": 99.5,
+      "odds_at_book": 380,
+      "best_odds": 380,
+      "best_book": "BR,BB",
+      "ev_pct": 14.3,
+      "grade": "S",
+      "game": "Tampa Bay Buccaneers@Carolina Panthers",
+      "game_time": "1:00 PM ET",
+      "coverage": 12,
+      "is_alt": false
+     }
+    ],
+    "sport": "NFL"
+   },
+   {
+    "tier": "SGP+",
+    "rank": 10,
+    "book": "FD",
+    "combined_odds": 13383,
+    "combined_decimal": 134.833,
+    "avg_ev_pct": 14.2,
+    "total_ev_pct": 56.9,
+    "games": [
+     "Indianapolis Colts@Minnesota Vikings",
+     "Kansas City Chiefs@Seattle Seahawks",
+     "Miami Dolphins@New York Jets",
+     "Tampa Bay Buccaneers@Carolina Panthers"
+    ],
+    "odds_are_estimate": true,
+    "next_book": "FN",
+    "next_odds": 12421,
+    "pct_vs_next": 7.7,
+    "n_books": 4,
+    "alt_books": [
+     [
+      "FD",
+      13383
+     ],
+     [
+      "FN",
+      12421
+     ],
+     [
+      "NOV",
+      11529
+     ],
+     [
+      "PX",
+      1030
+     ]
+    ],
+    "legs": [
+     {
+      "player": "Sam Darnold",
+      "team": "SEA",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 9.5",
+      "point": 9.5,
+      "odds_at_book": 194,
+      "best_odds": 194,
+      "best_book": "FD",
+      "ev_pct": 14.3,
+      "grade": "S",
+      "game": "Kansas City Chiefs@Seattle Seahawks",
+      "game_time": "8:20 PM ET",
+      "coverage": 6,
+      "is_alt": false
+     },
+     {
+      "player": "Kyler Murray",
+      "team": "MIN",
+      "market_short": "RUSHYD",
+      "prop": "RUSHYD Over 39.5",
+      "point": 39.5,
+      "odds_at_book": 270,
+      "best_odds": 320,
+      "best_book": "365",
+      "ev_pct": 14.2,
+      "grade": "S",
+      "game": "Indianapolis Colts@Minnesota Vikings",
+      "game_time": "1:00 PM ET",
       "coverage": 12,
       "is_alt": false
      },
      {
-      "player": "Evan Mobley",
-      "team": "CLE",
-      "market_short": "PRA",
-      "prop": "PRA Over 34.5",
-      "point": 34.5,
-      "odds_at_book": 215,
-      "best_odds": 215,
-      "best_book": "FD",
-      "ev_pct": 6.2,
+      "player": "Malik Willis",
+      "team": "MIA",
+      "market_short": "PASSYD",
+      "prop": "PASSYD Over 224.5",
+      "point": 224.5,
+      "odds_at_book": 235,
+      "best_odds": 320,
+      "best_book": "365",
+      "ev_pct": 14.2,
       "grade": "S",
-      "game": "CLE@PHI",
-      "game_time": "7:00 PM ET",
-      "coverage": 7,
+      "game": "Miami Dolphins@New York Jets",
+      "game_time": "1:00 PM ET",
+      "coverage": 8,
+      "is_alt": false
+     },
+     {
+      "player": "Cade Otton",
+      "team": "TB",
+      "market_short": "REC",
+      "prop": "REC Over 5.5",
+      "point": 5.5,
+      "odds_at_book": 270,
+      "best_odds": 320,
+      "best_book": "BR,BB",
+      "ev_pct": 14.2,
+      "grade": "S",
+      "game": "Tampa Bay Buccaneers@Carolina Panthers",
+      "game_time": "1:00 PM ET",
+      "coverage": 11,
       "is_alt": false
      }
     ],
-    "sport": "NBA"
+    "sport": "NFL"
    }
   ],
   "hr_plays": [],
-  "_file": "nba_parlays_2026-10-22.json",
-  "scraped_at": "2026-10-22T16:16:13.129992",
-  "odds_last_update": "2026-10-22 04:12:00 PM EDT",
+  "_file": "nfl_parlays_2026-10-23.json",
+  "scraped_at": "2026-10-23T13:10:33.373750",
+  "odds_last_update": "2026-10-23 09:30:00 AM EDT",
   "note": "PARLAY combined_odds are exact (independent cross-game legs). SGP combined_odds are RAW MULTIPLIED estimates — same-game legs correlate and the book applies a discount not in the per-leg data. SGP+ is EV-optimized across >=2 games (more dispersed = lower shared failure risk, higher all-legs-hit probability); its odds are still flagged estimate because it may include same-game legs that correlate.",
   "hr_note": "HR plays come from SimpleOdds' own Dinger Report model. edge_pct = modelProb - impliedProb. is_bet is SimpleOdds' own recommended flag. Graded separately from parlays."
  },
@@ -25341,1111 +26287,6 @@
    "sport": "MLB"
   },
   {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 1,
-   "player": "KaVontae Turpin",
-   "market": "RECYD",
-   "prop": "RECYD Over 19.5",
-   "odds": 320,
-   "ev_pct": 19.9,
-   "result": "LOSS",
-   "actual": "0.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 1,
-   "player": "Matthew Stafford",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 349.5",
-   "odds": 500,
-   "ev_pct": 19.8,
-   "result": "LOSS",
-   "actual": "222.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 2,
-   "player": "Justin Herbert",
-   "market": "ATT",
-   "prop": "ATT Over 29.5",
-   "odds": -134,
-   "ev_pct": 19.8,
-   "result": "WIN",
-   "actual": "37.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 2,
-   "player": "Marvin Harrison Jr.",
-   "market": "RECYD",
-   "prop": "RECYD Over 39.5",
-   "odds": 295,
-   "ev_pct": 19.5,
-   "result": "LOSS",
-   "actual": "34.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 3,
-   "player": "Michael Penix Jr.",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 9.5",
-   "odds": 307,
-   "ev_pct": 19.5,
-   "result": "LOSS",
-   "actual": "1.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 3,
-   "player": "DJ Moore",
-   "market": "RECYD",
-   "prop": "RECYD Over 69.5",
-   "odds": 224,
-   "ev_pct": 18.8,
-   "result": "VOID",
-   "actual": "",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 4,
-   "player": "Nico Collins",
-   "market": "RECYD",
-   "prop": "RECYD Over 109.5",
-   "odds": 320,
-   "ev_pct": 18.7,
-   "result": "LOSS",
-   "actual": "74.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 4,
-   "player": "James Cook III",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 124.5",
-   "odds": 285,
-   "ev_pct": 18.4,
-   "result": "LOSS",
-   "actual": "95.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 5,
-   "player": "George Kittle",
-   "market": "REC",
-   "prop": "REC Over 5.5",
-   "odds": -103,
-   "ev_pct": 18,
-   "result": "LOSS",
-   "actual": "5.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 5,
-   "player": "Kayshon Boutte",
-   "market": "RECYD",
-   "prop": "RECYD Over 49.5",
-   "odds": 420,
-   "ev_pct": 17.8,
-   "result": "LOSS",
-   "actual": "16.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 6,
-   "player": "Brian Thomas Jr.",
-   "market": "RECYD",
-   "prop": "RECYD Over 39.5",
-   "odds": 300,
-   "ev_pct": 17.6,
-   "result": "LOSS",
-   "actual": "0.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 6,
-   "player": "Drake Maye",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 299.5",
-   "odds": 450,
-   "ev_pct": 17.6,
-   "result": "LOSS",
-   "actual": "235.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 7,
-   "player": "Jordan Love",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 324.5",
-   "odds": 360,
-   "ev_pct": 17.5,
-   "result": "LOSS",
-   "actual": "276.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 7,
-   "player": "Woody Marks",
-   "market": "RECYD",
-   "prop": "RECYD Over 29.5",
-   "odds": 430,
-   "ev_pct": 17.3,
-   "result": "LOSS",
-   "actual": "25.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 8,
-   "player": "Bryce Lance",
-   "market": "RECYD",
-   "prop": "RECYD Over 19.5",
-   "odds": 150,
-   "ev_pct": 17.3,
-   "result": "LOSS",
-   "actual": "9.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 8,
-   "player": "Brock Purdy",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 24.5",
-   "odds": 194,
-   "ev_pct": 17.2,
-   "result": "WIN",
-   "actual": "28.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 9,
-   "player": "Trevor Lawrence",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 24.5",
-   "odds": 285,
-   "ev_pct": 17.1,
-   "result": "LOSS",
-   "actual": "11.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 9,
-   "player": "Kenneth Walker III",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 119.5",
-   "odds": 213,
-   "ev_pct": 17.1,
-   "result": "WIN",
-   "actual": "128.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 10,
-   "player": "C.J. Stroud",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 274.5",
-   "odds": 154,
-   "ev_pct": 17,
-   "result": "WIN",
-   "actual": "312.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 10,
-   "player": "Jake Ferguson",
-   "market": "RECYD",
-   "prop": "RECYD Over 39.5",
-   "odds": 270,
-   "ev_pct": 16.9,
-   "result": "LOSS",
-   "actual": "13.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 11,
-   "player": "Kimani Vidal",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 29.5",
-   "odds": 400,
-   "ev_pct": 16.6,
-   "result": "LOSS",
-   "actual": "21.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 11,
-   "player": "Tre Tucker",
-   "market": "REC",
-   "prop": "REC Over 5.5",
-   "odds": 450,
-   "ev_pct": 16.5,
-   "result": "LOSS",
-   "actual": "5.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 12,
-   "player": "Zachariah Branch",
-   "market": "RECYD",
-   "prop": "RECYD Over 14.5",
-   "odds": 132,
-   "ev_pct": 16.1,
-   "result": "LOSS",
-   "actual": "9.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "PARLAY",
-   "rank": 12,
-   "player": "Mark Andrews",
-   "market": "RECYD",
-   "prop": "RECYD Over 49.5",
-   "odds": 245,
-   "ev_pct": 16,
-   "result": "LOSS",
-   "actual": "4.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 1,
-   "player": "Marvin Harrison Jr.",
-   "market": "RECYD",
-   "prop": "RECYD Over 39.5",
-   "odds": 295,
-   "ev_pct": 19.5,
-   "result": "LOSS",
-   "actual": "34.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 1,
-   "player": "Nico Collins",
-   "market": "RECYD",
-   "prop": "RECYD Over 109.5",
-   "odds": 400,
-   "ev_pct": 18.7,
-   "result": "LOSS",
-   "actual": "74.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 1,
-   "player": "Kayshon Boutte",
-   "market": "RECYD",
-   "prop": "RECYD Over 49.5",
-   "odds": 420,
-   "ev_pct": 17.8,
-   "result": "LOSS",
-   "actual": "16.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 2,
-   "player": "KaVontae Turpin",
-   "market": "RECYD",
-   "prop": "RECYD Over 19.5",
-   "odds": 320,
-   "ev_pct": 19.9,
-   "result": "LOSS",
-   "actual": "0.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 2,
-   "player": "Jordan Love",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 324.5",
-   "odds": 260,
-   "ev_pct": 17.5,
-   "result": "LOSS",
-   "actual": "276.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 2,
-   "player": "Jake Ferguson",
-   "market": "RECYD",
-   "prop": "RECYD Over 39.5",
-   "odds": 270,
-   "ev_pct": 16.9,
-   "result": "LOSS",
-   "actual": "13.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 3,
-   "player": "DJ Moore",
-   "market": "RECYD",
-   "prop": "RECYD Over 69.5",
-   "odds": 205,
-   "ev_pct": 18.8,
-   "result": "VOID",
-   "actual": "",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 3,
-   "player": "James Cook III",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 124.5",
-   "odds": 285,
-   "ev_pct": 18.4,
-   "result": "LOSS",
-   "actual": "95.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 3,
-   "player": "Tre Tucker",
-   "market": "REC",
-   "prop": "REC Over 5.5",
-   "odds": 355,
-   "ev_pct": 16.5,
-   "result": "LOSS",
-   "actual": "5.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 4,
-   "player": "Justin Herbert",
-   "market": "ATT",
-   "prop": "ATT Over 29.5",
-   "odds": 110,
-   "ev_pct": 19.8,
-   "result": "WIN",
-   "actual": "37.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 4,
-   "player": "Kenneth Walker III",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 119.5",
-   "odds": 250,
-   "ev_pct": 17.1,
-   "result": "WIN",
-   "actual": "128.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 4,
-   "player": "Kimani Vidal",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 29.5",
-   "odds": 400,
-   "ev_pct": 16.6,
-   "result": "LOSS",
-   "actual": "21.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 5,
-   "player": "Michael Penix Jr.",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 9.5",
-   "odds": 307,
-   "ev_pct": 19.5,
-   "result": "LOSS",
-   "actual": "1.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 5,
-   "player": "Zachariah Branch",
-   "market": "RECYD",
-   "prop": "RECYD Over 14.5",
-   "odds": 109,
-   "ev_pct": 16.1,
-   "result": "LOSS",
-   "actual": "9.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 5,
-   "player": "Roschon Johnson",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 39.5",
-   "odds": 383,
-   "ev_pct": 13.8,
-   "result": "WIN",
-   "actual": "51.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 6,
-   "player": "Matthew Stafford",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 349.5",
-   "odds": 400,
-   "ev_pct": 19.8,
-   "result": "LOSS",
-   "actual": "222.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 6,
-   "player": "Kyren Williams",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 89.5",
-   "odds": 205,
-   "ev_pct": 15.7,
-   "result": "LOSS",
-   "actual": "50.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 6,
-   "player": "Elijah Higgins",
-   "market": "RECYD",
-   "prop": "RECYD Over 14.5",
-   "odds": 124,
-   "ev_pct": 13.7,
-   "result": "WIN",
-   "actual": "28.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 7,
-   "player": "Bryce Lance",
-   "market": "RECYD",
-   "prop": "RECYD Over 19.5",
-   "odds": 180,
-   "ev_pct": 17.3,
-   "result": "LOSS",
-   "actual": "9.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 7,
-   "player": "Cam Skattebo",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 89.5",
-   "odds": 380,
-   "ev_pct": 14.9,
-   "result": "LOSS",
-   "actual": "0.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP",
-   "rank": 7,
-   "player": "Alvin Kamara",
-   "market": "REC",
-   "prop": "REC Over 3.5",
-   "odds": 235,
-   "ev_pct": 14.6,
-   "result": "LOSS",
-   "actual": "2.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 1,
-   "player": "KaVontae Turpin",
-   "market": "RECYD",
-   "prop": "RECYD Over 19.5",
-   "odds": 260,
-   "ev_pct": 19.9,
-   "result": "LOSS",
-   "actual": "0.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 1,
-   "player": "Matthew Stafford",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 349.5",
-   "odds": 410,
-   "ev_pct": 19.8,
-   "result": "LOSS",
-   "actual": "222.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 1,
-   "player": "Justin Herbert",
-   "market": "ATT",
-   "prop": "ATT Over 29.5",
-   "odds": -140,
-   "ev_pct": 19.8,
-   "result": "WIN",
-   "actual": "37.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 1,
-   "player": "Marvin Harrison Jr.",
-   "market": "RECYD",
-   "prop": "RECYD Over 39.5",
-   "odds": 225,
-   "ev_pct": 19.5,
-   "result": "LOSS",
-   "actual": "34.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 2,
-   "player": "Michael Penix Jr.",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 9.5",
-   "odds": 250,
-   "ev_pct": 19.5,
-   "result": "LOSS",
-   "actual": "1.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 2,
-   "player": "DJ Moore",
-   "market": "RECYD",
-   "prop": "RECYD Over 69.5",
-   "odds": 205,
-   "ev_pct": 18.8,
-   "result": "VOID",
-   "actual": "",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 2,
-   "player": "Nico Collins",
-   "market": "RECYD",
-   "prop": "RECYD Over 109.5",
-   "odds": 320,
-   "ev_pct": 18.7,
-   "result": "LOSS",
-   "actual": "74.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 2,
-   "player": "James Cook III",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 124.5",
-   "odds": 285,
-   "ev_pct": 18.4,
-   "result": "LOSS",
-   "actual": "95.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 3,
-   "player": "George Kittle",
-   "market": "REC",
-   "prop": "REC Over 5.5",
-   "odds": 130,
-   "ev_pct": 18,
-   "result": "LOSS",
-   "actual": "5.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 3,
-   "player": "Kayshon Boutte",
-   "market": "RECYD",
-   "prop": "RECYD Over 49.5",
-   "odds": 320,
-   "ev_pct": 17.8,
-   "result": "LOSS",
-   "actual": "16.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 3,
-   "player": "Brian Thomas Jr.",
-   "market": "RECYD",
-   "prop": "RECYD Over 39.5",
-   "odds": 300,
-   "ev_pct": 17.6,
-   "result": "LOSS",
-   "actual": "0.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 3,
-   "player": "Drake Maye",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 299.5",
-   "odds": 450,
-   "ev_pct": 17.6,
-   "result": "LOSS",
-   "actual": "235.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 4,
-   "player": "Jordan Love",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 324.5",
-   "odds": 300,
-   "ev_pct": 17.5,
-   "result": "LOSS",
-   "actual": "276.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 4,
-   "player": "Woody Marks",
-   "market": "RECYD",
-   "prop": "RECYD Over 29.5",
-   "odds": 360,
-   "ev_pct": 17.3,
-   "result": "LOSS",
-   "actual": "25.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 4,
-   "player": "Bryce Lance",
-   "market": "RECYD",
-   "prop": "RECYD Over 19.5",
-   "odds": 145,
-   "ev_pct": 17.3,
-   "result": "LOSS",
-   "actual": "9.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 4,
-   "player": "Brock Purdy",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 24.5",
-   "odds": 150,
-   "ev_pct": 17.2,
-   "result": "WIN",
-   "actual": "28.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 5,
-   "player": "Trevor Lawrence",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 24.5",
-   "odds": 285,
-   "ev_pct": 17.1,
-   "result": "LOSS",
-   "actual": "11.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 5,
-   "player": "Kenneth Walker III",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 119.5",
-   "odds": 213,
-   "ev_pct": 17.1,
-   "result": "WIN",
-   "actual": "128.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 5,
-   "player": "C.J. Stroud",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 274.5",
-   "odds": 156,
-   "ev_pct": 17,
-   "result": "WIN",
-   "actual": "312.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 5,
-   "player": "Jake Ferguson",
-   "market": "RECYD",
-   "prop": "RECYD Over 39.5",
-   "odds": 251,
-   "ev_pct": 16.9,
-   "result": "LOSS",
-   "actual": "13.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 6,
-   "player": "Kimani Vidal",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 29.5",
-   "odds": 320,
-   "ev_pct": 16.6,
-   "result": "LOSS",
-   "actual": "21.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 6,
-   "player": "Tre Tucker",
-   "market": "REC",
-   "prop": "REC Over 5.5",
-   "odds": 355,
-   "ev_pct": 16.5,
-   "result": "LOSS",
-   "actual": "5.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 6,
-   "player": "Zachariah Branch",
-   "market": "RECYD",
-   "prop": "RECYD Over 14.5",
-   "odds": 132,
-   "ev_pct": 16.1,
-   "result": "LOSS",
-   "actual": "9.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 6,
-   "player": "Mark Andrews",
-   "market": "RECYD",
-   "prop": "RECYD Over 49.5",
-   "odds": 245,
-   "ev_pct": 16,
-   "result": "LOSS",
-   "actual": "4.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 7,
-   "player": "Kyren Williams",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 89.5",
-   "odds": 255,
-   "ev_pct": 15.7,
-   "result": "LOSS",
-   "actual": "50.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 7,
-   "player": "Derrick Henry",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 119.5",
-   "odds": 350,
-   "ev_pct": 15.3,
-   "result": "LOSS",
-   "actual": "58.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 7,
-   "player": "Cam Ward",
-   "market": "PASSTD",
-   "prop": "PASSTD Over 1.5",
-   "odds": 200,
-   "ev_pct": 15.1,
-   "result": "LOSS",
-   "actual": "1.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 7,
-   "player": "Bryce Young",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 274.5",
-   "odds": 265,
-   "ev_pct": 15,
-   "result": "WIN",
-   "actual": "281.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 8,
-   "player": "Cam Skattebo",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 89.5",
-   "odds": 380,
-   "ev_pct": 14.9,
-   "result": "LOSS",
-   "actual": "0.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 8,
-   "player": "Emmett Johnson",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 19.5",
-   "odds": 180,
-   "ev_pct": 14.8,
-   "result": "LOSS",
-   "actual": "6.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 8,
-   "player": "Keenan Allen",
-   "market": "RECYD",
-   "prop": "RECYD Over 59.5",
-   "odds": 175,
-   "ev_pct": 14.6,
-   "result": "WIN",
-   "actual": "82.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 8,
-   "player": "Alvin Kamara",
-   "market": "REC",
-   "prop": "REC Over 3.5",
-   "odds": 235,
-   "ev_pct": 14.6,
-   "result": "LOSS",
-   "actual": "2.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 9,
-   "player": "Roschon Johnson",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 39.5",
-   "odds": 400,
-   "ev_pct": 13.8,
-   "result": "WIN",
-   "actual": "51.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 9,
-   "player": "Geno Smith",
-   "market": "PASSYD",
-   "prop": "PASSYD Over 274.5",
-   "odds": 320,
-   "ev_pct": 13.8,
-   "result": "LOSS",
-   "actual": "252.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 9,
-   "player": "Ashton Jeanty",
-   "market": "RECYD",
-   "prop": "RECYD Over 49.5",
-   "odds": 400,
-   "ev_pct": 13.8,
-   "result": "LOSS",
-   "actual": "36.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 9,
-   "player": "Elijah Higgins",
-   "market": "RECYD",
-   "prop": "RECYD Over 14.5",
-   "odds": 122,
-   "ev_pct": 13.7,
-   "result": "WIN",
-   "actual": "28.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 10,
-   "player": "Xavier Worthy",
-   "market": "REC",
-   "prop": "REC Over 6.5",
-   "odds": 320,
-   "ev_pct": 13.6,
-   "result": "WIN",
-   "actual": "7.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 10,
-   "player": "Kalif Raymond",
-   "market": "RECYD",
-   "prop": "RECYD Over 49.5",
-   "odds": 380,
-   "ev_pct": 13.3,
-   "result": "LOSS",
-   "actual": "18.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 10,
-   "player": "Pat Freiermuth",
-   "market": "REC",
-   "prop": "REC Over 4.5",
-   "odds": 194,
-   "ev_pct": 13.3,
-   "result": "LOSS",
-   "actual": "2.0",
-   "sport": "NFL"
-  },
-  {
-   "date": "2026-10-16",
-   "tier": "SGP+",
-   "rank": 10,
-   "player": "Bijan Robinson",
-   "market": "RUSHYD",
-   "prop": "RUSHYD Over 124.5",
-   "odds": 300,
-   "ev_pct": 13.2,
-   "result": "LOSS",
-   "actual": "61.0",
-   "sport": "NFL"
-  },
-  {
    "date": "2026-10-20",
    "tier": "PARLAY",
    "rank": 1,
@@ -28576,6 +28417,1111 @@
    "result": "LOSS",
    "actual": "2",
    "sport": "NBA"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 1,
+   "player": "KaVontae Turpin",
+   "market": "RECYD",
+   "prop": "RECYD Over 19.5",
+   "odds": 320,
+   "ev_pct": 19.9,
+   "result": "LOSS",
+   "actual": "0.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 1,
+   "player": "Matthew Stafford",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 349.5",
+   "odds": 500,
+   "ev_pct": 19.8,
+   "result": "LOSS",
+   "actual": "222.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 2,
+   "player": "Justin Herbert",
+   "market": "ATT",
+   "prop": "ATT Over 29.5",
+   "odds": -134,
+   "ev_pct": 19.8,
+   "result": "WIN",
+   "actual": "37.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 2,
+   "player": "Marvin Harrison Jr.",
+   "market": "RECYD",
+   "prop": "RECYD Over 39.5",
+   "odds": 295,
+   "ev_pct": 19.5,
+   "result": "LOSS",
+   "actual": "34.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 3,
+   "player": "Michael Penix Jr.",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 9.5",
+   "odds": 307,
+   "ev_pct": 19.5,
+   "result": "LOSS",
+   "actual": "1.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 3,
+   "player": "DJ Moore",
+   "market": "RECYD",
+   "prop": "RECYD Over 69.5",
+   "odds": 224,
+   "ev_pct": 18.8,
+   "result": "VOID",
+   "actual": "",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 4,
+   "player": "Nico Collins",
+   "market": "RECYD",
+   "prop": "RECYD Over 109.5",
+   "odds": 320,
+   "ev_pct": 18.7,
+   "result": "LOSS",
+   "actual": "74.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 4,
+   "player": "James Cook III",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 124.5",
+   "odds": 285,
+   "ev_pct": 18.4,
+   "result": "LOSS",
+   "actual": "95.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 5,
+   "player": "George Kittle",
+   "market": "REC",
+   "prop": "REC Over 5.5",
+   "odds": -103,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "5.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 5,
+   "player": "Kayshon Boutte",
+   "market": "RECYD",
+   "prop": "RECYD Over 49.5",
+   "odds": 420,
+   "ev_pct": 17.8,
+   "result": "LOSS",
+   "actual": "16.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 6,
+   "player": "Brian Thomas Jr.",
+   "market": "RECYD",
+   "prop": "RECYD Over 39.5",
+   "odds": 300,
+   "ev_pct": 17.6,
+   "result": "LOSS",
+   "actual": "0.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 6,
+   "player": "Drake Maye",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 299.5",
+   "odds": 450,
+   "ev_pct": 17.6,
+   "result": "WIN",
+   "actual": "321.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 7,
+   "player": "Jordan Love",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 324.5",
+   "odds": 360,
+   "ev_pct": 17.5,
+   "result": "LOSS",
+   "actual": "276.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 7,
+   "player": "Woody Marks",
+   "market": "RECYD",
+   "prop": "RECYD Over 29.5",
+   "odds": 430,
+   "ev_pct": 17.3,
+   "result": "LOSS",
+   "actual": "25.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 8,
+   "player": "Bryce Lance",
+   "market": "RECYD",
+   "prop": "RECYD Over 19.5",
+   "odds": 150,
+   "ev_pct": 17.3,
+   "result": "LOSS",
+   "actual": "9.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 8,
+   "player": "Brock Purdy",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 24.5",
+   "odds": 194,
+   "ev_pct": 17.2,
+   "result": "WIN",
+   "actual": "28.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 9,
+   "player": "Trevor Lawrence",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 24.5",
+   "odds": 285,
+   "ev_pct": 17.1,
+   "result": "LOSS",
+   "actual": "11.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 9,
+   "player": "Kenneth Walker III",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 119.5",
+   "odds": 213,
+   "ev_pct": 17.1,
+   "result": "WIN",
+   "actual": "128.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 10,
+   "player": "C.J. Stroud",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 274.5",
+   "odds": 154,
+   "ev_pct": 17,
+   "result": "WIN",
+   "actual": "312.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 10,
+   "player": "Jake Ferguson",
+   "market": "RECYD",
+   "prop": "RECYD Over 39.5",
+   "odds": 270,
+   "ev_pct": 16.9,
+   "result": "LOSS",
+   "actual": "13.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 11,
+   "player": "Kimani Vidal",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 29.5",
+   "odds": 400,
+   "ev_pct": 16.6,
+   "result": "LOSS",
+   "actual": "21.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 11,
+   "player": "Tre Tucker",
+   "market": "REC",
+   "prop": "REC Over 5.5",
+   "odds": 450,
+   "ev_pct": 16.5,
+   "result": "LOSS",
+   "actual": "5.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 12,
+   "player": "Zachariah Branch",
+   "market": "RECYD",
+   "prop": "RECYD Over 14.5",
+   "odds": 132,
+   "ev_pct": 16.1,
+   "result": "LOSS",
+   "actual": "9.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "PARLAY",
+   "rank": 12,
+   "player": "Mark Andrews",
+   "market": "RECYD",
+   "prop": "RECYD Over 49.5",
+   "odds": 245,
+   "ev_pct": 16,
+   "result": "LOSS",
+   "actual": "4.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 1,
+   "player": "Marvin Harrison Jr.",
+   "market": "RECYD",
+   "prop": "RECYD Over 39.5",
+   "odds": 295,
+   "ev_pct": 19.5,
+   "result": "LOSS",
+   "actual": "34.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 1,
+   "player": "Nico Collins",
+   "market": "RECYD",
+   "prop": "RECYD Over 109.5",
+   "odds": 400,
+   "ev_pct": 18.7,
+   "result": "LOSS",
+   "actual": "74.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 1,
+   "player": "Kayshon Boutte",
+   "market": "RECYD",
+   "prop": "RECYD Over 49.5",
+   "odds": 420,
+   "ev_pct": 17.8,
+   "result": "LOSS",
+   "actual": "16.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 2,
+   "player": "KaVontae Turpin",
+   "market": "RECYD",
+   "prop": "RECYD Over 19.5",
+   "odds": 320,
+   "ev_pct": 19.9,
+   "result": "LOSS",
+   "actual": "0.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 2,
+   "player": "Jordan Love",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 324.5",
+   "odds": 260,
+   "ev_pct": 17.5,
+   "result": "LOSS",
+   "actual": "276.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 2,
+   "player": "Jake Ferguson",
+   "market": "RECYD",
+   "prop": "RECYD Over 39.5",
+   "odds": 270,
+   "ev_pct": 16.9,
+   "result": "LOSS",
+   "actual": "13.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 3,
+   "player": "DJ Moore",
+   "market": "RECYD",
+   "prop": "RECYD Over 69.5",
+   "odds": 205,
+   "ev_pct": 18.8,
+   "result": "VOID",
+   "actual": "",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 3,
+   "player": "James Cook III",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 124.5",
+   "odds": 285,
+   "ev_pct": 18.4,
+   "result": "LOSS",
+   "actual": "95.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 3,
+   "player": "Tre Tucker",
+   "market": "REC",
+   "prop": "REC Over 5.5",
+   "odds": 355,
+   "ev_pct": 16.5,
+   "result": "LOSS",
+   "actual": "5.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 4,
+   "player": "Justin Herbert",
+   "market": "ATT",
+   "prop": "ATT Over 29.5",
+   "odds": 110,
+   "ev_pct": 19.8,
+   "result": "WIN",
+   "actual": "37.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 4,
+   "player": "Kenneth Walker III",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 119.5",
+   "odds": 250,
+   "ev_pct": 17.1,
+   "result": "WIN",
+   "actual": "128.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 4,
+   "player": "Kimani Vidal",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 29.5",
+   "odds": 400,
+   "ev_pct": 16.6,
+   "result": "LOSS",
+   "actual": "21.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 5,
+   "player": "Michael Penix Jr.",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 9.5",
+   "odds": 307,
+   "ev_pct": 19.5,
+   "result": "LOSS",
+   "actual": "1.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 5,
+   "player": "Zachariah Branch",
+   "market": "RECYD",
+   "prop": "RECYD Over 14.5",
+   "odds": 109,
+   "ev_pct": 16.1,
+   "result": "LOSS",
+   "actual": "9.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 5,
+   "player": "Roschon Johnson",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 39.5",
+   "odds": 383,
+   "ev_pct": 13.8,
+   "result": "LOSS",
+   "actual": "13.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 6,
+   "player": "Matthew Stafford",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 349.5",
+   "odds": 400,
+   "ev_pct": 19.8,
+   "result": "LOSS",
+   "actual": "222.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 6,
+   "player": "Kyren Williams",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 89.5",
+   "odds": 205,
+   "ev_pct": 15.7,
+   "result": "LOSS",
+   "actual": "50.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 6,
+   "player": "Elijah Higgins",
+   "market": "RECYD",
+   "prop": "RECYD Over 14.5",
+   "odds": 124,
+   "ev_pct": 13.7,
+   "result": "WIN",
+   "actual": "28.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 7,
+   "player": "Bryce Lance",
+   "market": "RECYD",
+   "prop": "RECYD Over 19.5",
+   "odds": 180,
+   "ev_pct": 17.3,
+   "result": "LOSS",
+   "actual": "9.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 7,
+   "player": "Cam Skattebo",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 89.5",
+   "odds": 380,
+   "ev_pct": 14.9,
+   "result": "LOSS",
+   "actual": "0.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP",
+   "rank": 7,
+   "player": "Alvin Kamara",
+   "market": "REC",
+   "prop": "REC Over 3.5",
+   "odds": 235,
+   "ev_pct": 14.6,
+   "result": "LOSS",
+   "actual": "2.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 1,
+   "player": "KaVontae Turpin",
+   "market": "RECYD",
+   "prop": "RECYD Over 19.5",
+   "odds": 260,
+   "ev_pct": 19.9,
+   "result": "LOSS",
+   "actual": "0.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 1,
+   "player": "Matthew Stafford",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 349.5",
+   "odds": 410,
+   "ev_pct": 19.8,
+   "result": "LOSS",
+   "actual": "222.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 1,
+   "player": "Justin Herbert",
+   "market": "ATT",
+   "prop": "ATT Over 29.5",
+   "odds": -140,
+   "ev_pct": 19.8,
+   "result": "WIN",
+   "actual": "37.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 1,
+   "player": "Marvin Harrison Jr.",
+   "market": "RECYD",
+   "prop": "RECYD Over 39.5",
+   "odds": 225,
+   "ev_pct": 19.5,
+   "result": "LOSS",
+   "actual": "34.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 2,
+   "player": "Michael Penix Jr.",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 9.5",
+   "odds": 250,
+   "ev_pct": 19.5,
+   "result": "LOSS",
+   "actual": "1.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 2,
+   "player": "DJ Moore",
+   "market": "RECYD",
+   "prop": "RECYD Over 69.5",
+   "odds": 205,
+   "ev_pct": 18.8,
+   "result": "VOID",
+   "actual": "",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 2,
+   "player": "Nico Collins",
+   "market": "RECYD",
+   "prop": "RECYD Over 109.5",
+   "odds": 320,
+   "ev_pct": 18.7,
+   "result": "LOSS",
+   "actual": "74.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 2,
+   "player": "James Cook III",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 124.5",
+   "odds": 285,
+   "ev_pct": 18.4,
+   "result": "LOSS",
+   "actual": "95.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 3,
+   "player": "George Kittle",
+   "market": "REC",
+   "prop": "REC Over 5.5",
+   "odds": 130,
+   "ev_pct": 18,
+   "result": "LOSS",
+   "actual": "5.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 3,
+   "player": "Kayshon Boutte",
+   "market": "RECYD",
+   "prop": "RECYD Over 49.5",
+   "odds": 320,
+   "ev_pct": 17.8,
+   "result": "LOSS",
+   "actual": "16.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 3,
+   "player": "Brian Thomas Jr.",
+   "market": "RECYD",
+   "prop": "RECYD Over 39.5",
+   "odds": 300,
+   "ev_pct": 17.6,
+   "result": "LOSS",
+   "actual": "0.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 3,
+   "player": "Drake Maye",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 299.5",
+   "odds": 450,
+   "ev_pct": 17.6,
+   "result": "WIN",
+   "actual": "321.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 4,
+   "player": "Jordan Love",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 324.5",
+   "odds": 300,
+   "ev_pct": 17.5,
+   "result": "LOSS",
+   "actual": "276.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 4,
+   "player": "Woody Marks",
+   "market": "RECYD",
+   "prop": "RECYD Over 29.5",
+   "odds": 360,
+   "ev_pct": 17.3,
+   "result": "LOSS",
+   "actual": "25.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 4,
+   "player": "Bryce Lance",
+   "market": "RECYD",
+   "prop": "RECYD Over 19.5",
+   "odds": 145,
+   "ev_pct": 17.3,
+   "result": "LOSS",
+   "actual": "9.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 4,
+   "player": "Brock Purdy",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 24.5",
+   "odds": 150,
+   "ev_pct": 17.2,
+   "result": "WIN",
+   "actual": "28.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 5,
+   "player": "Trevor Lawrence",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 24.5",
+   "odds": 285,
+   "ev_pct": 17.1,
+   "result": "LOSS",
+   "actual": "11.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 5,
+   "player": "Kenneth Walker III",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 119.5",
+   "odds": 213,
+   "ev_pct": 17.1,
+   "result": "WIN",
+   "actual": "128.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 5,
+   "player": "C.J. Stroud",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 274.5",
+   "odds": 156,
+   "ev_pct": 17,
+   "result": "WIN",
+   "actual": "312.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 5,
+   "player": "Jake Ferguson",
+   "market": "RECYD",
+   "prop": "RECYD Over 39.5",
+   "odds": 251,
+   "ev_pct": 16.9,
+   "result": "LOSS",
+   "actual": "13.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 6,
+   "player": "Kimani Vidal",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 29.5",
+   "odds": 320,
+   "ev_pct": 16.6,
+   "result": "LOSS",
+   "actual": "21.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 6,
+   "player": "Tre Tucker",
+   "market": "REC",
+   "prop": "REC Over 5.5",
+   "odds": 355,
+   "ev_pct": 16.5,
+   "result": "LOSS",
+   "actual": "5.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 6,
+   "player": "Zachariah Branch",
+   "market": "RECYD",
+   "prop": "RECYD Over 14.5",
+   "odds": 132,
+   "ev_pct": 16.1,
+   "result": "LOSS",
+   "actual": "9.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 6,
+   "player": "Mark Andrews",
+   "market": "RECYD",
+   "prop": "RECYD Over 49.5",
+   "odds": 245,
+   "ev_pct": 16,
+   "result": "LOSS",
+   "actual": "4.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 7,
+   "player": "Kyren Williams",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 89.5",
+   "odds": 255,
+   "ev_pct": 15.7,
+   "result": "LOSS",
+   "actual": "50.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 7,
+   "player": "Derrick Henry",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 119.5",
+   "odds": 350,
+   "ev_pct": 15.3,
+   "result": "LOSS",
+   "actual": "58.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 7,
+   "player": "Cam Ward",
+   "market": "PASSTD",
+   "prop": "PASSTD Over 1.5",
+   "odds": 200,
+   "ev_pct": 15.1,
+   "result": "LOSS",
+   "actual": "1.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 7,
+   "player": "Bryce Young",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 274.5",
+   "odds": 265,
+   "ev_pct": 15,
+   "result": "WIN",
+   "actual": "281.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 8,
+   "player": "Cam Skattebo",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 89.5",
+   "odds": 380,
+   "ev_pct": 14.9,
+   "result": "LOSS",
+   "actual": "0.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 8,
+   "player": "Emmett Johnson",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 19.5",
+   "odds": 180,
+   "ev_pct": 14.8,
+   "result": "LOSS",
+   "actual": "6.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 8,
+   "player": "Keenan Allen",
+   "market": "RECYD",
+   "prop": "RECYD Over 59.5",
+   "odds": 175,
+   "ev_pct": 14.6,
+   "result": "WIN",
+   "actual": "82.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 8,
+   "player": "Alvin Kamara",
+   "market": "REC",
+   "prop": "REC Over 3.5",
+   "odds": 235,
+   "ev_pct": 14.6,
+   "result": "LOSS",
+   "actual": "2.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 9,
+   "player": "Roschon Johnson",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 39.5",
+   "odds": 400,
+   "ev_pct": 13.8,
+   "result": "LOSS",
+   "actual": "13.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 9,
+   "player": "Geno Smith",
+   "market": "PASSYD",
+   "prop": "PASSYD Over 274.5",
+   "odds": 320,
+   "ev_pct": 13.8,
+   "result": "LOSS",
+   "actual": "252.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 9,
+   "player": "Ashton Jeanty",
+   "market": "RECYD",
+   "prop": "RECYD Over 49.5",
+   "odds": 400,
+   "ev_pct": 13.8,
+   "result": "LOSS",
+   "actual": "36.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 9,
+   "player": "Elijah Higgins",
+   "market": "RECYD",
+   "prop": "RECYD Over 14.5",
+   "odds": 122,
+   "ev_pct": 13.7,
+   "result": "WIN",
+   "actual": "28.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 10,
+   "player": "Xavier Worthy",
+   "market": "REC",
+   "prop": "REC Over 6.5",
+   "odds": 320,
+   "ev_pct": 13.6,
+   "result": "WIN",
+   "actual": "7.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 10,
+   "player": "Kalif Raymond",
+   "market": "RECYD",
+   "prop": "RECYD Over 49.5",
+   "odds": 380,
+   "ev_pct": 13.3,
+   "result": "LOSS",
+   "actual": "0.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 10,
+   "player": "Pat Freiermuth",
+   "market": "REC",
+   "prop": "REC Over 4.5",
+   "odds": 194,
+   "ev_pct": 13.3,
+   "result": "LOSS",
+   "actual": "2.0",
+   "sport": "NFL"
+  },
+  {
+   "date": "2026-10-16",
+   "tier": "SGP+",
+   "rank": 10,
+   "player": "Bijan Robinson",
+   "market": "RUSHYD",
+   "prop": "RUSHYD Over 124.5",
+   "odds": 300,
+   "ev_pct": 13.2,
+   "result": "LOSS",
+   "actual": "61.0",
+   "sport": "NFL"
   }
  ],
  "hr_history": [
