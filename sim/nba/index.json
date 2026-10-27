@@ -1,8 +1,12 @@
 {
  "league": "nba",
  "season_label": "NBA 2026–27",
- "updated": "2026-10-27T13:42:47+00:00",
+ "updated": "2026-10-27T15:32:43+00:00",
  "nights": [
+  {
+   "id": "2026-10-27",
+   "label": "Tue, Oct 27"
+  },
   {
    "id": "2026-10-26",
    "label": "Mon, Oct 26"
