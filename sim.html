@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-[data-theme="light"]{--bg:#e8e6e1;--surface:#f0eeea;--surface-2:#e8e6e1;--surface-3:#e3e1dc;--border:#d4d0c8;--border-h:#c0bbb2;--text:#1a1d26;--text-2:#3d4250;--text-3:#6b7280;--text-4:#9ca3af;--shadow:0 1px 2px rgba(0,0,0,.05);--green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;--green-text:#15803d;--red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;--red-text:#b91c1c;--amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fde68a;--amber-text:#92400e;--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;--blue-text:#1d4ed8;--track:#dcd8d1;--gold:#946200;--sim:#5b21b6;--sim-2:#8b5cf6}
-[data-theme="dark"]{--bg:#111318;--surface:#191c22;--surface-2:#21252c;--surface-3:#15171c;--border:#282d36;--border-h:#363c48;--text:#dce0e8;--text-2:#a8b0bc;--text-3:#707a8a;--text-4:#4a5464;--shadow:0 1px 2px rgba(0,0,0,.3);--green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.18);--green-text:#4ade80;--red:#f87171;--red-bg:rgba(248,113,113,.1);--red-border:rgba(248,113,113,.2);--red-text:#f87171;--amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.18);--amber-text:#fbbf24;--blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.18);--blue-text:#60a5fa;--track:#2a2f38;--gold:#e3b341;--sim:#c4b5fd;--sim-2:#7c6bd6;color-scheme:dark}
+[data-theme="light"]{--bg:#e8e6e1;--surface:#f0eeea;--surface-2:#e8e6e1;--surface-3:#e3e1dc;--border:#d4d0c8;--border-h:#c0bbb2;--text:#1a1d26;--text-2:#3d4250;--text-3:#6b7280;--text-4:#9ca3af;--shadow:0 1px 2px rgba(0,0,0,.05);--green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;--green-text:#15803d;--red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;--red-text:#b91c1c;--amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fde68a;--amber-text:#92400e;--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;--blue-text:#1d4ed8;--track:#dcd8d1;--gold:#946200;--sim:#1a1d26;--sim-2:#5a606e}
+[data-theme="dark"]{--bg:#111318;--surface:#191c22;--surface-2:#21252c;--surface-3:#15171c;--border:#282d36;--border-h:#363c48;--text:#dce0e8;--text-2:#a8b0bc;--text-3:#707a8a;--text-4:#4a5464;--shadow:0 1px 2px rgba(0,0,0,.3);--green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.18);--green-text:#4ade80;--red:#f87171;--red-bg:rgba(248,113,113,.1);--red-border:rgba(248,113,113,.2);--red-text:#f87171;--amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.18);--amber-text:#fbbf24;--blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.18);--blue-text:#60a5fa;--track:#2a2f38;--gold:#e3b341;--sim:#dce0e8;--sim-2:#8f98a6;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;min-height:100vh;transition:background .2s,color .2s}
 .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
@@ -58,7 +58,11 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .tm{display:grid;min-width:0}.tm.home{text-align:right}
 .tm-n{font-weight:800;font-size:17px;letter-spacing:-.01em;text-transform:uppercase}
 .tm-p{font-weight:800;font-size:clamp(44px,9vw,72px);line-height:.95;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.tm .tm-p{color:var(--sim-2)} .tm.fav .tm-p{color:var(--sim)}
+.tm .tm-p{color:var(--sim-2);display:flex;align-items:center;gap:.14em} .tm.home .tm-p{justify-content:flex-end} .tm.fav .tm-p{color:var(--sim)}
+.tm.fav .tm-p::after,.tm.home.fav .tm-p::before{content:'';width:0;height:0;border-top:.13em solid transparent;border-bottom:.13em solid transparent}
+.tm.fav:not(.home) .tm-p::after{border-right:.17em solid currentColor}
+.tm.home.fav .tm-p::before{border-left:.17em solid currentColor}
+.tm.home.fav .tm-p::after{content:none}
 .tm-f{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-3)} .tm-f b{color:var(--text);font-weight:700}
 .mid{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4);text-align:center;padding-bottom:10px;line-height:1.5;display:grid;gap:3px;justify-items:center}
 .mid b{font-family:'Manrope',system-ui,sans-serif;font-size:clamp(13px,2.2vw,20px);font-weight:800;letter-spacing:-.01em;text-transform:none;color:var(--sim);white-space:nowrap}
