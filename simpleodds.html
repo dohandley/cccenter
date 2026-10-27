@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>SimpleOdds · Chasin Cheddar's Command Center</title>
+<title>Parlay Board · Chasin Cheddar's Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -149,7 +149,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) var(--bg)}body{backgroun
 // ═══════════════════════════════════════════════════════════════════════════
 // SimpleOdds board — standalone. Reads simpleodds_log.json from the repo.
 // Deliberately shares NOTHING with index.html: own localStorage key, own
-// state, own math. Nothing here can affect the MKB numbers.
+// state, own math. Nothing here can affect the archived picks boards.
 // ═══════════════════════════════════════════════════════════════════════════
 const LS='ccso1';
 const GH_BASE='https://raw.githubusercontent.com/dohandley/cccenter/main';
@@ -290,7 +290,7 @@ window.tgl=id=>{const e=document.getElementById('lg-'+id);if(e)e.style.display=e
 
 function pgToday(){
   const t=S.data&&S.data.today;
-  if(!t)return emptyState('No card loaded','Run publish_simpleodds.py, then hit Refresh.');
+  if(!t)return emptyState('No card yet today','Today\'s parlays post here once they\'re built. Hit Refresh to check.');
   const show=TIERS.filter(([k])=>S.tier==='all'||S.tier===k);
   let html='';
   if(t.odds_last_update)html+=`<div class="hint">Odds last updated ${esc(t.odds_last_update)} · card generated ${esc((t.scraped_at||'').replace('T',' ').slice(0,16))}</div>`;
@@ -513,7 +513,7 @@ function render(){
 
   const h=`<div class="hdr"><div class="hdr-in">
     <div class="logo-w"><img class="logo-mark" src="logo.png" onerror="this.style.display='none'">
-      <div><div class="logo-text"><span>SimpleOdds</span> Parlays &amp; Homers</div>
+      <div><div class="logo-text"><span>Chasin Cheddar's</span> Parlay Board</div>
       <div class="logo-date">${ds.toUpperCase()}</div></div></div>
     <div class="hdr-r">
       <div class="chip">W-L <span class="${priced.roi>=0?'p':'n'}">${priced.w}-${priced.l}${priced.void?'-'+priced.void:''}</span></div>
@@ -522,7 +522,7 @@ function render(){
       <input class="unit-inp" type="text" inputmode="decimal" placeholder="1u=$" value="${esc(S.unitSize||'')}" oninput="setUnitSize(this.value)" onblur="commitUnitSize()" onkeydown="if(event.key==='Enter')this.blur()" title="Set your unit size in dollars">
       <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">${themeIcon}</button>
       <button class="btn" onclick="refreshLive()" title="Pull latest from GitHub">↻ Refresh</button>
-      <a class="btn btn-p" href="index.html">← MKB Board</a>
+      <a class="btn btn-p" href="index.html">← Command Center</a>
     </div></div></div>`;
 
   const spCount=k=>{const u=k.toUpperCase();const c=(S.data&&S.data.history||[]).filter(r=>spOf(r)===u).length;return c;};
@@ -553,7 +553,7 @@ window.refreshLive=async(opts={})=>{
     const d=await r.json();
     if(!d||!d.source)throw new Error('unrecognized payload');
     S.data=d;sv();render();
-    if(!opts.silent)toast('SimpleOdds data refreshed');
+    if(!opts.silent)toast('Parlay Board refreshed');
     return true;
   }catch(e){
     console.warn('SimpleOdds fetch failed',e);
