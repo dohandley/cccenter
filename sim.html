@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-[data-theme="light"]{--bg:#e8e6e1;--surface:#f0eeea;--surface-2:#e8e6e1;--surface-3:#e3e1dc;--border:#d4d0c8;--border-h:#c0bbb2;--text:#1a1d26;--text-2:#3d4250;--text-3:#6b7280;--text-4:#9ca3af;--shadow:0 1px 2px rgba(0,0,0,.05);--green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;--green-text:#15803d;--red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;--red-text:#b91c1c;--amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fde68a;--amber-text:#92400e;--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;--blue-text:#1d4ed8;--track:#dcd8d1;--gold:#946200}
-[data-theme="dark"]{--bg:#111318;--surface:#191c22;--surface-2:#21252c;--surface-3:#15171c;--border:#282d36;--border-h:#363c48;--text:#dce0e8;--text-2:#a8b0bc;--text-3:#707a8a;--text-4:#4a5464;--shadow:0 1px 2px rgba(0,0,0,.3);--green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.18);--green-text:#4ade80;--red:#f87171;--red-bg:rgba(248,113,113,.1);--red-border:rgba(248,113,113,.2);--red-text:#f87171;--amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.18);--amber-text:#fbbf24;--blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.18);--blue-text:#60a5fa;--track:#2a2f38;--gold:#e3b341;color-scheme:dark}
+[data-theme="light"]{--bg:#e8e6e1;--surface:#f0eeea;--surface-2:#e8e6e1;--surface-3:#e3e1dc;--border:#d4d0c8;--border-h:#c0bbb2;--text:#1a1d26;--text-2:#3d4250;--text-3:#6b7280;--text-4:#9ca3af;--shadow:0 1px 2px rgba(0,0,0,.05);--green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;--green-text:#15803d;--red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;--red-text:#b91c1c;--amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fde68a;--amber-text:#92400e;--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;--blue-text:#1d4ed8;--track:#dcd8d1;--gold:#946200;--sim:#5b21b6;--sim-2:#8b5cf6}
+[data-theme="dark"]{--bg:#111318;--surface:#191c22;--surface-2:#21252c;--surface-3:#15171c;--border:#282d36;--border-h:#363c48;--text:#dce0e8;--text-2:#a8b0bc;--text-3:#707a8a;--text-4:#4a5464;--shadow:0 1px 2px rgba(0,0,0,.3);--green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.18);--green-text:#4ade80;--red:#f87171;--red-bg:rgba(248,113,113,.1);--red-border:rgba(248,113,113,.2);--red-text:#f87171;--amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.18);--amber-text:#fbbf24;--blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.18);--blue-text:#60a5fa;--track:#2a2f38;--gold:#e3b341;--sim:#c4b5fd;--sim-2:#7c6bd6;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;min-height:100vh;transition:background .2s,color .2s}
 .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
@@ -58,10 +58,19 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .tm{display:grid;min-width:0}.tm.home{text-align:right}
 .tm-n{font-weight:800;font-size:17px;letter-spacing:-.01em;text-transform:uppercase}
 .tm-p{font-weight:800;font-size:clamp(44px,9vw,72px);line-height:.95;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.tm .tm-p{color:var(--text-3)} .tm.fav .tm-p{color:var(--text)}
+.tm .tm-p{color:var(--sim-2)} .tm.fav .tm-p{color:var(--sim)}
 .tm-f{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-3)} .tm-f b{color:var(--text);font-weight:700}
-.mid{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4);text-align:center;padding-bottom:10px;line-height:1.5}
-.lines{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.mid{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4);text-align:center;padding-bottom:10px;line-height:1.5;display:grid;gap:3px;justify-items:center}
+.mid b{font-family:'Manrope',system-ui,sans-serif;font-size:clamp(13px,2.2vw,20px);font-weight:800;letter-spacing:-.01em;text-transform:none;color:var(--sim);white-space:nowrap}
+.mid .mw{font-size:10.5px;color:var(--text-3)}
+.lines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.cmp{display:flex;gap:18px;flex-wrap:wrap;margin-top:6px}
+.cmp>div{display:grid;gap:2px}
+.cmp small{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4)}
+.cmp b{font-weight:800;font-size:18px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.cmp .sv{color:var(--sim)}
+.gap{font-size:12px;font-weight:600;color:var(--text-3);margin-top:8px;border-top:1px dashed var(--border);padding-top:7px}
+.gap b{color:var(--sim);font-weight:800}
 .ln{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;min-width:0}
 .ln-v{font-weight:800;font-size:18px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:4px}
 .ln-v small{display:block;font-weight:500;font-size:11px;color:var(--text-3);letter-spacing:0}
@@ -126,7 +135,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 @keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
 .game{scroll-margin-top:96px}.mo{display:none}
 @media(max-width:768px){.vw{margin-left:0;width:100%}.vw button{flex:1}.hm{display:none}.mo{display:inline}.sub.mo{display:block}td.pk{min-width:120px}td,th{padding:8px 7px}}
-@media(max-width:768px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats>.st:last-child:nth-child(odd){grid-column:span 2}.hdr-r .kpi{display:none}.body{padding:16px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}.hdr-in{padding:12px 16px}.nav-in{padding:0 16px}.lines{grid-template-columns:repeat(2,minmax(0,1fr))}.meters{grid-template-columns:1fr;gap:8px}.box2{grid-template-columns:1fr}.game{padding:14px}}
+@media(max-width:768px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats>.st:last-child:nth-child(odd){grid-column:span 2}.hdr-r .kpi{display:none}.body{padding:16px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}.hdr-in{padding:12px 16px}.nav-in{padding:0 16px}.lines{grid-template-columns:1fr}.score{grid-template-columns:1fr 1fr}.mid{grid-column:1/-1;grid-row:2;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 10px;padding:4px 0 0}.meters{grid-template-columns:1fr;gap:8px}.box2{grid-template-columns:1fr}.game{padding:14px}}
 @media(prefers-reduced-motion:no-preference){.bar i{transition:width .4s ease}}
 </style></head>
 <body>
@@ -151,7 +160,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
   <div class="stats" id="season"></div>
   <div id="view"><div class="empty">Loading&hellip;</div></div>
   <div class="notes"><strong>How to read this</strong><ul>
-    <li>Every game is simulated play by play thousands of times (possessions for the NBA, snaps for the NFL), using that day's injury report and projected rotations. The big numbers are the average simulated score.</li>
+    <li>Every game is simulated play by play thousands of times (possessions for the NBA, snaps for the NFL), using that day's injury report and projected rotations. The big numbers are the average simulated score. The sim spread and total are medians (the number the sim lands over half the time), so they can differ slightly from the gap between the averages.</li>
     <li><b>Bets</b> are 1 unit each. A bet needs the model to beat the no-vig market by 6 points on totals or 7 on props, and it still has to clear breakeven in the stress test, which reruns the game with every team and player edge cut in half. <b>Leans</b> are edges that didn't qualify, tracked to see whether they would have paid.</li>
     <li>Each meter is a win probability, and the dark tick is breakeven at the posted price. In the box score, actuals are green when they beat the projection and red when they fell short.</li>
     <li>Sides (spreads and moneylines) are tracked as leans only. In backtesting the model didn't beat the closing spread, so they aren't staked.</li>
@@ -253,19 +262,24 @@ function card(g) {
   const started = Date.now() > new Date(g.tipoff).getTime();
   const state = f ? '<span class="tag t-final">Final</span>' : started ? '<span class="tag t-live">In progress</span>' : '<span class="tag t-open">Open</span>';
   const fs = g.fair_spread_home, sl = g.spread_line;
+  const lead = g.home_mean >= g.away_mean ? g.home : g.away, leadWin = lead === g.home ? g.home_win : 1 - g.home_win;
+  const fsTxt = fs <= 0 ? g.home + ' ' + sgn(fs) : g.away + ' ' + sgn(-fs);
+  const slTxt = sl == null ? '' : sl >= 0 ? g.home + ' −' + Math.abs(sl) : g.away + ' −' + Math.abs(sl);
+  const sd = sl == null ? null : fs + sl;   // < 0: sim rates the home team higher than the market does
+  const sGap = sd == null ? '' : `<div class="gap">${Math.abs(sd) < 0.05 ? 'Sim matches the market' : `Sim <b>${Math.abs(sd).toFixed(1)} pts</b> higher on ${esc(sd < 0 ? g.home : g.away)}`}</div>`;
+  const td = g.total_line == null ? null : g.fair_total - g.total_line;
+  const tGap = td == null ? '' : `<div class="gap">${Math.abs(td) < 0.05 ? 'Sim matches the market' : `Sim <b>${Math.abs(td).toFixed(1)} pts ${td < 0 ? 'under' : 'over'}</b>`}</div>`;
   const outs = [g.away, g.home].filter(t => (g.out[t] || []).length).map(t => `<b>${esc(t)}</b> ${esc(g.out[t].join(', '))}`).join(' &middot; ');
   return `<article class="game" id="g-${esc(g.game_id)}">
     <div class="g-top"><span class="ct">${esc(tip(g.tipoff))} &middot; ${(g.sims || 4000).toLocaleString()} sims${g.line_source ? ' &middot; lines ' + esc(g.line_source) : ''}</span>${state}</div>
     <div class="score">
       <div class="tm${homeFav ? '' : ' fav'}"><span class="tm-n">${esc(nick(g.away))}</span><span class="tm-p">${g.away_mean.toFixed(1)}</span>${f ? `<span class="tm-f">Final <b>${f.away_score}</b></span>` : ''}</div>
-      <div class="mid">at<br>avg sim</div>
+      <div class="mid">${g.home_mean === g.away_mean ? '<b>Even</b>' : `<b>${esc(lead)} by ${Math.abs(g.home_mean - g.away_mean).toFixed(1)}</b><span class="mw">wins ${Math.round(leadWin * 100)}%</span>`}<span>avg of ${(g.sims || 4000).toLocaleString()} sims</span></div>
       <div class="tm home${homeFav ? ' fav' : ''}"><span class="tm-n">${esc(nick(g.home))}</span><span class="tm-p">${g.home_mean.toFixed(1)}</span>${f ? `<span class="tm-f">Final <b>${f.home_score}</b></span>` : ''}</div>
     </div>
     <div class="lines">
-      <div class="ln"><div class="st-l">Fair spread</div><div class="ln-v">${esc(fs <= 0 ? g.home + ' ' + sgn(fs) : g.away + ' ' + sgn(-fs))}</div></div>
-      <div class="ln"><div class="st-l">Fair total</div><div class="ln-v">${g.fair_total.toFixed(1)}</div></div>
-      <div class="ln"><div class="st-l">${esc(g.home)} win</div><div class="ln-v">${Math.round(g.home_win * 100)}%</div></div>
-      <div class="ln"><div class="st-l">Market</div><div class="ln-v">${sl == null ? '—' : esc(sl >= 0 ? g.home + ' −' + Math.abs(sl) : g.away + ' −' + Math.abs(sl))}<small>O/U ${g.total_line ?? '—'}</small></div></div>
+      <div class="ln"><div class="st-l">Spread</div><div class="cmp"><div><small>Sim</small><b class="sv">${esc(fsTxt)}</b></div><div><small>Market</small><b>${sl == null ? '—' : esc(slTxt)}</b></div></div>${sGap}</div>
+      <div class="ln"><div class="st-l">Total</div><div class="cmp"><div><small>Sim</small><b class="sv">${g.fair_total.toFixed(1)}</b></div><div><small>Market</small><b>${g.total_line ?? '—'}</b></div></div>${tGap}</div>
     </div>
     ${outs ? `<div class="out">Out: ${outs}</div>` : ''}
     <div class="sec"><span class="tag t-bet">Bet</span> 1 unit each <span class="cnt">${bets.length || 'none cleared the bar'}</span></div>
