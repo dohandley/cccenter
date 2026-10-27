@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-[data-theme="light"]{--bg:#e8e6e1;--surface:#f0eeea;--surface-2:#e8e6e1;--surface-3:#e3e1dc;--border:#d4d0c8;--border-h:#c0bbb2;--text:#1a1d26;--text-2:#3d4250;--text-3:#6b7280;--text-4:#9ca3af;--shadow:0 1px 2px rgba(0,0,0,.05);--green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;--green-text:#15803d;--red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;--red-text:#b91c1c;--amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fde68a;--amber-text:#92400e;--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;--blue-text:#1d4ed8;--track:#dcd8d1;--gold:#946200;--sim:#1a1d26;--sim-2:#5a606e}
-[data-theme="dark"]{--bg:#111318;--surface:#191c22;--surface-2:#21252c;--surface-3:#15171c;--border:#282d36;--border-h:#363c48;--text:#dce0e8;--text-2:#a8b0bc;--text-3:#707a8a;--text-4:#4a5464;--shadow:0 1px 2px rgba(0,0,0,.3);--green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.18);--green-text:#4ade80;--red:#f87171;--red-bg:rgba(248,113,113,.1);--red-border:rgba(248,113,113,.2);--red-text:#f87171;--amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.18);--amber-text:#fbbf24;--blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.18);--blue-text:#60a5fa;--track:#2a2f38;--gold:#e3b341;--sim:#dce0e8;--sim-2:#8f98a6;color-scheme:dark}
+[data-theme="light"]{--bg:#e8e6e1;--surface:#f0eeea;--surface-2:#e8e6e1;--surface-3:#e3e1dc;--border:#d4d0c8;--border-h:#c0bbb2;--text:#1a1d26;--text-2:#3d4250;--text-3:#6b7280;--text-4:#9ca3af;--shadow:0 1px 2px rgba(0,0,0,.05);--green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;--green-text:#15803d;--red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;--red-text:#b91c1c;--amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fde68a;--amber-text:#92400e;--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;--blue-text:#1d4ed8;--track:#dcd8d1;--gold:#946200;--cyan-bg:#ecfeff;--cyan-border:#a5f3fc;--cyan-text:#0e7490;--sim:#1a1d26;--sim-2:#5a606e}
+[data-theme="dark"]{--bg:#111318;--surface:#191c22;--surface-2:#21252c;--surface-3:#15171c;--border:#282d36;--border-h:#363c48;--text:#dce0e8;--text-2:#a8b0bc;--text-3:#707a8a;--text-4:#4a5464;--shadow:0 1px 2px rgba(0,0,0,.3);--green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.18);--green-text:#4ade80;--red:#f87171;--red-bg:rgba(248,113,113,.1);--red-border:rgba(248,113,113,.2);--red-text:#f87171;--amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.18);--amber-text:#fbbf24;--blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.18);--blue-text:#60a5fa;--track:#2a2f38;--gold:#e3b341;--cyan-bg:rgba(34,211,238,.1);--cyan-border:rgba(34,211,238,.2);--cyan-text:#67e8f9;--sim:#dce0e8;--sim-2:#8f98a6;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;min-height:100vh;transition:background .2s,color .2s}
 .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
@@ -103,6 +103,14 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .p-loss{background:var(--red-bg);border-color:var(--red-border);color:var(--red-text)}
 .p-push,.p-void{background:var(--surface-2);border-color:var(--border);color:var(--text-3)}
 .p-open{background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue-text)}
+.p-hot{background:var(--green-bg);border-color:var(--green-border);color:var(--green-text)}
+.p-cold{background:var(--cyan-bg);border-color:var(--cyan-border);color:var(--cyan-text)}
+.p-cat{background:var(--surface-2);border-color:var(--border);color:var(--text-3)}
+.fm{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:12px;color:var(--text-3)}
+.fm .u{font-size:12px}
+.legend{font-size:12px;color:var(--text-3);line-height:1.9}
+.legend .pill{margin-right:4px}
+td .pill.tg{margin-left:6px;vertical-align:1px}
 .u{font-family:'JetBrains Mono',monospace;font-weight:700}
 .tw{overflow-x:auto;border-radius:8px;border:1px solid var(--border);background:var(--surface)}
 table{width:100%;border-collapse:collapse}
@@ -220,6 +228,14 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
       <li><b>Prop limit reached:</b> at most one prop per player, and five per game in the NBA (three in the NFL).</li>
     </ul>
 
+    <h3>Tags</h3>
+    <ul>
+      <li><span class="pill p-hot">★ Hot</span> on a bet: that bet type (market, stat and side, e.g. "3-pointers unders") has 15+ graded bets and is +10% ROI or better this season.</li>
+      <li><span class="pill p-cold">❄ Cold</span>: 15+ graded and &minus;10% or worse. Every ungraded bet also shows its bet type's record, tagged or not.</li>
+      <li><b>Watch list</b> leans: a lean category (the reason it wasn't bet) that is up units over 30+ graded picks. <span class="pill p-hot">★ Top group</span> marks a stat group inside it with 15+ graded and +10% ROI.</li>
+      <li>Tags are recalculated after every grading and show only on picks that haven't been graded. They describe the record so far, not a prediction.</li>
+    </ul>
+
     <h3>Results</h3>
     <p>Picks show <span class="pill p-open">pending</span> until graded from the official box score the morning after. Then they show <span class="pill p-win">win</span>, <span class="pill p-loss">loss</span> or <span class="pill p-push">push</span> with units won or lost. Units are figured at the posted price: a win at &minus;110 pays +0.91u, a loss is &minus;1u.</p>
 
@@ -278,6 +294,68 @@ function readHash() {
 }
 function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'slate' && NID ? '/' + NID : ''}`); } catch (e) {} }
 
+/* ---------- form tags (same rules as the pricing email) ----------
+   Bets: grouped by market + stat + side (e.g. "3-pointers unders"); 15+ graded and +10% ROI or better = Hot,
+   -10% or worse = Cold. Leans: a lean category (why it wasn't bet) with 30+ graded and up units is on the watch list;
+   inside it, a stat group with 15+ graded and +10% ROI is a Top group. Season to date; tags show on ungraded picks. */
+const SUF = {pts: 'points', ast: 'assists', reb: 'rebounds', 'P+R': 'pts+reb', 'P+A': 'pts+ast', 'R+A': 'reb+ast', PRA: 'pts+reb+ast',
+  '3PM': '3-pointers', rec: 'receptions', 'rec yds': 'receiving yds', 'rush yds': 'rushing yds', 'rush att': 'rush attempts',
+  'pass yds': 'passing yds', 'pass att': 'pass attempts', 'pass comp': 'completions'};
+const CATS = [['cap', 'Over 20-pt cap', 'Over cap', /20-pt cap/], ['limit', 'Prop limit', 'Prop limit', /prop limit/],
+  ['be', 'Near breakeven', 'Near BE', /breakeven/], ['stress', 'Failed stress test', 'Stress', /stress test/], ['side', 'Side market', 'Side', /side market/]];
+const FORM = {};
+function parts(r) {
+  const m = /\b(Over|Under)\s+[\d.]+\s*(.*)$/.exec(r.selection || ''), side = m ? m[1] : '', suf = m ? m[2].trim() : '';
+  const base = r.market === 'total' ? 'totals' : r.market === 'prop' ? (SUF[suf] || suf || 'prop') : r.market;
+  return {side, base};
+}
+function betKey(r) { const {side, base} = parts(r); return `${r.market}|${base}|${side}`; }
+function betLabel(r) { const {side, base} = parts(r); return side ? `${base} ${side.toLowerCase()}s` : base; }
+function catOf(r) { const c = CATS.find(c => c[3].test(r.reason || '')); return c ? c[0] : null; }
+function tallyAdd(o, k, r) {
+  const t = o[k] || (o[k] = {w: 0, l: 0, p: 0, u: 0});
+  if (r.result === 'win') t.w++; else if (r.result === 'loss') t.l++; else t.p++;
+  t.u += r.units || 0;
+}
+function buildForm(lg) {
+  const rows = (LEDGER[lg] || {}).rows || [], f = {bet: {}, cat: {}, grp: {}};
+  for (const r of rows) {
+    if (!r.result) continue;
+    if (r.kind === 'bet') tallyAdd(f.bet, betKey(r), r);
+    else { const c = catOf(r); if (!c) continue; tallyAdd(f.cat, c, r); tallyAdd(f.grp, c + '|' + parts(r).base, r); }
+  }
+  const n = t => t.w + t.l;
+  for (const t of Object.values(f.bet)) t.tag = n(t) < 15 ? '' : t.u >= .1 * n(t) ? 'hot' : t.u <= -.1 * n(t) ? 'cold' : '';
+  for (const t of Object.values(f.cat)) t.watch = n(t) >= 30 && t.u > 0;
+  for (const [k, t] of Object.entries(f.grp)) t.top = !!(f.cat[k.split('|')[0]] || {}).watch && n(t) >= 15 && t.u >= .1 * n(t);
+  FORM[lg] = f;
+}
+const frec = t => `${t.w}–${t.l}${t.p ? '–' + t.p : ''}, <span class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</span>`;
+const HOT = '<span class="pill p-hot">★ Hot</span>', COLD = '<span class="pill p-cold">❄ Cold</span>', TOP = '<span class="pill p-hot">★ Top group</span>';
+function betForm(p) {
+  const f = FORM[LG]; if (!f || p.result) return '';
+  const t = f.bet[betKey(p)];
+  return `<div class="fm">${t && t.tag === 'hot' ? HOT : t && t.tag === 'cold' ? COLD : ''}<span>${esc(betLabel(p))} ${t ? frec(t) : '· first graded pick pending'}</span></div>`;
+}
+function leanForm(p) {
+  const f = FORM[LG]; if (!f || p.result) return null;
+  const c = catOf(p), ct = c && f.cat[c]; if (!ct || !ct.watch) return null;
+  const g = f.grp[c + '|' + parts(p).base], cat = CATS.find(x => x[0] === c);
+  return {top: !!(g && g.top), html: `<span class="sub">${g && g.top ? TOP + ' ' : ''}<span class="pill p-cat">${cat[2]}</span> ${esc(parts(p).base)} ${g ? frec(g) : ''}</span>`};
+}
+function legend() {
+  const f = FORM[LG]; if (!f) return '';
+  const lab = (o, want) => Object.entries(o).filter(([, t]) => want(t)).map(([k]) => k);
+  const hot = Object.entries(f.bet).filter(([, t]) => t.tag === 'hot').map(([k]) => { const [m, b, sd] = k.split('|'); return sd ? `${b} ${sd.toLowerCase()}s` : b; });
+  const cold = Object.entries(f.bet).filter(([, t]) => t.tag === 'cold').map(([k]) => { const [m, b, sd] = k.split('|'); return sd ? `${b} ${sd.toLowerCase()}s` : b; });
+  const tops = lab(f.grp, t => t.top).map(k => { const [c, b] = k.split('|'); return `${CATS.find(x => x[0] === c)[1].toLowerCase()} · ${b}`; });
+  const cats = lab(f.cat, t => t.watch).map(c => CATS.find(x => x[0] === c)[1]);
+  return `<div class="notes legend">${HOT} bet type with 15+ graded and +10% ROI or better${hot.length ? ': ' + esc(hot.join(', ')) : ' (none yet)'}.<br>
+    ${COLD} 15+ graded and −10% or worse${cold.length ? ': ' + esc(cold.join(', ')) : ' (none yet)'}. Unmarked bets have fewer picks or are about breakeven.<br>
+    <span class="pill p-cat">Watch list</span> lean categories up units over 30+ graded${cats.length ? ': ' + esc(cats.join(', ')) : ' (none yet)'}. ${TOP} a stat group inside one with 15+ graded and +10% ROI${tops.length ? ': ' + esc(tops.join(', ')) : ''}.<br>
+    <span class="dim">Season to date, recalculated after every grading. Tags show on picks that haven't been graded yet.</span></div>`;
+}
+
 /* ---------- slate ---------- */
 const meter = (l, v, be, mkt) => `<div><div class="mt-l"><span>${l}</span><b>${pct(v)}</b></div><div class="bar${mkt ? ' mkt' : ''}"><i style="width:${Math.max(0, Math.min(1, v)) * 100}%"></i>${be != null ? `<s style="left:calc(${(be * 100).toFixed(1)}% - 1px)" title="Breakeven ${pct(be)}"></s>` : ''}</div></div>`;
 function finishLine(p) {
@@ -289,13 +367,13 @@ function pickCard(g, p) {
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
   return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
-    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${res}</div>`;
+    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${res}</div>`;
 }
 function leanTable(ls) {
   if (!ls.length) return '';
-  const rows = ls.map(p => `<tr><td class="w">${esc(p.selection)}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span></td>
+  const rows = ls.map(p => { const lf = leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
-    <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : '<span class="pill p-open">pending</span>'}</td></tr>`).join('');
+    <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
     <div class="tw"><table><thead><tr><th>Lean</th><th class="r">Price</th><th class="r">Model</th><th class="r">Result</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
@@ -366,6 +444,7 @@ async function renderSlate() {
   if (!NID || !idx.nights.some(n => n.id === NID)) NID = idx.nights[0].id;
   const key = LG + '/' + NID;
   if (!NIGHT[key]) NIGHT[key] = await getJSON(`sim/${LG}/${NID}.json`);
+  try { if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`); if (!FORM[LG]) buildForm(LG); } catch (e) {}
   const data = NIGHT[key], gs = data.games, r = data.record;
   let nb = 0, nl = 0;
   for (const g of gs) for (const p of g.picks) p.kind === 'bet' ? nb++ : nl++;
@@ -373,6 +452,7 @@ async function renderSlate() {
   $('view').innerHTML = `<div style="display:grid;gap:16px">
     <div class="fbar" id="nights" role="group" aria-label="Choose a ${unit.toLowerCase()}"><span class="f-lab">${unit}</span>${idx.nights.map(n => `<button type="button" class="fb${n.id === NID ? ' on' : ''}" data-n="${esc(n.id)}" aria-pressed="${n.id === NID}">${esc(n.label)}</button>`).join('')}</div>
     <div class="stats">${st('Games', gs.length) + st('Bets', nb) + st('Leans', nl) + st(unit + ' W–L', rec(r), r ? '' : 'graded the next morning') + st(unit + ' units', r ? un(r.units) : '—', '', r ? ucls(r.units) : '')}</div>
+    ${gs.some(g => !g.final) ? legend() : ''}
     ${gs.length ? gs.map(card).join('') : '<div class="empty">No games priced.</div>'}</div>`;
   $('nights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; NID = b.dataset.n; FOCUS = null; go(); window.scrollTo({top: 0}); };
   if (FOCUS) { const el = document.getElementById('g-' + FOCUS); if (el) { el.scrollIntoView({block: 'start'}); el.classList.add('flash'); } FOCUS = null; }
@@ -381,7 +461,11 @@ async function renderSlate() {
 /* ---------- ledger ---------- */
 async function renderLedger() {
   if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`);
+  if (!FORM[LG]) buildForm(LG);
   const all = LEDGER[LG].rows;
+  const rowTag = r => { if (r.result) return '';
+    if (r.kind === 'bet') { const t = FORM[LG].bet[betKey(r)]; return t && t.tag ? `<span class="pill tg ${t.tag === 'hot' ? 'p-hot">★ Hot' : 'p-cold">❄ Cold'}</span>` : ''; }
+    const lf = leanForm(r); return lf && lf.top ? '<span class="pill tg p-hot">★ Top group</span>' : ''; };
   const mk = m => m === 'prop' ? 'props' : m === 'total' ? 'totals' : 'sides';
   const WHY = {cap: /20-pt cap/, limit: /prop limit/, stress: /stress test/, be: /breakeven/, side: /side market/};
   const rows = all.filter(r => (FILT.kind === 'all' || r.kind === FILT.kind) && (FILT.mkt === 'all' || mk(r.market) === FILT.mkt)
@@ -391,7 +475,7 @@ async function renderLedger() {
   const chip = (grp, v, l) => `<button type="button" class="fb${FILT[grp] === v ? ' on' : ''}" data-g="${grp}" data-v="${v}" aria-pressed="${FILT[grp] === v}">${l}</button>`;
   const body = rows.map(r => `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
       <td>${esc(shortDate(r.tipoff))}<span class="sub">${esc(r.matchup)}</span></td>
-      <td class="pk">${esc(r.selection)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}</td>
+      <td class="pk">${esc(r.selection)}${rowTag(r)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}</td>
       <td class="hm"><span class="tag ${r.kind === 'bet' ? 't-bet' : 't-lean'}">${r.kind}</span></td>
       <td class="r">${odds(r.price)}<span class="sub bk">${esc(r.book)}</span></td>
       <td class="r hm">${pct(r.model_p)}<span class="sub">mkt ${pct(r.book_p)}</span></td>
