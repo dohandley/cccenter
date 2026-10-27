@@ -131,6 +131,16 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) var(--bg)}body{backgroun
   .pf-grid{grid-template-columns:repeat(2,1fr)}
   .secth{flex-wrap:wrap;gap:6px}
 }
+.vsrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 12px 8px;border-top:1px solid var(--border)}
+.vs{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;border:1px solid var(--green-border);background:var(--green-bg);color:var(--green-text)}
+.vs.warn{border-color:var(--red-border);background:var(--red-bg);color:var(--red-text)}
+.vs.solo{border-color:var(--amber-border);background:var(--amber-bg);color:var(--amber-text)}
+.bchip{font-family:'JetBrains Mono',monospace;font-size:9.5px;padding:2px 7px;border-radius:5px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-3);white-space:nowrap}
+.bchip b{color:var(--text-2);font-weight:700}
+.bchip.best{border-color:var(--green-border);background:var(--green-bg);color:var(--green-text)}
+.bchip.best b{color:var(--green-text)}
+.vslbl{font-size:9px;color:var(--text-4);text-transform:uppercase;letter-spacing:.1em;font-family:'JetBrains Mono',monospace}
+@media(max-width:500px){.vsrow{padding:5px 8px 7px;gap:4px}.bchip,.vs{font-size:9px;padding:2px 5px}}
 </style>
 </head>
 <body>
@@ -145,7 +155,7 @@ const LS='ccso1';
 const GH_BASE='https://raw.githubusercontent.com/dohandley/cccenter/main';
 const SRC=`${GH_BASE}/simpleodds_log.json`;
 
-let S={theme:'light',v:'today',tier:'all',hrFilter:'all',hrSort:'edge',q:'',
+let S={theme:'light',sp:'mlb',v:'today',tier:'all',hrFilter:'all',hrSort:'edge',q:'',
        unitSize:'',dollarMode:false,data:null};
 
 function ld(){try{const d=JSON.parse(localStorage.getItem(LS));if(d)S={...S,...d}}catch(e){}}
@@ -182,6 +192,17 @@ let tT;function toast(m){clearTimeout(tT);document.querySelectorAll('.toast').fo
 
 // ── tier helpers ───────────────────────────────────────────────────────────
 const TIERS=[['PARLAY','Parlays','tp-parlay'],['SGP','SGP','tp-sgp'],['SGP+','SGP+','tp-sgpplus']];
+// Sports. Every ticket and history row carries a `sport` tag; rows written
+// before the publisher knew about sports have none, and those are all MLB.
+// Records are filtered per sport and NEVER pooled — an NFL parlay sample must
+// not inherit MLB's n.
+const SPORTS=[['nba','🏀','NBA'],['mlb','⚾','MLB'],['nfl','🏈','NFL']];
+const SPU=()=>String(S.sp||'mlb').toUpperCase();
+const spOf=r=>String((r&&r.sport)||'MLB').toUpperCase();
+const bySport=rows=>(rows||[]).filter(r=>spOf(r)===SPU());
+const spMeta=()=>SPORTS.find(s=>s[0]===S.sp)||SPORTS[1];
+// Homers are an MLB-only feed (SimpleOdds' Dinger Report).
+const hasHomers=()=>S.sp==='mlb';
 const tierCls=t=>t==='PARLAY'?'tp-parlay':t==='SGP'?'tp-sgp':t==='SGP+'?'tp-sgpplus':'tp-hr';
 const groupKey=t=>t==='PARLAY'?'parlays':t==='SGP'?'sgp':'sgp_plus';
 
@@ -211,11 +232,32 @@ function hrStats(rows){
   o.hit=o.n?o.w/o.n*100:0;
   return o;
 }
-const hist=()=>(S.data&&S.data.history)||[];
+const hist=()=>bySport((S.data&&S.data.history)||[]);
 const hrHist=()=>(S.data&&S.data.hr_history)||[];
-const legsFor=(d,t,r)=>((S.data&&S.data.legs)||[]).filter(l=>l.date===d&&l.tier===t&&l.rank===r);
+// date+tier+rank repeats across sports, so the sport has to be part of the key.
+const legsFor=(d,t,r)=>bySport((S.data&&S.data.legs)||[]).filter(l=>l.date===d&&l.tier===t&&l.rank===r);
 
 // ═══ TODAY ═════════════════════════════════════════════════════════════════
+// What every other book carrying ALL legs pays, and how far ahead the chosen
+// one is. pct_vs_next is measured on decimal payout, so +2596% means this pick
+// returns 26.96x the runner-up. Red past 100%: one book alone that far out of
+// line is nearly always a stale or mis-mapped price rather than an edge you can
+// take. "ONLY BOOK" means nothing else carried every leg — no second opinion.
+function bookRow(p){
+  const alts=(p.alt_books||[]).filter(a=>Array.isArray(a)&&a.length>=2);
+  if(!alts.length && !p.next_odds) return '';
+  let tag='';
+  if(p.n_books===1) tag='<span class="vs solo">ONLY BOOK</span>';
+  else if(p.next_odds && p.pct_vs_next!=null){
+    const warn=Math.abs(p.pct_vs_next)>=100?' warn':'';
+    tag=`<span class="vs${warn}">${p.pct_vs_next>0?'+':''}${Math.round(p.pct_vs_next)}% vs next best</span>`;
+  }
+  const chips=alts.slice(0,5).map((a,i)=>
+    `<span class="bchip${i===0?' best':''}">${esc(String(a[0]).toUpperCase())} <b>${fO(a[1])}</b></span>`).join('');
+  const n=p.n_books?`<span class="vslbl">${p.n_books} book${p.n_books===1?'':'s'}</span>`:'';
+  return `<div class="vsrow">${tag}${chips}${n}</div>`;
+}
+
 function parlayCard(p,idx){
   const est=p.odds_are_estimate;
   const id=`${p.tier}-${p.rank}`;
@@ -240,6 +282,7 @@ function parlayCard(p,idx){
       </span>
       <span class="pc-games">${esc((p.games||[]).join('  /  '))}</span>
     </div>
+    ${bookRow(p)}
     <table class="pc-legs" id="lg-${id}">${legs}</table>
   </div>`;
 }
@@ -252,7 +295,7 @@ function pgToday(){
   let html='';
   if(t.odds_last_update)html+=`<div class="hint">Odds last updated ${esc(t.odds_last_update)} · card generated ${esc((t.scraped_at||'').replace('T',' ').slice(0,16))}</div>`;
   show.forEach(([key,label])=>{
-    const rows=t[groupKey(key)]||[];
+    const rows=bySport(t[groupKey(key)]);
     if(!rows.length)return;
     const est=rows.some(r=>r.odds_are_estimate);
     html+=`<div class="secth"><span class="tierpill ${tierCls(key)}">${label}</span>
@@ -267,7 +310,7 @@ function pgToday(){
 // ═══ HOMERS ════════════════════════════════════════════════════════════════
 function pgHomers(){
   const t=S.data&&S.data.today;
-  let plays=(t&&t.hr_plays)||[];
+  let plays=(t&&hasHomers())?(t.hr_plays||[]):[];
   if(S.hrFilter==='bet')plays=plays.filter(p=>p.is_bet);
   else if(S.hrFilter==='pos')plays=plays.filter(p=>Number(p.edge_pct)>0);
   if(S.q){const q=S.q.toLowerCase();plays=plays.filter(p=>(p.player+' '+p.team+' '+p.game+' '+p.pitcher).toLowerCase().includes(q))}
@@ -463,8 +506,8 @@ function render(){
   const a=document.getElementById('app');
   const t=S.data&&S.data.today;
   const priced=tierStats(hist().filter(r=>!r.est));
-  const todayN=t?((t.parlays||[]).length+(t.sgp||[]).length+(t.sgp_plus||[]).length):0;
-  const hrN=t?(t.hr_plays||[]).length:0;
+  const todayN=t?(bySport(t.parlays).length+bySport(t.sgp).length+bySport(t.sgp_plus).length):0;
+  const hrN=(t&&hasHomers())?(t.hr_plays||[]).length:0;
   const themeIcon=S.theme==='dark'?'☀️':'🌙';
   const ds=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
 
@@ -482,17 +525,23 @@ function render(){
       <a class="btn btn-p" href="index.html">← MKB Board</a>
     </div></div></div>`;
 
+  const spCount=k=>{const u=k.toUpperCase();const c=(S.data&&S.data.history||[]).filter(r=>spOf(r)===u).length;return c;};
   const nav=`<div class="nav"><div class="nav-in">
-    <button class="sp ${S.tier==='all'?'on':''}" onclick="setTier('all')">⚾ All${todayN?` <span class="badge">${todayN}</span>`:''}</button>
-    ${TIERS.map(([k,l])=>{const n=t?(t[groupKey(k)]||[]).length:0;return `<button class="sp ${S.tier===k?'on':''}" onclick="setTier('${k}')">${l}${n?` <span class="badge">${n}</span>`:''}</button>`}).join('')}
+    ${SPORTS.map(([k,e,l])=>{const n=spCount(k);return `<button class="sp ${S.sp===k?'on':''}" onclick="setSp('${k}')">${e} ${l}${n?` <span class="badge">${n}</span>`:''}</button>`}).join('')}
     <div class="ndiv"></div>
-    ${[['today','Today'],['homers',`Homers${hrN?' ('+hrN+')':''}`],['history','History'],['performance','Performance']].map(([id,l])=>`<button class="nt ${S.v===id?'on':''}" onclick="setV('${id}')">${l}</button>`).join('')}
+    <button class="sp ${S.tier==='all'?'on':''}" onclick="setTier('all')">${spMeta()[1]} All${todayN?` <span class="badge">${todayN}</span>`:''}</button>
+    ${TIERS.map(([k,l])=>{const n=t?bySport(t[groupKey(k)]).length:0;return `<button class="sp ${S.tier===k?'on':''}" onclick="setTier('${k}')">${l}${n?` <span class="badge">${n}</span>`:''}</button>`}).join('')}
+    <div class="ndiv"></div>
+    ${[['today','Today'],...(hasHomers()?[['homers',`Homers${hrN?' ('+hrN+')':''}`]]:[]),['history','History'],['performance','Performance']].map(([id,l])=>`<button class="nt ${S.v===id?'on':''}" onclick="setV('${id}')">${l}</button>`).join('')}
   </div></div>`;
 
   const page=S.v==='today'?pgToday():S.v==='homers'?pgHomers():S.v==='history'?pgHistory():pgPerf();
   a.innerHTML=h+nav+`<div class="body">${page}</div>`;
 }
 window.setV=v=>{S.v=v;sv();render()};
+// Homers only exists for MLB; switching away from it must not leave the
+// page rendering a tab whose button is gone.
+window.setSp=k=>{S.sp=k;if(S.v==='homers'&&!hasHomers())S.v='today';sv();render()};
 window.setTier=k=>{S.tier=k;sv();render()};
 window.toggleTheme=()=>{S.theme=S.theme==='dark'?'light':'dark';sv();render()};
 
