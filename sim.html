@@ -149,6 +149,7 @@ dialog.help::backdrop{background:rgba(10,12,16,.45)}
 tr.go{cursor:pointer} tr.go:hover td{background:var(--surface-2)}
 td.pk{font-weight:700;white-space:normal;min-width:180px}
 .grp{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-3);background:var(--surface-2)}
+.lsum{font-size:12.5px;color:var(--text-3)}.lsum b{color:var(--text);font-weight:800}.lsum b.pos{color:var(--green-text)}.lsum b.neg{color:var(--red-text)}
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
 .game{scroll-margin-top:96px}.mo{display:none}
@@ -226,7 +227,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
     <ul>
       <li><b>NBA / NFL</b> switches leagues. The buttons show each league's season record.</li>
       <li><b>Slate</b> shows one night (or NFL week) of game cards. Pick a date from the row above the cards.</li>
-      <li><b>Ledger</b> lists every pick. Filter by bets or leans and by market, and tap any row to jump to its game card.</li>
+      <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
       <li>The record at the top right combines both leagues. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
     </ul>
 
@@ -262,7 +263,7 @@ const NICK = {
   nfl: {ARI:'Cardinals',ATL:'Falcons',BAL:'Ravens',BUF:'Bills',CAR:'Panthers',CHI:'Bears',CIN:'Bengals',CLE:'Browns',DAL:'Cowboys',DEN:'Broncos',DET:'Lions',GB:'Packers',HOU:'Texans',IND:'Colts',JAX:'Jaguars',KC:'Chiefs',LA:'Rams',LAC:'Chargers',LV:'Raiders',MIA:'Dolphins',MIN:'Vikings',NE:'Patriots',NO:'Saints',NYG:'Giants',NYJ:'Jets',PHI:'Eagles',PIT:'Steelers',SEA:'Seahawks',SF:'49ers',TB:'Buccaneers',TEN:'Titans',WAS:'Commanders'}
 };
 const IDX = {}, NIGHT = {}, LEDGER = {};
-let LG = 'nba', VIEW = 'slate', NID = null, FOCUS = null, FILT = {kind: 'all', mkt: 'all'};
+let LG = 'nba', VIEW = 'slate', NID = null, FOCUS = null, FILT = {kind: 'all', mkt: 'all', why: 'all'};
 const nick = t => (NICK[LG] || {})[t] || t;
 const tip = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', timeZone:'America/New_York'}) + ' · ' + d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/New_York'}) + ' ET'; };
 const shortDate = s => new Date(s).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'America/New_York'});
@@ -382,7 +383,11 @@ async function renderLedger() {
   if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`);
   const all = LEDGER[LG].rows;
   const mk = m => m === 'prop' ? 'props' : m === 'total' ? 'totals' : 'sides';
-  const rows = all.filter(r => (FILT.kind === 'all' || r.kind === FILT.kind) && (FILT.mkt === 'all' || mk(r.market) === FILT.mkt));
+  const WHY = {cap: /20-pt cap/, limit: /prop limit/, stress: /stress test/, be: /breakeven/, side: /side market/};
+  const rows = all.filter(r => (FILT.kind === 'all' || r.kind === FILT.kind) && (FILT.mkt === 'all' || mk(r.market) === FILT.mkt)
+    && (FILT.why === 'all' || (r.kind === 'lean' && WHY[FILT.why].test(r.reason || ''))));
+  const g = rows.filter(r => r.result), sumU = g.reduce((a, r) => a + (r.units || 0), 0);
+  const tally = g.length ? ` Graded: <b>${rec({w: g.filter(r => r.result === 'win').length, l: g.filter(r => r.result === 'loss').length, p: g.filter(r => r.result === 'push').length})}</b>, <b class="${ucls(sumU)}">${un(Math.round(sumU * 100) / 100)}</b>${FILT.kind !== 'bet' && rows.some(r => r.kind === 'lean') ? ' (leans counted as 1u each)' : ''}.` : '';
   const chip = (grp, v, l) => `<button type="button" class="fb${FILT[grp] === v ? ' on' : ''}" data-g="${grp}" data-v="${v}" aria-pressed="${FILT[grp] === v}">${l}</button>`;
   const body = rows.map(r => `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
       <td>${esc(shortDate(r.tipoff))}<span class="sub">${esc(r.matchup)}</span></td>
@@ -395,10 +400,16 @@ async function renderLedger() {
   $('view').innerHTML = `<div style="display:grid;gap:12px">
     <div class="fbar" id="lf"><span class="f-lab">Show</span>${chip('kind', 'all', 'All')}${chip('kind', 'bet', 'Bets')}${chip('kind', 'lean', 'Leans')}
       <span class="ndiv"></span>${chip('mkt', 'all', 'Every market')}${chip('mkt', 'totals', 'Totals')}${chip('mkt', 'props', 'Props')}${chip('mkt', 'sides', 'Sides')}</div>
+    <div class="fbar" id="lf2"><span class="f-lab">Lean reason</span>${chip('why', 'all', 'Any')}${chip('why', 'cap', 'Over 20-pt cap')}${chip('why', 'limit', 'Prop limit')}${chip('why', 'be', 'Near breakeven')}${chip('why', 'stress', 'Failed stress test')}${chip('why', 'side', 'Side market')}</div>
+    <div class="lsum">${rows.length} of ${all.length} picks.${tally}</div>
     <div class="tw"><table><thead><tr><th>Game</th><th>Pick</th><th class="hm"></th><th class="r">Price</th><th class="r hm">Model</th><th class="r hm">Result</th><th class="r">Units</th></tr></thead>
     <tbody>${body || '<tr><td colspan="7" class="dim">Nothing matches.</td></tr>'}</tbody></table></div>
-    <div class="dim" style="font-size:11.5px">${rows.length} of ${all.length} picks. Tap a row to open that game's card and box score.</div></div>`;
-  $('lf').onclick = e => { const b = e.target.closest('button[data-g]'); if (!b) return; FILT[b.dataset.g] = b.dataset.v; renderLedger(); };
+    <div class="dim" style="font-size:11.5px">Tap a row to open that game's card and box score.</div></div>`;
+  const pick = e => { const b = e.target.closest('button[data-g]'); if (!b) return; FILT[b.dataset.g] = b.dataset.v;
+    if (b.dataset.g === 'why' && b.dataset.v !== 'all') FILT.kind = 'lean';           // a reason only applies to leans
+    if (b.dataset.g === 'kind' && b.dataset.v === 'bet') FILT.why = 'all';
+    renderLedger(); };
+  $('lf').onclick = pick; $('lf2').onclick = pick;
   const open = tr => { NID = tr.dataset.n; FOCUS = tr.dataset.g; VIEW = 'slate'; go(); };
   $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = () => open(tr); tr.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(tr); } }; });
 }
