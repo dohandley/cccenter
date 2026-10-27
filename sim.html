@@ -120,6 +120,20 @@ summary{cursor:pointer;font-weight:800;font-size:13px;text-transform:uppercase;l
 .box2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
 .box2>*{min-width:0}
 .box2 .ct{margin-bottom:6px}
+.hbtn{font-weight:800;font-family:inherit;min-width:31px}
+.helpbar{display:flex;justify-content:center}
+.hlink{background:none;border:1px solid var(--border);border-radius:8px;padding:9px 16px;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--text-2);cursor:pointer}
+.hlink:hover{border-color:var(--border-h);color:var(--text)}
+dialog.help{width:min(680px,calc(100vw - 24px));max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+dialog.help::backdrop{background:rgba(10,12,16,.45)}
+.hp-h{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;background:var(--surface);border-bottom:1px solid var(--border);z-index:1}
+.hp-h h2{margin:0;font-size:18px;font-weight:800;letter-spacing:-.02em}
+.hp-b{padding:6px 20px 22px;font-size:13.5px;line-height:1.55;color:var(--text-2)}
+.hp-b h3{margin:20px 0 6px;font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4)}
+.hp-b p{margin:0 0 8px}.hp-b ul{margin:0 0 8px;padding-left:18px}.hp-b li{margin-bottom:5px}
+.hp-b b{color:var(--text)}
+.hp-b .pill{vertical-align:1px}
+.hp-fine{font-size:12px;color:var(--text-3);border-top:1px dashed var(--border);margin-top:18px;padding-top:12px}
 .notes{padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-3);font-size:11.5px}
 .notes ul{padding-left:16px;margin:8px 0 0}.notes li{margin-bottom:4px}
 .empty{padding:28px;color:var(--text-3);text-align:center;font-size:13px;background:var(--surface);border:1px dashed var(--border);border-radius:10px}
@@ -148,6 +162,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 <div class="hdr-r">
 <div class="kpi"><span class="kpi-l">All bets</span><span class="kpi-v" id="k-rec">&mdash;</span></div>
 <div class="kpi"><span class="kpi-l">Units</span><span class="kpi-v" id="k-u">&mdash;</span></div>
+<button class="tbtn hbtn" id="hb" title="How this works" aria-label="How this works" aria-haspopup="dialog">?</button>
 <button class="tbtn" id="th" title="Toggle theme" aria-label="Toggle theme">&#9789;</button>
 </div></div></div>
 <div class="nav" id="ownernav" hidden><div class="nav-in">
@@ -163,14 +178,61 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
   </div>
   <div class="stats" id="season"></div>
   <div id="view"><div class="empty">Loading&hellip;</div></div>
-  <div class="notes"><strong>How to read this</strong><ul>
-    <li>Every game is simulated play by play thousands of times (possessions for the NBA, snaps for the NFL), using that day's injury report and projected rotations. The big numbers are the average simulated score. The sim spread and total are medians (the number the sim lands over half the time), so they can differ slightly from the gap between the averages.</li>
-    <li><b>Bets</b> are 1 unit each. A bet needs the model to beat the no-vig market by 6 points on totals or 7 on props, and it still has to clear breakeven in the stress test, which reruns the game with every team and player edge cut in half. <b>Leans</b> are edges that didn't qualify, tracked to see whether they would have paid.</li>
-    <li>Each meter is a win probability, and the dark tick is breakeven at the posted price. In the box score, actuals are green when they beat the projection and red when they fell short.</li>
-    <li>Sides (spreads and moneylines) are tracked as leans only. In backtesting the model didn't beat the closing spread, so they aren't staked.</li>
-    <li>Prices are from when the game was priced. For entertainment; not betting advice.</li>
-  </ul></div>
+  <div class="helpbar"><button type="button" class="hlink" id="hb2">How the sim and ledger work &rarr;</button></div>
 </div>
+<dialog class="help" id="help" aria-labelledby="hp-t">
+  <div class="hp-h"><h2 id="hp-t">How this works</h2><button type="button" class="tbtn" id="hx" aria-label="Close">&#10005;</button></div>
+  <div class="hp-b">
+    <h3>What this is</h3>
+    <p>A public record of every pick from an NBA and NFL simulation model: what it liked, at what price, and how it turned out. Every pick is posted before the game and graded the next morning, wins and losses alike.</p>
+
+    <h3>How a game is simulated</h3>
+    <ul>
+      <li>Each game is played out <b>4,000 times</b>, possession by possession in the NBA and snap by snap in the NFL, using that day's injury report and projected rotations.</li>
+      <li>From those runs come a projected score, a fair spread, a fair total, each team's win chance, and a range for every player's stats.</li>
+      <li>Those numbers are compared with the sportsbooks' prices. Where the sim and the market disagree by enough, that's a pick.</li>
+    </ul>
+
+    <h3>Reading a game card</h3>
+    <ul>
+      <li><b>Big numbers</b> are each team's average score across the sims. The arrow points to the team the sim favors, and the middle shows by how much and how often it wins.</li>
+      <li><b>Spread and Total</b> put the sim's number next to the market's, with the gap underneath. The sim's numbers here are medians, the line it lands over half the time, so they can differ slightly from the gap between the averages.</li>
+      <li><b>Out</b> lists players the sim treated as unavailable.</li>
+      <li>Open <b>Projected box score</b> for each player's projected stats. After the game, the actual number appears under each projection, green if it beat the projection and red if it fell short.</li>
+    </ul>
+
+    <h3>Bets</h3>
+    <p>Bets are 1 unit each and are only <b>totals and player props</b>. To qualify, a pick has to:</p>
+    <ul>
+      <li>beat the market's no-vig probability by at least 6 points on a total or 7 on a prop,</li>
+      <li>clear breakeven at the posted price, and</li>
+      <li>still clear breakeven in the <b>stress test</b>, which reruns the game with every team and player edge cut in half.</li>
+    </ul>
+    <p>Each bet shows three meters. <b>Model</b> and <b>Stress test</b> are the sim's win chance for the pick, and the dark tick is breakeven at the price. <b>Market, no-vig</b> is the book's own view with its margin removed. The book and price shown are the best number available when the game was priced.</p>
+
+    <h3>Leans</h3>
+    <p>Leans are edges that didn't qualify as bets. They are graded as if 1 unit had been bet, so you can see whether they would have paid. The reason is listed with each one:</p>
+    <ul>
+      <li><b>Side market:</b> spreads and moneylines. In backtesting the model didn't beat the closing spread, so sides are never staked.</li>
+      <li><b>Over 20-pt cap:</b> a gap that large is treated as more likely a model error than a real edge.</li>
+      <li><b>Failed stress test</b> or <b>too little over breakeven</b>.</li>
+      <li><b>Prop limit reached:</b> at most one prop per player, and five per game in the NBA (three in the NFL).</li>
+    </ul>
+
+    <h3>Results</h3>
+    <p>Picks show <span class="pill p-open">pending</span> until graded from the official box score the morning after. Then they show <span class="pill p-win">win</span>, <span class="pill p-loss">loss</span> or <span class="pill p-push">push</span> with units won or lost. Units are figured at the posted price: a win at &minus;110 pays +0.91u, a loss is &minus;1u.</p>
+
+    <h3>Using the page</h3>
+    <ul>
+      <li><b>NBA / NFL</b> switches leagues. The buttons show each league's season record.</li>
+      <li><b>Slate</b> shows one night (or NFL week) of game cards. Pick a date from the row above the cards.</li>
+      <li><b>Ledger</b> lists every pick. Filter by bets or leans and by market, and tap any row to jump to its game card.</li>
+      <li>The record at the top right combines both leagues. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
+    </ul>
+
+    <p class="hp-fine">Records are early-season samples and say little on their own. Prices are from when each game was priced and may have moved. For entertainment only, not betting advice. If gambling stops being fun, call 1-800-GAMBLER.</p>
+  </div>
+</dialog>
 <script>
 function getTheme(){try{var s=JSON.parse(localStorage.getItem('cc7')||'{}');return s.theme||'light';}catch(e){return 'light';}}
 function setTheme(t){document.documentElement.setAttribute('data-theme',t);
@@ -178,6 +240,11 @@ function setTheme(t){document.documentElement.setAttribute('data-theme',t);
 setTheme(getTheme());
 // The site nav is for Dylan only: show it when signed in (the cc_in cookie is set at sign-in and grants nothing by itself).
 if (/(?:^|;\s*)cc_in=1/.test(document.cookie)) document.getElementById('ownernav').hidden = false;
+const HELP = document.getElementById('help');
+function openHelp() { if (HELP.showModal) HELP.showModal(); else HELP.setAttribute('open', ''); HELP.scrollTop = 0; }
+document.getElementById('hb').onclick = openHelp; document.getElementById('hb2').onclick = openHelp;
+document.getElementById('hx').onclick = () => HELP.close();
+HELP.addEventListener('click', e => { if (e.target === HELP) HELP.close(); });
 document.getElementById('th').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
 
 const $ = id => document.getElementById(id);
