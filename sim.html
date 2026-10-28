@@ -158,6 +158,19 @@ tr.go{cursor:pointer} tr.go:hover td{background:var(--surface-2)}
 td.pk{font-weight:700;white-space:normal;min-width:180px}
 .grp{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-3);background:var(--surface-2)}
 .lsum{font-size:12.5px;color:var(--text-3)}.lsum b{color:var(--text);font-weight:800}.lsum b.pos{color:var(--green-text)}.lsum b.neg{color:var(--red-text)}
+.tk{border:1px solid var(--border);border-radius:8px;background:var(--surface);display:grid;min-width:0;box-shadow:var(--shadow)}
+.tk-h{display:flex;justify-content:space-between;align-items:baseline;gap:6px 14px;flex-wrap:wrap;padding:12px 14px 10px}
+.tk-o{font-weight:800;font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tk-o b{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:0;margin-left:6px}
+.tk-m{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-3)}
+.tk-l{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;padding:9px 14px;border-top:1px dashed var(--border)}
+.tk-l .s{font-weight:700;font-size:14px}
+.tk-l .r{text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+.tk-f{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:12.5px;padding:9px 14px;border-top:1px solid var(--border);background:var(--surface-2);border-radius:0 0 8px 8px}
+.tks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sl-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:800;font-size:15px;letter-spacing:-.01em;margin-top:6px}
+.sl-h .cnt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-3);letter-spacing:0}
+@media(max-width:768px){.tks{grid-template-columns:1fr}}
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
 .game{scroll-margin-top:96px}.mo{display:none}
@@ -183,7 +196,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 <div class="body">
   <div class="lg">
     <div class="lg" id="leagues" role="group" aria-label="League"></div>
-    <div class="vw" role="group" aria-label="View"><button type="button" data-v="slate">Slate</button><button type="button" data-v="ledger">Ledger</button></div>
+    <div class="vw" role="group" aria-label="View"><button type="button" data-v="slate">Slate</button><button type="button" data-v="ledger">Ledger</button><button type="button" data-v="parlays">Parlays</button></div>
   </div>
   <div class="stats" id="season"></div>
   <div id="view"><div class="empty">Loading&hellip;</div></div>
@@ -236,6 +249,15 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
       <li>Tags are recalculated after every grading and show only on picks that haven't been graded. They describe the record so far, not a prediction.</li>
     </ul>
 
+    <h3>Paper parlays</h3>
+    <p>The <b>Parlays</b> view tests whether pairing leans holds up. It is <b>learning only</b>: the tickets are never bet and never count toward the season record or units.</p>
+    <ul>
+      <li>Each slate, the leans on props and totals are paired into <b>2-leg tickets</b>: both legs at the same sportsbook and price, from different games, one leg per player.</li>
+      <li>The sim overrates leans, so each leg's win chance is pulled toward the market's by however much the model has overrated leans before that slate. A ticket needs <b>+10% expected value</b> or better; at most 5 a slate, each lean on at most 2.</li>
+      <li>Tickets are graded from the leans' own results. A void leg drops out and the ticket pays on the other one, as sportsbooks do.</li>
+      <li><span class="pill p-cat">Rebuilt from ledger</span> slates were built after the fact from leans priced before tracking began, using only results known at the time. They are shown separately from the tracked record.</li>
+    </ul>
+
     <h3>Results</h3>
     <p>Picks show <span class="pill p-open">pending</span> until graded from the official box score the morning after. Then they show <span class="pill p-win">win</span>, <span class="pill p-loss">loss</span> or <span class="pill p-push">push</span> with units won or lost. Units are figured at the posted price: a win at &minus;110 pays +0.91u, a loss is &minus;1u.</p>
 
@@ -243,6 +265,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
     <ul>
       <li><b>NBA / NFL</b> switches leagues. The buttons show each league's season record.</li>
       <li><b>Slate</b> shows one night (or NFL week) of game cards. Pick a date from the row above the cards.</li>
+      <li><b>Parlays</b> shows the paper parlay tickets (learning only).</li>
       <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
       <li>The record at the top right combines both leagues. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
     </ul>
@@ -278,7 +301,7 @@ const NICK = {
   nba: {ATL:'Hawks',BKN:'Nets',BOS:'Celtics',CHA:'Hornets',CHI:'Bulls',CLE:'Cavaliers',DAL:'Mavericks',DEN:'Nuggets',DET:'Pistons',GS:'Warriors',HOU:'Rockets',IND:'Pacers',LAC:'Clippers',LAL:'Lakers',MEM:'Grizzlies',MIA:'Heat',MIL:'Bucks',MIN:'Timberwolves',NO:'Pelicans',NY:'Knicks',OKC:'Thunder',ORL:'Magic',PHI:'76ers',PHX:'Suns',POR:'Trail Blazers',SA:'Spurs',SAC:'Kings',TOR:'Raptors',UTAH:'Jazz',WSH:'Wizards'},
   nfl: {ARI:'Cardinals',ATL:'Falcons',BAL:'Ravens',BUF:'Bills',CAR:'Panthers',CHI:'Bears',CIN:'Bengals',CLE:'Browns',DAL:'Cowboys',DEN:'Broncos',DET:'Lions',GB:'Packers',HOU:'Texans',IND:'Colts',JAX:'Jaguars',KC:'Chiefs',LA:'Rams',LAC:'Chargers',LV:'Raiders',MIA:'Dolphins',MIN:'Vikings',NE:'Patriots',NO:'Saints',NYG:'Giants',NYJ:'Jets',PHI:'Eagles',PIT:'Steelers',SEA:'Seahawks',SF:'49ers',TB:'Buccaneers',TEN:'Titans',WAS:'Commanders'}
 };
-const IDX = {}, NIGHT = {}, LEDGER = {};
+const IDX = {}, NIGHT = {}, LEDGER = {}, PARL = {};
 let LG = 'nba', VIEW = 'slate', NID = null, FOCUS = null, FILT = {kind: 'all', mkt: 'all', why: 'all'};
 const nick = t => (NICK[LG] || {})[t] || t;
 const tip = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', timeZone:'America/New_York'}) + ' · ' + d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/New_York'}) + ' ET'; };
@@ -289,7 +312,7 @@ const getJSON = async u => { const r = await fetch(u, {cache: 'no-cache'}); if (
 function readHash() {
   const [lg, v, n] = location.hash.slice(1).split('/');
   if (LEAGUES[lg]) LG = lg;
-  if (v === 'slate' || v === 'ledger') VIEW = v;
+  if (v === 'slate' || v === 'ledger' || v === 'parlays') VIEW = v;
   NID = n || null;
 }
 function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'slate' && NID ? '/' + NID : ''}`); } catch (e) {} }
@@ -498,6 +521,42 @@ async function renderLedger() {
   $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = () => open(tr); tr.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(tr); } }; });
 }
 
+/* ---------- paper parlays ----------
+   Built by sim_parlays.py in each sim repo: 2-leg tickets from the slate's leans, same book, different games.
+   Learning only: never bet and never part of the season record. Data: sim/<league>/parlays.json. */
+const amer = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
+const FLAG = {backfill: 'Rebuilt from ledger', late: 'Built late', live: ''};
+function ticket(t) {
+  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span><span class="sub">${esc(l.matchup)} &middot; ${esc(shortDate(l.start))}</span></div>
+      <div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">est ${pct(l.p)} &middot; mkt ${pct(l.book_p)}</span></div></div>`).join('');
+  const foot = t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span><span class="u ${ucls(t.units)}">${un(t.units)}</span>`
+    : `<span class="pill p-open">pending</span><span class="dim">Settles when both legs are graded</span>`;
+  return `<div class="tk"><div class="tk-h"><span class="tk-o">${esc(t.american)}<b>${esc(t.book)}</b></span>
+      <span class="tk-m">est ${pct(t.p)} &middot; fair ${amer(1 / t.p)} &middot; EV ${t.ev >= 0 ? '+' : ''}${(t.ev * 100).toFixed(0)}%</span></div>${legs}<div class="tk-f">${foot}</div></div>`;
+}
+async function renderParlays() {
+  if (!PARL[LG]) { try { PARL[LG] = await getJSON(`sim/${LG}/parlays.json`); } catch (e) { PARL[LG] = null; } }
+  const d = PARL[LG];
+  if (!d) { $('season').innerHTML = ''; $('view').innerHTML = `<div class="empty">No ${LEAGUES[LG]} paper parlays yet.</div>`; return; }
+  const tr = d.record.tracked, bf = d.record.backfill;
+  $('season').innerHTML = st('Tracked tickets', rec(tr), `since ${shortDate(d.live_from + 'T12:00:00-04:00')}`)
+    + st('Units', un(tr.units), tr.roi != null ? `${tr.roi > 0 ? '+' : ''}${tr.roi}% ROI` : 'paper only', ucls(tr.units))
+    + st('Open', tr.open, 'waiting on results')
+    + st('Rebuilt', rec(bf), bf.n ? `${un(bf.units)} · before tracking began` : 'none')
+    + st('Rule', `${d.rules.legs} legs`, `+${Math.round(d.rules.min_ev * 100)}% EV or better`);
+  const by = {}; for (const t of d.tickets) (by[t.slate] = by[t.slate] || []).push(t);
+  const unit = LG === 'nfl' ? 'pricing day' : 'night';
+  const sections = d.slates.map(s => {
+    const ts = by[s.id] || [], r = s.record;
+    const head = `<div class="sl-h">${esc(s.label)}${FLAG[s.flag] ? ` <span class="pill p-cat">${FLAG[s.flag]}</span>` : ''}<span class="cnt">${ts.length} ticket${ts.length === 1 ? '' : 's'}${r.w + r.l ? ` &middot; ${rec(r)}, <span class="u ${ucls(r.units)}">${un(r.units)}</span>` : ''}</span></div>`;
+    const why = s.note ? 'Not enough graded leans yet to calibrate the model.' : 'No pair of leans cleared the bar.';
+    return head + (ts.length ? `<div class="tks">${ts.map(ticket).join('')}</div>` : `<div class="dim" style="font-size:12.5px">${why}</div>`);
+  }).join('');
+  $('view').innerHTML = `<div style="display:grid;gap:12px">
+    <div class="notes"><b style="color:var(--text)">Paper parlays: learning only.</b> These tickets are never bet and never count toward the record above or the season units. Each ${unit}, the leans are paired into 2-leg tickets at one sportsbook, legs from different games, using a win chance pulled toward the market by how much the model has overrated leans so far. A ticket needs +${Math.round(d.rules.min_ev * 100)}% expected value or better; at most ${d.rules.per_slate} a ${unit}, each lean on at most ${d.rules.per_leg}. Units at the ticket's price, 1u per ticket.</div>
+    ${sections || `<div class="empty">No ${LEAGUES[LG]} slates yet.</div>`}</div>`;
+}
+
 /* ---------- shell ---------- */
 function renderTop() {
   $('leagues').innerHTML = Object.entries(LEAGUES).filter(([k]) => IDX[k]).map(([k, l]) => {
@@ -506,7 +565,7 @@ function renderTop() {
   }).join('');
   document.querySelectorAll('.vw button').forEach(b => { b.classList.toggle('on', b.dataset.v === VIEW); b.setAttribute('aria-pressed', b.dataset.v === VIEW); });
   const s = IDX[LG].season, b = s.bets, l = s.leans, m = s.by_market || {};
-  $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'slate' ? 'every game simulated thousands of times' : 'every pick, graded'}`;
+  $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'slate' ? 'every game simulated thousands of times' : VIEW === 'parlays' ? 'paper parlays · learning only' : 'every pick, graded'}`;
   $('season').innerHTML = st('Season bets', rec(b), IDX[LG].season_label)
     + st('Units', un(b.units), b.roi != null ? `${b.roi > 0 ? '+' : ''}${b.roi}% ROI` : '', ucls(b.units))
     + st('Totals', m.total ? rec(m.total) : '—', m.total ? un(m.total.units) : '')
@@ -519,7 +578,7 @@ function renderTop() {
 }
 async function go() {
   writeHash(); renderTop();
-  try { await (VIEW === 'slate' ? renderSlate() : renderLedger()); writeHash(); }
+  try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : renderLedger()); writeHash(); }
   catch (e) { $('view').innerHTML = '<div class="empty">This couldn’t load. Refresh to try again.</div>'; }
 }
 $('leagues').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b || b.dataset.l === LG) return; LG = b.dataset.l; NID = null; FOCUS = null; go(); });
