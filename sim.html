@@ -21,6 +21,13 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .h-t span{color:var(--green)}
 .h-d{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4);margin-top:3px}
 .hdr-r{display:flex;align-items:center;gap:8px}
+.kpis{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.kpis .seg button{padding:5px 9px}
+.kpi-d{padding:3px 4px 3px 11px}
+.ksz{display:flex;align-items:center;gap:5px;border-left:1px solid var(--border);padding-left:8px;margin-left:2px;cursor:text}
+.ksz input{width:58px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 6px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--text)}
+.ksz input:focus{outline:2px solid var(--green);outline-offset:0;border-color:transparent}
+.ksz input::placeholder{color:var(--text-4);font-weight:600}
 .kpi{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 11px;display:flex;align-items:center;gap:6px}
 .kpi-l{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4)}
 .kpi-v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--text)}
@@ -225,15 +232,19 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 @media(max-width:860px){.res2{grid-template-columns:1fr}}
 @media(max-width:480px){.dy{min-height:50px;padding:4px 1px}.dy .dr,.dy .du{font-size:9px}.cal{gap:3px}}
 @media(max-width:768px){.vw{margin-left:0;width:100%}.vw button{flex:1}.hm{display:none}.mo{display:inline}.sub.mo{display:block}td.pk{min-width:120px}td,th{padding:8px 7px}}
-@media(max-width:768px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats>.st:last-child:nth-child(odd){grid-column:span 2}.hdr-r .kpi{display:none}.body{padding:16px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}.hdr-in{padding:12px 16px}.nav-in{padding:0 16px}.lines{grid-template-columns:1fr}.score{grid-template-columns:1fr 1fr}.mid{grid-column:1/-1;grid-row:2;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 10px;padding:4px 0 0}.meters{grid-template-columns:1fr;gap:8px}.box2{grid-template-columns:1fr}.game{padding:14px}}
+@media(max-width:768px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats>.st:last-child:nth-child(odd){grid-column:span 2}.hdr-in{flex-wrap:wrap}.hdr-in>div:first-child{flex:1 1 0;min-width:0}.kpis{order:3;width:100%;justify-content:flex-start;margin-left:0;gap:6px}.body{padding:16px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}.hdr-in{padding:12px 16px}.nav-in{padding:0 16px}.lines{grid-template-columns:1fr}.score{grid-template-columns:1fr 1fr}.mid{grid-column:1/-1;grid-row:2;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 10px;padding:4px 0 0}.meters{grid-template-columns:1fr;gap:8px}.box2{grid-template-columns:1fr}.game{padding:14px}}
 @media(prefers-reduced-motion:no-preference){.bar i{transition:width .4s ease}}
 </style></head>
 <body>
 <div class="hdr"><div class="hdr-in">
 <div><div class="h-t"><span>Sim</span> Ledger</div><div class="h-d" id="hd">NBA &amp; NFL &middot; every game simulated thousands of times</div></div>
-<div class="hdr-r">
-<div class="kpi"><span class="kpi-l">All bets</span><span class="kpi-v" id="k-rec">&mdash;</span></div>
+<div class="kpis" title="Season to date, NBA and NFL combined">
+<div class="seg" id="k-kind" role="group" aria-label="Show all picks, bets or leans"><button type="button" data-k="all">All</button><button type="button" data-k="bet">Bets</button><button type="button" data-k="lean">Leans</button></div>
+<div class="kpi"><span class="kpi-l" id="k-rl">Bets</span><span class="kpi-v" id="k-rec">&mdash;</span></div>
 <div class="kpi"><span class="kpi-l">Units</span><span class="kpi-v" id="k-u">&mdash;</span></div>
+<div class="kpi kpi-d"><span class="kpi-v" id="k-d" title="Units times your unit size">$&mdash;</span><label class="ksz"><span class="kpi-l">Unit $</span><input id="k-sz" type="text" inputmode="decimal" autocomplete="off" placeholder="100" aria-label="Your unit size in dollars"></label></div>
+</div>
+<div class="hdr-r">
 <button class="tbtn hbtn" id="hb" title="How this works" aria-label="How this works" aria-haspopup="dialog">?</button>
 <button class="tbtn" id="th" title="Toggle theme" aria-label="Toggle theme">&#9789;</button>
 </div></div></div>
@@ -318,7 +329,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
       <li><b>Parlays</b> shows the paper parlay tickets (learning only).</li>
       <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
       <li>At the top of the Ledger, the <b>calendar</b> colors each night (each week for the NFL) green if it finished up units, red if down, amber if even, and dashed while results are pending; tap one to open that slate. <b>Units over time</b> charts the running total for all picks and for each market or stat; tap a chip to hide or show its line. Both switch between bets and leans.</li>
-      <li>The record at the top right combines both leagues. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
+      <li>The record at the top right combines both leagues; switch it between <b>All</b> picks, <b>Bets</b> and <b>Leans</b> (leans graded as 1u each). Type your own unit size in <b>Unit $</b> to see that record in dollars; it stays in your browser only. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
     </ul>
 
     <p class="hp-fine">Records are early-season samples and say little on their own. Prices are from when each game was priced and may have moved. For entertainment only, not betting advice. If gambling stops being fun, call 1-800-GAMBLER.</p>
@@ -742,11 +753,29 @@ function renderTop() {
     + st('Totals', m.total ? rec(m.total) : '—', m.total ? un(m.total.units) : '')
     + st('Props', m.prop ? rec(m.prop) : '—', m.prop ? un(m.prop.units) : '')
     + st('Leans', rec(l), l.w + l.l ? `${un(l.units)} if bet` : '');
-  // header KPIs: all leagues combined
-  let w = 0, ls = 0, u = 0;
-  for (const k in IDX) { const x = IDX[k].season.bets; w += x.w; ls += x.l; u += x.units; }
-  $('k-rec').textContent = `${w}–${ls}`; $('k-u').textContent = un(Math.round(u * 100) / 100); $('k-u').className = 'kpi-v ' + ucls(u);
+  renderKpis();
 }
+/* header KPIs: both leagues combined; All = bets + leans (leans graded as 1u). The unit size is the viewer's own,
+   kept in this browser only, and turns units into dollars for them. The site itself never shows real stakes. */
+let KK = 'bet', USZ = '';
+try { const s = JSON.parse(localStorage.getItem('simk') || '{}'); if (['all', 'bet', 'lean'].includes(s.k)) KK = s.k; if (s.u) USZ = String(s.u); } catch (e) {}
+const saveK = () => { try { localStorage.setItem('simk', JSON.stringify({k: KK, u: USZ})); } catch (e) {} };
+const money = v => (v < 0 ? '−' : v > 0 ? '+' : '') + '$' + Math.abs(v).toLocaleString('en-US', {maximumFractionDigits: Math.abs(v) < 100 ? 2 : 0, minimumFractionDigits: 0});
+function renderKpis() {
+  let w = 0, ls = 0, p = 0, u = 0;
+  for (const k in IDX) for (const part of KK === 'all' ? ['bets', 'leans'] : [KK + 's']) { const x = IDX[k].season[part] || {}; w += x.w || 0; ls += x.l || 0; p += x.p || 0; u += x.units || 0; }
+  u = Math.round(u * 100) / 100;
+  $('k-rl').textContent = KK === 'all' ? 'All picks' : KK === 'bet' ? 'Bets' : 'Leans';
+  $('k-rec').textContent = `${w}–${ls}${p ? '–' + p : ''}`;
+  $('k-u').textContent = un(u); $('k-u').className = 'kpi-v ' + ucls(u);
+  $('k-u').parentElement.title = KK === 'bet' ? 'Units at each bet\'s price' : 'Leans graded as 1u each at their price';
+  const sz = parseFloat(USZ.replace(/[$,\s]/g, ''));
+  const d = $('k-d'); if (sz > 0) { const v = u * sz; d.textContent = money(Math.round(v * 100) / 100); d.className = 'kpi-v ' + ucls(v); } else { d.textContent = '$—'; d.className = 'kpi-v'; }
+  document.querySelectorAll('#k-kind button').forEach(b => { b.classList.toggle('on', b.dataset.k === KK); b.setAttribute('aria-pressed', b.dataset.k === KK); });
+}
+$('k-sz').value = USZ;
+$('k-sz').addEventListener('input', e => { USZ = e.target.value.slice(0, 9); saveK(); renderKpis(); });
+$('k-kind').addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (!b) return; KK = b.dataset.k; saveK(); renderKpis(); });
 async function go() {
   writeHash(); renderTop();
   try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : renderLedger()); writeHash(); }
