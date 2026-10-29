@@ -56,6 +56,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;box-shadow:var(--shadow);min-width:0}
 .st-l{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4);margin-bottom:6px;font-family:'JetBrains Mono',monospace}
 .st-v{font-size:1.5rem;font-weight:800;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+@media(min-width:769px) and (max-width:1100px){.st-v{font-size:clamp(17px,2.35vw,24px);white-space:nowrap}.st{padding:12px 12px}}
 .st-s{font-size:11px;color:var(--text-3);margin-top:5px}
 .pos{color:var(--green-text)} .neg{color:var(--red-text)} .dim{color:var(--text-4)}
 .fbar{display:flex;gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
@@ -764,7 +765,11 @@ function renderResults() {
     tipEl.style.top = '8px';
   };
   const hide = () => { tipEl.hidden = true; cg.setAttribute('visibility', 'hidden'); };
-  ch.addEventListener('pointermove', show); ch.addEventListener('pointerdown', show); ch.addEventListener('pointerleave', hide);
+  ch.addEventListener('pointermove', show); ch.addEventListener('pointerdown', show);
+  ch.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') hide(); });   // a finger lifting fires pointerleave; keep the tooltip on touch
+  if (!window.CTIP_DOC) { window.CTIP_DOC = 1;   // once: a tap anywhere else closes the chart tooltip
+    document.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse' || e.target.closest('#chart')) return;
+      const t = $('ctip'), g = $('cg'); if (t) t.hidden = true; if (g) g.setAttribute('visibility', 'hidden'); }, {passive: true}); }
 }
 
 /* ---------- paper parlays ----------
