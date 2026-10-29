@@ -1,12 +1,12 @@
 // Site password for CC Center.
-// Public (no password): the Sim Ledger page and its data, the logo, and the login page.
+// Public (no password): the Sim Ledger page, its data, its home-screen manifest and icons, the logo, and the login page.
 // Everything else (dashboard, SimpleOdds, HR Highlights, the picks logs) needs the password.
 // The password lives only in the Vercel environment variable CC_PASSWORD, never in this repo.
 import { next } from '@vercel/functions';
 
 export const config = { matcher: ['/', '/:path*'] }; // '/' listed on its own: '/:path*' alone skipped the home page
 
-const PUBLIC = [/^\/sim(\.html)?$/, /^\/sim\//, /^\/logo\.png$/, /^\/favicon\.ico$/, /^\/login(\.html)?$/, /^\/robots\.txt$/];
+const PUBLIC = [/^\/sim(\.html)?$/, /^\/sim\//, /^\/sim\.webmanifest$/, /^\/sim-icon-\d+\.png$/, /^\/logo\.png$/, /^\/favicon\.ico$/, /^\/login(\.html)?$/, /^\/robots\.txt$/];
 const COOKIE = 'cc_auth';
 const MAX_AGE = 60 * 60 * 24 * 180; // stay signed in for 180 days per device
 

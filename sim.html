@@ -2,6 +2,14 @@
 <html lang="en" data-theme="light"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Sim Ledger &middot; Chasin Cheddar</title>
+<link rel="manifest" href="sim.webmanifest">
+<link rel="apple-touch-icon" href="sim-icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="sim-icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sim Ledger">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f0eeea" id="tc">
 <meta name="description" content="NBA and NFL sims: every game simulated thousands of times, with projections, fair lines, every pick and graded results.">
 <meta property="og:title" content="Sim Ledger · Chasin Cheddar's Command Center">
 <meta property="og:description" content="NBA and NFL games simulated thousands of times: projections, fair lines vs the market, every pick and graded results.">
@@ -15,7 +23,7 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;min-height:100vh;transition:background .2s,color .2s}
 .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
-.hdr{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top,0px)}
 .hdr-in{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px max(24px,env(safe-area-inset-right,0px)) 12px max(24px,env(safe-area-inset-left,0px));gap:12px}
 .h-t{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
 .h-t span{color:var(--green)}
@@ -362,7 +370,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 </dialog>
 <script>
 function getTheme(){try{var s=JSON.parse(localStorage.getItem('cc7')||'{}');return s.theme||'light';}catch(e){return 'light';}}
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);var tc=document.getElementById('tc');if(tc)tc.setAttribute('content',t==='dark'?'#191c22':'#f0eeea');
  try{var s=JSON.parse(localStorage.getItem('cc7')||'{}');s.theme=t;localStorage.setItem('cc7',JSON.stringify(s));}catch(e){}}
 setTheme(getTheme());
 // The site nav is for Dylan only: show it when signed in (the cc_in cookie is set at sign-in and grants nothing by itself).
@@ -875,6 +883,8 @@ async function go() {
 }
 $('leagues').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b || b.dataset.l === LG) return; LG = b.dataset.l; NID = null; FOCUS = null; go(); });
 document.querySelector('.vw').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (!b) return; VIEW = b.dataset.v; FOCUS = null; go(); });
+let AWAY = 0;
+document.addEventListener('visibilitychange', () => { if (document.hidden) AWAY = Date.now(); else if (AWAY && Date.now() - AWAY > 600000) location.reload(); });
 (async () => {
   readHash();
   await Promise.all(Object.keys(LEAGUES).map(async k => { try { IDX[k] = await getJSON(`sim/${k}/index.json`); } catch (e) {} }));
