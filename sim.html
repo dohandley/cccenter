@@ -206,10 +206,10 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .sp-r:hover{border-color:var(--text-3)}.sp-r:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 .sp-r b{font-size:12.5px;font-weight:800;min-width:0}
 .sp-r .pr{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;text-align:right;white-space:nowrap}
-.sp-r .sub{grid-column:1/-1}.sp-r .bk{color:var(--gold);font-weight:700}
+.sp-r .sub,.sp-r .shop{grid-column:1/-1}.sp-r .bk{color:var(--gold);font-weight:700}
 .sp-r .pill{font-size:9px;padding:1px 6px}
 .sp-n{font-size:11.5px;color:var(--text-3)}
-.shop{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:12px;color:var(--text-3);margin-top:6px}.shop b{color:var(--gold);font-family:'JetBrains Mono',monospace;font-weight:700}
+.shop{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:12px;color:var(--text-3);margin-top:6px}.shop.sm{font-size:10.5px;margin-top:3px;gap:2px 6px}.shop.sm .st-l{font-size:9px}.shop b{color:var(--gold);font-family:'JetBrains Mono',monospace;font-weight:700}
 @media(min-width:1580px){
   html,body{overflow-x:clip}
   .slate-wrap{position:relative}
@@ -343,7 +343,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
       <li><span class="pill p-hot">★ Hot</span> on a bet: that bet type (market, stat and side, e.g. "3-pointers unders") has 15+ graded bets and is +10% ROI or better this season.</li>
       <li><span class="pill p-cold">❄ Cold</span>: 15+ graded and &minus;10% or worse. Every ungraded bet also shows its bet type's record, tagged or not.</li>
       <li><b>Watch list</b> leans: a lean category (the reason it wasn't bet) that is up units over 30+ graded picks. <span class="pill p-hot">★ Top group</span> marks a stat group inside it with 15+ graded and +10% ROI.</li>
-      <li><b>Shop</b> under a bet: another of the books in the feed has a better price at the same line, or a better number (a lower line for an over, a higher one for an under). The edge and the graded result still use the listed price, which comes from the book with the lowest vig at the line most books post.</li>
+      <li><b>Shop</b> under a bet or lean: another of the books in the feed has a better price at the same line, or a better number (a lower line for an over, a higher one for an under). The edge and the graded result still use the listed price, which comes from the book with the lowest vig at the line most books post.</li>
       <li>Tags are recalculated after every grading and show only on picks that haven't been graded. They describe the record so far, not a prediction.</li>
     </ul>
 
@@ -493,15 +493,15 @@ function pickCard(g, p) {
 }
 /* price shopping from the odds pull: a better price at the same line, or a better number, at another book. Display only:
    the edge and the graded result use the listed price. */
-function shopLine(p) {
+function shopLine(p, small) {
   if (p.result || !(p.best_price || p.alt_line)) return '';
   const fx = t => esc(t).replace(/ -(\d)/g, ' −$1');
   const bits = [p.best_price ? `better price <b>${fx(p.best_price)}</b>` : '', p.alt_line ? `better number <b>${fx(p.alt_line)}</b>` : ''].filter(Boolean);
-  return `<div class="shop"><span class="st-l" style="margin:0">Shop</span> ${bits.join(' &middot; ')}</div>`;
+  return `<div class="shop${small ? ' sm' : ''}"><span class="st-l" style="margin:0">Shop</span> ${bits.join(' &middot; ')}</div>`;
 }
 function leanTable(ls) {
   if (!ls.length) return '';
-  const rows = ls.map(p => { const lf = leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}</td>
+  const rows = ls.map(p => { const lf = leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${shopLine(p, true)}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
@@ -582,7 +582,7 @@ function spots(gs, unit) {
   const graded = gs.every(g => g.final);
   const row = ({g, p, st}) => `<button type="button" class="sp-r" data-g="${esc(g.game_id)}"><b>${esc(p.selection)}</b><span class="pr">${odds(p.price)}</span>
     <span class="sub">${esc(g.away)} @ ${esc(g.home)} &middot; <span class="bk">${esc(p.book)}</span>${p.result ? ` &middot; <span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>` : ''}</span>
-    <span class="sub">${esc(st.label)} ${frec(st.t)}</span></button>`;
+    <span class="sub">${esc(st.label)} ${frec(st.t)}</span>${shopLine(p, true)}</button>`;
   const all = rows.bet.concat(rows.lean), done = all.filter(x => x.p.result);
   let recap = '';
   if (done.length) { const t = {w: 0, l: 0, p: 0, u: 0}; for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
