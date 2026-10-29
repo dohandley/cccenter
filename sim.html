@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Sim Ledger &middot; Chasin Cheddar</title>
+<title>Chasin Cheddar&rsquo;s Sim Ledger</title>
 <link rel="manifest" href="sim.webmanifest">
 <link rel="apple-touch-icon" href="sim-icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="sim-icon-192.png">
@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f0eeea" id="tc">
 <meta name="description" content="NBA and NFL sims: every game simulated thousands of times, with projections, fair lines, every pick and graded results.">
-<meta property="og:title" content="Sim Ledger · Chasin Cheddar's Command Center">
+<meta property="og:title" content="Chasin Cheddar's Sim Ledger">
 <meta property="og:description" content="NBA and NFL games simulated thousands of times: projections, fair lines vs the market, every pick and graded results.">
 <meta property="og:image" content="https://cccenter.vercel.app/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +27,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .hdr-in{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px max(24px,env(safe-area-inset-right,0px)) 12px max(24px,env(safe-area-inset-left,0px));gap:12px}
 .h-t{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
 .h-t span{color:var(--green)}
+@media(max-width:400px){.h-t{font-size:16.5px}}
 .h-d{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4);margin-top:3px}
 .hdr-r{display:flex;align-items:center;gap:8px}
 .kpis{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:nowrap;justify-content:flex-end;flex:0 0 auto}
@@ -271,7 +272,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 </style></head>
 <body>
 <div class="hdr"><div class="hdr-in">
-<div><div class="h-t"><span>Sim</span> Ledger</div><div class="h-d" id="hd">NBA &amp; NFL &middot; every game simulated thousands of times</div></div>
+<div><div class="h-t"><span>Chasin Cheddar&rsquo;s</span> Sim Ledger</div><div class="h-d" id="hd">NBA &amp; NFL &middot; every game simulated thousands of times</div></div>
 <div class="kpis" title="Season to date for the league you have open">
 <div class="seg" id="k-kind" role="group" aria-label="Show all picks, bets or leans"><button type="button" data-k="all">All</button><button type="button" data-k="bet">Bets</button><button type="button" data-k="lean">Leans</button></div>
 <div class="kpi"><span class="kpi-l" id="k-rl">Bets</span><span class="kpi-v" id="k-rec">&mdash;</span></div>
