@@ -174,6 +174,56 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
 .game{scroll-margin-top:96px}.mo{display:none}
+/* results: calendar + cumulative units */
+[data-theme="light"]{--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948;--s0:#9ca3af}
+[data-theme="dark"]{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;--s0:#6b7280}
+.res2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:12px;align-items:start}
+.res2>*{min-width:0}
+.pan{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow);display:grid;gap:10px;align-content:start;min-width:0}
+.pan-h{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.pan-t{font-weight:800;font-size:14px;letter-spacing:-.01em}
+.cnav{display:flex;align-items:center;gap:6px}
+.cnav button{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;width:30px;height:30px;cursor:pointer;color:var(--text);font-size:14px;line-height:1}
+.cnav button:disabled{opacity:.35;cursor:default}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal .dw{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:var(--text-4);text-align:center;padding-bottom:2px}
+.dy{border:1px solid var(--border);border-radius:6px;background:var(--surface-2);min-height:58px;padding:5px 3px;display:grid;align-content:center;justify-items:center;gap:1px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-4);text-align:center;font:inherit}
+.dy .dn{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700}
+.dy .dr{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;overflow-wrap:anywhere}
+.dy .du{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700}
+.dy.blank{background:none;border-color:transparent}
+.dy.off{opacity:.55}
+.dy.win{background:var(--green-bg);border-color:var(--green-border);color:var(--green-text)}
+.dy.loss{background:var(--red-bg);border-color:var(--red-border);color:var(--red-text)}
+.dy.even{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber-text)}
+.dy.wait{border-style:dashed;border-color:var(--border-h);color:var(--text-3);background:var(--surface)}
+.dy.today{box-shadow:inset 0 0 0 2px var(--text)}
+button.dy{cursor:pointer}button.dy:hover{border-color:var(--text-3)}
+button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.wks{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px}
+.wks .dy{min-height:66px}
+.ckey{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--text-3);align-items:center}
+.ckey i{display:inline-block;width:11px;height:11px;border-radius:3px;border:1px solid;vertical-align:-1px;margin-right:4px}
+.lchips{display:flex;flex-wrap:wrap;gap:6px}
+.lchip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px 10px;font-family:inherit;font-size:11.5px;font-weight:700;color:var(--text);cursor:pointer}
+.lchip i{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.lchip span{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:11px}
+.lchip.x{opacity:.45}.lchip.x i{background:var(--track)!important}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:'JetBrains Mono',monospace;font-size:10px;fill:var(--text-4)}
+.ctip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--border-h);border-radius:8px;padding:8px 10px;font-size:11.5px;box-shadow:0 6px 20px rgba(0,0,0,.14);min-width:150px;z-index:2}
+.ctip b{display:block;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text-3);margin-bottom:4px;font-weight:600}
+.ctip div{display:flex;align-items:center;gap:6px;justify-content:space-between;white-space:nowrap}
+.ctip div span:first-child{display:flex;align-items:center;gap:6px}
+.ctip i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.seg{display:flex;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:2px}
+.seg button{background:none;border:0;border-radius:5px;padding:5px 10px;font-family:inherit;font-weight:700;font-size:11px;color:var(--text-3);cursor:pointer}
+.seg button.on{background:var(--text);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--green);outline-offset:1px}
+.cnote{font-size:11.5px;color:var(--text-3)}
+@media(max-width:860px){.res2{grid-template-columns:1fr}}
+@media(max-width:480px){.dy{min-height:50px;padding:4px 1px}.dy .dr,.dy .du{font-size:9px}.cal{gap:3px}}
 @media(max-width:768px){.vw{margin-left:0;width:100%}.vw button{flex:1}.hm{display:none}.mo{display:inline}.sub.mo{display:block}td.pk{min-width:120px}td,th{padding:8px 7px}}
 @media(max-width:768px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats>.st:last-child:nth-child(odd){grid-column:span 2}.hdr-r .kpi{display:none}.body{padding:16px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}.hdr-in{padding:12px 16px}.nav-in{padding:0 16px}.lines{grid-template-columns:1fr}.score{grid-template-columns:1fr 1fr}.mid{grid-column:1/-1;grid-row:2;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 10px;padding:4px 0 0}.meters{grid-template-columns:1fr;gap:8px}.box2{grid-template-columns:1fr}.game{padding:14px}}
 @media(prefers-reduced-motion:no-preference){.bar i{transition:width .4s ease}}
@@ -267,6 +317,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
       <li><b>Slate</b> shows one night (or NFL week) of game cards. Pick a date from the row above the cards.</li>
       <li><b>Parlays</b> shows the paper parlay tickets (learning only).</li>
       <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
+      <li>At the top of the Ledger, the <b>calendar</b> colors each night (each week for the NFL) green if it finished up units, red if down, amber if even, and dashed while results are pending; tap one to open that slate. <b>Units over time</b> charts the running total for all picks and for each market or stat; tap a chip to hide or show its line. Both switch between bets and leans.</li>
       <li>The record at the top right combines both leagues. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
     </ul>
 
@@ -505,6 +556,7 @@ async function renderLedger() {
       <td class="r hm">${r.result ? `<span class="pill p-${esc(r.result)}">${esc(r.result)}</span>` : '<span class="pill p-open">pending</span>'}</td>
       <td class="r u ${ucls(r.units)}">${r.result ? un(r.units) : '<span class="dim">pending</span>'}<span class="sub mo" style="font-weight:600">${esc(r.result || '')}</span></td></tr>`).join('');
   $('view').innerHTML = `<div style="display:grid;gap:12px">
+    <section id="res" style="display:grid;gap:10px" aria-label="Results by ${LG === 'nfl' ? 'week' : 'night'}"></section>
     <div class="fbar" id="lf"><span class="f-lab">Show</span>${chip('kind', 'all', 'All')}${chip('kind', 'bet', 'Bets')}${chip('kind', 'lean', 'Leans')}
       <span class="ndiv"></span>${chip('mkt', 'all', 'Every market')}${chip('mkt', 'totals', 'Totals')}${chip('mkt', 'props', 'Props')}${chip('mkt', 'sides', 'Sides')}</div>
     <div class="fbar" id="lf2"><span class="f-lab">Lean reason</span>${chip('why', 'all', 'Any')}${chip('why', 'cap', 'Over 20-pt cap')}${chip('why', 'limit', 'Prop limit')}${chip('why', 'be', 'Near breakeven')}${chip('why', 'stress', 'Failed stress test')}${chip('why', 'side', 'Side market')}</div>
@@ -517,8 +569,127 @@ async function renderLedger() {
     if (b.dataset.g === 'kind' && b.dataset.v === 'bet') FILT.why = 'all';
     renderLedger(); };
   $('lf').onclick = pick; $('lf2').onclick = pick;
+  renderResults();
   const open = tr => { NID = tr.dataset.n; FOCUS = tr.dataset.g; VIEW = 'slate'; go(); };
   $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = () => open(tr); tr.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(tr); } }; });
+}
+
+/* ---------- results: calendar + cumulative units ----------
+   Built from ledger.json. Bets at their price; leans graded as 1u each (as everywhere else on the page). */
+const RES = {kind: 'bet', mo: null, hide: {}};
+const etDay = t => new Date(t).toLocaleDateString('en-CA', {timeZone: 'America/New_York'});   // YYYY-MM-DD
+const r2 = v => Math.round(v * 100) / 100;
+function nightTally(kind) {
+  const by = {};
+  for (const r of LEDGER[LG].rows) {
+    if (r.kind !== kind) continue;
+    const t = by[r.night] || (by[r.night] = {w: 0, l: 0, p: 0, u: 0, open: 0});
+    if (!r.result) { t.open++; continue; }
+    if (r.result === 'win') t.w++; else if (r.result === 'loss') t.l++; else t.p++;
+    t.u += r.units || 0;
+  }
+  return by;
+}
+function tile(t, top, n, extra) {
+  const g = t ? t.w + t.l + t.p : 0;
+  let cls = 'off', rr = '', uu = '';
+  if (t && t.open && !g) { cls = 'wait'; rr = `${t.open} open`; }
+  else if (g) { const u = r2(t.u); cls = t.open ? 'wait' : u > 0 ? 'win' : u < 0 ? 'loss' : 'even'; rr = rec(t); uu = un(u) + (t.open ? ` · ${t.open} open` : ''); }
+  else if (n) { rr = RES.kind === 'bet' ? 'no bets' : 'no leans'; }
+  const lab = `${top}: ${g ? rec(t) + ', ' + un(r2(t.u)) : rr || 'no slate'}`;
+  const inner = `<span class="dn">${top}</span>${rr ? `<span class="dr">${rr}</span>` : ''}${uu ? `<span class="du">${uu}</span>` : ''}`;
+  return n ? `<button type="button" class="dy ${cls}${extra || ''}" data-n="${esc(n)}" aria-label="${esc(lab)}, open slate">${inner}</button>`
+    : `<div class="dy ${cls}${extra || ''}">${inner}</div>`;
+}
+function calendar(by) {
+  const ids = IDX[LG].nights.map(n => n.id), have = new Set(ids);
+  if (LG === 'nfl') {   // about one slate a week: a strip of weeks instead of a month grid
+    const ws = IDX[LG].nights.slice().reverse();
+    return `<div class="wks">${ws.map((n, i) => tile(by[n.id], n.label.replace('Week ', 'Wk '), n.id, i === ws.length - 1 ? ' today' : '')).join('')}</div>`;
+  }
+  const today = etDay(Date.now()), days = ids.concat(today).sort();
+  const months = [...new Set(days.map(d => d.slice(0, 7)))];
+  if (!RES.mo || !months.includes(RES.mo)) RES.mo = (ids[0] || today).slice(0, 7);
+  const [y, m] = RES.mo.split('-').map(Number), first = new Date(Date.UTC(y, m - 1, 1)), nd = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  // whole weeks before the first slate (and not this week) are left out, so the opening month isn't mostly empty
+  const lead = first.getUTCDay(), cellsArr = Array(lead).fill('<div class="dy blank"></div>'), live = [];
+  for (let d = 1; d <= nd; d++) {
+    const id = `${RES.mo}-${String(d).padStart(2, '0')}`;
+    cellsArr.push(tile(by[id], d, have.has(id) ? id : null, id === today ? ' today' : ''));
+    live.push(have.has(id) || id === today || id > days[0]);
+  }
+  const firstLive = live.indexOf(true), skip = firstLive < 0 ? 0 : Math.floor((firstLive + lead) / 7) * 7;
+  const cells = 'SMTWTFS'.split('').map(d => `<div class="dw">${d}</div>`).join('') + cellsArr.slice(skip).join('');
+  const mi = months.indexOf(RES.mo), name = first.toLocaleDateString('en-US', {month: 'long', year: 'numeric', timeZone: 'UTC'});
+  return `<div class="pan-h"><span class="pan-t">${name}</span><span class="cnav"><button type="button" data-mo="${months[mi - 1] || ''}" aria-label="Previous month"${mi > 0 ? '' : ' disabled'}>&lsaquo;</button><button type="button" data-mo="${months[mi + 1] || ''}" aria-label="Next month"${mi < months.length - 1 ? '' : ' disabled'}>&rsaquo;</button></span></div>
+    <div class="cal">${cells}</div>`;
+}
+function series(kind) {
+  const rows = LEDGER[LG].rows.filter(r => r.kind === kind && r.result);
+  const grp = r => r.market === 'total' ? 'totals' : r.market === 'prop' ? parts(r).base : 'sides';
+  const cnt = {}; for (const r of rows) cnt[grp(r)] = (cnt[grp(r)] || 0) + 1;
+  const keep = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]).slice(0, 7);
+  const name = r => keep.includes(grp(r)) ? grp(r) : 'other';
+  const nights = [...new Set(rows.map(r => r.night))].sort();
+  const lab = Object.fromEntries(IDX[LG].nights.map(n => [n.id, n.label]));
+  const keys = ['all', ...keep, ...(rows.some(r => name(r) === 'other') ? ['other'] : [])];
+  const S = keys.map((k, i) => ({k, name: k === 'all' ? 'All' : k, col: k === 'all' ? 'var(--text)' : k === 'other' ? 'var(--s0)' : `var(--s${i})`, v: [0], n: 0}));
+  for (const nt of nights) {
+    const day = {}; for (const r of rows) if (r.night === nt) { day.all = (day.all || 0) + (r.units || 0); day[name(r)] = (day[name(r)] || 0) + (r.units || 0); }
+    for (const s of S) s.v.push(s.v[s.v.length - 1] + (day[s.k] || 0));
+  }
+  for (const r of rows) { S[0].n++; S.find(s => s.k === name(r)).n++; }
+  const xl = ['Start', ...nights.map(n => LG === 'nfl' ? (lab[n] || n).replace('Week ', 'Wk ') : shortDate(n + 'T12:00:00-04:00'))];
+  return {S, xl};
+}
+function chart({S, xl}, W) {
+  const vis = S.filter(s => !RES.hide[s.k]);
+  if (xl.length < 2) return '<div class="cnote">Nothing graded yet.</div>';
+  const H = W < 480 ? 220 : 260, L = 40, R = 12, T = 10, B = 26, all = vis.flatMap(s => s.v).concat(0);
+  let lo = Math.min(...all), hi = Math.max(...all); if (hi - lo < 2) { hi += 1; lo -= 1; }
+  const raw = (hi - lo) / 5, mag = 10 ** Math.floor(Math.log10(raw)), step = [1, 2, 2.5, 5, 10].map(x => x * mag).find(x => x >= raw);
+  lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+  const X = i => L + (W - L - R) * i / (xl.length - 1), Y = v => T + (H - T - B) * (hi - v) / (hi - lo);
+  let g = '';
+  for (let v = lo; v <= hi + 1e-9; v += step) g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--${Math.abs(v) < 1e-9 ? 'text-4' : 'border'})" stroke-width="1"${Math.abs(v) < 1e-9 ? '' : ' stroke-dasharray="2 3"'}/><text x="${L - 6}" y="${Y(v) + 3}" text-anchor="end">${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(+v.toFixed(2))}</text>`;
+  const every = Math.max(1, Math.ceil((xl.length - 1) / (W < 480 ? 4 : 6)));
+  xl.forEach((t, i) => { if (i && (i % every === 0 || i === xl.length - 1) && (i === xl.length - 1 || xl.length - 1 - i >= every * 0.75)) g += `<text x="${X(i)}" y="${H - 6}" text-anchor="middle">${esc(t)}</text>`; });
+  const lines = vis.slice().reverse().map(s => `<polyline fill="none" stroke="${s.col}" stroke-width="${s.k === 'all' ? 3 : 1.75}" stroke-linejoin="round" stroke-linecap="round" points="${s.v.map((v, i) => X(i).toFixed(1) + ',' + Y(v).toFixed(1)).join(' ')}"/><circle cx="${X(s.v.length - 1)}" cy="${Y(s.v[s.v.length - 1])}" r="${s.k === 'all' ? 4 : 3}" fill="${s.col}"/>`).join('');
+  const sum = vis.map(s => `${s.name} ${un(s.v[s.v.length - 1])}`).join(', ');
+  return `<div class="chart" id="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cumulative units by night: ${esc(sum)}">${g}${lines}<line id="cg" x1="0" x2="0" y1="${T}" y2="${H - B}" stroke="var(--text-3)" stroke-width="1" visibility="hidden"/><rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent" id="ch"/></svg><div class="ctip" id="ctip" hidden></div></div>`;
+}
+function renderResults() {
+  const el = $('res'); if (!el) return;
+  const CW = Math.round(Math.max(300, Math.min(640, (el.clientWidth || 640) * (innerWidth > 860 ? 0.58 : 1) - 34))), by = nightTally(RES.kind), sr = series(RES.kind), unitW = LG === 'nfl' ? 'week' : 'night';
+  const seg = ['bet', 'lean'].map(k => `<button type="button" data-k="${k}" class="${RES.kind === k ? 'on' : ''}" aria-pressed="${RES.kind === k}">${k === 'bet' ? 'Bets' : 'Leans'}</button>`).join('');
+  const chips = sr.S.map(s => `<button type="button" class="lchip${RES.hide[s.k] ? ' x' : ''}" data-s="${esc(s.k)}" aria-pressed="${!RES.hide[s.k]}" title="${s.n} graded"><i style="background:${s.col}"></i>${esc(s.name)} <span class="${ucls(s.v[s.v.length - 1])}">${un(s.v[s.v.length - 1])}</span></button>`).join('');
+  el.innerHTML = `<div class="pan-h"><span class="pan-t">Results by ${unitW}</span><div class="seg" role="group" aria-label="Show bets or leans">${seg}</div></div>
+    <div class="res2">
+      <div class="pan">${LG === 'nfl' ? `<div class="pan-h"><span class="pan-t">${IDX[LG].season_label}</span></div>` : ''}${calendar(by)}
+        <div class="ckey"><span><i style="background:var(--green-bg);border-color:var(--green-border)"></i>Up</span><span><i style="background:var(--red-bg);border-color:var(--red-border)"></i>Down</span><span><i style="background:var(--amber-bg);border-color:var(--amber-border)"></i>Even</span><span><i style="background:var(--surface);border-color:var(--border-h);border-style:dashed"></i>Waiting on results</span></div>
+        <div class="cnote">Tap a ${unitW} to open its slate.${RES.kind === 'lean' ? ' Leans are graded as 1u each and never staked.' : ''}</div></div>
+      <div class="pan"><div class="pan-h"><span class="pan-t">Units over time</span><span class="cnote">${RES.kind === 'bet' ? 'bets at their price' : 'leans at 1u each'}</span></div>
+        <div class="lchips">${chips}</div>${chart(sr, CW)}
+        <div class="cnote">Tap a market to hide or show its line. Hover or tap the chart for that ${unitW}'s running totals.</div></div>
+    </div>`;
+  el.querySelector('.seg').onclick = e => { const b = e.target.closest('button[data-k]'); if (!b || b.dataset.k === RES.kind) return; RES.kind = b.dataset.k; RES.hide = {}; renderResults(); };
+  el.querySelectorAll('button.dy').forEach(b => b.onclick = () => { NID = b.dataset.n; FOCUS = null; VIEW = 'slate'; go(); window.scrollTo({top: 0}); });
+  el.querySelectorAll('.cnav button').forEach(b => b.onclick = () => { if (b.dataset.mo) { RES.mo = b.dataset.mo; renderResults(); } });
+  el.querySelectorAll('.lchip').forEach(b => b.onclick = () => { RES.hide[b.dataset.s] = !RES.hide[b.dataset.s]; renderResults(); });
+  const ch = $('ch'); if (!ch) return;
+  const svg = ch.ownerSVGElement, tipEl = $('ctip'), cg = $('cg'), n = sr.xl.length, L = 40, R = 12, W = CW;
+  const show = e => {
+    const bx = svg.getBoundingClientRect(), x = (e.clientX - bx.left) * W / bx.width;
+    const i = Math.max(0, Math.min(n - 1, Math.round((x - L) / (W - L - R) * (n - 1)))), px = L + (W - L - R) * i / (n - 1);
+    cg.setAttribute('x1', px); cg.setAttribute('x2', px); cg.setAttribute('visibility', 'visible');
+    tipEl.innerHTML = `<b>${esc(sr.xl[i])}</b>` + sr.S.filter(s => !RES.hide[s.k]).map(s => `<div><span><i style="background:${s.col}"></i>${esc(s.name)}</span><span class="u ${ucls(s.v[i])}">${un(s.v[i])}</span></div>`).join('');
+    tipEl.hidden = false;
+    const left = px * bx.width / W, wrap = tipEl.parentElement.clientWidth;
+    tipEl.style.left = Math.min(Math.max(0, left + 12 + tipEl.offsetWidth > wrap ? left - 12 - tipEl.offsetWidth : left + 12), Math.max(0, wrap - tipEl.offsetWidth)) + 'px';
+    tipEl.style.top = '8px';
+  };
+  const hide = () => { tipEl.hidden = true; cg.setAttribute('visibility', 'hidden'); };
+  ch.addEventListener('pointermove', show); ch.addEventListener('pointerdown', show); ch.addEventListener('pointerleave', hide);
 }
 
 /* ---------- paper parlays ----------
