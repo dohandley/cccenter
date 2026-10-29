@@ -238,7 +238,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 <body>
 <div class="hdr"><div class="hdr-in">
 <div><div class="h-t"><span>Sim</span> Ledger</div><div class="h-d" id="hd">NBA &amp; NFL &middot; every game simulated thousands of times</div></div>
-<div class="kpis" title="Season to date, NBA and NFL combined">
+<div class="kpis" title="Season to date for the league you have open">
 <div class="seg" id="k-kind" role="group" aria-label="Show all picks, bets or leans"><button type="button" data-k="all">All</button><button type="button" data-k="bet">Bets</button><button type="button" data-k="lean">Leans</button></div>
 <div class="kpi"><span class="kpi-l" id="k-rl">Bets</span><span class="kpi-v" id="k-rec">&mdash;</span></div>
 <div class="kpi"><span class="kpi-l">Units</span><span class="kpi-v" id="k-u">&mdash;</span></div>
@@ -329,7 +329,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
       <li><b>Parlays</b> shows the paper parlay tickets (learning only).</li>
       <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
       <li>At the top of the Ledger, the <b>calendar</b> colors each night (each week for the NFL) green if it finished up units, red if down, amber if even, and dashed while results are pending; tap one to open that slate. <b>Units over time</b> charts the running total for all picks and for each market or stat; tap a chip to hide or show its line. Both switch between bets and leans.</li>
-      <li>The record at the top right combines both leagues; switch it between <b>All</b> picks, <b>Bets</b> and <b>Leans</b> (leans graded as 1u each). Type your own unit size in <b>Unit $</b> to see that record in dollars; it stays in your browser only. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
+      <li>The record at the top right is for the league you have open; switch it between <b>All</b> picks, <b>Bets</b> and <b>Leans</b> (leans graded as 1u each). Type your own unit size in <b>Unit $</b> to see that record in dollars; it stays in your browser only. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
     </ul>
 
     <p class="hp-fine">Records are early-season samples and say little on their own. Prices are from when each game was priced and may have moved. For entertainment only, not betting advice. If gambling stops being fun, call 1-800-GAMBLER.</p>
@@ -755,7 +755,7 @@ function renderTop() {
     + st('Leans', rec(l), l.w + l.l ? `${un(l.units)} if bet` : '');
   renderKpis();
 }
-/* header KPIs: both leagues combined; All = bets + leans (leans graded as 1u). The unit size is the viewer's own,
+/* header KPIs: the open league (LG); All = bets + leans (leans graded as 1u). The unit size is the viewer's own,
    kept in this browser only, and turns units into dollars for them. The site itself never shows real stakes. */
 let KK = 'bet', USZ = '';
 try { const s = JSON.parse(localStorage.getItem('simk') || '{}'); if (['all', 'bet', 'lean'].includes(s.k)) KK = s.k; if (s.u) USZ = String(s.u); } catch (e) {}
@@ -763,9 +763,10 @@ const saveK = () => { try { localStorage.setItem('simk', JSON.stringify({k: KK, 
 const money = v => (v < 0 ? '−' : v > 0 ? '+' : '') + '$' + Math.abs(v).toLocaleString('en-US', {maximumFractionDigits: Math.abs(v) < 100 ? 2 : 0, minimumFractionDigits: 0});
 function renderKpis() {
   let w = 0, ls = 0, p = 0, u = 0;
-  for (const k in IDX) for (const part of KK === 'all' ? ['bets', 'leans'] : [KK + 's']) { const x = IDX[k].season[part] || {}; w += x.w || 0; ls += x.l || 0; p += x.p || 0; u += x.units || 0; }
+  if (!IDX[LG]) return;
+  for (const part of KK === 'all' ? ['bets', 'leans'] : [KK + 's']) { const x = IDX[LG].season[part] || {}; w += x.w || 0; ls += x.l || 0; p += x.p || 0; u += x.units || 0; }
   u = Math.round(u * 100) / 100;
-  $('k-rl').textContent = KK === 'all' ? 'All picks' : KK === 'bet' ? 'Bets' : 'Leans';
+  $('k-rl').textContent = LEAGUES[LG] + ' ' + (KK === 'all' ? 'all picks' : KK === 'bet' ? 'bets' : 'leans');
   $('k-rec').textContent = `${w}–${ls}${p ? '–' + p : ''}`;
   $('k-u').textContent = un(u); $('k-u').className = 'kpi-v ' + ucls(u);
   $('k-u').parentElement.title = KK === 'bet' ? 'Units at each bet\'s price' : 'Leans graded as 1u each at their price';
