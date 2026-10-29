@@ -1,8 +1,12 @@
 {
  "league": "nfl",
  "season_label": "NFL 2026",
- "updated": "2026-10-29T15:07:45+00:00",
+ "updated": "2026-10-29T16:09:15+00:00",
  "nights": [
+  {
+   "id": "2026-w08",
+   "label": "Week 8"
+  },
   {
    "id": "2026-w07",
    "label": "Week 7"
