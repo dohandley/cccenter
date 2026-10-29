@@ -245,7 +245,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 <div class="seg" id="k-kind" role="group" aria-label="Show all picks, bets or leans"><button type="button" data-k="all">All</button><button type="button" data-k="bet">Bets</button><button type="button" data-k="lean">Leans</button></div>
 <div class="kpi"><span class="kpi-l" id="k-rl">Bets</span><span class="kpi-v" id="k-rec">&mdash;</span></div>
 <div class="kpi"><span class="kpi-l">Units</span><span class="kpi-v" id="k-u">&mdash;</span></div>
-<div class="kpi kpi-d"><span class="kpi-v" id="k-d" title="Units times your unit size">$&mdash;</span><label class="ksz"><span class="kpi-l">Unit $</span><input id="k-sz" type="text" inputmode="decimal" autocomplete="off" placeholder="100" aria-label="Your unit size in dollars"></label></div>
+<div class="kpi kpi-d"><span class="kpi-v" id="k-d" title="Units times your unit size">$&mdash;</span><label class="ksz"><span class="kpi-l">Unit $</span><input id="k-sz" type="text" inputmode="decimal" autocomplete="off" placeholder="25" aria-label="Your unit size in dollars"></label></div>
 </div>
 <div class="hdr-r">
 <button class="tbtn hbtn" id="hb" title="How this works" aria-label="How this works" aria-haspopup="dialog">?</button>
@@ -332,7 +332,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
       <li><b>Parlays</b> shows the paper parlay tickets (learning only).</li>
       <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
       <li>At the top of the Ledger, the <b>calendar</b> colors each night (each week for the NFL) green if it finished up units, red if down, amber if even, and dashed while results are pending; tap one to open that slate. <b>Units over time</b> charts the running total for all picks and for each market or stat; tap a chip to hide or show its line. Both switch between bets and leans.</li>
-      <li>The record at the top right is for the league you have open; switch it between <b>All</b> picks, <b>Bets</b> and <b>Leans</b> (leans graded as 1u each). Type your own unit size in <b>Unit $</b> to see that record in dollars; it stays in your browser only. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
+      <li>The record at the top right is for the league you have open; switch it between <b>All</b> picks, <b>Bets</b> and <b>Leans</b> (leans graded as 1u each). Type your own unit size in <b>Unit $</b> to see that record in dollars; it stays in your browser only. The season tiles and the NBA / NFL buttons follow the same switch. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
     </ul>
 
     <p class="hp-fine">Records are early-season samples and say little on their own. Prices are from when each game was priced and may have moved. For entertainment only, not betting advice. If gambling stops being fun, call 1-800-GAMBLER.</p>
@@ -745,18 +745,53 @@ async function renderParlays() {
 /* ---------- shell ---------- */
 function renderTop() {
   $('leagues').innerHTML = Object.entries(LEAGUES).filter(([k]) => IDX[k]).map(([k, l]) => {
-    const b = IDX[k].season.bets;
+    const b = pickSum(IDX[k].season);
     return `<button type="button" class="lgb${k === LG ? ' on' : ''}" data-l="${k}" aria-pressed="${k === LG}"><b>${l}</b><span>${rec(b)} &middot; <span class="${ucls(b.units)}">${un(b.units)}</span></span></button>`;
   }).join('');
   document.querySelectorAll('.vw button').forEach(b => { b.classList.toggle('on', b.dataset.v === VIEW); b.setAttribute('aria-pressed', b.dataset.v === VIEW); });
-  const s = IDX[LG].season, b = s.bets, l = s.leans, m = s.by_market || {};
   $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'slate' ? 'every game simulated thousands of times' : VIEW === 'parlays' ? 'paper parlays · learning only' : 'every pick, graded'}`;
-  $('season').innerHTML = st('Season bets', rec(b), IDX[LG].season_label)
-    + st('Units', un(b.units), b.roi != null ? `${b.roi > 0 ? '+' : ''}${b.roi}% ROI` : '', ucls(b.units))
-    + st('Totals', m.total ? rec(m.total) : '—', m.total ? un(m.total.units) : '')
-    + st('Props', m.prop ? rec(m.prop) : '—', m.prop ? un(m.prop.units) : '')
-    + st('Leans', rec(l), l.w + l.l ? `${un(l.units)} if bet` : '');
+  renderSeason();
   renderKpis();
+}
+/* season tiles follow the header's All / Bets / Leans switch. Season totals come from index.json (exact P/L, rounded once);
+   lean and all-pick market splits come from ledger.json rows (rounded per pick, so they can differ by a cent or two). */
+function pickSum(s) {
+  if (KK === 'bet') return s.bets;
+  if (KK === 'lean') return s.leans;
+  const t = {w: 0, l: 0, p: 0, units: 0};
+  for (const x of [s.bets, s.leans]) { t.w += x.w; t.l += x.l; t.p += x.p; t.units += x.units; }
+  t.units = Math.round(t.units * 100) / 100; t.roi = t.w + t.l ? Math.round(t.units / (t.w + t.l) * 1000) / 10 : null;
+  return t;
+}
+function renderSeason() {
+  if (VIEW === 'parlays' || !IDX[LG]) return;
+  const s = IDX[LG].season, t = pickSum(s), roi = t.roi != null ? `${t.roi > 0 ? '+' : ''}${t.roi}% ROI` : '';
+  const head = st(KK === 'bet' ? 'Season bets' : KK === 'lean' ? 'Season leans' : 'Season picks', rec(t), KK === 'bet' ? IDX[LG].season_label : KK === 'lean' ? 'tracked, not staked' : 'bets + leans')
+    + st('Units', un(t.units), roi + (KK === 'bet' ? '' : ' · leans at 1u'), ucls(t.units));
+  if (KK === 'bet') {
+    const m = s.by_market || {}, l = s.leans;
+    $('season').innerHTML = head + st('Totals', m.total ? rec(m.total) : '—', m.total ? un(m.total.units) : '')
+      + st('Props', m.prop ? rec(m.prop) : '—', m.prop ? un(m.prop.units) : '')
+      + st('Leans', rec(l), l.w + l.l ? `${un(l.units)} if bet` : '');
+    return;
+  }
+  if (!LEDGER[LG]) {   // market splits need the ledger; show the totals now and fill in when it arrives
+    $('season').innerHTML = head + st('Totals', '…') + st('Props', '…') + st('Sides', '…');
+    getJSON(`sim/${LG}/ledger.json`).then(d => { LEDGER[LG] = d; renderSeason(); }).catch(() => {});
+    return;
+  }
+  const by = {total: {w: 0, l: 0, p: 0, u: 0}, prop: {w: 0, l: 0, p: 0, u: 0}, side: {w: 0, l: 0, p: 0, u: 0}};
+  for (const r of LEDGER[LG].rows) {
+    if (!r.result || (KK !== 'all' && r.kind !== KK)) continue;
+    const x = by[r.market === 'total' ? 'total' : r.market === 'prop' ? 'prop' : 'side'];
+    if (r.result === 'win') x.w++; else if (r.result === 'loss') x.l++; else x.p++;
+    x.u += r.units || 0;
+  }
+  const tl = x => x.w + x.l + x.p ? un(Math.round(x.u * 100) / 100) : '';
+  $('season').innerHTML = head
+    + st('Totals', by.total.w + by.total.l + by.total.p ? rec(by.total) : '—', tl(by.total))
+    + st('Props', by.prop.w + by.prop.l + by.prop.p ? rec(by.prop) : '—', tl(by.prop))
+    + st('Sides', by.side.w + by.side.l + by.side.p ? rec(by.side) : '—', (tl(by.side) ? tl(by.side) + ' · ' : '') + 'spreads + ML');
 }
 /* header KPIs: the open league (LG); All = bets + leans (leans graded as 1u). The unit size is the viewer's own,
    kept in this browser only, and turns units into dollars for them. The site itself never shows real stakes. */
@@ -779,7 +814,7 @@ function renderKpis() {
 }
 $('k-sz').value = USZ;
 $('k-sz').addEventListener('input', e => { USZ = e.target.value.slice(0, 9); saveK(); renderKpis(); });
-$('k-kind').addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (!b) return; KK = b.dataset.k; saveK(); renderKpis(); });
+$('k-kind').addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (!b || b.dataset.k === KK) return; KK = b.dataset.k; saveK(); renderTop(); });
 async function go() {
   writeHash(); renderTop();
   try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : renderLedger()); writeHash(); }
