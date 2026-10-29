@@ -209,6 +209,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .sp-r .sub{grid-column:1/-1}.sp-r .bk{color:var(--gold);font-weight:700}
 .sp-r .pill{font-size:9px;padding:1px 6px}
 .sp-n{font-size:11.5px;color:var(--text-3)}
+.shop{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:12px;color:var(--text-3);margin-top:6px}.shop b{color:var(--gold);font-family:'JetBrains Mono',monospace;font-weight:700}
 @media(min-width:1580px){
   html,body{overflow-x:clip}
   .slate-wrap{position:relative}
@@ -342,6 +343,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
       <li><span class="pill p-hot">★ Hot</span> on a bet: that bet type (market, stat and side, e.g. "3-pointers unders") has 15+ graded bets and is +10% ROI or better this season.</li>
       <li><span class="pill p-cold">❄ Cold</span>: 15+ graded and &minus;10% or worse. Every ungraded bet also shows its bet type's record, tagged or not.</li>
       <li><b>Watch list</b> leans: a lean category (the reason it wasn't bet) that is up units over 30+ graded picks. <span class="pill p-hot">★ Top group</span> marks a stat group inside it with 15+ graded and +10% ROI.</li>
+      <li><b>Shop</b> under a bet: another of the books in the feed has a better price at the same line, or a better number (a lower line for an over, a higher one for an under). The edge and the graded result still use the listed price, which comes from the book with the lowest vig at the line most books post.</li>
       <li>Tags are recalculated after every grading and show only on picks that haven't been graded. They describe the record so far, not a prediction.</li>
     </ul>
 
@@ -487,7 +489,15 @@ function pickCard(g, p) {
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
   return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
-    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${res}</div>`;
+    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${shopLine(p)}${res}</div>`;
+}
+/* price shopping from the odds pull: a better price at the same line, or a better number, at another book. Display only:
+   the edge and the graded result use the listed price. */
+function shopLine(p) {
+  if (p.result || !(p.best_price || p.alt_line)) return '';
+  const fx = t => esc(t).replace(/ -(\d)/g, ' −$1');
+  const bits = [p.best_price ? `better price <b>${fx(p.best_price)}</b>` : '', p.alt_line ? `better number <b>${fx(p.alt_line)}</b>` : ''].filter(Boolean);
+  return `<div class="shop"><span class="st-l" style="margin:0">Shop</span> ${bits.join(' &middot; ')}</div>`;
 }
 function leanTable(ls) {
   if (!ls.length) return '';
