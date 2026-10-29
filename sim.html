@@ -787,7 +787,7 @@ async function renderParlays() {
   const sections = d.slates.map(s => {
     const ts = by[s.id] || [], r = s.record;
     const head = `<div class="sl-h">${esc(s.label)}${FLAG[s.flag] ? ` <span class="pill p-cat">${FLAG[s.flag]}</span>` : ''}<span class="cnt">${ts.length} ticket${ts.length === 1 ? '' : 's'}${r.w + r.l ? ` &middot; ${rec(r)}, <span class="u ${ucls(r.units)}">${un(r.units)}</span>` : ''}</span></div>`;
-    const why = s.note ? 'Not enough graded leans yet to calibrate the model.' : 'No pair of leans cleared the bar.';
+    const why = s.note || 'No pair of leans cleared the bar.';
     return head + (ts.length ? `<div class="tks">${ts.map(ticket).join('')}</div>` : `<div class="dim" style="font-size:12.5px">${why}</div>`);
   }).join('');
   $('view').innerHTML = `<div style="display:grid;gap:12px">
