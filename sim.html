@@ -184,6 +184,28 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
 .game{scroll-margin-top:96px}.mo{display:none}
+/* slate: the night's starred picks (sidebar on wide screens, box above the cards otherwise) */
+.spots{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:14px 16px}
+.spots-in{display:grid;gap:10px}
+.sp-t{font-weight:800;font-size:14px;letter-spacing:-.01em;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sp-t span{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--text-4);text-transform:uppercase;letter-spacing:.08em}
+.sp-s{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 6px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-top:4px}
+.sp-s b{color:var(--green-text)}.sp-s span{font-weight:500;color:var(--text-4);text-transform:none;letter-spacing:0;font-family:Manrope,sans-serif;font-size:11px}
+.sp-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px}
+.sp-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:inherit;color:var(--text);cursor:pointer;width:100%}
+.sp-r:hover{border-color:var(--text-3)}.sp-r:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.sp-r b{font-size:12.5px;font-weight:800;min-width:0}
+.sp-r .pr{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;text-align:right;white-space:nowrap}
+.sp-r .sub{grid-column:1/-1}.sp-r .bk{color:var(--gold);font-weight:700}
+.sp-r .pill{font-size:9px;padding:1px 6px}
+.sp-n{font-size:11.5px;color:var(--text-3)}
+@media(min-width:1580px){
+  html,body{overflow-x:clip}
+  .slate-wrap{position:relative}
+  .spots{position:absolute;top:0;bottom:0;left:calc(100% + 20px);width:min(320px,calc(50vw - 592px));background:none;border:0;box-shadow:none;padding:0}
+  .spots-in{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:14px}
+  .sp-l{grid-template-columns:1fr}
+}
 /* results: calendar + cumulative units */
 [data-theme="light"]{--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948;--s0:#9ca3af}
 [data-theme="dark"]{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;--s0:#6b7280}
@@ -328,7 +350,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
     <h3>Using the page</h3>
     <ul>
       <li><b>NBA / NFL</b> switches leagues. The buttons show each league's season record.</li>
-      <li><b>Slate</b> shows one night (or NFL week) of game cards. Pick a date from the row above the cards.</li>
+      <li><b>Slate</b> shows one night (or NFL week) of game cards. Pick a date from the row above the cards. The <b>★ picks</b> box (a sidebar on wide screens) gathers that slate's <span class="pill p-hot">★ Hot</span> bets and <span class="pill p-hot">★ Top group</span> leans in one list; tap one to jump to its game. On a graded slate it also shows how they did.</li>
       <li><b>Parlays</b> shows the paper parlay tickets (learning only).</li>
       <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
       <li>At the top of the Ledger, the <b>calendar</b> colors each night (each week for the NFL) green if it finished up units, red if down, amber if even, and dashed while results are pending; tap one to open that slate. <b>Units over time</b> charts the running total for all picks and for each market or stat; tap a chip to hide or show its line. Both switch between bets and leans.</li>
@@ -526,6 +548,34 @@ function card(g) {
     <details${FOCUS === g.game_id ? ' open' : ''}><summary>${f ? 'Box score: projected vs actual' : 'Projected box score'}</summary><div class="box2">${box(g, g.away)}${box(g, g.home)}</div></details>
   </article>`;
 }
+/* the slate's starred picks: Hot bets and Top group leans, in one list (same rules as the tags) */
+function starOf(p) {
+  const f = FORM[LG]; if (!f) return null;
+  if (p.kind === 'bet') { const t = f.bet[betKey(p)]; return t && t.tag === 'hot' ? {t, label: betLabel(p)} : null; }
+  const c = catOf(p), ct = c && f.cat[c]; if (!ct || !ct.watch) return null;
+  const g = f.grp[c + '|' + parts(p).base]; return g && g.top ? {t: g, label: `${CATS.find(x => x[0] === c)[1].toLowerCase()} · ${parts(p).base}`} : null;
+}
+function spots(gs, unit) {
+  const rows = {bet: [], lean: []};
+  for (const g of gs) for (const p of g.picks) { const st = starOf(p); if (st) rows[p.kind].push({g, p, st}); }
+  for (const k in rows) rows[k].sort((a, b) => new Date(a.g.tipoff) - new Date(b.g.tipoff) || b.p.model_p - a.p.model_p);
+  const graded = gs.every(g => g.final);
+  const row = ({g, p, st}) => `<button type="button" class="sp-r" data-g="${esc(g.game_id)}"><b>${esc(p.selection)}</b><span class="pr">${odds(p.price)}</span>
+    <span class="sub">${esc(g.away)} @ ${esc(g.home)} &middot; <span class="bk">${esc(p.book)}</span>${p.result ? ` &middot; <span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>` : ''}</span>
+    <span class="sub">${esc(st.label)} ${frec(st.t)}</span></button>`;
+  const all = rows.bet.concat(rows.lean), done = all.filter(x => x.p.result);
+  let recap = '';
+  if (done.length) { const t = {w: 0, l: 0, p: 0, u: 0}; for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
+    recap = `<div class="sp-n">These picks went <b>${rec(t)}</b>, <b class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</b>${rows.lean.some(x => x.p.result) ? ' (leans at 1u)' : ''}.</div>`; }
+  return `<aside class="spots" aria-label="Starred picks"><div class="spots-in">
+    <div class="sp-t">${graded ? '★ Picks on this ' + unit.toLowerCase() : unit === 'Week' ? "This week's ★ picks" : "Tonight's ★ picks"}<span>${all.length}</span></div>${recap}
+    <div class="sp-s"><b>★</b> Hot bets <span>1 unit each</span></div>
+    ${rows.bet.length ? `<div class="sp-l">${rows.bet.map(row).join('')}</div>` : '<div class="sp-n">None yet. A bet type needs 15+ graded at +10% ROI or better.</div>'}
+    <div class="sp-s"><b>★</b> Top group leans <span>tracked, not staked</span></div>
+    ${rows.lean.length ? `<div class="sp-l">${rows.lean.map(row).join('')}</div>` : '<div class="sp-n">None on this slate.</div>'}
+    <div class="sp-n">${graded ? 'Tagged with today\'s season records. ' : ''}Several unders on one team tend to win or lose together. Tap a pick to jump to its game.</div>
+  </div></aside>`;
+}
 async function renderSlate() {
   const idx = IDX[LG];
   if (!idx.nights.length) { $('view').innerHTML = `<div class="empty">No ${LEAGUES[LG]} games priced yet.</div>`; return; }
@@ -537,12 +587,15 @@ async function renderSlate() {
   let nb = 0, nl = 0;
   for (const g of gs) for (const p of g.picks) p.kind === 'bet' ? nb++ : nl++;
   const unit = LG === 'nfl' ? 'Week' : 'Night';
-  $('view').innerHTML = `<div style="display:grid;gap:16px">
+  $('view').innerHTML = `<div class="slate-wrap" style="display:grid;gap:16px">
     <div class="fbar" id="nights" role="group" aria-label="Choose a ${unit.toLowerCase()}"><span class="f-lab">${unit}</span>${idx.nights.map(n => `<button type="button" class="fb${n.id === NID ? ' on' : ''}" data-n="${esc(n.id)}" aria-pressed="${n.id === NID}">${esc(n.label)}</button>`).join('')}</div>
     <div class="stats">${st('Games', gs.length) + st('Bets', nb) + st('Leans', nl) + st(unit + ' W–L', rec(r), r ? '' : 'graded the next morning') + st(unit + ' units', r ? un(r.units) : '—', '', r ? ucls(r.units) : '')}</div>
+    ${nb + nl ? spots(gs, unit) : ''}
     ${gs.some(g => !g.final) ? legend() : ''}
     ${gs.length ? gs.map(card).join('') : '<div class="empty">No games priced.</div>'}</div>`;
   $('nights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; NID = b.dataset.n; FOCUS = null; go(); window.scrollTo({top: 0}); };
+  $('view').querySelectorAll('.sp-r').forEach(b => b.onclick = () => { const el = document.getElementById('g-' + b.dataset.g); if (!el) return;
+    el.scrollIntoView({block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); });
   if (FOCUS) { const el = document.getElementById('g-' + FOCUS); if (el) { el.scrollIntoView({block: 'start'}); el.classList.add('flash'); } FOCUS = null; }
 }
 
