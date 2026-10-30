@@ -217,6 +217,21 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
   .spots-in{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:14px}
   .sp-l{grid-template-columns:1fr}
 }
+/* report card */
+.rc-k{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.rc-v{font-size:13.5px;line-height:1.55;color:var(--text-2)}
+.rc-cal{display:grid;gap:10px}
+.rc-row{display:grid;grid-template-columns:92px minmax(0,1fr) 78px;gap:10px;align-items:center;font-size:12px}
+.rc-row .bk{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3)}
+.rc-row .n{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-4);text-align:right;white-space:nowrap}.rc-row .n b{color:var(--text);font-weight:700}
+.rc-tr{position:relative;height:22px;background:var(--surface-2);border:1px solid var(--border);border-radius:6px}
+.rc-tr i{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid var(--surface)}
+.rc-tr .m{background:var(--text)}.rc-tr .k{background:var(--text-4)}.rc-tr .a{background:var(--green);width:14px;height:14px;margin:-7px 0 0 -7px}
+.rc-tr s{position:absolute;top:0;bottom:0;width:1px;background:var(--border-h)}
+.rc-key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11px;color:var(--text-3)}
+.rc-key i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.rc-flag{font-size:12px;font-weight:700;color:var(--red-text)}
+@media(max-width:768px){.rc-k{grid-template-columns:repeat(2,minmax(0,1fr))}.rc-k>.st:last-child:nth-child(odd){grid-column:span 2}.rc-row{grid-template-columns:70px minmax(0,1fr) 36px;gap:6px}.rc-row .n em{display:none}}
 /* results: calendar + cumulative units */
 [data-theme="light"]{--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948;--s0:#9ca3af}
 [data-theme="dark"]{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;--s0:#6b7280}
@@ -293,7 +308,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 <div class="body">
   <div class="lg">
     <div class="lg" id="leagues" role="group" aria-label="League"></div>
-    <div class="vw" role="group" aria-label="View"><button type="button" data-v="slate">Slate</button><button type="button" data-v="ledger">Ledger</button><button type="button" data-v="parlays">Parlays</button></div>
+    <div class="vw" role="group" aria-label="View"><button type="button" data-v="slate">Slate</button><button type="button" data-v="ledger">Ledger</button><button type="button" data-v="parlays">Parlays</button><button type="button" data-v="report">Report</button></div>
   </div>
   <div class="stats" id="season"></div>
   <div id="view"><div class="empty">Loading&hellip;</div></div>
@@ -364,6 +379,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
       <li><b>NBA / NFL</b> switches leagues. The buttons show each league's season record.</li>
       <li><b>Slate</b> shows one night (or NFL week) of game cards. Pick a date from the row above the cards. The <b>★ picks</b> box (a sidebar on wide screens) gathers that slate's <span class="pill p-hot">★ Hot</span> bets and <span class="pill p-hot">★ Top group</span> leans in one list; tap one to jump to its game. On a graded slate it also shows how they did.</li>
       <li><b>Parlays</b> shows the paper parlay tickets (learning only).</li>
+      <li><b>Report</b> is the model's report card: how its win chances compare with the market's and with what actually happened (calibration), how much of its disagreement with the market has paid off (trust weight), closing-line value, how close the projections were to the box scores, and the week-by-week trend. It updates after every grading.</li>
       <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
       <li>At the top of the Ledger, the <b>calendar</b> colors each night (each week for the NFL) green if it finished up units, red if down, amber if even, and dashed while results are pending; tap one to open that slate. <b>Units over time</b> charts the running total for all picks and for each market or stat; tap a chip to hide or show its line. Both switch between bets and leans.</li>
       <li>The record at the top right is for the league you have open; switch it between <b>All</b> picks, <b>Bets</b> and <b>Leans</b> (leans graded as 1u each). Type your own unit size in <b>Unit $</b> to see that record in dollars; it stays in your browser only. The season tiles and the NBA / NFL buttons follow the same switch. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
@@ -411,7 +427,7 @@ const getJSON = async u => { const r = await fetch(u, {cache: 'no-cache'}); if (
 function readHash() {
   const [lg, v, n] = location.hash.slice(1).split('/');
   if (LEAGUES[lg]) LG = lg;
-  if (v === 'slate' || v === 'ledger' || v === 'parlays') VIEW = v;
+  if (v === 'slate' || v === 'ledger' || v === 'parlays' || v === 'report') VIEW = v;
   NID = n || null;
 }
 function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'slate' && NID ? '/' + NID : ''}`); } catch (e) {} }
@@ -819,6 +835,62 @@ async function renderParlays() {
     ${sections || `<div class="empty">No ${LEAGUES[LG]} slates yet.</div>`}</div>`;
 }
 
+/* ---------- model report card ----------
+   Built by report_card.py in each sim repo (sim/<league>/report.json): calibration, model vs market, CLV,
+   projection accuracy and the week-by-week trend. */
+const REP = {}, RK = {kind: 'bet'};
+const pc = v => v == null ? '—' : Math.round(v * 100) + '%';
+async function renderReport() {
+  if (!(LG in REP)) { try { REP[LG] = await getJSON(`sim/${LG}/report.json`); } catch (e) { REP[LG] = null; } }
+  const d = REP[LG];
+  if (!d) { $('view').innerHTML = `<div class="empty">The ${LEAGUES[LG]} report card is built after the next grading.</div>`; return; }
+  const k = d.kinds[RK.kind], who = RK.kind === 'bet' ? 'bets' : 'leans', unitW = LG === 'nfl' ? 'week' : 'week';
+  const seg = ['bet', 'lean'].map(x => `<button type="button" data-k="${x}" class="${RK.kind === x ? 'on' : ''}" aria-pressed="${RK.kind === x}">${x === 'bet' ? 'Bets' : 'Leans'}</button>`).join('');
+  if (!k) { $('view').innerHTML = `<div class="empty">No graded ${who} yet.</div>`; return; }
+  const v = k.vs_market, c = k.clv || {};
+  let verdict = 'Not enough graded picks yet.';
+  if (v) {
+    verdict = `On <b>${v.n}</b> graded ${who} the model said <b>${pc(v.model)}</b> on average, the market said <b>${pc(v.market)}</b>, and <b>${pc(v.actual)}</b> won. `;
+    verdict += v.model_better ? `The model's probabilities were closer to the results than the market's.`
+      : v.trust > 0 ? `The market's probabilities were closer. The best forecast would have used only ${v.trust.toFixed(2)} of the model's disagreement with the market, so most of its edge has been noise.`
+      : `The market's probabilities were closer, and mixing in any of the model's view made them worse.`;
+    verdict += c.n ? ` Closing-line value: <b>${c.avg > 0 ? '+' : ''}${c.avg.toFixed(1)}</b> pts on average; ${c.beat} of ${c.n} beat the close.` : ' Closing-line value starts with the Oct 30 games.';
+  }
+  const tiles = v ? st('Model said', pc(v.model), 'average win chance') + st('Market said', pc(v.market), 'no-vig, same picks') + st('Actually won', pc(v.actual), `${v.n} graded, pushes out`, v.actual >= v.market ? 'pos' : 'neg')
+    + st('Trust weight', v.trust.toFixed(2), '0 = ignore model · 1 = trust it', v.trust >= .5 ? 'pos' : v.trust === 0 ? 'neg' : '')
+    + st('CLV', c.n ? (c.avg > 0 ? '+' : '') + c.avg.toFixed(1) : '—', c.n ? `${c.beat}/${c.n} beat the close` : 'from Oct 30 games', c.n ? ucls(c.avg) : '') : '';
+  const X = p => `${Math.max(0, Math.min(100, p * 100))}%`;
+  const cal = k.calibration.map(b => `<div class="rc-row"${b.n < 10 ? ' style="opacity:.45"' : ''}><span class="bk">${esc(b.bucket)}</span>
+      <div class="rc-tr" role="img" aria-label="${esc(b.bucket)}: model ${pc(b.model)}, market ${pc(b.market)}, won ${pc(b.actual)}"><s style="left:50%"></s><i class="k" style="left:${X(b.market)}"></i><i class="m" style="left:${X(b.model)}"></i><i class="a" style="left:${X(b.actual)}"></i></div>
+      <span class="n"><b>${pc(b.actual)}</b><em> · ${b.n}</em></span></div>`).join('');
+  const wk = k.weeks.map(w => `<tr><td>${esc(w.label)}</td><td class="r">${w.n}</td><td class="r">${pc(w.actual)}</td><td class="r hm">${pc(w.model)}</td><td class="r hm">${pc(w.market)}</td>
+      <td class="r u ${ucls(w.units)}">${un(w.units)}</td><td class="r hm">${w.clv && w.clv.n ? (w.clv.avg > 0 ? '+' : '') + w.clv.avg.toFixed(1) : '—'}</td></tr>`).join('');
+  const gr = k.groups.map(g => `<tr><td>${esc(g.group)}</td><td class="r">${g.w}–${g.l}${g.p ? '–' + g.p : ''}</td><td class="r hm">${pc(g.model)}</td><td class="r hm">${pc(g.market)}</td><td class="r">${pc(g.actual)}</td>
+      <td class="r u ${ucls(g.units)}">${un(g.units)}</td><td class="r hm">${g.trust == null ? '—' : g.trust.toFixed(2)}</td></tr>`).join('');
+  const pj = d.projections || [], fl = pj.filter(p => p.n >= 30 && p.avg_actual && Math.abs(p.bias) / p.avg_actual >= .05);
+  const pr = pj.map(p => `<tr><td>${esc(p.stat)}</td><td class="r hm">${p.n}</td><td class="r">${p.avg_actual.toFixed(1)}</td><td class="r">${p.mae.toFixed(1)}</td>
+      <td class="r"><b class="${fl.includes(p) ? 'neg' : ''}">${Math.abs(p.bias) < .05 ? '0.0' : (p.bias > 0 ? '+' : '') + p.bias.toFixed(1)}</b></td></tr>`).join('');
+  const tw = (head, body) => `<div class="tw"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+  $('view').innerHTML = `<div style="display:grid;gap:14px">
+    <div class="pan-h"><span class="pan-t">Is the model any good?</span><div class="seg" role="group" aria-label="Bets or leans">${seg}</div></div>
+    <div class="rc-k">${tiles}</div>
+    <div class="notes rc-v">${verdict}</div>
+    <div class="pan"><div class="pan-h"><span class="pan-t">Calibration</span><span class="cnote">when the model says X, how often does it win?</span></div>
+      <div class="rc-key"><span><i style="background:var(--text)"></i>Model said</span><span><i style="background:var(--text-4)"></i>Market said</span><span><i style="background:var(--green)"></i>Actually won</span></div>
+      <div class="rc-cal">${cal}</div>
+      <div class="cnote">Each row is a range of the model's win chance, with picks grouped by it. A well-calibrated model has the green dot on top of the model dot. When green sits nearer the market dot, the market was right and the model was overconfident. Faded rows have fewer than 10 picks.</div></div>
+    <div class="pan"><div class="pan-h"><span class="pan-t">Week by week</span><span class="cnote">is it getting better?</span></div>
+      ${tw('<th>Week</th><th class="r">Picks</th><th class="r">Won</th><th class="r hm">Model</th><th class="r hm">Market</th><th class="r">Units</th><th class="r hm">CLV</th>', wk)}</div>
+    ${gr ? `<div class="pan"><div class="pan-h"><span class="pan-t">By bet type</span><span class="cnote">10+ graded, best to worst</span></div>
+      ${tw('<th>Group</th><th class="r">Record</th><th class="r hm">Model</th><th class="r hm">Market</th><th class="r">Won</th><th class="r">Units</th><th class="r hm">Trust</th>', gr)}</div>` : ''}
+    ${pr ? `<div class="pan"><div class="pan-h"><span class="pan-t">Projections vs box scores</span><span class="cnote">every simulated player who played</span></div>
+      ${tw('<th>Stat</th><th class="r hm">Players</th><th class="r">Avg actual</th><th class="r">Avg miss</th><th class="r">Bias</th>', pr)}
+      ${fl.map(p => `<div class="rc-flag">Flag: ${esc(p.stat)} projected ${Math.abs(p.bias).toFixed(1)} too ${p.bias > 0 ? 'high' : 'low'} on average (${Math.round(Math.abs(p.bias) / p.avg_actual * 100)}% of the actual)</div>`).join('')}
+      <div class="cnote">Bias is projected minus actual: positive means the sim projects too high. A small bias with poor calibration means the averages are right but the model is too sure of them.</div></div>` : ''}
+    <div class="dim" style="font-size:11.5px">Leans are graded as 1u each at their price. <b>Trust weight</b>: the share of the model's disagreement with the market that would have made the best forecast. <b>CLV</b>: closing-line value, in points of win chance; above 0 means the market moved toward the pick before the game. Updated after every grading; read the trend, not one week. Built ${esc(shortDate(d.generated))}.</div></div>`;
+  $('view').querySelector('.seg').onclick = e => { const b = e.target.closest('button[data-k]'); if (!b || b.dataset.k === RK.kind) return; RK.kind = b.dataset.k; renderReport(); };
+}
+
 /* ---------- shell ---------- */
 function renderTop() {
   $('leagues').innerHTML = Object.entries(LEAGUES).filter(([k]) => IDX[k]).map(([k, l]) => {
@@ -826,7 +898,7 @@ function renderTop() {
     return `<button type="button" class="lgb${k === LG ? ' on' : ''}" data-l="${k}" aria-pressed="${k === LG}"><b>${l}</b><span>${rec(b)} &middot; <span class="${ucls(b.units)}">${un(b.units)}</span></span></button>`;
   }).join('');
   document.querySelectorAll('.vw button').forEach(b => { b.classList.toggle('on', b.dataset.v === VIEW); b.setAttribute('aria-pressed', b.dataset.v === VIEW); });
-  $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'slate' ? 'every game simulated thousands of times' : VIEW === 'parlays' ? 'paper parlays · learning only' : 'every pick, graded'}`;
+  $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'slate' ? 'every game simulated thousands of times' : VIEW === 'parlays' ? 'paper parlays · learning only' : VIEW === 'report' ? 'model report card' : 'every pick, graded'}`;
   renderSeason();
   renderKpis();
 }
@@ -894,7 +966,7 @@ $('k-sz').addEventListener('input', e => { USZ = e.target.value.slice(0, 9); sav
 $('k-kind').addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (!b || b.dataset.k === KK) return; KK = b.dataset.k; saveK(); renderTop(); });
 async function go() {
   writeHash(); renderTop();
-  try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : renderLedger()); writeHash(); }
+  try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : VIEW === 'report' ? renderReport() : renderLedger()); writeHash(); }
   catch (e) { $('view').innerHTML = '<div class="empty">This couldn’t load. Refresh to try again.</div>'; }
 }
 $('leagues').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b || b.dataset.l === LG) return; LG = b.dataset.l; NID = null; FOCUS = null; go(); });
