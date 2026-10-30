@@ -379,7 +379,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
       <li><b>NBA / NFL</b> switches leagues. The buttons show each league's season record.</li>
       <li><b>Slate</b> shows one night (or NFL week) of game cards. Pick a date from the row above the cards. The <b>★ picks</b> box (a sidebar on wide screens) gathers that slate's <span class="pill p-hot">★ Hot</span> bets and <span class="pill p-hot">★ Top group</span> leans in one list; tap one to jump to its game. On a graded slate it also shows how they did.</li>
       <li><b>Parlays</b> shows the paper parlay tickets (learning only).</li>
-      <li><b>Report</b> is the model's report card: how its win chances compare with the market's and with what actually happened (calibration), how much of its disagreement with the market has paid off (trust weight), closing-line value, how close the projections were to the box scores, and the week-by-week trend. It updates after every grading.</li>
+      <li><b>Report</b> is the model's report card: how its win chances compare with the market's and with what actually happened (calibration), how much of its disagreement with the market has paid off (trust weight), closing-line value, the sim's game scores, margins and totals against the finals (next to the market's lines), spread and moneyline leans by how far the sim disagreed with the market, how close the player projections were to the box scores, and the week-by-week trend. It updates after every grading.</li>
       <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
       <li>At the top of the Ledger, the <b>calendar</b> colors each night (each week for the NFL) green if it finished up units, red if down, amber if even, and dashed while results are pending; tap one to open that slate. <b>Units over time</b> charts the running total for all picks and for each market or stat; tap a chip to hide or show its line. Both switch between bets and leans.</li>
       <li>The record at the top right is for the league you have open; switch it between <b>All</b> picks, <b>Bets</b> and <b>Leans</b> (leans graded as 1u each). Type your own unit size in <b>Unit $</b> to see that record in dollars; it stays in your browser only. The season tiles and the NBA / NFL buttons follow the same switch. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
@@ -871,6 +871,21 @@ async function renderReport() {
   const pr = pj.map(p => `<tr><td>${esc(p.stat)}</td><td class="r hm">${p.n}</td><td class="r">${p.avg_actual.toFixed(1)}</td><td class="r">${p.mae.toFixed(1)}</td>
       <td class="r"><b class="${fl.includes(p) ? 'neg' : ''}">${Math.abs(p.bias) < .05 ? '0.0' : (p.bias > 0 ? '+' : '') + p.bias.toFixed(1)}</b></td></tr>`).join('');
   const tw = (head, body) => `<div class="tw"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+  const G = d.games, f1 = v => v == null ? '—' : v.toFixed(1), sg1 = v => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(1);
+  const gamesPan = G ? `<div class="pan"><div class="pan-h"><span class="pan-t">Game scores vs finals</span><span class="cnote">${G.n} games · average miss, lower is better</span></div>
+      ${tw('<th></th><th class="r">Sim</th><th class="r">Market</th><th class="r">Sim closer</th>',
+        `<tr><td>Margin (spread)</td><td class="r"><b>${f1(G.margin_mae_sim)}</b></td><td class="r">${f1(G.margin_mae_mkt)}</td><td class="r">${G.margin_closer} of ${G.margin_n}</td></tr>
+         <tr><td>Total</td><td class="r"><b>${f1(G.total_mae_sim)}</b></td><td class="r">${f1(G.total_mae_mkt)}</td><td class="r">${G.total_closer} of ${G.total_n}</td></tr>
+         <tr><td>Total bias <span class="dim">(projected − actual)</span></td><td class="r">${sg1(G.total_bias_sim)}</td><td class="r">${sg1(G.total_bias_mkt)}</td><td></td></tr>
+         <tr><td>Team score</td><td class="r">${f1(G.score_mae)}</td><td class="r dim">—</td><td class="r dim">bias ${sg1(G.score_bias)}</td></tr>
+         <tr><td>Sim favorite won</td><td class="r">${G.fav_won} of ${G.fav_n}</td><td></td><td class="r">${pc(G.fav_won / Math.max(1, G.fav_n))}</td></tr>`)}
+      ${(d.game_weeks || []).length > 1 ? tw('<th>Week</th><th class="r">Games</th><th class="r">Margin sim / mkt</th><th class="r">Total sim / mkt</th>',
+        d.game_weeks.map(w => `<tr><td>${esc(w.label)}</td><td class="r">${w.n}</td><td class="r">${f1(w.margin_mae_sim)} / ${f1(w.margin_mae_mkt)}</td><td class="r">${f1(w.total_mae_sim)} / ${f1(w.total_mae_mkt)}</td></tr>`).join('')) : ''}
+      <div class="cnote">The sim's margin and total are its fair spread and fair total (the middle of its 4,000 games); the market's are the spread and total when the game was priced. Box scores for every player are in the projections table below, and game by game on each slate.</div></div>` : '';
+  const sidesPan = (d.sides || []).length ? `<div class="pan"><div class="pan-h"><span class="pan-t">Spreads and moneylines</span><span class="cnote">leans, never staked · by sim-vs-market gap</span></div>
+      ${tw('<th>Market</th><th>Sim vs market gap</th><th class="r">Record</th><th class="r">Units</th>',
+        d.sides.map(sd => sd.by_gap.map((b, i) => `<tr><td>${i ? '' : `<b>${esc(sd.market === 'moneyline' ? 'Moneyline' : 'Spread')}</b> <span class="dim">${sd.w}–${sd.l}${sd.p ? '–' + sd.p : ''}, ${un(sd.units)}</span>`}</td><td>${esc(b.gap)}</td><td class="r">${b.w}–${b.l}${b.p ? '–' + b.p : ''}</td><td class="r u ${ucls(b.units)}">${un(b.units)}</td></tr>`).join('')).join(''))}
+      <div class="cnote">The gap is how far the sim's projected margin was from the market's spread in that game. Small samples: a hot bucket can be luck.</div></div>` : '';
   $('view').innerHTML = `<div style="display:grid;gap:14px">
     <div class="pan-h"><span class="pan-t">Is the model any good?</span><div class="seg" role="group" aria-label="Bets or leans">${seg}</div></div>
     <div class="rc-k">${tiles}</div>
@@ -883,6 +898,7 @@ async function renderReport() {
       ${tw('<th>Week</th><th class="r">Picks</th><th class="r">Won</th><th class="r hm">Model</th><th class="r hm">Market</th><th class="r">Units</th><th class="r hm">CLV</th>', wk)}</div>
     ${gr ? `<div class="pan"><div class="pan-h"><span class="pan-t">By bet type</span><span class="cnote">10+ graded, best to worst</span></div>
       ${tw('<th>Group</th><th class="r">Record</th><th class="r hm">Model</th><th class="r hm">Market</th><th class="r">Won</th><th class="r">Units</th><th class="r hm">Trust</th>', gr)}</div>` : ''}
+    ${gamesPan}${sidesPan}
     ${pr ? `<div class="pan"><div class="pan-h"><span class="pan-t">Projections vs box scores</span><span class="cnote">every simulated player who played</span></div>
       ${tw('<th>Stat</th><th class="r hm">Players</th><th class="r">Avg actual</th><th class="r">Avg miss</th><th class="r">Bias</th>', pr)}
       ${fl.map(p => `<div class="rc-flag">Flag: ${esc(p.stat)} projected ${Math.abs(p.bias).toFixed(1)} too ${p.bias > 0 ? 'high' : 'low'} on average (${Math.round(Math.abs(p.bias) / p.avg_actual * 100)}% of the actual)</div>`).join('')}
