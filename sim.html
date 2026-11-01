@@ -496,12 +496,20 @@ function legend() {
 
 /* ---------- slate ---------- */
 const meter = (l, v, be, mkt) => `<div><div class="mt-l"><span>${l}</span><b>${pct(v)}</b></div><div class="bar${mkt ? ' mkt' : ''}"><i style="width:${Math.max(0, Math.min(1, v)) * 100}%"></i>${be != null ? `<s style="left:calc(${(be * 100).toFixed(1)}% - 1px)" title="Breakeven ${pct(be)}"></s>` : ''}</div></div>`;
+/* minutes played from the final box score (NBA): matches the graded email's "played 34". NFL boxes have no minutes. */
+function played(g, p) {
+  if (!g || !g.final || !g.final.box || p.market !== 'prop' || !p.team) return '';
+  const a = (g.final.box[p.team] || {})[p.player];
+  if (!a) return '';
+  if (a.dnp) return 'did not play';
+  return a.min != null ? `played ${Math.round(a.min)} min` : '';
+}
 function finishLine(p) {
   if (p.actual == null) return '';
   return p.market === 'prop' ? `Finished with ${esc(p.actual)}` : p.market === 'total' ? `Final total ${esc(p.actual)}` : `Final: ${esc(p.actual)}`;
 }
 function pickCard(g, p) {
-  const res = p.result ? `<div class="res"><span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span>${finishLine(p)}</span><span class="u ${ucls(p.units)}">${un(p.units)}</span></div>`
+  const res = p.result ? `<div class="res"><span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span>${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span><span class="u ${ucls(p.units)}">${un(p.units)}</span></div>`
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
   return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
@@ -515,9 +523,9 @@ function shopLine(p, small) {
   const bits = [p.best_price ? `better price <b>${fx(p.best_price)}</b>` : '', p.alt_line ? `better number <b>${fx(p.alt_line)}</b>` : ''].filter(Boolean);
   return `<div class="shop${small ? ' sm' : ''}"><span class="st-l" style="margin:0">Shop</span> ${bits.join(' &middot; ')}</div>`;
 }
-function leanTable(ls) {
+function leanTable(ls, g) {
   if (!ls.length) return '';
-  const rows = ls.map(p => { const lf = leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${shopLine(p, true)}</td>
+  const rows = ls.map(p => { const lf = leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${shopLine(p, true)}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
@@ -580,7 +588,7 @@ function card(g) {
     ${outs ? `<div class="out">Out: ${outs}</div>` : ''}
     <div class="sec"><span class="tag t-bet">Bet</span> 1 unit each <span class="cnt">${bets.length || 'none cleared the bar'}</span></div>
     ${bets.length ? `<div class="picks">${bets.map(p => pickCard(g, p)).join('')}</div>` : ''}
-    ${leanTable(ls)}
+    ${leanTable(ls, g)}
     <details${FOCUS === g.game_id ? ' open' : ''}><summary>${f ? 'Box score: projected vs actual' : 'Projected box score'}</summary><div class="box2">${box(g, g.away)}${box(g, g.home)}</div></details>
   </article>`;
 }
