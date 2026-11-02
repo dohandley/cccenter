@@ -355,6 +355,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 
     <h3>Tags</h3>
     <ul>
+      <li><span class="pill p-cold">Role?</span> on an NFL over: the sim projects more than 1.33&times; the line, which often means it gives the player a bigger role than the books do. It is still a pick; check his workload first.</li>
       <li><span class="pill p-hot">★ Hot</span> on a bet: that bet type (market, stat and side, e.g. "3-pointers unders") has 15+ graded bets and is +10% ROI or better this season.</li>
       <li><span class="pill p-cold">❄ Cold</span>: 15+ graded and &minus;10% or worse. Every ungraded bet also shows its bet type's record, tagged or not.</li>
       <li><b>Watch list</b> leans: a lean category (the reason it wasn't bet) that is up units over 30+ graded picks. <span class="pill p-hot">★ Top group</span> marks a stat group inside it with 15+ graded and +10% ROI.</li>
@@ -366,7 +367,8 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
     <p>The <b>Parlays</b> view tests whether pairing leans holds up. It is <b>learning only</b>: the tickets are never bet and never count toward the season record or units.</p>
     <ul>
       <li>Each slate, the leans on props and totals are paired into <b>2-leg tickets</b>: both legs at the same sportsbook and price, from different games, one leg per player.</li>
-      <li>The sim overrates leans, so each leg's win chance is pulled toward the market's by however much the model has overrated leans before that slate. A ticket needs <b>+10% expected value</b> or better; at most 5 a slate, each lean on at most 2.</li>
+      <li>The sim overrates leans, so each leg's win chance is pulled toward the market's by however much the model has overrated leans before that slate. A ticket needs <b>+10% expected value</b> or better; at most 5 a slate, each lean on one ticket (two before Nov 2, 2026).</li>
+      <li><b>NFL:</b> overs tagged <span class="pill p-cold">Role?</span> are left out (since Nov 2, 2026).</li>
       <li>Tickets are graded from the leans' own results. A void leg drops out and the ticket pays on the other one, as sportsbooks do.</li>
       <li><span class="pill p-cat">Rebuilt from ledger</span> slates were built after the fact from leans priced before tracking began, using only results known at the time. They are shown separately from the tracked record.</li>
     </ul>
@@ -511,7 +513,7 @@ function finishLine(p) {
 function pickCard(g, p) {
   const res = p.result ? `<div class="res"><span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span>${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span><span class="u ${ucls(p.units)}">${un(p.units)}</span></div>`
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
-  return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
+  return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
     <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${shopLine(p)}${res}</div>`;
 }
@@ -525,7 +527,7 @@ function shopLine(p, small) {
 }
 function leanTable(ls, g) {
   if (!ls.length) return '';
-  const rows = ls.map(p => { const lf = leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${shopLine(p, true)}</td>
+  const rows = ls.map(p => { const lf = leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${shopLine(p, true)}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
@@ -839,7 +841,7 @@ async function renderParlays() {
     return head + (ts.length ? `<div class="tks">${ts.map(ticket).join('')}</div>` : `<div class="dim" style="font-size:12.5px">${why}</div>`);
   }).join('');
   $('view').innerHTML = `<div style="display:grid;gap:12px">
-    <div class="notes"><b style="color:var(--text)">Paper parlays: learning only.</b> These tickets are never bet and never count toward the record above or the season units. Each ${unit}, the leans are paired into 2-leg tickets at one sportsbook, legs from different games, using a win chance pulled toward the market by how much the model has overrated leans so far. A ticket needs +${Math.round(d.rules.min_ev * 100)}% expected value or better; at most ${d.rules.per_slate} a ${unit}, each lean on at most ${d.rules.per_leg}. Units at the ticket's price, 1u per ticket.</div>
+    <div class="notes"><b style="color:var(--text)">Paper parlays: learning only.</b> These tickets are never bet and never count toward the record above or the season units. Each ${unit}, the leans are paired into 2-leg tickets at one sportsbook, legs from different games, using a win chance pulled toward the market by how much the model has overrated leans so far. A ticket needs +${Math.round(d.rules.min_ev * 100)}% expected value or better; at most ${d.rules.per_slate} a ${unit}, each lean on ${d.rules.per_leg === 1 ? 'one ticket' : 'at most ' + d.rules.per_leg}${LG === 'nfl' ? '; overs tagged Role? are left out' : ''}. Rules changed Nov 2: earlier slates allowed a lean on two tickets. Units at the ticket's price, 1u per ticket.</div>
     ${sections || `<div class="empty">No ${LEAGUES[LG]} slates yet.</div>`}</div>`;
 }
 
