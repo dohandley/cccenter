@@ -367,9 +367,9 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
     <h3>Tags</h3>
     <ul>
       <li><span class="pill p-cold">Role?</span> on an NFL over: the sim projects more than 1.33&times; the line, which often means it gives the player a bigger role than the books do. It is still a pick; check his workload first.</li>
-      <li><span class="pill p-hot">★ Hot</span> on a bet: that bet type (market, stat and side, e.g. "3-pointers unders") has 15+ graded bets and is +10% ROI or better this season.</li>
-      <li><span class="pill p-cold">❄ Cold</span>: 15+ graded and &minus;10% or worse. Every ungraded bet also shows its bet type's record, tagged or not.</li>
-      <li><b>Watch list</b> leans: a lean category (the reason it wasn't bet) that is up units over 30+ graded picks. <span class="pill p-hot">★ Top group</span> marks a stat group inside it with 15+ graded and +10% ROI.</li>
+      <li><span class="pill p-hot">★ Hot</span> on a bet: that bet type (market, stat and side, e.g. "3-pointers unders") has 15+ graded bets and is +9% ROI or better this season, after adjusting for sample size: the record is judged as if 40 breakeven picks were added, so 49–22 counts for more than 9–6.</li>
+      <li><span class="pill p-cold">❄ Cold</span>: 15+ graded and &minus;9% or worse, adjusted the same way. Every ungraded bet also shows its bet type's record, tagged or not.</li>
+      <li><b>Watch list</b> leans: a lean category (the reason it wasn't bet) that is up units over 30+ graded picks. <span class="pill p-hot">★ Top group</span> marks a stat group inside it with 15+ graded and +9% ROI, adjusted the same way.</li>
       <li><b>Shop</b> under a bet or lean: another of the books in the feed has a better price at the same line, or a better number (a lower line for an over, a higher one for an under). The edge and the graded result still use the listed price, which comes from the book with the lowest vig at the line most books post.</li>
       <li>Tags are recalculated after every grading and show only on picks that haven't been graded. They describe the record so far, not a prediction.</li>
     </ul>
@@ -447,9 +447,9 @@ function readHash() {
 function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'slate' && NID ? '/' + NID : ''}`); } catch (e) {} }
 
 /* ---------- form tags (same rules as the pricing email) ----------
-   Bets: grouped by market + stat + side (e.g. "3-pointers unders"); 15+ graded and +10% ROI or better = Hot,
+   Bets: grouped by market + stat + side (e.g. "3-pointers unders"); 15+ graded and +9% sample-adjusted ROI (units / (n + 40)) = Hot,
    -10% or worse = Cold. Leans: a lean category (why it wasn't bet) with 30+ graded and up units is on the watch list;
-   inside it, a stat group with 15+ graded and +10% ROI is a Top group. Season to date; tags show on ungraded picks. */
+   inside it, a stat group with 15+ graded and +9% sample-adjusted ROI is a Top group. Season to date; tags show on ungraded picks. */
 const SUF = {pts: 'points', ast: 'assists', reb: 'rebounds', 'P+R': 'pts+reb', 'P+A': 'pts+ast', 'R+A': 'reb+ast', PRA: 'pts+reb+ast',
   '3PM': '3-pointers', rec: 'receptions', 'rec yds': 'receiving yds', 'rush yds': 'rushing yds', 'rush att': 'rush attempts',
   'pass yds': 'passing yds', 'pass att': 'pass attempts', 'pass comp': 'completions'};
@@ -477,9 +477,11 @@ function buildForm(lg) {
     else { const c = catOf(r); if (!c) continue; tallyAdd(f.cat, c, r); tallyAdd(f.grp, c + '|' + parts(r).base, r); }
   }
   const n = t => t.w + t.l;
-  for (const t of Object.values(f.bet)) t.tag = n(t) < 15 ? '' : t.u >= .1 * n(t) ? 'hot' : t.u <= -.1 * n(t) ? 'cold' : '';
+  // Nov 2: ROI adjusted for sample size, units / (graded + 40), so 49-22 counts for more than 9-6; tag at +/-9% with 15+ graded
+  const adj = t => t.u / (n(t) + 40);
+  for (const t of Object.values(f.bet)) t.tag = n(t) < 15 ? '' : adj(t) >= .09 ? 'hot' : adj(t) <= -.09 ? 'cold' : '';
   for (const t of Object.values(f.cat)) t.watch = n(t) >= 30 && t.u > 0;
-  for (const [k, t] of Object.entries(f.grp)) t.top = !!(f.cat[k.split('|')[0]] || {}).watch && n(t) >= 15 && t.u >= .1 * n(t);
+  for (const [k, t] of Object.entries(f.grp)) t.top = !!(f.cat[k.split('|')[0]] || {}).watch && n(t) >= 15 && adj(t) >= .09;
   FORM[lg] = f;
 }
 const frec = t => `${t.w}–${t.l}${t.p ? '–' + t.p : ''}, <span class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</span>`;
@@ -502,9 +504,9 @@ function legend() {
   const cold = Object.entries(f.bet).filter(([, t]) => t.tag === 'cold').map(([k]) => { const [m, b, sd] = k.split('|'); return sd ? `${b} ${sd.toLowerCase()}s` : b; });
   const tops = lab(f.grp, t => t.top).map(k => { const [c, b] = k.split('|'); return `${CATS.find(x => x[0] === c)[1].toLowerCase()} · ${b}`; });
   const cats = lab(f.cat, t => t.watch).map(c => CATS.find(x => x[0] === c)[1]);
-  return `<div class="notes legend">${HOT} bet type with 15+ graded and +10% ROI or better${hot.length ? ': ' + esc(hot.join(', ')) : ' (none yet)'}.<br>
-    ${COLD} 15+ graded and −10% or worse${cold.length ? ': ' + esc(cold.join(', ')) : ' (none yet)'}. Unmarked bets have fewer picks or are about breakeven.<br>
-    <span class="pill p-cat">Watch list</span> lean categories up units over 30+ graded${cats.length ? ': ' + esc(cats.join(', ')) : ' (none yet)'}. ${TOP} a stat group inside one with 15+ graded and +10% ROI${tops.length ? ': ' + esc(tops.join(', ')) : ''}.<br>
+  return `<div class="notes legend">${HOT} bet type with 15+ graded and +9% ROI or better, adjusted for sample size${hot.length ? ': ' + esc(hot.join(', ')) : ' (none yet)'}.<br>
+    ${COLD} 15+ graded and −9% or worse${cold.length ? ': ' + esc(cold.join(', ')) : ' (none yet)'}. Unmarked bets have fewer picks or are about breakeven.<br>
+    <span class="pill p-cat">Watch list</span> lean categories up units over 30+ graded${cats.length ? ': ' + esc(cats.join(', ')) : ' (none yet)'}. ${TOP} a stat group inside one with 15+ graded and +9% ROI (adjusted)${tops.length ? ': ' + esc(tops.join(', ')) : ''}.<br>
     <span class="dim">Season to date, recalculated after every grading. Tags show on picks that haven't been graded yet.</span></div>`;
 }
 
@@ -645,7 +647,7 @@ function spots(gs, unit) {
   return `<aside class="spots" aria-label="Starred picks"><div class="spots-in">
     <div class="sp-t">${graded ? '★ Picks on this ' + unit.toLowerCase() : unit === 'Week' ? "This week's ★ picks" : "Tonight's ★ picks"}<span>${all.length}</span></div>${recap}
     <div class="sp-s"><b>★</b> Hot bets <span>1 unit each</span></div>
-    ${rows.bet.length ? `<div class="sp-l">${rows.bet.map(row).join('')}</div>` : '<div class="sp-n">None yet. A bet type needs 15+ graded at +10% ROI or better.</div>'}
+    ${rows.bet.length ? `<div class="sp-l">${rows.bet.map(row).join('')}</div>` : '<div class="sp-n">None yet. A bet type needs 15+ graded and +9% ROI or better, adjusted for sample size.</div>'}
     <div class="sp-s"><b>★</b> Top group leans <span>tracked, not staked</span></div>
     ${rows.lean.length ? leanGroups(rows.lean, row) : '<div class="sp-n">None on this slate.</div>'}
     <div class="sp-n">${graded ? 'Tagged with today\'s season records. ' : ''}Tap a group to see its picks, and a pick to jump to its game. Several unders on one team tend to win or lose together.</div>
