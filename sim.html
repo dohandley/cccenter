@@ -191,6 +191,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .sl-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:800;font-size:15px;letter-spacing:-.01em;margin-top:6px}
 .sl-h .cnt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-3);letter-spacing:0}
 @media(max-width:768px){.tks{grid-template-columns:1fr}}
+.upd{font-size:12.5px;color:var(--amber-text);background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:8px 12px}.upd b{color:var(--amber-text)}
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
 .game{scroll-margin-top:96px}.mo{display:none}
@@ -332,6 +333,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
       <li><b>Big numbers</b> are each team's average score across the sims. The arrow points to the team the sim favors, and the middle shows by how much and how often it wins.</li>
       <li><b>Spread and Total</b> put the sim's number next to the market's, with the gap underneath. The sim's numbers here are medians, the line it lands over half the time, so they can differ slightly from the gap between the averages.</li>
       <li><b>Out</b> lists players the sim treated as unavailable.</li>
+      <li><b>Updated for late news</b>: if an injury or lineup change comes in after a game is priced, the game is re-simmed before tip and the card shows the new projections, score and fair lines. Each pick keeps the win chances it was posted with.</li>
       <li>Open <b>Projected box score</b> for each player's projected stats. After the game, the actual number appears under each projection, green if it beat the projection and red if it fell short.</li>
     </ul>
 
@@ -422,6 +424,7 @@ const IDX = {}, NIGHT = {}, LEDGER = {}, PARL = {};
 let LG = 'nba', VIEW = 'slate', NID = null, FOCUS = null, FILT = {kind: 'all', mkt: 'all', why: 'all'};
 const nick = t => (NICK[LG] || {})[t] || t;
 const tip = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', timeZone:'America/New_York'}) + ' · ' + d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/New_York'}) + ' ET'; };
+const clockET = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/New_York'}) + ' ET'; };
 const shortDate = s => new Date(s).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'America/New_York'});
 const getJSON = async u => { const r = await fetch(u, {cache: 'no-cache'}); if (!r.ok) throw new Error(u); return r.json(); };
 
@@ -588,6 +591,7 @@ function card(g) {
       <div class="ln"><div class="st-l">Total</div><div class="cmp"><div><small>Sim</small><b class="sv">${g.fair_total.toFixed(1)}</b></div><div><small>Market</small><b>${g.total_line ?? '—'}</b></div></div>${tGap}</div>
     </div>
     ${outs ? `<div class="out">Out: ${outs}</div>` : ''}
+    ${g.updated ? `<div class="upd"><b>Updated for late news</b> &middot; ${esc(clockET(g.updated.at))}${(g.updated.changes || []).length ? ': ' + esc(g.updated.changes.join(', ')) : ''}. Projections, score and fair lines are re-simmed; each pick's percentages are from when it was priced.</div>` : ''}
     <div class="sec"><span class="tag t-bet">Bet</span> 1 unit each <span class="cnt">${bets.length || 'none cleared the bar'}</span></div>
     ${bets.length ? `<div class="picks">${bets.map(p => pickCard(g, p)).join('')}</div>` : ''}
     ${leanTable(ls, g)}
