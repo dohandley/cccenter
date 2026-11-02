@@ -210,6 +210,15 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .sp-r .sub,.sp-r .shop{grid-column:1/-1}.sp-r .shop b{font-size:10.5px;font-weight:700;min-width:0}.sp-r .bk{color:var(--gold);font-weight:700}
 .sp-r .pill{font-size:9px;padding:1px 6px}
 .sp-n{font-size:11.5px;color:var(--text-3)}
+.sp-gs{display:grid;gap:6px}
+details.sp-g{border:1px solid var(--border);border-radius:8px;padding:0;background:var(--surface)}
+details.sp-g>summary{list-style:none;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px 10px;padding:8px 10px;text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:700}
+details.sp-g>summary::-webkit-details-marker{display:none}
+details.sp-g>summary::before{content:'\25B8';color:var(--text-4);margin-right:6px;font-size:11px}
+details.sp-g[open]>summary::before{content:'\25BE'}
+.sp-gn{flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:6px}.sp-gc{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-3);font-weight:600}
+.sp-gr{font-size:11.5px;font-weight:500;color:var(--text-3)}
+details.sp-g>.sp-l{padding:0 8px 8px}
 .shop{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:12px;color:var(--text-3);margin-top:6px}.shop.sm{font-size:10.5px;margin-top:3px;gap:2px 6px}.shop.sm .st-l{font-size:9px}.shop b{color:var(--gold);font-family:'JetBrains Mono',monospace;font-weight:700}
 @media(min-width:1580px){
   html,body{overflow-x:clip}
@@ -516,9 +525,9 @@ function finishLine(p) {
 function pickCard(g, p) {
   const res = p.result ? `<div class="res"><span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span>${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span><span class="u ${ucls(p.units)}">${un(p.units)}</span></div>`
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
-  return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
+  return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
-    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${shopLine(p)}${res}</div>`;
+    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${res}</div>`;
 }
 /* price shopping from the odds pull: a better price at the same line, or a better number, at another book. Display only:
    the edge and the graded result use the listed price. */
@@ -530,9 +539,9 @@ function shopLine(p, small) {
 }
 function leanTable(ls, g) {
   if (!ls.length) return '';
-  const rows = ls.map(p => { const lf = leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${shopLine(p, true)}</td>
+  const rows = ls.map(p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
-    <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
+    <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : out ? '<span class="pill p-void">void</span>' : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
     <div class="tw"><table><thead><tr><th>Lean</th><th class="r">Price</th><th class="r">Model</th><th class="r">Result</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
@@ -598,6 +607,9 @@ function card(g) {
     <details${FOCUS === g.game_id ? ' open' : ''}><summary>${f ? 'Box score: projected vs actual' : 'Projected box score'}</summary><div class="box2">${box(g, g.away)}${box(g, g.home)}</div></details>
   </article>`;
 }
+/* a prop whose player was ruled out after pricing (the late-news re-sim lists him as out): no star, flagged on the card */
+const ruledOut = (g, p) => p.market === 'prop' && !p.result && !!g.updated && (g.out[p.team] || []).includes(p.player);
+const OUTPILL = '<span class="pill p-void" title="Ruled out after this was priced. A player who doesn\'t play voids the prop at the book.">Ruled out</span>';
 /* the slate's starred picks: Hot bets and Top group leans, in one list (same rules as the tags) */
 function starOf(p) {
   const f = FORM[LG]; if (!f) return null;
@@ -605,14 +617,27 @@ function starOf(p) {
   const c = catOf(p), ct = c && f.cat[c]; if (!ct || !ct.watch) return null;
   const g = f.grp[c + '|' + parts(p).base]; return g && g.top ? {t: g, label: `${CATS.find(x => x[0] === c)[1].toLowerCase()} · ${parts(p).base}`} : null;
 }
+/* Top group leans, one collapsed line per group (Nov 2: 32 starred leans in one list was too long to scan; every pick
+   in a group carries the same star and record, so the group is the useful unit). Biggest group record first. */
+function leanGroups(list, row) {
+  const by = new Map();
+  for (const x of list) { const k = x.st.label; if (!by.has(k)) by.set(k, {st: x.st, xs: []}); by.get(k).xs.push(x); }
+  const gr = [...by.values()].sort((a, b) => b.st.t.u - a.st.t.u);
+  return `<div class="sp-gs">${gr.map(({st, xs}) => {
+    const done = xs.filter(x => x.p.result), t = {w: 0, l: 0, p: 0, u: 0};
+    for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
+    const tonight = done.length ? ` &middot; this slate ${rec(t)} <span class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</span>` : '';
+    return `<details class="sp-g"><summary><span class="sp-gn">${esc(st.label)}<span class="sp-gc">${xs.length}</span></span><span class="sp-gr">${frec(st.t)}${tonight}</span></summary><div class="sp-l">${xs.map(x => row(x, true)).join('')}</div></details>`;
+  }).join('')}</div>`;
+}
 function spots(gs, unit) {
   const rows = {bet: [], lean: []};
-  for (const g of gs) for (const p of g.picks) { const st = starOf(p); if (st) rows[p.kind].push({g, p, st}); }
+  for (const g of gs) for (const p of g.picks) { if (ruledOut(g, p)) continue; const st = starOf(p); if (st) rows[p.kind].push({g, p, st}); }
   for (const k in rows) rows[k].sort((a, b) => new Date(a.g.tipoff) - new Date(b.g.tipoff) || b.p.model_p - a.p.model_p);
   const graded = gs.every(g => g.final);
-  const row = ({g, p, st}) => `<button type="button" class="sp-r" data-g="${esc(g.game_id)}"><b>${esc(p.selection)}</b><span class="pr">${odds(p.price)}</span>
+  const row = ({g, p, st}, inGroup) => `<button type="button" class="sp-r" data-g="${esc(g.game_id)}"><b>${esc(p.selection)}</b><span class="pr">${odds(p.price)}</span>
     <span class="sub">${esc(g.away)} @ ${esc(g.home)} &middot; <span class="bk">${esc(p.book)}</span>${p.result ? ` &middot; <span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>` : ''}</span>
-    <span class="sub">${esc(st.label)} ${frec(st.t)}</span>${shopLine(p, true)}</button>`;
+    ${inGroup === true ? '' : `<span class="sub">${esc(st.label)} ${frec(st.t)}</span>`}${shopLine(p, true)}</button>`;
   const all = rows.bet.concat(rows.lean), done = all.filter(x => x.p.result);
   let recap = '';
   if (done.length) { const t = {w: 0, l: 0, p: 0, u: 0}; for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
@@ -622,8 +647,8 @@ function spots(gs, unit) {
     <div class="sp-s"><b>★</b> Hot bets <span>1 unit each</span></div>
     ${rows.bet.length ? `<div class="sp-l">${rows.bet.map(row).join('')}</div>` : '<div class="sp-n">None yet. A bet type needs 15+ graded at +10% ROI or better.</div>'}
     <div class="sp-s"><b>★</b> Top group leans <span>tracked, not staked</span></div>
-    ${rows.lean.length ? `<div class="sp-l">${rows.lean.map(row).join('')}</div>` : '<div class="sp-n">None on this slate.</div>'}
-    <div class="sp-n">${graded ? 'Tagged with today\'s season records. ' : ''}Several unders on one team tend to win or lose together. Tap a pick to jump to its game.</div>
+    ${rows.lean.length ? leanGroups(rows.lean, row) : '<div class="sp-n">None on this slate.</div>'}
+    <div class="sp-n">${graded ? 'Tagged with today\'s season records. ' : ''}Tap a group to see its picks, and a pick to jump to its game. Several unders on one team tend to win or lose together.</div>
   </div></aside>`;
 }
 async function renderSlate() {
@@ -1003,6 +1028,7 @@ $('leagues').addEventListener('click', e => { const b = e.target.closest('button
 document.querySelector('.vw').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (!b) return; VIEW = b.dataset.v; FOCUS = null; go(); });
 let AWAY = 0;
 document.addEventListener('visibilitychange', () => { if (document.hidden) AWAY = Date.now(); else if (AWAY && Date.now() - AWAY > 600000) location.reload(); });
+window.addEventListener('hashchange', () => { readHash(); FOCUS = null; if (Object.keys(IDX).length) { if (!IDX[LG]) LG = Object.keys(IDX)[0]; go(); } });
 (async () => {
   readHash();
   await Promise.all(Object.keys(LEAGUES).map(async k => { try { IDX[k] = await getJSON(`sim/${k}/index.json`); } catch (e) {} }));
