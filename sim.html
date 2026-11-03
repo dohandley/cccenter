@@ -366,6 +366,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 
     <h3>Tags</h3>
     <ul>
+      <li><span class="pill p-open">Hold</span> on an NFL pick: when it was priced, the books posted props for a teammate the sim had no role for, so that team's projections were inflated. Wait on it. Hold and Role? picks never get a star.</li>
       <li><span class="pill p-cold">Role?</span> on an NFL over: the sim projects more than 1.33&times; the line, which often means it gives the player a bigger role than the books do. It is still a pick; check his workload first.</li>
       <li><span class="pill p-hot">★ Hot</span> on a bet: that bet type (market, stat and side, e.g. "3-pointers unders") has 15+ graded bets and is +9% ROI or better this season, after adjusting for sample size: the record is judged as if 40 breakeven picks were added, so 49–22 counts for more than 9–6.</li>
       <li><span class="pill p-cold">❄ Cold</span>: 15+ graded and &minus;9% or worse, adjusted the same way. Every ungraded bet also shows its bet type's record, tagged or not.</li>
@@ -495,7 +496,8 @@ function leanForm(p) {
   const f = FORM[LG]; if (!f || p.result) return null;
   const c = catOf(p), ct = c && f.cat[c]; if (!ct || !ct.watch) return null;
   const g = f.grp[c + '|' + parts(p).base], cat = CATS.find(x => x[0] === c);
-  return {top: !!(g && g.top), html: `<span class="sub">${g && g.top ? TOP + ' ' : ''}<span class="pill p-cat">${cat[2]}</span> ${esc(parts(p).base)} ${g ? frec(g) : ''}</span>`};
+  const top = !!(g && g.top) && !p.role && !p.hold;                  // NFL ROLE? / HOLD: no Top group tag (Nov 3)
+  return {top, html: `<span class="sub">${top ? TOP + ' ' : ''}<span class="pill p-cat">${cat[2]}</span> ${esc(parts(p).base)} ${g ? frec(g) : ''}</span>`};
 }
 function legend() {
   const f = FORM[LG]; if (!f) return '';
@@ -527,7 +529,7 @@ function finishLine(p) {
 function pickCard(g, p) {
   const res = p.result ? `<div class="res"><span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span>${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span><span class="u ${ucls(p.units)}">${un(p.units)}</span></div>`
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
-  return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
+  return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
     <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${res}</div>`;
 }
@@ -541,7 +543,7 @@ function shopLine(p, small) {
 }
 function leanTable(ls, g) {
   if (!ls.length) return '';
-  const rows = ls.map(p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
+  const rows = ls.map(p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : out ? '<span class="pill p-void">void</span>' : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
@@ -614,7 +616,7 @@ const ruledOut = (g, p) => p.market === 'prop' && !p.result && !!g.updated && (g
 const OUTPILL = '<span class="pill p-void" title="Ruled out after this was priced. A player who doesn\'t play voids the prop at the book.">Ruled out</span>';
 /* the slate's starred picks: Hot bets and Top group leans, in one list (same rules as the tags) */
 function starOf(p) {
-  const f = FORM[LG]; if (!f) return null;
+  const f = FORM[LG]; if (!f || p.role || p.hold) return null;      // NFL ROLE? / HOLD picks never get a star (Nov 3)
   if (p.kind === 'bet') { const t = f.bet[betKey(p)]; return t && t.tag === 'hot' ? {t, label: betLabel(p)} : null; }
   const c = catOf(p), ct = c && f.cat[c]; if (!ct || !ct.watch) return null;
   const g = f.grp[c + '|' + parts(p).base]; return g && g.top ? {t: g, label: `${CATS.find(x => x[0] === c)[1].toLowerCase()} · ${parts(p).base}`} : null;
