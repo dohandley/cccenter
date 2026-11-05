@@ -183,6 +183,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
       <li><b>Trust the sim only part way.</b> Where the sim and the market disagree, the market has mostly been right. So Ace uses <span class="mono">market + k &times; (sim &minus; market)</span>, with <span class="mono">k</span> fit each night on every pick already graded. A k of 0.20 means Ace believes the sim 20% of the way.</li>
       <li><b>Edge:</b> that number must beat the market&rsquo;s no-vig chance by 7 points on props, 6 on totals, and be +EV at the listed price.</li>
       <li><b>Limits:</b> one pick per player, one total per game, no nightly count. NFL picks flagged for a role or roster question are left out.</li>
+      <li><b>Final after the injury check:</b> for games that start after the pre-game check (about 6 PM ET for the NBA), Ace's picks stay pending at pricing and are hidden. The check confirms each one at the current price, or pulls it, and only then does it appear here.</li>
       <li><b>Late news:</b> the pre-game re-check redoes each open pick with the latest injury news and the current market. If the player is ruled out, the line has moved a point or more against the pick, or the pick no longer clears the bar, Ace <b>pulls</b> it before the game. A pulled pick returns its stake and is not a win or a loss.</li>
     </ul>
     <h3>Stakes and the bankroll</h3>
@@ -225,7 +226,7 @@ const usz = () => { const v = parseFloat(String(USZ).replace(/[$,\s]/g, '')); re
 const money = v => { const d = Math.abs(v) < 100 ? 2 : 0; return (v < 0 ? '−' : v > 0 ? '+' : '') + '$' + Math.abs(v).toLocaleString('en-US', {maximumFractionDigits: d, minimumFractionDigits: d}); };
 const cash = v => '$' + Math.round(v).toLocaleString('en-US');
 
-let ALL = [], SLATES = [], META = {}, SCOPE = 'all', LG = 'all', MONTH = null, DAY = null, SHOW = 40, OPEN = new Set();
+let ALL = [], PEND = [], SLATES = [], META = {}, SCOPE = 'all', LG = 'all', MONTH = null, DAY = null, SHOW = 40, OPEN = new Set();
 try { const s = JSON.parse(localStorage.getItem('acek') || '{}'); if (['all','live','backfill'].includes(s.s)) SCOPE = s.s; if (['all','nba','nfl'].includes(s.l)) LG = s.l; } catch (e) {}
 const saveS = () => { try { localStorage.setItem('acek', JSON.stringify({s: SCOPE, l: LG})); } catch (e) {} };
 const BANK = () => (META.nba || META.nfl || {rules: {bank: 100}}).rules.bank;
@@ -301,10 +302,17 @@ function renderOpen() {
     note = `${ps.length} pick${ps.length === 1 ? '' : 's'} · ${st.toFixed(2)}u at risk`;
   }
   ps.sort((a, b) => a.start.localeCompare(b.start) || b.ev - a.ev);
+  const pend = PEND.filter(p => (LG === 'all' || p.lg === LG) && new Date(p.start) > new Date());
+  if (pend.length) {
+    const chk = pend.map(p => p.check_at).filter(Boolean).sort()[0];
+    const t = chk ? new Date(chk).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}) + ' ET' : 'the pre-game check';
+    note = (note ? note + ' · ' : '') + `${pend.length} more pending until ${t}`;
+  }
   $('tn-t').textContent = title; $('tn-n').textContent = note;
   const quiet = SLATES.filter(s => (LG === 'all' || s.lg === LG) && s.id >= now && !s.picks && s.k != null);
-  $('tn').innerHTML = ps.length ? ps.map(p => pickRow(p)).join('')
-    : `<div class="empty">${quiet.length ? 'No pick cleared the bar tonight. Ace passes rather than forcing one.' : 'No picks yet.'}</div>`;
+  const pendBox = pend.length ? `<div class="why" style="grid-column:auto;margin:4px 8px 8px"><b>${pend.length} pick${pend.length === 1 ? '' : 's'} pending.</b> Ace's final list for these games comes after the pre-game injury check, which confirms each pick at the current price or pulls it. They're hidden until then, so nothing here goes stale.</div>` : '';
+  $('tn').innerHTML = pendBox + (ps.length ? ps.map(p => pickRow(p)).join('')
+    : (pend.length ? '' : `<div class="empty">${quiet.length ? 'No pick cleared the bar tonight. Ace passes rather than forcing one.' : 'No picks yet.'}</div>`));
 }
 
 function renderStats() {
@@ -447,7 +455,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) AWAY 
     try {
       const r = await fetch(`sim/${lg}/ace.json`, {cache: 'no-store'}); if (!r.ok) return;
       const d = await r.json(); META[lg] = d;
-      ALL.push(...d.picks.map(p => ({...p, lg})));
+      for (const p of d.picks.map(p => ({...p, lg}))) (p.pending ? PEND : ALL).push(p);   // pending: not final until the pre-game check
       SLATES.push(...d.slates.map(s => ({...s, lg})));
     } catch (e) {}
   }));
