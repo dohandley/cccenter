@@ -121,7 +121,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .pill{display:inline-block;padding:2px 8px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:1px solid}
 .p-win{background:var(--green-bg);border-color:var(--green-border);color:var(--green-text)}
 .p-loss{background:var(--red-bg);border-color:var(--red-border);color:var(--red-text)}
-.p-push,.p-void{background:var(--surface-2);border-color:var(--border);color:var(--text-3)}
+.p-push,.p-void,.p-pulled{background:var(--surface-2);border-color:var(--border);color:var(--text-3)}
 .p-open{background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue-text)}
 .p-hot{background:var(--green-bg);border-color:var(--green-border);color:var(--green-text)}
 .p-cold{background:var(--cyan-bg);border-color:var(--cyan-border);color:var(--cyan-text)}
@@ -394,7 +394,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
     <ul>
       <li><b>NBA / NFL</b> switches leagues. The buttons show each league's season record.</li>
       <li><b>Slate</b> shows one night (or NFL week) of game cards. Pick a date from the row above the cards. The <b>★ picks</b> box (a sidebar on wide screens) gathers that slate's <span class="pill p-hot">★ Hot</span> bets and <span class="pill p-hot">★ Top group</span> leans in one list; tap one to jump to its game. On a graded slate it also shows how they did.</li>
-      <li><b>Parlays</b> shows the paper parlay tickets (learning only).</li>
+      <li><b>Parlays</b> shows the paper parlay tickets (learning only). A ticket the pre-game check finds broken (a leg ruled out, a line moved a point or more against it, or the ticket no longer +EV) is pulled before the games: no win or loss, and no replacement.</li>
       <li><b>Report</b> is the model's report card: how its win chances compare with the market's and with what actually happened (calibration), how much of its disagreement with the market has paid off (trust weight), closing-line value, the sim's game scores, margins and totals against the finals (next to the market's lines), spread and moneyline leans by how far the sim disagreed with the market, how close the player projections were to the box scores, and the week-by-week trend. It updates after every grading.</li>
       <li><b>Ledger</b> lists every pick. Filter by bets or leans, by market, and by lean reason; the record for whatever you've filtered shows above the table. Tap any row to jump to its game card.</li>
       <li>At the top of the Ledger, the <b>calendar</b> colors each night (each week for the NFL) green if it finished up units, red if down, amber if even, and dashed while results are pending; tap one to open that slate. <b>Units over time</b> charts the running total for all picks and for each market or stat; tap a chip to hide or show its line. Both switch between bets and leans.</li>
@@ -852,7 +852,8 @@ const FLAG = {backfill: 'Rebuilt from ledger', late: 'Built late', live: ''};
 function ticket(t) {
   const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span><span class="sub">${esc(l.matchup)} &middot; ${esc(shortDate(l.start))}</span></div>
       <div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">est ${pct(l.p)} &middot; mkt ${pct(l.book_p)}</span></div></div>`).join('');
-  const foot = t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span><span class="u ${ucls(t.units)}">${un(t.units)}</span>`
+  const foot = t.result === 'pulled' ? `<span class="pill p-pulled">pulled</span><span class="dim">Pulled before the games: ${esc(t.pull_reason || '')}. Not a win or a loss.</span>`
+    : t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span><span class="u ${ucls(t.units)}">${un(t.units)}</span>`
     : `<span class="pill p-open">pending</span><span class="dim">Settles when both legs are graded</span>`;
   return `<div class="tk"><div class="tk-h"><span class="tk-o">${esc(t.american)}<b>${esc(t.book)}</b></span>
       <span class="tk-m">est ${pct(t.p)} &middot; fair ${amer(1 / t.p)} &middot; EV ${t.ev >= 0 ? '+' : ''}${(t.ev * 100).toFixed(0)}%</span></div>${legs}<div class="tk-f">${foot}</div></div>`;
