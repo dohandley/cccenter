@@ -61,6 +61,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .tn-list{padding:6px 8px 4px;display:grid;gap:2px}
 .pk{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:10px 8px;border-radius:8px;border-top:1px solid var(--border)}
 .pk:first-child{border-top:0}
+.pk.pend .pk-s{color:var(--text-3)}.pk.pend .pk-m{opacity:.75}
+.ptag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.06em;padding:2px 6px;border-radius:4px;background:var(--amber-bg);border:1px solid var(--amber-border);color:var(--amber-text);white-space:nowrap}
 .pk-lg{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.08em}
 .pk-lg i{display:block;font-style:normal;font-weight:500;color:var(--text-4);margin-top:2px}
 .pk-s{font-weight:700;font-size:14px;line-height:1.3}
@@ -183,7 +185,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
       <li><b>Trust the sim only part way.</b> Where the sim and the market disagree, the market has mostly been right. So Ace uses <span class="mono">market + k &times; (sim &minus; market)</span>, with <span class="mono">k</span> fit each night on every pick already graded. A k of 0.20 means Ace believes the sim 20% of the way.</li>
       <li><b>Edge:</b> that number must beat the market&rsquo;s no-vig chance by 7 points on props, 6 on totals, and be +EV at the listed price.</li>
       <li><b>Limits:</b> one pick per player, one total per game, no nightly count. NFL picks flagged for a role or roster question are left out.</li>
-      <li><b>Final after the injury check:</b> for games that start after the pre-game check (about 6 PM ET for the NBA), Ace's picks stay pending at pricing and are hidden. The check confirms each one at the current price, or pulls it, and only then does it appear here.</li>
+      <li><b>Final after the injury check:</b> for games that start after the pre-game check (about 6 PM ET for the NBA), Ace's picks show as <b>pending</b> from pricing until the check confirms each one at the current price or pulls it. Don't play a pending pick; pending picks aren't in the record until confirmed.</li>
       <li><b>Late news:</b> the pre-game re-check redoes each open pick with the latest injury news and the current market. If the player is ruled out, the line has moved a point or more against the pick, or the pick no longer clears the bar, Ace <b>pulls</b> it before the game. A pulled pick returns its stake and is not a win or a loss.</li>
     </ul>
     <h3>Stakes and the bankroll</h3>
@@ -281,11 +283,13 @@ function pickRow(p, open) {
   const id = 'w' + btoa(unescape(encodeURIComponent(p.id))).replace(/[^a-z0-9]/gi, '').slice(-24);
   const st = new Date(p.start);
   const t = st.toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}).replace(':00', '');
-  const right = p.result == null ? `<b>${p.stake.toFixed(2)}u</b><span>${am(p.price)}</span>`
+  const ck = p.check_at ? new Date(p.check_at).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}).replace(':00', '') : '';
+  const right = p.pending ? `<span class="ptag">PENDING</span><span style="display:block;margin-top:4px">${ck ? 'final ~' + ck + ' ET' : 'pre-game check'}</span>`
+    : p.result == null ? `<b>${p.stake.toFixed(2)}u</b><span>${am(p.price)}</span>`
     : `<b class="${ucls(p.units)}">${un(p.units)}</b><span>${p.result}${p.actual != null ? ' · ' + p.actual : ''}</span>`;
-  return `<div class="pk"><div class="pk-lg">${p.lg.toUpperCase()}<i>${dlab(p.slate)}</i></div>
+  return `<div class="pk${p.pending ? ' pend' : ''}"><div class="pk-lg">${p.lg.toUpperCase()}<i>${dlab(p.slate)}</i></div>
     <div><div class="pk-s">${esc(p.selection)}<button class="wbtn" data-w="${id}">WHY</button></div>
-    <div class="pk-m">${esc(p.matchup)} &middot; ${t} ET &middot; <span class="bk">${esc(p.book)}</span> ${am(p.price)} &middot; Ace ${pct(p.p)} vs mkt ${pct(p.mkt_p)}${p.actual != null ? ' &middot; ' + fin(p) : ''}</div></div>
+    <div class="pk-m">${esc(p.matchup)} &middot; ${t} ET &middot; <span class="bk">${esc(p.book)}</span> ${am(p.price)}${p.pending ? ' at pricing' : ''} &middot; Ace ${pct(p.p)} vs mkt ${pct(p.mkt_p)}${p.actual != null ? ' &middot; ' + fin(p) : ''}</div></div>
     <div class="pk-r">${right}</div>
     <div class="why" id="${id}" ${open ? '' : 'hidden'}>${why(p)}</div></div>`;
 }
@@ -308,11 +312,12 @@ function renderOpen() {
   if (pend.length) {
     const chk = pend.map(p => p.check_at).filter(Boolean).sort()[0];
     const t = chk ? new Date(chk).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}) + ' ET' : 'the pre-game check';
-    note = (note ? note + ' · ' : '') + `${pend.length} more pending until ${t}`;
+    note = (note ? note + ' · ' : '') + `${pend.length} pending until ${t}`;
   }
   $('tn-t').textContent = title; $('tn-n').textContent = note;
   const quiet = SLATES.filter(s => (LG === 'all' || s.lg === LG) && s.id >= now && !s.picks && s.k != null);
-  const pendBox = pend.length ? `<div class="why" style="grid-column:auto;margin:4px 8px 8px"><b>${pend.length} pick${pend.length === 1 ? '' : 's'} pending.</b> Ace's final list for these games comes after the pre-game injury check, which confirms each pick at the current price or pulls it. They're hidden until then, so nothing here goes stale.</div>` : '';
+  pend.sort((a, b) => a.start.localeCompare(b.start) || b.ev - a.ev);
+  const pendBox = pend.length ? `<div class="why" style="grid-column:auto;margin:4px 8px 8px"><b>Pending: don't play these yet.</b> The pre-game injury check confirms each one at the current price (and you get the final list by email) or pulls it if late news or a line move broke it. Pending picks aren't in the record.</div>` + pend.map(p => pickRow(p)).join('') : '';
   $('tn').innerHTML = pendBox + (ps.length ? ps.map(p => pickRow(p)).join('')
     : (pend.length ? '' : `<div class="empty">${quiet.length ? 'No pick cleared the bar tonight. Ace passes rather than forcing one.' : 'No picks yet.'}</div>`));
 }
