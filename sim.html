@@ -194,7 +194,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .upd{font-size:12.5px;color:var(--amber-text);background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:8px 12px}.upd b{color:var(--amber-text)}
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
-.game{scroll-margin-top:96px}.mo{display:none}
+.game{scroll-margin-top:calc(var(--hdrh,64px) + 84px)}.mo{display:none}
 /* slate: the night's starred picks (sidebar on wide screens, box above the cards otherwise) */
 .spots{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:14px 16px}
 .spots-in{display:grid;gap:10px}
@@ -227,6 +227,22 @@ details.sp-g>.sp-l{padding:0 8px 8px}
   .spots-in{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:14px}
   .sp-l{grid-template-columns:1fr}
 }
+/* slate game strip (Nov 5): one tile per game, sticky under the header, tap to jump to the card */
+.gstrip{position:sticky;top:var(--hdrh,64px);z-index:50;margin:0 -4px;padding:6px 4px;background:var(--bg);min-width:0;max-width:calc(100% + 8px)}
+.slate-wrap>*{min-width:0}
+.gs-row{display:flex;gap:6px;overflow-x:auto;min-width:0;max-width:100%;scrollbar-width:thin;scroll-behavior:smooth;padding-bottom:2px}
+.gs{flex:0 0 auto;min-width:128px;max-width:170px;display:grid;gap:2px;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-family:inherit;color:var(--text);cursor:pointer}
+.gs:hover{border-color:var(--text-3)}.gs:focus-visible{outline:2px solid var(--green);outline-offset:1px}
+.gs.on{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text)}
+.gs.win{background:var(--green-bg);border-color:var(--green-border)}.gs.loss{background:var(--red-bg);border-color:var(--red-border)}
+.gs.win.on,.gs.loss.on{border-color:var(--text)}
+.gs .m{font-weight:800;font-size:12.5px;white-space:nowrap;display:flex;justify-content:space-between;gap:6px}
+.gs .m i{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;color:var(--text-4);text-transform:uppercase}
+.gs .e{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-3);white-space:nowrap}
+.gs .e b{color:var(--text);font-weight:700}
+.gs .c{font-size:10.5px;color:var(--text-3);white-space:nowrap}
+.gs .c .st{color:var(--green-text);font-weight:800}.gs .c .hd{color:var(--blue-text);font-weight:800}
+.gs .u{font-family:'JetBrains Mono',monospace;font-weight:700}
 /* report card */
 .rc-k{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .rc-v{font-size:13.5px;line-height:1.55;color:var(--text-2)}
@@ -657,6 +673,50 @@ function spots(gs, unit) {
     <div class="sp-n">${graded ? 'Tagged with today\'s season records. ' : ''}Tap a group to see its picks, and a pick to jump to its game. Several unders on one team tend to win or lose together.</div>
   </div></aside>`;
 }
+/* game strip: one tile per game (matchup + time or final score, the sim's spread edge, picks with a star / hold
+   marker, and after grading the game's bet record). Tap scrolls to the card; the tile of the card on screen is outlined. */
+function gameStrip(gs) {
+  if (gs.length < 2) return '';
+  const tile = g => {
+    const f = g.final, started = Date.now() > new Date(g.tipoff).getTime();
+    const bets = g.picks.filter(p => p.kind === 'bet'), nl = g.picks.length - bets.length;
+    const sd = g.spread_line == null ? null : g.fair_spread_home + g.spread_line;
+    const edge = sd == null ? '' : Math.abs(sd) < 0.05 ? 'sim = market' : `sim <b>+${Math.abs(sd).toFixed(1)}</b> ${esc(sd < 0 ? g.home : g.away)}`;
+    const star = g.picks.some(p => !p.result && starOf(p)), hold = g.picks.some(p => p.hold);
+    const gb = bets.filter(p => p.result), u = gb.reduce((a, p) => a + (p.units || 0), 0), ur = Math.round(u * 100) / 100;
+    const wl = {w: gb.filter(p => p.result === 'win').length, l: gb.filter(p => p.result === 'loss').length, p: gb.filter(p => p.result === 'push').length};
+    const cls = f && gb.length ? (ur > 0 ? ' win' : ur < 0 ? ' loss' : '') : '';
+    const when = f ? 'Final' : started ? 'Live' : new Date(g.tipoff).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York'});
+    const line2 = f ? `<b>${esc(g.away)} ${f.away_score}</b> – <b>${esc(g.home)} ${f.home_score}</b>` : edge;
+    const line3 = f && gb.length ? `Bets ${rec(wl)} <span class="u ${ucls(ur)}">${un(ur)}</span>`
+      : `${bets.length} bet${bets.length === 1 ? '' : 's'} · ${nl} lean${nl === 1 ? '' : 's'}${star ? ' <span class="st" title="Has a starred pick">★</span>' : ''}${hold ? ' <span class="hd" title="A pick on this game is on hold">Hold</span>' : ''}`;
+    const lab = `${g.away} at ${g.home}, ${f ? `final ${g.away} ${f.away_score}, ${g.home} ${f.home_score}` : when}. ${bets.length} bets, ${nl} leans. Jump to the game.`;
+    return `<button type="button" class="gs${cls}" data-g="${esc(g.game_id)}" aria-label="${esc(lab)}"><span class="m">${esc(g.away)} @ ${esc(g.home)}<i>${esc(when)}</i></span><span class="e">${line2}</span><span class="c">${line3}</span></button>`;
+  };
+  return `<nav class="gstrip" aria-label="Games on this slate"><div class="gs-row" id="gsrow">${gs.map(tile).join('')}</div></nav>`;
+}
+function stripActive() {               // outline the tile of the game card at the top of the screen
+  const row = $('gsrow'); if (!row) return;
+  const hdr = document.querySelector('.hdr'), top = (hdr ? hdr.offsetHeight : 64) + row.parentElement.offsetHeight + 12;
+  let best = null; document.querySelectorAll('.game').forEach(el => { if (el.getBoundingClientRect().top - top <= 40) best = el; });
+  const id = best ? best.id.slice(2) : null;
+  row.querySelectorAll('.gs').forEach(t => { const on = t.dataset.g === id; if (t.classList.contains('on') === on) return; t.classList.toggle('on', on);
+    if (on) { const l = t.offsetLeft - row.offsetLeft, r = l + t.offsetWidth;   // keep it visible inside the strip only (no page jump)
+      if (l < row.scrollLeft || r > row.scrollLeft + row.clientWidth) row.scrollTo({left: Math.max(0, l - 24)}); } });
+}
+function wireStrip() {
+  const row = $('gsrow'); if (!row) return;
+  const setH = () => { const h = document.querySelector('.hdr'); if (h) document.documentElement.style.setProperty('--hdrh', h.offsetHeight + 'px'); };
+  setH();
+  const smooth = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  row.querySelectorAll('.gs').forEach(t => t.onclick = () => { const el = document.getElementById('g-' + t.dataset.g); if (!el) return;
+    el.scrollIntoView({block: 'start', behavior: smooth}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); });
+  if (!window.STRIP_ON) { window.STRIP_ON = 1; let q = 0;
+    addEventListener('scroll', () => { if (!q) { q = 1; requestAnimationFrame(() => { q = 0; stripActive(); }); } }, {passive: true});
+    addEventListener('resize', () => { setH(); stripActive(); }); }
+  stripActive();
+}
+
 async function renderSlate() {
   const idx = IDX[LG];
   if (!idx.nights.length) { $('view').innerHTML = `<div class="empty">No ${LEAGUES[LG]} games priced yet.</div>`; return; }
@@ -673,10 +733,12 @@ async function renderSlate() {
     <div class="stats">${st('Games', gs.length) + st('Bets', nb) + st('Leans', nl) + st(unit + ' W–L', rec(r), r ? '' : 'graded the next morning') + st(unit + ' units', r ? un(r.units) : '—', '', r ? ucls(r.units) : '')}</div>
     ${nb + nl ? spots(gs, unit) : ''}
     ${gs.some(g => !g.final) ? legend() : ''}
+    ${gameStrip(gs)}
     ${gs.length ? gs.map(card).join('') : '<div class="empty">No games priced.</div>'}</div>`;
   $('nights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; NID = b.dataset.n; FOCUS = null; go(); window.scrollTo({top: 0}); };
   $('view').querySelectorAll('.sp-r').forEach(b => b.onclick = () => { const el = document.getElementById('g-' + b.dataset.g); if (!el) return;
     el.scrollIntoView({block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); });
+  wireStrip();
   if (FOCUS) { const el = document.getElementById('g-' + FOCUS); if (el) { el.scrollIntoView({block: 'start'}); el.classList.add('flash'); } FOCUS = null; }
 }
 
