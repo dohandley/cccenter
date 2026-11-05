@@ -189,7 +189,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
       <li><b>Late news:</b> the pre-game re-check redoes each open pick with the latest injury news and the current market. If the player is ruled out, the line has moved a point or more against the pick, or the pick no longer clears the bar, Ace <b>pulls</b> it before the game. A pulled pick returns its stake and is not a win or a loss.</li>
     </ul>
     <h3>Stakes and the bankroll</h3>
-    <p>The bankroll starts at 100 units (1u&nbsp;=&nbsp;$100 by default; type your own unit size at the top). Each pick stakes one-tenth Kelly on Ace&rsquo;s probability, at most 3u, and a night&rsquo;s stakes are capped at 30u (best EV first). Stakes are sized off the starting bankroll. Pushes and voids return the stake.</p>
+    <p>The bankroll starts at 100 units (1u&nbsp;=&nbsp;$100 by default; type your own unit size at the top). Each pick stakes one-tenth Kelly on Ace&rsquo;s probability, at most 3u, and each league&rsquo;s stakes for a night are capped at 30u total (best EV first; a typical pick is 1&ndash;2u, so that&rsquo;s a ceiling for very big slates, not a pick count). Stakes are sized off the starting bankroll. Pushes and voids return the stake.</p>
     <h3>Live vs backfill</h3>
     <p><b>Live</b> picks are made before the games, from Nov 4, 2026 on. <b>Backfill</b> picks (Oct 24 &ndash; Nov 3) were rebuilt from the ledger by the same rule, using only results known before each night. They show how the rule would have done; they were not posted at the time.</p>
     <h3>Reading the page</h3>
@@ -275,7 +275,7 @@ function renderRoll() {
     <div><div class="roll-v">${roll.toFixed(2)}<small>u</small></div>
     <div class="roll-c ${ucls(r.u)}" style="margin-top:8px">${un(r.u)} &middot; ${(r.u / bank * 100 >= 0 ? '+' : '')}${(r.u / bank * 100).toFixed(1)}%</div></div>
     <div class="roll-s">from ${bank}u${sz ? ` (${cash(bank * sz)} at ${cash(sz)}/u → <b class="${ucls(r.u)}">${cash(roll * sz)}</b>)` : ''}${first ? '<br>since ' + dlab(first) : ''}</div>
-    <div class="sizing"><span class="kpi-l">Stake sizing</span><b>1/10 Kelly &middot; max 3u</b><span>30u per night at most &middot; no compounding</span></div>
+    <div class="sizing"><span class="kpi-l">Stake sizing</span><b>1/10 Kelly &middot; max 3u</b><span>stakes ~1–2u a pick &middot; at most 30u per league per night &middot; no compounding</span></div>
     <div class="ladder"><div class="lad-t"><span>Next rung</span><span>${roll.toFixed(1)} of ${rung}u</span></div><div class="bar"><i style="width:${(pc * 100).toFixed(1)}%"></i></div></div>`;
 }
 
