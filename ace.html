@@ -240,6 +240,7 @@ function rec(ps) {
   return {n: ps.length, w, l, pu, pl, open: ps.length - g.length, u, st, roi: st ? u / st : null, clv: c.length ? c.reduce((a, b) => a + b, 0) / c.length : null,
     beat: c.filter(v => v > 0).length, nc: c.length, ev: ps.length ? ps.reduce((a, p) => a + p.ev, 0) / ps.length : null};
 }
+const fin = p => p.actual == null ? '' : `${p.market === 'total' ? 'Total' : 'Finished'} <b class="${p.result === 'win' ? 'pos' : p.result === 'loss' ? 'neg' : 'flat'}">${p.actual}</b> (line ${p.line})`;
 const rtxt = r => `${r.w}–${r.l}${r.pu ? '–' + r.pu : ''}`;
 const pulledTxt = r => r.pl ? ` · ${r.pl} pulled` : '';
 
@@ -249,6 +250,7 @@ function why(p) {
   return `The sim gave this <b>${pct(p.model_p)}</b>; the market (no-vig) <b>${pct(p.mkt_p)}</b>. Ace trusts the sim ${Math.round(p.k * 100)}% of the way `
     + `(k ${kk}) → <b>${pct(p.p)}</b>, which is <b>+${(p.edge * 100).toFixed(1)} pts</b> over the market and <b>${p.ev >= 0 ? '+' : ''}${(p.ev * 100).toFixed(1)}% EV</b> at ${am(p.price)} `
     + `(${esc(p.book)}). Stake: one-tenth Kelly = <b>${p.stake.toFixed(2)}u</b>. Logged in the Sim Ledger as ${src}.`
+    + (p.proj ? ` ${esc(p.proj)}` : '') + (p.actual != null ? ` ${fin(p)}.` : '')
     + (p.clv != null ? ` Closing-line value: <b class="${ucls(p.clv)}">${p.clv > 0 ? '+' : ''}${p.clv.toFixed(1)} pp</b>.` : '')
     + (p.result === 'pulled' ? ` <br><b>Pulled before the game</b>${p.pulled_at ? ' (' + new Date(p.pulled_at).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}) + ' ET)' : ''}: ${esc(p.pull_reason || '')}. Stake returned; not a win or a loss.` : '');
 }
@@ -280,10 +282,10 @@ function pickRow(p, open) {
   const st = new Date(p.start);
   const t = st.toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}).replace(':00', '');
   const right = p.result == null ? `<b>${p.stake.toFixed(2)}u</b><span>${am(p.price)}</span>`
-    : `<b class="${ucls(p.units)}">${un(p.units)}</b><span>${p.result}</span>`;
+    : `<b class="${ucls(p.units)}">${un(p.units)}</b><span>${p.result}${p.actual != null ? ' · ' + p.actual : ''}</span>`;
   return `<div class="pk"><div class="pk-lg">${p.lg.toUpperCase()}<i>${dlab(p.slate)}</i></div>
     <div><div class="pk-s">${esc(p.selection)}<button class="wbtn" data-w="${id}">WHY</button></div>
-    <div class="pk-m">${esc(p.matchup)} &middot; ${t} ET &middot; <span class="bk">${esc(p.book)}</span> ${am(p.price)} &middot; Ace ${pct(p.p)} vs mkt ${pct(p.mkt_p)}</div></div>
+    <div class="pk-m">${esc(p.matchup)} &middot; ${t} ET &middot; <span class="bk">${esc(p.book)}</span> ${am(p.price)} &middot; Ace ${pct(p.p)} vs mkt ${pct(p.mkt_p)}${p.actual != null ? ' &middot; ' + fin(p) : ''}</div></div>
     <div class="pk-r">${right}</div>
     <div class="why" id="${id}" ${open ? '' : 'hidden'}>${why(p)}</div></div>`;
 }
@@ -404,17 +406,18 @@ function renderLog() {
   $('logf').innerHTML = DAY ? `<button class="chip" id="clr">${dlab(DAY)} &times;</button>` : `<span class="cnote">${ps.length} picks</span>`;
   if (DAY) $('clr').onclick = () => { DAY = null; renderCal(); renderLog(); };
   const show = ps.slice(0, SHOW);
-  $('log').innerHTML = `<thead><tr><th>Date</th><th>Pick</th><th class="hm">Book</th><th class="r">Odds</th><th class="r">Stake</th><th class="r hm">Ace / Mkt</th><th class="r hm">CLV</th><th class="r">P/L</th><th></th></tr></thead><tbody>`
+  $('log').innerHTML = `<thead><tr><th>Date</th><th>Pick</th><th class="hm">Book</th><th class="r">Odds</th><th class="r">Stake</th><th class="r hm">Ace / Mkt</th><th class="r">Final</th><th class="r hm">CLV</th><th class="r">P/L</th><th></th></tr></thead><tbody>`
     + (show.length ? show.map(p => {
       const id = 'L' + btoa(unescape(encodeURIComponent(p.id))).replace(/[^a-z0-9]/gi, '').slice(-24), o = OPEN.has(id);
       return `<tr class="${o ? 'has-w' : ''}"><td class="n">${dlab(p.slate)}<br><span class="tag">${p.lg.toUpperCase()}</span>${p.flag === 'backfill' ? '<span class="tag bf" title="Rebuilt from the ledger, not posted at the time">BF</span>' : ''}</td>
         <td class="pick"><b>${esc(p.selection)}</b><span>${esc(p.matchup)}</span></td><td class="bk hm">${esc(p.book)}</td>
         <td class="r n">${am(p.price)}</td><td class="r n">${p.stake.toFixed(2)}u</td><td class="r n hm">${pct(p.p)} / ${pct(p.mkt_p)}</td>
+        <td class="r n ${p.result === 'win' ? 'pos' : p.result === 'loss' ? 'neg' : 'flat'}" title="${p.actual != null ? 'Finished ' + p.actual + ' vs line ' + p.line : ''}">${p.actual ?? '—'}</td>
         <td class="r n hm ${p.clv == null ? 'flat' : ucls(p.clv)}">${p.clv == null ? '—' : (p.clv > 0 ? '+' : '') + p.clv.toFixed(1)}</td>
         <td class="r res ${p.result == null ? 'pend' : ucls(p.units)}">${p.result == null ? 'open' : p.result === 'win' || p.result === 'loss' ? un(p.units) : p.result}</td>
         <td><button class="wbtn" data-l="${id}">WHY</button></td></tr>`
-        + (o ? `<tr class="wr"><td></td><td colspan="8"><div class="why" style="margin:0">${why(p)}</div></td></tr>` : '');
-    }).join('') : '<tr><td colspan="9" class="empty">No picks here yet.</td></tr>') + '</tbody>';
+        + (o ? `<tr class="wr"><td></td><td colspan="9"><div class="why" style="margin:0">${why(p)}</div></td></tr>` : '');
+    }).join('') : '<tr><td colspan="10" class="empty">No picks here yet.</td></tr>') + '</tbody>';
   $('more').hidden = ps.length <= SHOW;
 }
 
