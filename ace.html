@@ -183,6 +183,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
       <li><b>Trust the sim only part way.</b> Where the sim and the market disagree, the market has mostly been right. So Ace uses <span class="mono">market + k &times; (sim &minus; market)</span>, with <span class="mono">k</span> fit each night on every pick already graded. A k of 0.20 means Ace believes the sim 20% of the way.</li>
       <li><b>Edge:</b> that number must beat the market&rsquo;s no-vig chance by 7 points on props, 6 on totals, and be +EV at the listed price.</li>
       <li><b>Limits:</b> one pick per player, one total per game, no nightly count. NFL picks flagged for a role or roster question are left out.</li>
+      <li><b>Late news:</b> the pre-game re-check redoes each open pick with the latest injury news and the current market. If the player is ruled out, the line has moved a point or more against the pick, or the pick no longer clears the bar, Ace <b>pulls</b> it before the game. A pulled pick returns its stake and is not a win or a loss.</li>
     </ul>
     <h3>Stakes and the bankroll</h3>
     <p>The bankroll starts at 100 units (1u&nbsp;=&nbsp;$100 by default; type your own unit size at the top). Each pick stakes one-tenth Kelly on Ace&rsquo;s probability, at most 3u, and a night&rsquo;s stakes are capped at 30u (best EV first). Stakes are sized off the starting bankroll. Pushes and voids return the stake.</p>
@@ -233,12 +234,13 @@ const inScope = p => (SCOPE === 'all' || (SCOPE === 'live' ? p.flag !== 'backfil
 const graded = p => p.result != null;
 function rec(ps) {
   const g = ps.filter(graded); const w = g.filter(p => p.result === 'win').length, l = g.filter(p => p.result === 'loss').length;
-  const pu = g.length - w - l; const u = r2(g.reduce((a, p) => a + p.units, 0)); const st = g.filter(p => p.result === 'win' || p.result === 'loss').reduce((a, p) => a + p.stake, 0);
+  const pl = g.filter(p => p.result === 'pulled').length, pu = g.length - w - l - pl; const u = r2(g.reduce((a, p) => a + p.units, 0)); const st = g.filter(p => p.result === 'win' || p.result === 'loss').reduce((a, p) => a + p.stake, 0);
   const c = ps.filter(p => p.clv != null).map(p => p.clv);
-  return {n: ps.length, w, l, pu, open: ps.length - g.length, u, st, roi: st ? u / st : null, clv: c.length ? c.reduce((a, b) => a + b, 0) / c.length : null,
+  return {n: ps.length, w, l, pu, pl, open: ps.length - g.length, u, st, roi: st ? u / st : null, clv: c.length ? c.reduce((a, b) => a + b, 0) / c.length : null,
     beat: c.filter(v => v > 0).length, nc: c.length, ev: ps.length ? ps.reduce((a, p) => a + p.ev, 0) / ps.length : null};
 }
 const rtxt = r => `${r.w}–${r.l}${r.pu ? '–' + r.pu : ''}`;
+const pulledTxt = r => r.pl ? ` · ${r.pl} pulled` : '';
 
 function why(p) {
   const kk = p.k.toFixed(2), d = 1 + (p.price > 0 ? p.price / 100 : 100 / -p.price);
@@ -246,7 +248,8 @@ function why(p) {
   return `The sim gave this <b>${pct(p.model_p)}</b>; the market (no-vig) <b>${pct(p.mkt_p)}</b>. Ace trusts the sim ${Math.round(p.k * 100)}% of the way `
     + `(k ${kk}) → <b>${pct(p.p)}</b>, which is <b>+${(p.edge * 100).toFixed(1)} pts</b> over the market and <b>${p.ev >= 0 ? '+' : ''}${(p.ev * 100).toFixed(1)}% EV</b> at ${am(p.price)} `
     + `(${esc(p.book)}). Stake: one-tenth Kelly = <b>${p.stake.toFixed(2)}u</b>. Logged in the Sim Ledger as ${src}.`
-    + (p.clv != null ? ` Closing-line value: <b class="${ucls(p.clv)}">${p.clv > 0 ? '+' : ''}${p.clv.toFixed(1)} pp</b>.` : '');
+    + (p.clv != null ? ` Closing-line value: <b class="${ucls(p.clv)}">${p.clv > 0 ? '+' : ''}${p.clv.toFixed(1)} pp</b>.` : '')
+    + (p.result === 'pulled' ? ` <br><b>Pulled before the game</b>${p.pulled_at ? ' (' + new Date(p.pulled_at).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}) + ' ET)' : ''}: ${esc(p.pull_reason || '')}. Stake returned; not a win or a loss.` : '');
 }
 
 function renderHeader() {
@@ -311,7 +314,7 @@ function renderStats() {
   for (let i = g.length - 1; i >= 0; i--) { const x = g[i].result; if (x !== 'win' && x !== 'loss') continue; if (sv == null) sv = x; if (x === sv) sk++; else break; }
   const tile = (l, v, s, c = '') => `<div class="st"><div class="st-l">${l}</div><div class="st-v ${c}">${v}</div><div class="st-s">${s}</div></div>`;
   $('stats').innerHTML =
-    tile('Record', r.w + r.l ? rtxt(r) : '—', `${r.w + r.l ? (r.w / (r.w + r.l) * 100).toFixed(1) + '% win' : 'none graded'} · ${r.open} open`)
+    tile('Record', r.w + r.l ? rtxt(r) : '—', `${r.w + r.l ? (r.w / (r.w + r.l) * 100).toFixed(1) + '% win' : 'none graded'} · ${r.open} open${pulledTxt(r)}`)
     + tile('Units', un(r.u), `on ${r.st.toFixed(1)}u staked`, ucls(r.u))
     + tile('ROI', r.roi == null ? '—' : (r.roi >= 0 ? '+' : '') + (r.roi * 100).toFixed(1) + '%', `${ps.filter(graded).length} settled`, r.roi == null ? '' : ucls(r.roi))
     + tile('Avg CLV', r.clv == null ? '—' : (r.clv > 0 ? '+' : '') + r.clv.toFixed(1) + ' pp', r.nc ? `beat close ${r.beat} of ${r.nc}` : 'closing lines pending', r.clv == null ? '' : ucls(r.clv))
