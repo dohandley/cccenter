@@ -480,7 +480,7 @@ const NICK = {
   nba: {ATL:'Hawks',BKN:'Nets',BOS:'Celtics',CHA:'Hornets',CHI:'Bulls',CLE:'Cavaliers',DAL:'Mavericks',DEN:'Nuggets',DET:'Pistons',GS:'Warriors',HOU:'Rockets',IND:'Pacers',LAC:'Clippers',LAL:'Lakers',MEM:'Grizzlies',MIA:'Heat',MIL:'Bucks',MIN:'Timberwolves',NO:'Pelicans',NY:'Knicks',OKC:'Thunder',ORL:'Magic',PHI:'76ers',PHX:'Suns',POR:'Trail Blazers',SA:'Spurs',SAC:'Kings',TOR:'Raptors',UTAH:'Jazz',WSH:'Wizards'},
   nfl: {ARI:'Cardinals',ATL:'Falcons',BAL:'Ravens',BUF:'Bills',CAR:'Panthers',CHI:'Bears',CIN:'Bengals',CLE:'Browns',DAL:'Cowboys',DEN:'Broncos',DET:'Lions',GB:'Packers',HOU:'Texans',IND:'Colts',JAX:'Jaguars',KC:'Chiefs',LA:'Rams',LAC:'Chargers',LV:'Raiders',MIA:'Dolphins',MIN:'Vikings',NE:'Patriots',NO:'Saints',NYG:'Giants',NYJ:'Jets',PHI:'Eagles',PIT:'Steelers',SEA:'Seahawks',SF:'49ers',TB:'Buccaneers',TEN:'Titans',WAS:'Commanders'}
 };
-const IDX = {}, NIGHT = {}, LEDGER = {}, PARL = {};
+const IDX = {}, NIGHT = {}, LEDGER = {}, PARL = {}, PN = {};   // PN: the night picked on the Parlays view, per league
 let LG = 'nba', VIEW = 'slate', NID = null, FOCUS = null, FILT = {kind: 'all', mkt: 'all', why: 'all'};
 const nick = t => (NICK[LG] || {})[t] || t;
 const tip = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', timeZone:'America/New_York'}) + ' · ' + d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/New_York'}) + ' ET'; };
@@ -493,9 +493,9 @@ function readHash() {
   const [lg, v, n] = location.hash.slice(1).split('/');
   if (LEAGUES[lg]) LG = lg;
   if (v === 'slate' || v === 'ledger' || v === 'parlays' || v === 'report') VIEW = v;
-  NID = n || null;
+  NID = n || null; if (VIEW === 'parlays') { PN[LG] = n || null; NID = null; }
 }
-function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'slate' && NID ? '/' + NID : ''}`); } catch (e) {} }
+function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'slate' && NID ? '/' + NID : VIEW === 'parlays' && PN[LG] ? '/' + PN[LG] : ''}`); } catch (e) {} }
 
 /* ---------- form tags (same rules as the pricing email) ----------
    Bets: grouped by market + stat + side (e.g. "3-pointers unders"); 15+ graded and +9% sample-adjusted ROI (units / (n + 40)) = Hot,
@@ -1011,7 +1011,7 @@ function sgpTicket(t) {
     : `<span class="pill p-open">pending</span><span class="dim">Settles when every leg is graded</span>`;
   return `<div class="tk"><div class="tk-h">${head}</div>${legs}<div class="tk-f">${foot}</div></div>`;
 }
-function longShots(g) {
+function longShots(g, night) {
   if (!g || !g.tickets.length) return g ? `<div class="pan"><div class="pan-h"><span class="pan-t">Long shots: SGPs, SGP+ and price gaps</span></div><div class="dim" style="font-size:12.5px">Tracking starts with the ${esc(shortDate(g.live_from + 'T12:00:00-04:00'))} slate's next pricing run.</div></div>` : '';
   const R = g.record, hx = r => r.graded ? `${r.w}/${r.graded}` : '—';
   const ex = r => r.graded ? `hit · expected ${r.expected.toFixed(1)}${r.open ? ` · ${r.open} open` : ''}` : `none graded · ${r.open} open`;
@@ -1020,14 +1020,14 @@ function longShots(g) {
     + st('Price gaps', rec(R.gap), R.gap.graded ? un(R.gap.units) : `${R.gap.open} open`, ucls(R.gap.units));
   const by = {}; for (const t of g.tickets) (by[t.slate] = by[t.slate] || []).push(t);
   const ord = {sgp_plus: 0, sgp: 1, gap: 2};
-  const slates = Object.keys(by).sort().reverse().slice(0, 7).map(s => {
+  const slates = Object.keys(by).filter(s => !night || s === night).map(s => {
     const ts = by[s].sort((a, b) => ord[a.kind] - ord[b.kind] || a.p - b.p);
     return `<div class="sl-h">${esc(shortDate(s + 'T12:00:00-04:00'))}<span class="cnt">${ts.length} ticket${ts.length === 1 ? '' : 's'}</span></div><div class="tks">${ts.map(sgpTicket).join('')}</div>`;
   }).join('');
   return `<div class="pan"><div class="pan-h"><span class="pan-t">Long shots: SGPs, SGP+ and price gaps</span><span class="cnote">learning only &middot; never bet, never in the record</span></div>
     <div class="rc-k">${tiles}</div>
     <div class="notes" style="margin:10px 0">Built from <b>every</b> prop the books post, not just the leans. <b>Sim SGPs</b> (2 to 4 legs, one game): each leg's chance comes from the books' no-vig price, then the sim's 4,000 games say how much more often the legs land together than apart (the <b>lift</b>). The shown price is the fair price; only take it at that or longer, since we can't see the books' SGP prices. <b>SGP+</b> pairs two SGPs from different games. <b>Price gaps</b> are 3 or 4 leg tickets at one book whose every leg beats the other books' no-vig price. SGPs are graded by hits against the expected count; price gaps in units, 1u a ticket.</div>
-    ${slates || '<div class="dim" style="font-size:12.5px">No tickets yet.</div>'}</div>`;
+    ${slates || `<div class="dim" style="font-size:12.5px">No long-shot tickets ${night && night < g.live_from ? 'before tracking began (' + esc(shortDate(g.live_from + 'T12:00:00-04:00')) + ')' : 'for this night'}.</div>`}</div>`;
 }
 async function renderParlays() {
   if (!PARL[LG]) { try { PARL[LG] = await getJSON(`sim/${LG}/parlays.json`); } catch (e) { PARL[LG] = null; } }
@@ -1042,17 +1042,26 @@ async function renderParlays() {
     + st('Rule', `${d.rules.legs} legs`, `+${Math.round(d.rules.min_ev * 100)}% EV or better`);
   const by = {}; for (const t of d.tickets) (by[t.slate] = by[t.slate] || []).push(t);
   const unit = LG === 'nfl' ? 'pricing day' : 'night';
-  const sections = d.slates.map(s => {
+  // night bar (same look as the Slate view's): every night with lean tickets or long shots, newest first
+  const lab = {}; for (const s of d.slates) lab[s.id] = s.label;
+  for (const t of (SGP[LG] || {tickets: []}).tickets) if (!lab[t.slate]) lab[t.slate] = new Date(t.slate + 'T12:00:00-05:00').toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric', timeZone: 'America/New_York'});
+  const nights = Object.keys(lab).sort().reverse();
+  if (!PN[LG] || !lab[PN[LG]]) PN[LG] = nights[0] || null;
+  const cur = PN[LG];
+  const bar = nights.length ? `<div class="fbar" id="pnights" role="group" aria-label="Choose a ${unit}"><span class="f-lab">${LG === 'nfl' ? 'Day' : 'Night'}</span>${nights.map(n => `<button type="button" class="fb${n === cur ? ' on' : ''}" data-n="${esc(n)}" aria-pressed="${n === cur}">${esc(lab[n].replace(/^Week \d+ · /, ''))}</button>`).join('')}</div>` : '';
+  const sections = d.slates.filter(s => s.id === cur).map(s => {
     const ts = by[s.id] || [], r = s.record;
     const head = `<div class="sl-h">${esc(s.label)}${FLAG[s.flag] ? ` <span class="pill p-cat">${FLAG[s.flag]}</span>` : ''}<span class="cnt">${ts.length} ticket${ts.length === 1 ? '' : 's'}${r.w + r.l ? ` &middot; ${rec(r)}, <span class="u ${ucls(r.units)}">${un(r.units)}</span>` : ''}</span></div>`;
     const why = s.note || 'No pair of leans cleared the bar.';
     return head + (ts.length ? `<div class="tks">${ts.map(ticket).join('')}</div>` : `<div class="dim" style="font-size:12.5px">${why}</div>`);
   }).join('');
   $('view').innerHTML = `<div style="display:grid;gap:12px">
-    ${longShots(SGP[LG])}
+    ${bar}
+    ${longShots(SGP[LG], cur)}
     <div class="pan-h"><span class="pan-t">Lean 2-leggers</span></div>
     <div class="notes"><b style="color:var(--text)">Paper parlays: learning only.</b> These tickets are never bet and never count toward the record above or the season units. Each ${unit}, the leans are paired into 2-leg tickets at one sportsbook, legs from different games, using a win chance pulled toward the market by how much the model has overrated leans so far. A ticket needs +${Math.round(d.rules.min_ev * 100)}% expected value or better; at most ${d.rules.per_slate} a ${unit}, each lean on ${d.rules.per_leg === 1 ? 'one ticket' : 'at most ' + d.rules.per_leg}${LG === 'nfl' ? '; overs tagged Role? are left out' : ''}. Rules changed Nov 2: earlier slates allowed a lean on two tickets. Units at the ticket's price, 1u per ticket.</div>
-    ${sections || `<div class="empty">No ${LEAGUES[LG]} slates yet.</div>`}</div>`;
+    ${sections || `<div class="dim" style="font-size:12.5px">${nights.length ? 'No lean 2-leggers for this ' + unit + '.' : `No ${LEAGUES[LG]} slates yet.`}</div>`}</div>`;
+  if ($('pnights')) $('pnights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; PN[LG] = b.dataset.n; go(); };
 }
 
 /* ---------- model report card ----------
