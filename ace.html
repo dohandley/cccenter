@@ -284,7 +284,7 @@ function pickRow(p, open) {
   const st = new Date(p.start);
   const t = st.toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}).replace(':00', '');
   const ck = p.check_at ? new Date(p.check_at).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}).replace(':00', '') : '';
-  const right = p.pending ? `<span class="ptag">PENDING</span><span style="display:block;margin-top:4px">${ck ? 'final ~' + ck + ' ET' : 'pre-game check'}</span>`
+  const right = p.pending ? `<span class="ptag">PENDING</span><span style="display:block;margin-top:4px">${ck ? p.lg.toUpperCase() + ' check ~' + ck + ' ET' : 'pre-game check'}</span>`
     : p.result == null ? `<b>${p.stake.toFixed(2)}u</b><span>${am(p.price)}</span>`
     : `<b class="${ucls(p.units)}">${un(p.units)}</b><span>${p.result}${p.actual != null ? ' · ' + p.actual : ''}</span>`;
   return `<div class="pk${p.pending ? ' pend' : ''}"><div class="pk-lg">${p.lg.toUpperCase()}<i>${dlab(p.slate)}</i></div>
@@ -310,9 +310,12 @@ function renderOpen() {
   ps.sort((a, b) => a.start.localeCompare(b.start) || b.ev - a.ev);
   const pend = PEND.filter(p => (LG === 'all' || p.lg === LG) && new Date(p.start) > new Date());
   if (pend.length) {
-    const chk = pend.map(p => p.check_at).filter(Boolean).sort()[0];
-    const t = chk ? new Date(chk).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}) + ' ET' : 'the pre-game check';
-    note = (note ? note + ' · ' : '') + `${pend.length} pending until ${t}`;
+    const tm = c => c ? new Date(c).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}).replace(':00', '') + ' ET' : 'the pre-game check';
+    const groups = {};                                   // league + check time -> count, e.g. "2 NFL pending until 7:35 PM ET"
+    for (const p of pend) { const k = p.lg.toUpperCase() + '|' + (p.check_at || ''); groups[k] = (groups[k] || 0) + 1; }
+    const parts = Object.entries(groups).sort((a, b) => a[0].split('|')[1].localeCompare(b[0].split('|')[1]))
+      .map(([k, n]) => { const [lg, c] = k.split('|'); return `${n} ${lg} pending until ${tm(c)}`; });
+    note = (note ? note + ' · ' : '') + parts.join(' · ');
   }
   $('tn-t').textContent = title; $('tn-n').textContent = note;
   const quiet = SLATES.filter(s => (LG === 'all' || s.lg === LG) && s.id >= now && !s.picks && s.k != null);
