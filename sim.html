@@ -202,7 +202,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .sp-t span{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--text-4);text-transform:uppercase;letter-spacing:.08em}
 .sp-s{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 6px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-top:4px}
 .sp-s b{color:var(--green-text)}.sp-s span{font-weight:500;color:var(--text-4);text-transform:none;letter-spacing:0;font-family:Manrope,sans-serif;font-size:11px}
-.sp-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px}
+.sp-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:6px}.sp-r .fin{color:var(--text-2);font-size:11px}
 .sp-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:inherit;color:var(--text);cursor:pointer;width:100%}
 .sp-r:hover{border-color:var(--text-3)}.sp-r:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 .sp-r b{font-size:12.5px;font-weight:800;min-width:0}
@@ -225,7 +225,7 @@ details.sp-g>.sp-l{padding:0 8px 8px}
   .slate-wrap{position:relative}
   .spots{position:absolute;top:0;bottom:0;left:calc(100% + 20px);width:min(320px,calc(50vw - 592px));background:none;border:0;box-shadow:none;padding:0}
   .spots-in{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:14px}
-  .sp-l{grid-template-columns:1fr}
+  .sp-l{grid-template-columns:minmax(0,1fr)}
 }
 /* slate game strip (Nov 5): one tile per game, sticky under the header, tap to jump to the card */
 .gstrip{position:sticky;top:var(--hdrh,64px);z-index:50;margin:0 -4px;padding:6px 4px;background:var(--bg);min-width:0;max-width:calc(100% + 8px)}
@@ -659,6 +659,7 @@ function spots(gs, unit) {
   const graded = gs.every(g => g.final);
   const row = ({g, p, st}, inGroup) => `<button type="button" class="sp-r" data-g="${esc(g.game_id)}"><b>${esc(p.selection)}</b><span class="pr">${odds(p.price)}</span>
     <span class="sub">${esc(g.away)} @ ${esc(g.home)} &middot; <span class="bk">${esc(p.book)}</span>${p.result ? ` &middot; <span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>` : ''}</span>
+    ${p.actual != null ? `<span class="sub fin">${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}
     ${inGroup === true ? '' : `<span class="sub">${esc(st.label)} ${frec(st.t)}</span>`}${shopLine(p, true)}</button>`;
   const all = rows.bet.concat(rows.lean), done = all.filter(x => x.p.result);
   let recap = '';
