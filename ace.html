@@ -229,9 +229,9 @@ const usz = () => { const v = parseFloat(String(USZ).replace(/[$,\s]/g, '')); re
 const money = v => { const d = Math.abs(v) < 100 ? 2 : 0; return (v < 0 ? '−' : v > 0 ? '+' : '') + '$' + Math.abs(v).toLocaleString('en-US', {maximumFractionDigits: d, minimumFractionDigits: d}); };
 const cash = v => '$' + Math.round(v).toLocaleString('en-US');
 
-let ALL = [], PEND = [], SLATES = [], META = {}, SCOPE = 'all', LG = 'all', MONTH = null, DAY = null, SHOW = 40, OPEN = new Set();
-try { const s = JSON.parse(localStorage.getItem('acek') || '{}'); if (['all','live','backfill'].includes(s.s)) SCOPE = s.s; if (['all','nba','nfl'].includes(s.l)) LG = s.l; } catch (e) {}
-const saveS = () => { try { localStorage.setItem('acek', JSON.stringify({s: SCOPE, l: LG})); } catch (e) {} };
+let ALL = [], PEND = [], SLATES = [], META = {}, SCOPE = 'live', LG = 'all', MONTH = null, DAY = null, SHOW = 40, OPEN = new Set();
+try { const s = JSON.parse(localStorage.getItem('acek2') || '{}'); if (['all','live','backfill'].includes(s.s)) SCOPE = s.s; if (['all','nba','nfl'].includes(s.l)) LG = s.l; } catch (e) {}
+const saveS = () => { try { localStorage.setItem('acek2', JSON.stringify({s: SCOPE, l: LG})); } catch (e) {} };
 const BANK = () => (META.nba || META.nfl || {rules: {bank: 100}}).rules.bank;
 
 const inScope = p => (SCOPE === 'all' || (SCOPE === 'live' ? p.flag !== 'backfill' : p.flag === 'backfill')) && (LG === 'all' || p.lg === LG);

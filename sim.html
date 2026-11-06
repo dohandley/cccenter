@@ -320,6 +320,17 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 @media(max-width:768px){.vw{margin-left:0;width:100%}.vw button{flex:1}.hm{display:none}.mo{display:inline}.sub.mo{display:block}td.pk{min-width:120px}td,th{padding:8px 7px}th{white-space:normal}.tw td:first-child{white-space:normal}td.w{min-width:0}.box2 td,.box2 th{padding:7px 5px}td .sub.bk{white-space:normal}}
 @media(max-width:768px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats>.st:last-child:nth-child(odd){grid-column:span 2}.hdr-in{flex-wrap:wrap}.hdr-in>div:first-child{flex:1 1 0;min-width:0}.kpis{order:3;width:100%;justify-content:flex-start;margin-left:0;gap:6px;flex-wrap:wrap}.body{padding:16px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}.hdr-in{padding:12px 16px}.nav-in{padding:0 16px}.lines{grid-template-columns:1fr}.score{grid-template-columns:1fr 1fr}.mid{grid-column:1/-1;grid-row:2;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 10px;padding:4px 0 0}.meters{grid-template-columns:1fr;gap:8px}.box2{grid-template-columns:1fr}.game{padding:14px}}
 @media(prefers-reduced-motion:no-preference){.bar i{transition:width .4s ease}}
+
+/* Phone first screen (Nov 6): compact stat strips, league buttons on one row, tag key folded away, so the first game card shows sooner */
+@media(max-width:768px){
+  .stats{display:flex;grid-template-columns:none;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px 2px;scroll-snap-type:x proximity}
+  .stats::-webkit-scrollbar{display:none}
+  .stats>.st,.stats>.st:last-child:nth-child(odd){flex:0 0 auto;grid-column:auto;padding:8px 11px;scroll-snap-align:start;max-width:62vw}
+  .stats .st-l{font-size:9px;margin-bottom:3px}.stats .st-v{font-size:1.05rem}.stats .st-s{font-size:10px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #leagues{display:flex;flex-wrap:nowrap;gap:6px}#leagues .lgb{flex:1 1 0;min-width:0;padding:7px 10px;gap:6px}#leagues .lgb span{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+details.legd>summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--text-3);list-style:none}details.legd>summary::-webkit-details-marker{display:none}
+details.legd>summary::before{content:'▸ ';}details.legd[open]>summary::before{content:'▾ ';}details.legd[open]>summary{margin-bottom:6px}
 </style></head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -545,10 +556,10 @@ function legend() {
   const cold = Object.entries(f.bet).filter(([, t]) => t.tag === 'cold').map(([k]) => { const [m, b, sd] = k.split('|'); return sd ? `${b} ${sd.toLowerCase()}s` : b; });
   const tops = lab(f.grp, t => t.top).map(k => { const [c, b] = k.split('|'); return `${CATS.find(x => x[0] === c)[1].toLowerCase()} · ${b}`; });
   const cats = lab(f.cat, t => t.watch).map(c => CATS.find(x => x[0] === c)[1]);
-  return `<div class="notes legend">${HOT} bet type with 15+ graded and +9% ROI or better, adjusted for sample size${hot.length ? ': ' + esc(hot.join(', ')) : ' (none yet)'}.<br>
+  return `<details class="legd"${matchMedia('(max-width:768px)').matches ? '' : ' open'}><summary>What the ★ / ❄ / watch-list tags mean</summary><div class="notes legend">${HOT} bet type with 15+ graded and +9% ROI or better, adjusted for sample size${hot.length ? ': ' + esc(hot.join(', ')) : ' (none yet)'}.<br>
     ${COLD} 15+ graded and −9% or worse${cold.length ? ': ' + esc(cold.join(', ')) : ' (none yet)'}. Unmarked bets have fewer picks or are about breakeven.<br>
     <span class="pill p-cat">Watch list</span> lean categories up units over 30+ graded${cats.length ? ': ' + esc(cats.join(', ')) : ' (none yet)'}. ${TOP} a stat group inside one with 15+ graded and +9% ROI (adjusted)${tops.length ? ': ' + esc(tops.join(', ')) : ''}.<br>
-    <span class="dim">Season to date, recalculated after every grading. Tags show on picks that haven't been graded yet.</span></div>`;
+    <span class="dim">Season to date, recalculated after every grading. Tags show on picks that haven't been graded yet.</span></div></details>`;
 }
 
 /* ---------- slate ---------- */
