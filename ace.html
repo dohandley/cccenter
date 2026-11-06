@@ -112,7 +112,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .tbl td{padding:10px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
 .tbl tr:last-child td{border-bottom:0}
 .tbl .r{text-align:right}.tbl .n{font-family:'JetBrains Mono',monospace;white-space:nowrap}
-.tbl td.pick b{display:block;font-weight:700}.tbl td.pick span{font-size:11px;color:var(--text-3)}
+.mo{display:none}.tbl td.pick b{display:block;font-weight:700}.tbl td.pick span{font-size:11px;color:var(--text-3)}
 .tbl .bk{color:var(--gold);font-weight:700;white-space:nowrap}
 .tbl tr.wr td{padding-top:0;border-bottom:1px solid var(--border)}
 .tbl tr.has-w td{border-bottom:0}
@@ -135,7 +135,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .fine{font-size:11.5px;color:var(--text-3);margin-top:12px}
 @media(max-width:1000px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.low{grid-template-columns:1fr}}
 @media(max-width:860px){.top,.mid{grid-template-columns:1fr}}
-@media(max-width:768px){.hdr-in{flex-wrap:wrap;padding:12px 16px}.kpis{order:3;width:100%;margin-left:0;flex-wrap:wrap;gap:6px}.body{padding:16px 16px 60px}.nav-in{padding:0 16px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.roll-v{font-size:34px}.hm{display:none}.tbl td,.tbl th{padding:8px 7px}.pk{grid-template-columns:40px minmax(0,1fr) auto;gap:4px 8px}.why{grid-column:1/-1}}
+@media(max-width:768px){.hdr-in{flex-wrap:wrap;padding:12px 16px}.kpis{order:3;width:100%;margin-left:0;flex-wrap:wrap;gap:6px}.body{padding:16px 16px 60px}.nav-in{padding:0 16px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.roll-v{font-size:34px}.hm{display:none}.tbl td,.tbl th{padding:8px 7px}.pk{grid-template-columns:40px minmax(0,1fr) auto;gap:4px 8px}.why{grid-column:1/-1}.mo{display:block}.tbl td.pick{white-space:normal}}
+@media(max-width:400px){.tbl td,.tbl th{padding:7px 4px}}
 @media(max-width:480px){.dy{min-height:46px;padding:4px 3px}.dy .du{font-size:9.5px}.cal{gap:3px;padding:10px 10px 12px}}
 </style></head>
 <body>
@@ -414,13 +415,13 @@ function renderLog() {
   $('logf').innerHTML = DAY ? `<button class="chip" id="clr">${dlab(DAY)} &times;</button>` : `<span class="cnote">${ps.length} picks</span>`;
   if (DAY) $('clr').onclick = () => { DAY = null; renderCal(); renderLog(); };
   const show = ps.slice(0, SHOW);
-  $('log').innerHTML = `<thead><tr><th>Date</th><th>Pick</th><th class="hm">Book</th><th class="r">Odds</th><th class="r">Stake</th><th class="r hm">Ace / Mkt</th><th class="r">Final</th><th class="r hm">CLV</th><th class="r">P/L</th><th></th></tr></thead><tbody>`
+  $('log').innerHTML = `<thead><tr><th>Date</th><th>Pick</th><th class="hm">Book</th><th class="r">Odds</th><th class="r hm">Stake</th><th class="r hm">Ace / Mkt</th><th class="r hm">Final</th><th class="r hm">CLV</th><th class="r">P/L</th><th></th></tr></thead><tbody>`
     + (show.length ? show.map(p => {
       const id = 'L' + btoa(unescape(encodeURIComponent(p.id))).replace(/[^a-z0-9]/gi, '').slice(-24), o = OPEN.has(id);
       return `<tr class="${o ? 'has-w' : ''}"><td class="n">${dlab(p.slate)}<br><span class="tag">${p.lg.toUpperCase()}</span>${p.flag === 'backfill' ? '<span class="tag bf" title="Rebuilt from the ledger, not posted at the time">BF</span>' : ''}</td>
-        <td class="pick"><b>${esc(p.selection)}</b><span>${esc(p.matchup)}</span></td><td class="bk hm">${esc(p.book)}</td>
-        <td class="r n">${am(p.price)}</td><td class="r n">${p.stake.toFixed(2)}u</td><td class="r n hm">${pct(p.p)} / ${pct(p.mkt_p)}</td>
-        <td class="r n ${p.result === 'win' ? 'pos' : p.result === 'loss' ? 'neg' : 'flat'}" title="${p.actual != null ? 'Finished ' + p.actual + ' vs line ' + p.line : ''}">${p.actual ?? '—'}</td>
+        <td class="pick"><b>${esc(p.selection)}</b><span>${esc(p.matchup)}</span>${p.actual != null ? `<span class="mo">finished ${esc(p.actual)}</span>` : ''}</td><td class="bk hm">${esc(p.book)}</td>
+        <td class="r n">${am(p.price)}<span class="mo" style="font-size:11px;color:var(--text-3)">${p.stake.toFixed(2)}u</span></td><td class="r n hm">${p.stake.toFixed(2)}u</td><td class="r n hm">${pct(p.p)} / ${pct(p.mkt_p)}</td>
+        <td class="r n hm ${p.result === 'win' ? 'pos' : p.result === 'loss' ? 'neg' : 'flat'}" title="${p.actual != null ? 'Finished ' + p.actual + ' vs line ' + p.line : ''}">${p.actual ?? '—'}</td>
         <td class="r n hm ${p.clv == null ? 'flat' : ucls(p.clv)}">${p.clv == null ? '—' : (p.clv > 0 ? '+' : '') + p.clv.toFixed(1)}</td>
         <td class="r res ${p.result == null ? 'pend' : ucls(p.units)}">${p.result == null ? 'open' : p.result === 'win' || p.result === 'loss' ? un(p.units) : p.result}</td>
         <td><button class="wbtn" data-l="${id}">WHY</button></td></tr>`

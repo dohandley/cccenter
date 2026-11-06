@@ -27,7 +27,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .hdr-in{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px max(24px,env(safe-area-inset-right,0px)) 12px max(24px,env(safe-area-inset-left,0px));gap:12px}
 .h-t{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
 .h-t span{color:var(--green)}
-@media(max-width:400px){.h-t{font-size:16.5px}}
+@media(max-width:400px){.h-t{font-size:16.5px}td,th{padding:7px 5px}td.pk{min-width:96px}}
 .h-d{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4);margin-top:3px}
 .hdr-r{display:flex;align-items:center;gap:8px}
 .kpis{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:nowrap;justify-content:flex-end;flex:0 0 auto}
@@ -62,6 +62,14 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .pos{color:var(--green-text)} .neg{color:var(--red-text)} .dim{color:var(--text-4)}
 .fbar{display:flex;gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .fbar::-webkit-scrollbar{display:none}
+/* scrollable chip rows (Nov 6): arrows on mouse/trackpad screens, fade on the side that has more, thin scrollbar on desktop */
+.srow{display:flex;align-items:center;gap:4px;min-width:0}.srow>.fbar{flex:1 1 auto;min-width:0}
+.srow .sa{flex:0 0 auto;display:none;align-items:center;justify-content:center;width:28px;height:28px;padding:0;font-size:15px;line-height:1;color:var(--text-2)}
+.srow.ovf .sa{display:inline-flex}.srow .sa:disabled{opacity:.3;cursor:default}
+.srow.ovf>.fbar{--fl:0px;--fr:0px;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%)}
+.srow.ovf:not(.st)>.fbar{--fl:28px}.srow.ovf:not(.en)>.fbar{--fr:28px}
+@media (pointer:coarse){.srow.ovf .sa{display:none}}
+@media (hover:hover) and (pointer:fine){.srow>.fbar{scrollbar-width:thin;scrollbar-color:var(--border) transparent;padding-bottom:6px}.srow>.fbar::-webkit-scrollbar{display:block;height:6px}.srow>.fbar::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}}
 .f-lab{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4);margin-right:4px;flex:0 0 auto}
 .fb{flex:0 0 auto;background:var(--surface);border:1px solid var(--border);color:var(--text-2);border-radius:6px;padding:8px 12px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;white-space:nowrap}
 .fb:hover{border-color:var(--border-h)} .fb.on{background:var(--text);color:var(--bg);border-color:var(--text)}
@@ -309,7 +317,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 .cnote{font-size:11.5px;color:var(--text-3)}
 @media(max-width:860px){.res2{grid-template-columns:1fr}}
 @media(max-width:480px){.dy{min-height:50px;padding:4px 1px}.dy .dr,.dy .du{font-size:9px}.cal{gap:3px}}
-@media(max-width:768px){.vw{margin-left:0;width:100%}.vw button{flex:1}.hm{display:none}.mo{display:inline}.sub.mo{display:block}td.pk{min-width:120px}td,th{padding:8px 7px}}
+@media(max-width:768px){.vw{margin-left:0;width:100%}.vw button{flex:1}.hm{display:none}.mo{display:inline}.sub.mo{display:block}td.pk{min-width:120px}td,th{padding:8px 7px}th{white-space:normal}.tw td:first-child{white-space:normal}td.w{min-width:0}.box2 td,.box2 th{padding:7px 5px}td .sub.bk{white-space:normal}}
 @media(max-width:768px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats>.st:last-child:nth-child(odd){grid-column:span 2}.hdr-in{flex-wrap:wrap}.hdr-in>div:first-child{flex:1 1 0;min-width:0}.kpis{order:3;width:100%;justify-content:flex-start;margin-left:0;gap:6px;flex-wrap:wrap}.body{padding:16px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}.hdr-in{padding:12px 16px}.nav-in{padding:0 16px}.lines{grid-template-columns:1fr}.score{grid-template-columns:1fr 1fr}.mid{grid-column:1/-1;grid-row:2;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 10px;padding:4px 0 0}.meters{grid-template-columns:1fr;gap:8px}.box2{grid-template-columns:1fr}.game{padding:14px}}
 @media(prefers-reduced-motion:no-preference){.bar i{transition:width .4s ease}}
 </style></head>
@@ -573,11 +581,11 @@ function shopLine(p, small) {
 }
 function leanTable(ls, g) {
   if (!ls.length) return '';
-  const rows = ls.map(p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
-    <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
+  const rows = ls.map(p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
+    <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r hm">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : out ? '<span class="pill p-void">void</span>' : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
-    <div class="tw"><table><thead><tr><th>Lean</th><th class="r">Price</th><th class="r">Model</th><th class="r">Result</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    <div class="tw"><table><thead><tr><th>Lean</th><th class="r">Price</th><th class="r hm">Model</th><th class="r">Result</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 const YDS = /yds|min/;
 const fmt = (k, v) => typeof v === 'number' ? v.toFixed(YDS.test(k) ? 0 : 1) : '';
@@ -1142,6 +1150,25 @@ function renderKpis() {
 $('k-sz').value = USZ;
 $('k-sz').addEventListener('input', e => { USZ = e.target.value.slice(0, 9); saveK(); renderKpis(); });
 $('k-kind').addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (!b || b.dataset.k === KK) return; KK = b.dataset.k; saveK(); renderTop(); });
+/* wrap every chip row (.fbar) in the view with scroll arrows; state updates on scroll / resize */
+function srowState(w) { const r = w.querySelector('.fbar'); if (!r) return; const o = r.scrollWidth > r.clientWidth + 2;
+  w.classList.toggle('ovf', o); w.classList.toggle('st', r.scrollLeft <= 2); w.classList.toggle('en', r.scrollLeft + r.clientWidth >= r.scrollWidth - 2);
+  const [a, b] = w.querySelectorAll('.sa'); if (a) { a.disabled = w.classList.contains('st'); b.disabled = w.classList.contains('en'); } }
+function srows() {
+  document.querySelectorAll('#view .fbar').forEach(r => {
+    if (r.parentElement.classList.contains('srow')) return srowState(r.parentElement);
+    const w = document.createElement('div'); w.className = 'srow'; r.before(w);
+    const mk = (d, t) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'tbtn sa'; b.textContent = t; b.setAttribute('aria-label', d < 0 ? 'Scroll left' : 'Scroll right');
+      b.onclick = () => r.scrollBy({left: d * Math.max(120, r.clientWidth * 0.8), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); return b; };
+    w.append(mk(-1, '\u2039'), r, mk(1, '\u203A'));
+    r.addEventListener('scroll', () => srowState(w), {passive: true});
+    const on = r.querySelector('.on'); if (on && on.offsetLeft + on.offsetWidth > r.clientWidth) r.scrollLeft = on.offsetLeft - 40;
+    srowState(w);
+  });
+}
+new MutationObserver(() => srows()).observe(document.getElementById('view'), {childList: true, subtree: true});
+addEventListener('resize', () => document.querySelectorAll('.srow').forEach(srowState));
+
 async function go() {
   writeHash(); renderTop();
   try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : VIEW === 'report' ? renderReport() : renderLedger()); writeHash(); }
