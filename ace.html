@@ -318,11 +318,13 @@ function renderOpen() {
       .map(([k, n]) => { const [lg, c] = k.split('|'); return `${n} ${lg} pending until ${tm(c)}`; });
     note = (note ? note + ' · ' : '') + parts.join(' · ');
   }
+  let lastHead = '';
+  if (pend.length && title.startsWith('Latest slate')) { lastHead = `<div class="ct" style="margin:14px 8px 6px">${esc(title)} · graded</div>`; title = 'Tonight'; }
   $('tn-t').textContent = title; $('tn-n').textContent = note;
   const quiet = SLATES.filter(s => (LG === 'all' || s.lg === LG) && s.id >= now && !s.picks && s.k != null);
   pend.sort((a, b) => a.start.localeCompare(b.start) || b.ev - a.ev);
   const pendBox = pend.length ? `<div class="why" style="grid-column:auto;margin:4px 8px 8px"><b>Pending: don't play these yet.</b> The pre-game injury check confirms each one at the current price (and you get the final list by email) or pulls it if late news or a line move broke it. Pending picks aren't in the record.</div>` + pend.map(p => pickRow(p)).join('') : '';
-  $('tn').innerHTML = pendBox + (ps.length ? ps.map(p => pickRow(p)).join('')
+  $('tn').innerHTML = pendBox + (ps.length ? lastHead + ps.map(p => pickRow(p)).join('')
     : (pend.length ? '' : `<div class="empty">${quiet.length ? 'No pick cleared the bar tonight. Ace passes rather than forcing one.' : 'No picks yet.'}</div>`));
 }
 

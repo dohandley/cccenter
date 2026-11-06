@@ -632,7 +632,7 @@ function card(g) {
   const tGap = td == null ? '' : `<div class="gap">${Math.abs(td) < 0.05 ? 'Sim matches the market' : `Sim <b>${Math.abs(td).toFixed(1)} pts ${td < 0 ? 'under' : 'over'}</b>`}</div>`;
   const outs = [g.away, g.home].filter(t => (g.out[t] || []).length).map(t => `<b>${esc(t)}</b> ${esc(g.out[t].join(', '))}`).join(' &middot; ');
   return `<article class="game" id="g-${esc(g.game_id)}">
-    <div class="g-top"><span class="ct">${esc(tip(g.tipoff))} &middot; ${(g.sims || 4000).toLocaleString()} sims${g.line_source ? ' &middot; lines ' + esc(g.line_source) : ''}</span>${state}</div>
+    <div class="g-top"><span class="ct">${esc(tip(g.tipoff))} &middot; ${(g.sims || 4000).toLocaleString()} sims${g.line_source ? ' &middot; lines ' + esc(g.line_source.replace(/\s*\(.*\)\s*$/, '')) : ''}</span>${state}</div>
     <div class="score">
       <div class="tm${homeFav ? '' : ' fav'}"><span class="tm-n">${esc(nick(g.away))}</span><span class="tm-p">${g.away_mean.toFixed(1)}</span>${f ? `<span class="tm-f">Final <b>${f.away_score}</b></span>` : ''}</div>
       <div class="mid">${g.home_mean === g.away_mean ? '<b>Even</b>' : `<b>${esc(lead)} by ${Math.abs(g.home_mean - g.away_mean).toFixed(1)}</b><span class="mw">wins ${Math.round(leadWin * 100)}%</span>`}<span>avg of ${(g.sims || 4000).toLocaleString()} sims</span></div>
@@ -820,7 +820,8 @@ async function renderLedger() {
   const g = rows.filter(r => r.result), sumU = g.reduce((a, r) => a + (r.units || 0), 0);
   const tally = g.length ? ` Graded: <b>${rec({w: g.filter(r => r.result === 'win').length, l: g.filter(r => r.result === 'loss').length, p: g.filter(r => r.result === 'push').length})}</b>, <b class="${ucls(sumU)}">${un(Math.round(sumU * 100) / 100)}</b>${FILT.kind !== 'bet' && rows.some(r => r.kind === 'lean') ? ' (leans counted as 1u each)' : ''}.` : '';
   const chip = (grp, v, l) => `<button type="button" class="fb${FILT[grp] === v ? ' on' : ''}" data-g="${grp}" data-v="${v}" aria-pressed="${FILT[grp] === v}">${l}</button>`;
-  const body = rows.map(r => `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
+  const LIM = FILT.lim || 150, shown = rows.slice(0, LIM);
+  const body = shown.map(r => `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
       <td>${esc(shortDate(r.tipoff))}<span class="sub">${esc(r.matchup)}</span></td>
       <td class="pk">${esc(r.selection)}${rowTag(r)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}</td>
       <td class="hm"><span class="tag ${r.kind === 'bet' ? 't-bet' : 't-lean'}">${r.kind}</span></td>
@@ -833,15 +834,17 @@ async function renderLedger() {
     <div class="fbar" id="lf"><span class="f-lab">Show</span>${chip('kind', 'all', 'All')}${chip('kind', 'bet', 'Bets')}${chip('kind', 'lean', 'Leans')}
       <span class="ndiv"></span>${chip('mkt', 'all', 'Every market')}${chip('mkt', 'totals', 'Totals')}${chip('mkt', 'props', 'Props')}${chip('mkt', 'sides', 'Sides')}</div>
     <div class="fbar" id="lf2"><span class="f-lab">Lean reason</span>${chip('why', 'all', 'Any')}${chip('why', 'cap', 'Over 20-pt cap')}${chip('why', 'limit', 'Prop limit')}${chip('why', 'be', 'Near breakeven')}${chip('why', 'stress', 'Failed stress test')}${chip('why', 'side', 'Side market')}</div>
-    <div class="lsum">${rows.length} of ${all.length} picks.${tally}</div>
+    <div class="lsum">${rows.length} of ${all.length} picks${rows.length > LIM ? `, newest ${LIM} shown` : ''}.${tally}</div>
     <div class="tw"><table><thead><tr><th>Game</th><th>Pick</th><th class="hm"></th><th class="r">Price</th><th class="r hm">Model</th><th class="r hm">Result</th><th class="r">Units</th></tr></thead>
     <tbody>${body || '<tr><td colspan="7" class="dim">Nothing matches.</td></tr>'}</tbody></table></div>
+    ${rows.length > LIM ? `<button type="button" class="fb" id="lmore" style="justify-self:center">Show ${Math.min(300, rows.length - LIM)} more (${rows.length - LIM} not shown)</button>` : ''}
     <div class="dim" style="font-size:11.5px">Tap a row to open that game's card and box score.</div></div>`;
-  const pick = e => { const b = e.target.closest('button[data-g]'); if (!b) return; FILT[b.dataset.g] = b.dataset.v;
+  const pick = e => { const b = e.target.closest('button[data-g]'); if (!b) return; FILT[b.dataset.g] = b.dataset.v; FILT.lim = 150;
     if (b.dataset.g === 'why' && b.dataset.v !== 'all') FILT.kind = 'lean';           // a reason only applies to leans
     if (b.dataset.g === 'kind' && b.dataset.v === 'bet') FILT.why = 'all';
     renderLedger(); };
   $('lf').onclick = pick; $('lf2').onclick = pick;
+  if ($('lmore')) $('lmore').onclick = () => { const y = scrollY; FILT.lim = LIM + 300; renderLedger().then(() => scrollTo(0, y)); };
   renderResults();
   const open = tr => { NID = tr.dataset.n; FOCUS = tr.dataset.g; VIEW = 'slate'; go(); };
   $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = () => open(tr); tr.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(tr); } }; });
