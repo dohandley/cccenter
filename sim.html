@@ -404,6 +404,7 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 
     <h3>Paper parlays</h3>
     <p>The <b>Parlays</b> view tests whether pairing leans holds up. It is <b>learning only</b>: the tickets are never bet and never count toward the season record or units.</p>
+    <p>On NBA nights it also tracks <b>long shots</b>: sim same-game parlays (2 to 4 legs), SGP+ (two SGPs) and 3 to 4 leg price-gap tickets, built from every prop the books post. SGPs show a fair price to take at that or longer. Also learning only.</p>
     <ul>
       <li>Each slate, the leans on props and totals are paired into <b>2-leg tickets</b>: both legs at the same sportsbook and price, from different games, one leg per player.</li>
       <li>The sim overrates leans, so each leg's win chance is pulled toward the market's by however much the model has overrated leans before that slate. A ticket needs <b>+10% expected value</b> or better; at most 5 a slate, each lean on one ticket (two before Nov 2, 2026).</li>
@@ -982,8 +983,41 @@ function ticket(t) {
   return `<div class="tk"><div class="tk-h"><span class="tk-o">${esc(t.american)}<b>${esc(t.book)}</b></span>
       <span class="tk-m">est ${pct(t.p)} &middot; fair ${amer(1 / t.p)} &middot; EV ${t.ev >= 0 ? '+' : ''}${(t.ev * 100).toFixed(0)}%</span></div>${legs}<div class="tk-f">${foot}</div></div>`;
 }
+/* Long shots: sim SGPs, SGP+ and cross-game price-gap tickets. Built by sim_sgp.py (NBA only so far),
+   data sim/<league>/sgp.json. SGPs are fair-odds targets (books' SGP prices aren't in our feed), graded by hits vs expected. */
+const SGP = {}, KIND = {sgp: 'SGP', sgp_plus: 'SGP+', gap: 'Price gap'};
+const am = p => { const d = 1 / p; return d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1))); };
+function sgpTicket(t) {
+  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span><span class="sub">${esc(l.matchup || '')}</span></div>
+      <div class="r">${l.price != null ? odds(l.price) + ' ' : ''}${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">mkt ${pct(l.p_mkt)}</span></div></div>`).join('');
+  const gap = t.kind === 'gap';
+  const head = gap ? `<span class="tk-o">${esc(t.price)}<b>${esc(t.book)}</b></span><span class="tk-m">fair ${esc(t.target)} &middot; EV +${Math.round(t.ev * 100)}%</span>`
+    : `<span class="tk-o">${esc(t.target)}<b>${KIND[t.kind]} &middot; ${t.n} legs</b></span><span class="tk-m">est ${pct(t.p)} &middot; ${t.lift > 1.005 ? `sim lift &times;${t.lift.toFixed(2)} &middot; ` : ''}take ${esc(t.target)} or longer${t.book ? ' &middot; all legs at ' + esc(t.book) : ''}</span>`;
+  const foot = t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span>${gap ? `<span class="u ${ucls(t.units)}">${un(t.units)}</span>` : ''}`
+    : `<span class="pill p-open">pending</span><span class="dim">Settles when every leg is graded</span>`;
+  return `<div class="tk"><div class="tk-h">${head}</div>${legs}<div class="tk-f">${foot}</div></div>`;
+}
+function longShots(g) {
+  if (!g || !g.tickets.length) return g ? `<div class="pan"><div class="pan-h"><span class="pan-t">Long shots: SGPs, SGP+ and price gaps</span></div><div class="dim" style="font-size:12.5px">Tracking starts with the ${esc(shortDate(g.live_from + 'T12:00:00-04:00'))} slate's next pricing run.</div></div>` : '';
+  const R = g.record, hx = r => r.graded ? `${r.w}/${r.graded}` : '—';
+  const ex = r => r.graded ? `hit · expected ${r.expected.toFixed(1)}${r.open ? ` · ${r.open} open` : ''}` : `none graded · ${r.open} open`;
+  const tiles = st('Sim SGPs', hx(R.sgp), ex(R.sgp), R.sgp.graded ? (R.sgp.w >= R.sgp.expected ? 'pos' : 'neg') : '')
+    + st('SGP+', hx(R.sgp_plus), ex(R.sgp_plus), R.sgp_plus.graded ? (R.sgp_plus.w >= R.sgp_plus.expected ? 'pos' : 'neg') : '')
+    + st('Price gaps', rec(R.gap), R.gap.graded ? un(R.gap.units) : `${R.gap.open} open`, ucls(R.gap.units));
+  const by = {}; for (const t of g.tickets) (by[t.slate] = by[t.slate] || []).push(t);
+  const ord = {sgp_plus: 0, sgp: 1, gap: 2};
+  const slates = Object.keys(by).sort().reverse().slice(0, 7).map(s => {
+    const ts = by[s].sort((a, b) => ord[a.kind] - ord[b.kind] || a.p - b.p);
+    return `<div class="sl-h">${esc(shortDate(s + 'T12:00:00-04:00'))}<span class="cnt">${ts.length} ticket${ts.length === 1 ? '' : 's'}</span></div><div class="tks">${ts.map(sgpTicket).join('')}</div>`;
+  }).join('');
+  return `<div class="pan"><div class="pan-h"><span class="pan-t">Long shots: SGPs, SGP+ and price gaps</span><span class="cnote">learning only &middot; never bet, never in the record</span></div>
+    <div class="rc-k">${tiles}</div>
+    <div class="notes" style="margin:10px 0">Built from <b>every</b> prop the books post, not just the leans. <b>Sim SGPs</b> (2 to 4 legs, one game): each leg's chance comes from the books' no-vig price, then the sim's 4,000 games say how much more often the legs land together than apart (the <b>lift</b>). The shown price is the fair price; only take it at that or longer, since we can't see the books' SGP prices. <b>SGP+</b> pairs two SGPs from different games. <b>Price gaps</b> are 3 or 4 leg tickets at one book whose every leg beats the other books' no-vig price. SGPs are graded by hits against the expected count; price gaps in units, 1u a ticket.</div>
+    ${slates || '<div class="dim" style="font-size:12.5px">No tickets yet.</div>'}</div>`;
+}
 async function renderParlays() {
   if (!PARL[LG]) { try { PARL[LG] = await getJSON(`sim/${LG}/parlays.json`); } catch (e) { PARL[LG] = null; } }
+  if (LG === 'nba' && !(LG in SGP)) { try { SGP[LG] = await getJSON(`sim/${LG}/sgp.json`); } catch (e) { SGP[LG] = null; } }
   const d = PARL[LG];
   if (!d) { $('season').innerHTML = ''; $('view').innerHTML = `<div class="empty">No ${LEAGUES[LG]} paper parlays yet.</div>`; return; }
   const tr = d.record.tracked, bf = d.record.backfill;
@@ -1001,6 +1035,8 @@ async function renderParlays() {
     return head + (ts.length ? `<div class="tks">${ts.map(ticket).join('')}</div>` : `<div class="dim" style="font-size:12.5px">${why}</div>`);
   }).join('');
   $('view').innerHTML = `<div style="display:grid;gap:12px">
+    ${longShots(SGP[LG])}
+    <div class="pan-h"><span class="pan-t">Lean 2-leggers</span></div>
     <div class="notes"><b style="color:var(--text)">Paper parlays: learning only.</b> These tickets are never bet and never count toward the record above or the season units. Each ${unit}, the leans are paired into 2-leg tickets at one sportsbook, legs from different games, using a win chance pulled toward the market by how much the model has overrated leans so far. A ticket needs +${Math.round(d.rules.min_ev * 100)}% expected value or better; at most ${d.rules.per_slate} a ${unit}, each lean on ${d.rules.per_leg === 1 ? 'one ticket' : 'at most ' + d.rules.per_leg}${LG === 'nfl' ? '; overs tagged Role? are left out' : ''}. Rules changed Nov 2: earlier slates allowed a lean on two tickets. Units at the ticket's price, 1u per ticket.</div>
     ${sections || `<div class="empty">No ${LEAGUES[LG]} slates yet.</div>`}</div>`;
 }
