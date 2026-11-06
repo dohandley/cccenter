@@ -191,6 +191,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .sl-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:800;font-size:15px;letter-spacing:-.01em;margin-top:6px}
 .sl-h .cnt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-3);letter-spacing:0}
 @media(max-width:768px){.tks{grid-template-columns:1fr}}
+.runbar{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;font-size:12.5px;color:var(--text-3);padding:2px 2px}.runbar b{color:var(--text)}.runbar .rb-w{color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;flex:1 1 100%}.runbar button{font:inherit;color:var(--text-2);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .upd{font-size:12.5px;color:var(--amber-text);background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:8px 12px}.upd b{color:var(--amber-text)}
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
@@ -405,6 +406,17 @@ button.dy:focus-visible,.cnav button:focus-visible,.lchip:focus-visible{outline:
 
     <h3>Results</h3>
     <p>Picks show <span class="pill p-open">pending</span> until graded from the official box score the morning after. Then they show <span class="pill p-win">win</span>, <span class="pill p-loss">loss</span> or <span class="pill p-push">push</span> with units won or lost. Units are figured at the posted price: a win at &minus;110 pays +0.91u, a loss is &minus;1u.</p>
+
+    <h3 id="hp-sched">When it updates</h3>
+    <p>Everything runs on a fixed schedule (Eastern time). A new board usually shows up here 15&ndash;30 minutes after its run starts. Until then the page keeps showing the last board.</p>
+    <ul>
+      <li><b>NBA picks:</b> weekdays at 2:15 PM. Weekends at 10:55 AM (afternoon games only) and 4:55 PM (the night's games).</li>
+      <li><b>NBA late-news check:</b> every day at 5:58 PM. Game cards with late injury news get re-simmed projections and an amber note.</li>
+      <li><b>NBA results:</b> every morning at 9:35 AM.</li>
+      <li><b>NFL picks:</b> Thursday and Monday games at 11:55 AM that day; Sunday's games on Friday at 4:25 PM.</li>
+      <li><b>NFL late-news checks:</b> Sunday 11:35 AM and 3:35 PM, and Sunday, Monday and Thursday at 7:35 PM.</li>
+      <li><b>NFL results:</b> Monday, Tuesday and Friday mornings at 9:50 AM.</li>
+    </ul>
 
     <h3>Using the page</h3>
     <ul>
@@ -718,6 +730,45 @@ function wireStrip() {
   stripActive();
 }
 
+/* run schedule (ET), kept in step with the scheduled tasks; shown above the slate so a visitor knows when the next board lands.
+   m = minutes after midnight ET, d = weekdays (0 = Sun). post = minutes until it is usually on the site. */
+const RUNS = {
+  nba: [{d: [1, 2, 3, 4, 5], m: 14 * 60 + 15, what: "tonight's picks", post: 20}, {d: [0, 6], m: 10 * 60 + 55, what: 'afternoon picks', post: 20},
+        {d: [0, 6], m: 16 * 60 + 55, what: "tonight's picks", post: 20}, {d: [0, 1, 2, 3, 4, 5, 6], m: 9 * 60 + 35, what: "last night's results", post: 15}],
+  nfl: [{d: [1, 4], m: 11 * 60 + 55, what: "tonight's game", post: 20}, {d: [5], m: 16 * 60 + 25, what: "Sunday's picks", post: 30},
+        {d: [1, 2, 5], m: 9 * 60 + 50, what: 'results', post: 15}]};
+const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+function etNow(d = new Date()) {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', {timeZone: 'America/New_York', weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'}).formatToParts(d).map(x => [x.type, x.value]));
+  return {dow: DOW.indexOf(p.weekday), date: `${p.year}-${p.month}-${p.day}`, min: (+p.hour % 24) * 60 + +p.minute};
+}
+const hm = m => { const h = Math.floor(m / 60), mm = m % 60; return `${h % 12 || 12}${mm ? ':' + String(mm).padStart(2, '0') : ''} ${h < 12 ? 'AM' : 'PM'}`; };
+function nextRun(lg, now) {
+  let best = null;
+  for (let off = 0; off < 8 && !best; off++) {
+    const dow = (now.dow + off) % 7;
+    for (const r of RUNS[lg]) if (r.d.includes(dow) && (off > 0 || r.m + r.post > now.min) && (!best || r.m < best.m)) best = {...r, off, dow};
+  }
+  return best;
+}
+function runBar(idx) {
+  try {
+    const now = etNow(), nx = nextRun(LG, now);
+    const upd = idx.updated ? new Date(idx.updated) : null;
+    const updTxt = upd && !isNaN(upd) ? `${DOW[etNow(upd).dow]} ${clockET(upd)}` : '';
+    const when = nx ? (nx.off === 0 ? (nx.m <= now.min ? 'running now' : 'today ' + hm(nx.m)) : (nx.off === 1 ? 'tomorrow ' : DOW[nx.dow] + ' ') + hm(nx.m)) : '';
+    let warn = '';
+    if (LG === 'nba' && NID === idx.nights[0].id && idx.nights[0].id < now.date) {
+      const today = RUNS.nba.filter(r => r.d.includes(now.dow) && r.what !== "last night's results");
+      const due = today.find(r => r.m + r.post > now.min);
+      const wk = now.dow === 0 || now.dow === 6;
+      warn = due ? `Today's board isn't up yet. ${wk ? `Weekend games are priced at <b>10:55 AM ET</b> (afternoon tips) and <b>4:55 PM ET</b> (the night)` : `It's priced at <b>${hm(due.m)} ET</b>`} and usually shows here about ${due.post} minutes later. Below is the last board (${esc(idx.nights[0].label)}).`
+        : `Today's board should be up by now. If it isn't, refresh in a few minutes, or there may be no games today. Below is the last board (${esc(idx.nights[0].label)}).`;
+    }
+    return `<div class="runbar" role="status">${warn ? `<span class="rb-w">${warn}</span>` : ''}${updTxt ? `<span>Updated <b>${esc(updTxt)}</b></span>` : ''}${nx ? `<span>Next: ${esc(nx.what)}, <b>${esc(when)}${nx.off === 0 && nx.m <= now.min ? '' : ' ET'}</b></span>` : ''}<button type="button" id="rbs">Full schedule</button></div>`;
+  } catch (e) { return ''; }
+}
+
 async function renderSlate() {
   const idx = IDX[LG];
   if (!idx.nights.length) { $('view').innerHTML = `<div class="empty">No ${LEAGUES[LG]} games priced yet.</div>`; return; }
@@ -730,6 +781,7 @@ async function renderSlate() {
   for (const g of gs) for (const p of g.picks) p.kind === 'bet' ? nb++ : nl++;
   const unit = LG === 'nfl' ? 'Week' : 'Night';
   $('view').innerHTML = `<div class="slate-wrap" style="display:grid;gap:16px">
+    ${runBar(idx)}
     <div class="fbar" id="nights" role="group" aria-label="Choose a ${unit.toLowerCase()}"><span class="f-lab">${unit}</span>${idx.nights.map(n => `<button type="button" class="fb${n.id === NID ? ' on' : ''}" data-n="${esc(n.id)}" aria-pressed="${n.id === NID}">${esc(n.label)}</button>`).join('')}</div>
     <div class="stats">${st('Games', gs.length) + st('Bets', nb) + st('Leans', nl) + st(unit + ' W–L', rec(r), r ? '' : 'graded the next morning') + st(unit + ' units', r ? un(r.units) : '—', '', r ? ucls(r.units) : '')}</div>
     ${nb + nl ? spots(gs, unit) : ''}
@@ -739,6 +791,7 @@ async function renderSlate() {
   $('nights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; NID = b.dataset.n; FOCUS = null; go(); window.scrollTo({top: 0}); };
   $('view').querySelectorAll('.sp-r').forEach(b => b.onclick = () => { const el = document.getElementById('g-' + b.dataset.g); if (!el) return;
     el.scrollIntoView({block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); });
+  if ($('rbs')) $('rbs').onclick = () => { openHelp(); const h = document.getElementById('hp-sched'); if (h) h.scrollIntoView({block: 'start'}); };
   wireStrip();
   if (FOCUS) { const el = document.getElementById('g-' + FOCUS); if (el) { el.scrollIntoView({block: 'start'}); el.classList.add('flash'); } FOCUS = null; }
 }
