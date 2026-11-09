@@ -272,6 +272,25 @@ details.sp-g>.sp-l{padding:0 8px 8px}
 [data-theme="dark"]{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;--s0:#6b7280}
 .res2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:12px;align-items:start}
 .res2>*{min-width:0}
+.bm-c{display:grid;gap:8px}.bm-r{display:flex;flex-wrap:wrap;gap:4px;align-items:center}.bm-r .f-lab{min-width:56px}.bm-slip .tk{box-shadow:none}
+.bm-go{margin-left:auto;background:var(--green);color:#fff;border:0;border-radius:6px;padding:9px 18px;font:800 13px inherit;font-family:inherit;cursor:pointer;letter-spacing:.02em}
+.bm-go:disabled{opacity:.4;cursor:default}[data-theme="dark"] .bm-go{color:#0b1a10}
+.bm-msg{font-size:12.5px;color:var(--amber-text);min-height:0}.bm-msg:empty{display:none}
+.bm-slip{display:grid;gap:10px;margin-top:4px;padding-top:12px;border-top:1px solid var(--border)}
+.bm-slip .r .sub{display:block;color:var(--green-text)}.bm-x{margin-left:8px;background:none;border:1px solid var(--border);color:var(--text-3);border-radius:5px;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1}
+.bm-t{grid-template-columns:repeat(5,minmax(0,1fr))}
+.bm-q{background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:7px 10px;font:inherit;font-size:12.5px;min-width:180px}
+.bm-g{border-top:1px solid var(--border)}.bm-g:first-child{border-top:0}
+.pan-t .cnt,.bm-gh .cnt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-3);margin-left:6px}
+.bm-gh{display:flex;gap:8px;align-items:center;width:100%;background:none;border:0;color:var(--text);font:800 14px inherit;font-family:inherit;padding:10px 0;cursor:pointer;text-align:left}
+.bm-pl{display:grid;grid-template-columns:170px minmax(0,1fr);gap:6px 10px;padding:6px 0;border-top:1px dashed var(--border);align-items:start}
+.bm-pn{font-weight:700;font-size:13px}.bm-pn em{font-style:normal;color:var(--text-3);font-size:11px;font-weight:600;margin-left:4px}
+.bm-legs{display:flex;flex-wrap:wrap;gap:4px}
+.bm-leg{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);border-radius:6px;padding:5px 8px;font:600 11.5px 'JetBrains Mono',monospace;cursor:pointer;white-space:nowrap}
+.bm-leg b{color:var(--gold);font-weight:700}.bm-leg i{font-style:normal;color:var(--text-3)}
+.bm-leg.plus{border-color:var(--green-border);background:var(--green-bg)}.bm-leg.plus i{color:var(--green-text)}
+.bm-leg.on{background:var(--text);color:var(--bg);border-color:var(--text)}.bm-leg.on i,.bm-leg.on b{color:var(--bg)}
+@media(max-width:768px){.bm-t{grid-template-columns:repeat(2,minmax(0,1fr))}.bm-pl{grid-template-columns:minmax(0,1fr)}.bm-go{margin-left:0;width:100%}.bm-q{min-width:0;width:100%}}
 .pan{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow);display:grid;gap:10px;align-content:start;min-width:0}
 .pan-h{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .pan-t{font-weight:800;font-size:14px;letter-spacing:-.01em}
@@ -356,7 +375,7 @@ details.legd>summary::before{content:'▸ ';}details.legd[open]>summary::before{
 <div class="body">
   <div class="lg">
     <div class="lg" id="leagues" role="group" aria-label="League"></div>
-    <div class="vw" role="group" aria-label="View"><button type="button" data-v="slate">Slate</button><button type="button" data-v="ledger">Ledger</button><button type="button" data-v="parlays">Parlays</button><button type="button" data-v="report">Report</button></div>
+    <div class="vw" role="group" aria-label="View"><button type="button" data-v="slate">Slate</button><button type="button" data-v="build">Build</button><button type="button" data-v="ledger">Ledger</button><button type="button" data-v="parlays">Parlays</button><button type="button" data-v="report">Report</button></div>
   </div>
   <div class="stats" id="season"></div>
   <div id="view"><div class="empty">Loading&hellip;</div></div>
@@ -492,7 +511,7 @@ const getJSON = async u => { const r = await fetch(u, {cache: 'no-cache'}); if (
 function readHash() {
   const [lg, v, n] = location.hash.slice(1).split('/');
   if (LEAGUES[lg]) LG = lg;
-  if (v === 'slate' || v === 'ledger' || v === 'parlays' || v === 'report') VIEW = v;
+  if (v === 'slate' || v === 'ledger' || v === 'parlays' || v === 'report' || v === 'build') VIEW = v;
   NID = n || null; if (VIEW === 'parlays') { PN[LG] = n || null; NID = null; }
 }
 function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'slate' && NID ? '/' + NID : VIEW === 'parlays' && PN[LG] ? '/' + PN[LG] : ''}`); } catch (e) {} }
@@ -1064,6 +1083,188 @@ async function renderParlays() {
   if ($('pnights')) $('pnights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; PN[LG] = b.dataset.n; go(); };
 }
 
+/* ---------- Build me one (slip builder, NBA, paper only) ----------
+   Data: sim/nba/builder.json from slip_builder.py (nba-sim-ledger). Legs are the main-line props priced tonight; each
+   leg's chance is the blended one (market no-vig + k x (sim - market), Ace's k), the slip is priced at ONE book that
+   hangs every leg, and same-game legs use the sim's correlation (bits = which of 1,000 simulated games each leg hit).
+   Same solver as slip_builder.solve(); the presets it logs nightly are the record shown at the bottom. */
+const BLD = {d: undefined, legs: 3, target: 1000, stats: {pts: 1, reb: 1, ast: 1, fg3m: 1, combo: 1}, sg: 0, book: '', slip: [], alts: [], ai: 0, q: '', open: {}};
+const BWIN = [0.75, 1.35], BPOOL = 30, STATW = {pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', pra: 'Pts+Reb+Ast', pr: 'Pts+Reb', pa: 'Pts+Ast', ra: 'Reb+Ast'};
+const bdec = a => 1 + (a > 0 ? a / 100 : 100 / -a);
+const bam = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
+const bsel = l => `${l.player} ${l.side} ${l.line} ${STATW[l.stat] || l.stat}`;
+const statKey = s => ['pts', 'reb', 'ast', 'fg3m'].includes(s) ? s : 'combo';
+function bitsOf(l) {
+  if (!l._b) { const s = atob(l.bits), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); l._b = u; }
+  return l._b;
+}
+const POP = (() => { const t = new Uint8Array(256); for (let i = 1; i < 256; i++) t[i] = (i & 1) + t[i >> 1]; return t; })();
+function bLift(ls) {                      // P_sim(all) / product P_sim(each), over the exported draws
+  const B = ls.map(bitsOf), n = BLD.d.current.bits_n || 1000; let j = 0; const c = ls.map(() => 0);
+  for (let i = 0; i < B[0].length; i++) { let x = 255; B.forEach((b, k) => { x &= b[i]; c[k] += POP[b[i]]; }); j += POP[x]; }
+  const ind = c.reduce((a, v) => a * v / n, 1); return ind > 0 && j > 0 ? (j / n) / ind : 1;
+}
+function slipP(ls) {                      // blended chances multiplied, times the sim lift inside each game
+  let p = ls.reduce((a, l) => a * l.p, 1); const g = {};
+  for (const l of ls) (g[l.game_id] = g[l.game_id] || []).push(l);
+  for (const x of Object.values(g)) if (x.length > 1) p *= bLift(x);
+  return p;
+}
+function bLegs() {
+  const now = Date.now(), c = BLD.d && BLD.d.current;
+  if (!c) return [];
+  return c.legs.filter(l => new Date(l.start).getTime() > now && BLD.stats[statKey(l.stat)]);
+}
+function bSolve() {
+  const legs = bLegs(), ns = BLD.legs ? [BLD.legs] : [2, 3, 4, 5], t = bdec(BLD.target), lo = t * BWIN[0], hi = t * BWIN[1], out = [];
+  const books = [...new Set(legs.flatMap(l => Object.keys(l.prices)))].filter(b => !BLD.book || b === BLD.book).sort();
+  for (const bk of books) {
+    const pool = legs.filter(l => l.prices[bk] != null).map(l => [l.p * bdec(l.prices[bk]) - 1, l]).filter(x => x[0] > 0)
+      .sort((a, b) => b[0] - a[0]).slice(0, BPOOL).map(x => x[1]);
+    for (const n of ns) {
+      const pick = [], rec_ = (st, d) => {
+        if (pick.length === n) { if (d < lo) return; const p = BLD.sg ? slipP(pick) : pick.reduce((a, l) => a * l.p, 1); out.push({ev: p * d - 1, bk, legs: pick.slice(), p, d}); return; }
+        for (let i = st; i < pool.length; i++) {
+          const l = pool[i], d2 = d * bdec(l.prices[bk]);
+          if (d2 > hi) continue;
+          if (pick.some(x => x.player === l.player || (!BLD.sg && x.game_id === l.game_id))) continue;
+          pick.push(l); rec_(i + 1, d2); pick.pop();
+        }
+      };
+      rec_(0, 1);
+    }
+  }
+  out.sort((a, b) => b.ev - a.ev);
+  const seen = new Set(), top = [];
+  for (const s of out) { const k = s.legs.map(l => l.id).sort().join(); if (seen.has(k)) continue; seen.add(k); top.push(s); if (top.length >= 8) break; }
+  return top;
+}
+function bPrice(ls) {                     // best single book hanging every leg; null when no book has them all
+  let best = null;
+  const books = [...new Set(ls.flatMap(l => Object.keys(l.prices)))];
+  for (const bk of books) {
+    if (!ls.every(l => l.prices[bk] != null)) continue;
+    const d = ls.reduce((a, l) => a * bdec(l.prices[bk]), 1);
+    if (!best || d > best.d) best = {bk, d};
+  }
+  return best;
+}
+function slipCard(ls, info) {
+  if (!ls.length) return `<div class="bm-slip"><div class="dim" style="font-size:12.5px">Tap <b>Build me one</b> and it solves a slip to your payout, or tap legs in the list below to build your own.</div></div>`;
+  const pr = bPrice(ls), p = slipP(ls), same = new Set(ls.map(l => l.game_id)).size < ls.length;
+  const bk = info ? info.bk : pr && pr.bk, d = info ? info.d : pr && pr.d;
+  const be = d ? 1 / d : null, ev = d ? p * d - 1 : null, fair = bam(1 / Math.max(p, 1e-3));
+  const verdict = same ? `<span class="pill p-cat">fair target</span>` : ev == null ? `<span class="pill p-open">no single book</span>` : ev > 0 ? `<span class="pill p-win">value</span>` : `<span class="pill p-loss">no edge</span>`;
+  const rows = ls.map(l => `<div class="tk-l"><div><span class="s">${esc(l.player)}</span><span class="sub">${esc(l.side.toLowerCase())} ${l.line} ${esc(STATW[l.stat] || l.stat)} &middot; ${esc(l.matchup)}${bk && l.prices[bk] != null ? ' &middot; ' + esc(bk) : ''}</span></div>
+      <div class="r">${bk && l.prices[bk] != null ? odds(l.prices[bk]) : '—'}<span class="sub" title="blended chance (market ${pct(l.p_mkt)}, sim ${pct(l.p_sim)})">${Math.round(l.p * 100)}%</span>${info ? '' : `<button type="button" class="bm-x" data-rm="${esc(l.id)}" aria-label="Remove">&times;</button>`}</div></div>`).join('');
+  const tiles = same
+    ? st('Fair price', fair, 'take this or longer in the app') + st('Our chance', pct(p), `with sim correlation ×${bLift(ls.filter((l, i, a) => a.filter(x => x.game_id === l.game_id).length > 1)).toFixed(2)}`) + st('Legs pay alone', d ? bam(d) : '—', bk ? `${esc(bk)}; the book's SGP price will be lower` : '')
+    : st(bk ? `Pays at ${esc(bk)}` : 'Pays', d ? bam(d) : '—', d ? `1u wins ${(d - 1).toFixed(2)}u` : 'no book hangs every leg') + st('Our chance', pct(p), 'blended, legs multiplied')
+      + st('Break-even', be ? pct(be) : '—', '') + st('Fair', fair, '') + st('EV', ev == null ? '—' : (ev > 0 ? '+' : '') + Math.round(ev * 100) + '%', ev == null ? '' : `edge ${(p - be) * 100 > 0 ? '+' : ''}${((p - be) * 100).toFixed(1)} pts`, ev == null ? '' : ucls(ev));
+  const nav = info && BLD.alts.length > 1 ? `<button type="button" class="fb" id="bm-next">Next best (${BLD.ai + 1}/${BLD.alts.length})</button>` : '';
+  return `<div class="bm-slip"><div class="pan-h"><span class="pan-t">Your slip <span class="cnt">${ls.length} leg${ls.length === 1 ? '' : 's'}</span></span><span style="display:flex;gap:6px;align-items:center">${verdict}${nav}<button type="button" class="fb" id="bm-clear">Clear</button></span></div>
+    <div class="tk">${rows}</div><div class="rc-k bm-t">${tiles}</div></div>`;
+}
+function bPicker() {
+  const legs = bLegs(), q = BLD.q.trim().toLowerCase(), by = {};
+  for (const l of legs) if (!q || l.player.toLowerCase().includes(q)) (by[l.game_id] = by[l.game_id] || []).push(l);
+  const inSlip = new Set(BLD.slip.map(l => l.id));
+  const games = (BLD.d.current.games || []).filter(g => by[g.game_id]);
+  if (!games.length) return `<div class="dim" style="font-size:12.5px">${legs.length ? 'No player matches.' : 'No legs left: tonight’s games have started.'}</div>`;
+  return games.map(g => {
+    const ls = by[g.game_id], pl = {};
+    for (const l of ls) (pl[l.player] = pl[l.player] || []).push(l);
+    const open = q || BLD.open[g.game_id];
+    const body = open ? Object.entries(pl).map(([nm, xs]) => `<div class="bm-pl"><span class="bm-pn">${esc(nm)} <em>${esc(xs[0].team)}</em></span><div class="bm-legs">${xs.sort((a, b) => a.stat.localeCompare(b.stat) || a.side.localeCompare(b.side)).map(l => {
+        const bp = Math.max(...Object.values(l.prices)), ev = l.p * bdec(bp) - 1;
+        return `<button type="button" class="bm-leg${inSlip.has(l.id) ? ' on' : ''}${ev > 0 ? ' plus' : ''}" data-add="${esc(l.id)}" title="blended ${pct(l.p)} · market ${pct(l.p_mkt)} · sim ${pct(l.p_sim)} · best ${odds(bp)}">${l.side === 'Over' ? 'o' : 'u'}${l.line} ${esc((STATW[l.stat] || l.stat).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'))} <b>${odds(bp)}</b> <i>${Math.round(l.p * 100)}%</i></button>`;
+      }).join('')}</div></div>`).join('') : '';
+    return `<div class="bm-g"><button type="button" class="bm-gh" data-g="${esc(g.game_id)}" aria-expanded="${!!open}">${open ? '▾' : '▸'} ${esc(g.matchup)} <span class="cnt">${new Date(g.start).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York'})} ET &middot; ${Object.keys(pl).length} players</span></button>${body}</div>`;
+  }).join('');
+}
+function bRecord(d) {
+  const R = d.record, rows = d.slips.slice(0, 24);
+  const tiles = st('Builder slips', rec(R), R.graded ? `hit ${R.w} · expected ${R.expected.toFixed(1)}` : `${R.open} open`)
+    + st('Units', un(R.units), '1u per slip, paper', ucls(R.units))
+    + Object.entries(d.by_legs || {}).map(([n, r]) => st(`${n} legs`, rec(r), r.graded ? un(r.units) : `${r.open} open`, ucls(r.units))).slice(0, 3).join('');
+  const tk = rows.map(s => `<div class="tk"><div class="tk-h"><span class="tk-o">${esc(s.price)}<b>${esc(s.book)} &middot; ${s.legs_n} legs</b></span><span class="tk-m">${esc(shortDate(s.slate + 'T12:00:00-05:00'))} &middot; preset ${esc(s.target)} &middot; ${pct(s.p)} &middot; EV ${s.ev > 0 ? '+' : ''}${Math.round(s.ev * 100)}%</span></div>
+      ${s.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span><span class="sub">${esc(l.matchup || '')}</span></div><div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">${Math.round(l.p * 100)}%</span></div></div>`).join('')}
+      <div class="tk-f">${s.result ? `<span class="pill p-${esc(s.result)}">${esc(s.result)}</span><span class="u ${ucls(s.units)}">${un(s.units)}</span>` : '<span class="pill p-open">pending</span><span class="dim">Settles when every leg is graded</span>'}</div></div>`).join('');
+  return `<div class="pan"><div class="pan-h"><span class="pan-t">The builder's own slips</span><span class="cnote">paper only &middot; never bet, never in the record</span></div>
+    <div class="rc-k">${tiles}</div>
+    <div class="notes" style="margin:6px 0">After every pricing run the builder answers each preset (2, 3 and 4 legs at +200, +500, +1000 and +2500) with the same rule as the button, legs from different games at one book, each player on one slip a night, and logs it before tip. That record is how you'll know whether the button is any good: wins against the expected count, and units at 1u a slip.</div>
+    ${tk ? `<div class="tks">${tk}</div>` : `<div class="dim" style="font-size:12.5px">The first slips are logged with the ${esc(shortDate(d.live_from + 'T12:00:00-05:00'))} slate.</div>`}</div>`;
+}
+async function renderBuild() {
+  if (LG !== 'nba') { $('season').innerHTML = ''; $('view').innerHTML = `<div class="empty">Build me one is NBA only for now.</div>`; return; }
+  if (BLD.d === undefined) {
+    try {
+      BLD.d = await getJSON('sim/nba/builder.json');
+      const c = BLD.d.current;
+      if (c) c.legs = c.legs.map(([g, player, team, stat, line, sd, p_sim, p_mkt, p, prices, bits]) => {
+        const G = c.games[g], side = sd === 'O' ? 'Over' : 'Under';
+        return {id: `${G.game_id}|${player}|${stat}|${line}|${sd}`, game_id: G.game_id, matchup: G.matchup, start: G.start, player, team, stat, line, side, p_sim, p_mkt, p, prices, bits};
+      });
+    } catch (e) { BLD.d = null; }
+  }
+  const d = BLD.d;
+  if (!d) { $('season').innerHTML = ''; $('view').innerHTML = `<div class="empty">The slip builder starts with tonight’s pricing run.</div>`; return; }
+  const c = d.current, legs = bLegs();
+  const R = d.record;
+  $('season').innerHTML = st('Tonight', c ? `${c.games.length} games` : '—', c ? `${legs.length} legs still to tip · ${esc(shortDate(c.slate + 'T12:00:00-05:00'))}` : 'built after pricing')
+    + st('Builder record', rec(R), R.graded ? `${R.w} hit · ${R.expected.toFixed(1)} expected` : 'paper, from ' + shortDate(d.live_from + 'T12:00:00-05:00'))
+    + st('Units', un(R.units), '1u per slip', ucls(R.units))
+    + st('Trust in the sim', c ? c.k.toFixed(2) : '—', 'k: how far legs move off the market')
+    + st('Books', '5', 'DK · FD · MGM · CZR · ESPN BET');
+  const ch = (g, v, l, on) => `<button type="button" class="fb${on ? ' on' : ''}" data-bg="${g}" data-bv="${v}" aria-pressed="${!!on}">${l}</button>`;
+  const books = c ? [...new Set(c.legs.flatMap(l => Object.keys(l.prices)))].sort() : [];
+  const ctrls = `<div class="bm-c">
+      <div class="bm-r"><span class="f-lab">Legs</span>${[2, 3, 4, 5].map(n => ch('legs', n, n, BLD.legs === n)).join('')}${ch('legs', 0, 'Any', !BLD.legs)}</div>
+      <div class="bm-r"><span class="f-lab">Payout</span>${[200, 500, 1000, 2500, 6000].map(t => ch('target', t, '+' + t, BLD.target === t)).join('')}</div>
+      <div class="bm-r"><span class="f-lab">Props</span>${Object.entries({pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', combo: 'Combos'}).map(([k, l]) => ch('stat', k, l, BLD.stats[k])).join('')}</div>
+      <div class="bm-r"><span class="f-lab">Book</span>${ch('book', '', 'Any', !BLD.book)}${books.map(b => ch('book', b, b, BLD.book === b)).join('')}</div>
+      <div class="bm-r"><span class="f-lab">Games</span>${ch('sg', 0, 'Different games', !BLD.sg)}${ch('sg', 1, 'Allow same game', BLD.sg)}<button type="button" class="bm-go" id="bm-go"${legs.length ? '' : ' disabled'}>Build me one</button></div>
+      <div class="bm-msg" id="bm-msg"></div></div>`;
+  const info = BLD.alts.length ? BLD.alts[BLD.ai] : null;
+  $('view').innerHTML = `<div style="display:grid;gap:12px">
+    <div class="pan"><div class="pan-h"><span class="pan-t">Build me one</span><span class="cnote">paper tool &middot; projections, not betting advice</span></div>
+      ${c ? ctrls + slipCard(info ? info.legs : BLD.slip, info) : `<div class="dim" style="font-size:12.5px">Tonight’s legs are built right after the pricing run.</div>`}</div>
+    ${c ? `<div class="pan"><div class="pan-h"><span class="pan-t">Tonight's legs</span><input class="bm-q" id="bm-q" placeholder="Find a player…" value="${esc(BLD.q)}" aria-label="Find a player"></div><div id="bm-pick">${bPicker()}</div>
+      <div class="cnote">% = our blended chance. Highlighted legs are +EV at their best price. Tap to add to your slip.</div></div>` : ''}
+    <div class="notes"><b style="color:var(--text)">How it works.</b> Every main-line player prop the books post for tonight, priced by the sim. The sim alone has been overconfident on props, so each leg's chance is pulled toward the market's no-vig price: our chance = market + k &times; (sim &minus; market), with k = ${c ? c.k.toFixed(2) : 'the trust weight'} fitted on every graded pick so far (the same blend Ace uses). <b>Build me one</b> searches for the slip with the best expected value near your payout, every leg +EV on its own, all legs at one sportsbook at that book's own prices. Legs from different games are independent, so the payout is real. With <b>Allow same game</b> on, legs that share a game use the sim's correlation (how often they hit together across its simulated games), and the slip shows a fair price to take or beat, since books price same-game parlays themselves. Books on our feed: DraftKings, FanDuel, BetMGM, Caesars, ESPN BET.</div>
+    ${bRecord(d)}</div>`;
+  if (!c) return;
+  const msg = t => { $('bm-msg').textContent = t; };
+  document.querySelector('.bm-c').onclick = e => {
+    const b = e.target.closest('button[data-bg]'); if (!b) return;
+    const g = b.dataset.bg, v = b.dataset.bv;
+    if (g === 'legs') BLD.legs = +v; else if (g === 'target') BLD.target = +v; else if (g === 'book') BLD.book = v; else if (g === 'sg') BLD.sg = +v;
+    else if (g === 'stat') { BLD.stats[v] = BLD.stats[v] ? 0 : 1; if (!Object.values(BLD.stats).some(Boolean)) BLD.stats[v] = 1; }
+    renderBuild();
+  };
+  $('bm-go').onclick = () => {
+    msg('Searching…');
+    setTimeout(() => {
+      const r = bSolve(); BLD.alts = r; BLD.ai = 0;
+      if (!r.length) { BLD.alts = []; renderBuild(); $('bm-msg').textContent = `No slip with every leg +EV lands near +${BLD.target} with these settings. Try another payout, more legs or more props.`; return; }
+      BLD.slip = r[0].legs.slice(); renderBuild();
+    }, 20);
+  };
+  if ($('bm-next')) $('bm-next').onclick = () => { BLD.ai = (BLD.ai + 1) % BLD.alts.length; BLD.slip = BLD.alts[BLD.ai].legs.slice(); renderBuild(); };
+  if ($('bm-clear')) $('bm-clear').onclick = () => { BLD.slip = []; BLD.alts = []; renderBuild(); };
+  const byId = {}; for (const l of c.legs) byId[l.id] = l;
+  document.querySelector('.bm-slip').onclick = e => { const b = e.target.closest('[data-rm]'); if (!b) return; BLD.alts = []; BLD.slip = BLD.slip.filter(l => l.id !== b.dataset.rm); renderBuild(); };
+  $('bm-pick').onclick = e => {
+    const h = e.target.closest('[data-g]'); if (h) { BLD.open[h.dataset.g] = !BLD.open[h.dataset.g]; $('bm-pick').innerHTML = bPicker(); return; }
+    const b = e.target.closest('[data-add]'); if (!b) return;
+    const l = byId[b.dataset.add]; BLD.alts = [];
+    if (BLD.slip.some(x => x.id === l.id)) BLD.slip = BLD.slip.filter(x => x.id !== l.id);
+    else { BLD.slip = BLD.slip.filter(x => x.player !== l.player); BLD.slip.push(l); }
+    const y = scrollY; renderBuild(); scrollTo(0, y);
+  };
+  $('bm-q').oninput = e => { BLD.q = e.target.value; $('bm-pick').innerHTML = bPicker(); };
+}
+
 /* ---------- model report card ----------
    Built by report_card.py in each sim repo (sim/<league>/report.json): calibration, model vs market, CLV,
    projection accuracy and the week-by-week trend. */
@@ -1143,7 +1344,7 @@ function renderTop() {
     return `<button type="button" class="lgb${k === LG ? ' on' : ''}" data-l="${k}" aria-pressed="${k === LG}"><b>${l}</b><span>${rec(b)} &middot; <span class="${ucls(b.units)}">${un(b.units)}</span></span></button>`;
   }).join('');
   document.querySelectorAll('.vw button').forEach(b => { b.classList.toggle('on', b.dataset.v === VIEW); b.setAttribute('aria-pressed', b.dataset.v === VIEW); });
-  $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'slate' ? 'every game simulated thousands of times' : VIEW === 'parlays' ? 'paper parlays · learning only' : VIEW === 'report' ? 'model report card' : 'every pick, graded'}`;
+  $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'slate' ? 'every game simulated thousands of times' : VIEW === 'parlays' ? 'paper parlays · learning only' : VIEW === 'build' ? 'slip builder · paper only' : VIEW === 'report' ? 'model report card' : 'every pick, graded'}`;
   renderSeason();
   renderKpis();
 }
@@ -1158,7 +1359,7 @@ function pickSum(s) {
   return t;
 }
 function renderSeason() {
-  if (VIEW === 'parlays' || !IDX[LG]) return;
+  if (VIEW === 'parlays' || VIEW === 'build' || !IDX[LG]) return;
   const s = IDX[LG].season, t = pickSum(s), roi = t.roi != null ? `${t.roi > 0 ? '+' : ''}${t.roi}% ROI` : '';
   const head = st(KK === 'bet' ? 'Season bets' : KK === 'lean' ? 'Season leans' : 'Season picks', rec(t), KK === 'bet' ? IDX[LG].season_label : KK === 'lean' ? 'tracked, not staked' : 'bets + leans')
     + st('Units', un(t.units), roi + (KK === 'bet' ? '' : ' · leans at 1u'), ucls(t.units));
@@ -1230,7 +1431,7 @@ addEventListener('resize', () => document.querySelectorAll('.srow').forEach(srow
 
 async function go() {
   writeHash(); renderTop();
-  try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : VIEW === 'report' ? renderReport() : renderLedger()); writeHash(); }
+  try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : VIEW === 'build' ? renderBuild() : VIEW === 'report' ? renderReport() : renderLedger()); writeHash(); }
   catch (e) { $('view').innerHTML = '<div class="empty">This couldn’t load. Refresh to try again.</div>'; }
 }
 $('leagues').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b || b.dataset.l === LG) return; LG = b.dataset.l; NID = null; FOCUS = null; go(); });
