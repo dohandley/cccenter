@@ -352,6 +352,14 @@ details.legd>summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--t
 details.legd>summary::before{content:'▸ ';}details.legd[open]>summary::before{content:'▾ ';}details.legd[open]>summary{margin-bottom:6px}
 @media(max-width:400px){.vw button{font-size:11px}}
 @media(max-width:340px){.vw button{font-size:10px;letter-spacing:0}}
+.pl{color:inherit;text-decoration:underline;text-decoration-color:var(--border-h);text-underline-offset:3px;text-decoration-thickness:1px}.pl:hover{text-decoration-color:currentColor}
+.psr{position:relative}.psr input{width:100%;box-sizing:border-box;font:inherit;font-size:14px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text)}
+.psr input:focus{outline:2px solid var(--green);outline-offset:1px}
+.psl{position:absolute;z-index:60;left:0;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--border-h);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px;max-height:320px;overflow:auto}
+.psi{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 10px;border-radius:6px;color:var(--text);text-decoration:none;font-size:13.5px}
+.psi span{font-size:11.5px;color:var(--text-3);white-space:nowrap}.psi.on,.psi:hover{background:var(--surface-2)}.psn{padding:10px;font-size:12.5px;color:var(--text-3)}
+.pl-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}.pl-h h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em}
+td.pos b{color:var(--green-text)}td.neg b{color:var(--red-text)}
 </style></head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -502,10 +510,15 @@ const NICK = {
   nfl: {ARI:'Cardinals',ATL:'Falcons',BAL:'Ravens',BUF:'Bills',CAR:'Panthers',CHI:'Bears',CIN:'Bengals',CLE:'Browns',DAL:'Cowboys',DEN:'Broncos',DET:'Lions',GB:'Packers',HOU:'Texans',IND:'Colts',JAX:'Jaguars',KC:'Chiefs',LA:'Rams',LAC:'Chargers',LV:'Raiders',MIA:'Dolphins',MIN:'Vikings',NE:'Patriots',NO:'Saints',NYG:'Giants',NYJ:'Jets',PHI:'Eagles',PIT:'Steelers',SEA:'Seahawks',SF:'49ers',TB:'Buccaneers',TEN:'Titans',WAS:'Commanders'}
 };
 const IDX = {}, NIGHT = {}, LEDGER = {}, PARL = {}, PN = {};   // PN: the night picked on the Parlays view, per league
+let PLR = null, PTK = 'all', PTEAM = null;
 let LG = 'nba', VIEW = 'slate', NID = null, FOCUS = null, FILT = {kind: 'all', mkt: 'all', why: 'all'};
 const nick = t => (NICK[LG] || {})[t] || t;
 const tip = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', timeZone:'America/New_York'}) + ' · ' + d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/New_York'}) + ' ET'; };
 const clockET = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/New_York'}) + ' ET'; };
+/* player pages (Nov 9): a prop's player name links to #<league>/player/<name> */
+const plHref = n => `#${LG}/player/${encodeURIComponent(n)}`;
+const selH = p => p.player && p.market === 'prop' && (p.selection || '').startsWith(p.player)
+  ? `<a class="pl" href="${plHref(p.player)}">${esc(p.player)}</a>${esc(p.selection.slice(p.player.length))}` : esc(p.selection);
 const shortDate = s => new Date(s).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'America/New_York'});
 const getJSON = async u => { const r = await fetch(u, {cache: 'no-cache'}); if (!r.ok) throw new Error(u); return r.json(); };
 
@@ -513,10 +526,11 @@ const getJSON = async u => { const r = await fetch(u, {cache: 'no-cache'}); if (
 function readHash() {
   const [lg, v, n] = location.hash.slice(1).split('/');
   if (LEAGUES[lg]) LG = lg;
-  if (v === 'slate' || v === 'ledger' || v === 'parlays' || v === 'report' || v === 'build') VIEW = v;
+  if (v === 'slate' || v === 'ledger' || v === 'parlays' || v === 'report' || v === 'build' || v === 'player') VIEW = v;
+  if (VIEW === 'player') { let nm = null; try { nm = decodeURIComponent(n || ''); } catch (e) {} if (nm !== PLR) { PTEAM = null; } PLR = nm || null; if (!PLR) VIEW = 'ledger'; NID = null; return; }
   NID = n || null; if (VIEW === 'parlays') { PN[LG] = n || null; NID = null; }
 }
-function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'slate' && NID ? '/' + NID : VIEW === 'parlays' && PN[LG] ? '/' + PN[LG] : ''}`); } catch (e) {} }
+function writeHash() { try { history.replaceState(null, '', `#${LG}/${VIEW}${VIEW === 'player' ? '/' + encodeURIComponent(PLR || '') : VIEW === 'slate' && NID ? '/' + NID : VIEW === 'parlays' && PN[LG] ? '/' + PN[LG] : ''}`); } catch (e) {} }
 
 /* ---------- form tags (same rules as the pricing email) ----------
    Bets: grouped by market + stat + side (e.g. "3-pointers unders"); 15+ graded and +9% sample-adjusted ROI (units / (n + 40)) = Hot,
@@ -603,7 +617,7 @@ function finishLine(p) {
 function pickCard(g, p) {
   const res = p.result ? `<div class="res"><span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span>${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span><span class="u ${ucls(p.units)}">${un(p.units)}</span></div>`
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
-  return `<div class="pick"><div class="pk-h"><span class="pk-s">${esc(p.selection)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
+  return `<div class="pick"><div class="pk-h"><span class="pk-s">${selH(p)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
     <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${res}</div>`;
 }
@@ -617,7 +631,7 @@ function shopLine(p, small) {
 }
 function leanTable(ls, g) {
   if (!ls.length) return '';
-  const rows = ls.map(p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + esc(p.selection) + '</b>' : esc(p.selection)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
+  const rows = ls.map(p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + selH(p) + '</b>' : selH(p)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r hm">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : out ? '<span class="pill p-void">void</span>' : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
@@ -858,13 +872,14 @@ async function renderLedger() {
   const LIM = FILT.lim || 150, shown = rows.slice(0, LIM);
   const body = shown.map(r => `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
       <td>${esc(shortDate(r.tipoff))}<span class="sub">${esc(r.matchup)}</span></td>
-      <td class="pk">${esc(r.selection)}${rowTag(r)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}</td>
+      <td class="pk">${selH(r)}${rowTag(r)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}</td>
       <td class="hm"><span class="tag ${r.kind === 'bet' ? 't-bet' : 't-lean'}">${r.kind}</span></td>
       <td class="r">${odds(r.price)}<span class="sub bk">${esc(r.book)}</span></td>
       <td class="r hm">${pct(r.model_p)}<span class="sub">mkt ${pct(r.book_p)}</span></td>
       <td class="r hm">${r.result ? `<span class="pill p-${esc(r.result)}">${esc(r.result)}</span>` : '<span class="pill p-open">pending</span>'}</td>
       <td class="r u ${ucls(r.units)}">${r.result ? un(r.units) : '<span class="dim">pending</span>'}<span class="sub mo" style="font-weight:600">${esc(r.result || '')}</span></td></tr>`).join('');
   $('view').innerHTML = `<div style="display:grid;gap:12px">
+    ${psearch()}
     <section id="res" style="display:grid;gap:10px" aria-label="Results by ${LG === 'nfl' ? 'week' : 'night'}"></section>
     <div class="fbar" id="lf"><span class="f-lab">Show</span>${chip('kind', 'all', 'All')}${chip('kind', 'bet', 'Bets')}${chip('kind', 'lean', 'Leans')}
       <span class="ndiv"></span>${chip('mkt', 'all', 'Every market')}${chip('mkt', 'totals', 'Totals')}${chip('mkt', 'props', 'Props')}${chip('mkt', 'sides', 'Sides')}</div>
@@ -882,7 +897,111 @@ async function renderLedger() {
   if ($('lmore')) $('lmore').onclick = () => { const y = scrollY; FILT.lim = LIM + 300; renderLedger().then(() => scrollTo(0, y)); };
   renderResults();
   const open = tr => { NID = tr.dataset.n; FOCUS = tr.dataset.g; VIEW = 'slate'; go(); };
-  $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = () => open(tr); tr.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(tr); } }; });
+  $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = e => { if (!e.target.closest('a')) open(tr); }; tr.onkeydown = e => { if (e.target.closest('a')) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(tr); } }; });
+  wireSearch();
+}
+
+/* ---------- player search + player pages (Nov 9) ----------
+   Built from ledger.json: every prop row carries player, team, stat, line, the projection the game card showed
+   (re-simmed if late news changed it), and once graded what he finished with (NBA also projected and played minutes). */
+const fold = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ');
+function playerIndex() {
+  const m = new Map();
+  for (const r of LEDGER[LG].rows) {
+    if (!r.player) continue;
+    const e = m.get(r.player) || {name: r.player, teams: new Set(), n: 0, last: r.tipoff};
+    e.n++; if (r.team) e.teams.add(r.team); if (r.tipoff > e.last) e.last = r.tipoff; m.set(r.player, e);
+  }
+  return [...m.values()];
+}
+const psearch = () => `<div class="psr"><input type="search" id="psq" placeholder="Find a player" autocomplete="off" spellcheck="false" aria-label="Find a player" aria-controls="psl" aria-autocomplete="list"><div class="psl" id="psl" role="listbox" hidden></div></div>`;
+function wireSearch() {
+  const q = $('psq'), box = $('psl'); if (!q) return;
+  const all = playerIndex();
+  let hits = [], at = -1;
+  const show = () => {
+    const t = fold(q.value).split(/\s+/).filter(Boolean);
+    if (!t.length) { box.hidden = true; return; }
+    hits = all.filter(e => { const f = fold(e.name); return t.every(w => f.split(/\s+/).some(x => x.startsWith(w)) || f.includes(w)); })
+      .sort((a, b) => b.n - a.n).slice(0, 8);
+    at = hits.length ? 0 : -1;
+    box.innerHTML = hits.length ? hits.map((e, i) => `<a role="option" class="psi${i === at ? ' on' : ''}" href="${plHref(e.name)}" aria-selected="${i === at}"><b>${esc(e.name)}</b><span>${esc([...e.teams].join(' / '))} &middot; ${e.n} pick${e.n === 1 ? '' : 's'}</span></a>`).join('')
+      : `<div class="psn">No ${LEAGUES[LG]} player with picks matches “${esc(q.value)}”.</div>`;
+    box.hidden = false;
+  };
+  q.oninput = show;
+  q.onkeydown = e => {
+    if (box.hidden || !hits.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); at = (at + (e.key === 'ArrowDown' ? 1 : -1) + hits.length) % hits.length;
+      box.querySelectorAll('.psi').forEach((a, i) => { a.classList.toggle('on', i === at); a.setAttribute('aria-selected', i === at); }); }
+    else if (e.key === 'Enter' && at >= 0) { e.preventDefault(); location.hash = plHref(hits[at].name); }
+    else if (e.key === 'Escape') box.hidden = true;
+  };
+  q.onblur = () => setTimeout(() => { box.hidden = true; }, 150);
+  q.onfocus = () => { if (q.value) show(); };
+}
+async function renderPlayer() {
+  if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`);
+  const mine = LEDGER[LG].rows.filter(r => r.player === PLR);
+  const teams = [...new Set(mine.map(r => r.team).filter(Boolean))];
+  const back = `<a class="fb" href="#${LG}/ledger" style="justify-self:start;text-decoration:none">&larr; Ledger</a>`;
+  if (!mine.length) {
+    $('view').innerHTML = `<div style="display:grid;gap:12px">${back}${psearch()}<div class="empty">No ${LEAGUES[LG]} picks on ${esc(PLR || 'that player')} yet.</div></div>`;
+    wireSearch(); return;
+  }
+  const rows = mine.filter(r => (PTK === 'all' || r.kind === PTK) && (!PTEAM || r.team === PTEAM));
+  const T = rs => { const t = {w: 0, l: 0, p: 0, u: 0}; for (const r of rs) { if (!r.result) continue; if (r.result === 'win') t.w++; else if (r.result === 'loss') t.l++; else t.p++; t.u += r.units || 0; } t.u = r2(t.u); return t; };
+  const t = T(rows), n = t.w + t.l, open = rows.filter(r => !r.result).length;
+  const roi = n ? Math.round(t.u / n * 1000) / 10 : null;
+  const tb = T(rows.filter(r => r.kind === 'bet')), tl = T(rows.filter(r => r.kind === 'lean'));
+  // projection vs result on graded picks with both numbers
+  const pa = rows.filter(r => r.result && r.proj != null && r.actual != null);
+  const dir = r => /\bUnder\b/.test(r.selection) ? -1 : 1;
+  const hi = pa.filter(r => r.proj > r.actual).length, lo = pa.filter(r => r.proj < r.actual).length;
+  const tiles = st('Record', rec(t), `${n ? '' : 'nothing graded yet · '}bets ${rec(tb)} &middot; leans ${rec(tl)}`)
+    + st('Units', un(t.u), roi != null ? `${roi > 0 ? '+' : roi < 0 ? '−' : ''}${Math.abs(roi)}% ROI${tl.w + tl.l + tl.p ? ' · leans at 1u' : ''}` : '', ucls(t.u))
+    + st('Hit rate', n ? Math.round(t.w / n * 100) + '%' : '—', `${n} decided${t.p ? ` · ${t.p} push` : ''}${open ? ` · ${open} open` : ''}`)
+    + st('Sim too high', pa.length ? `${hi} of ${pa.length}` : '—', pa.length ? `sim projected more than he got${lo ? ` · too low ${lo}` : ''}` : 'no graded projections yet');
+  // by stat + side
+  const grp = new Map();
+  for (const r of rows) { const {side, base} = parts(r); const k = base + '|' + side; if (!grp.has(k)) grp.set(k, {base, side, rs: []}); grp.get(k).rs.push(r); }
+  const avg = (rs, k) => { const v = rs.filter(r => r[k] != null); return v.length ? (v.reduce((a, r) => a + r[k], 0) / v.length) : null; };
+  const f1 = v => v == null ? '—' : (Math.round(v * 10) / 10).toFixed(1);
+  const stat = [...grp.values()].sort((a, b) => b.rs.length - a.rs.length).map(({base, side, rs}) => {
+    const g = T(rs), d = g.w + g.l, gr = rs.filter(r => r.result && r.actual != null);
+    return `<tr><td>${esc(base)} <span class="dim">${esc(side.toLowerCase())}</span></td><td class="r hm">${rs.length}</td><td class="r">${rec(g)}</td>
+      <td class="r u ${ucls(g.u)}">${d + g.p ? un(g.u) : '—'}</td><td class="r hm">${d ? Math.round(g.w / d * 100) + '%' : '—'}</td>
+      <td class="r">${f1(avg(gr, 'line'))}</td><td class="r">${f1(avg(gr, 'proj'))}</td><td class="r">${f1(avg(gr, 'actual'))}</td></tr>`;
+  }).join('');
+  const nf = v => v == null ? '—' : String(Math.round(v * 10) / 10);
+  const log = rows.map(r => {
+    const got = r.actual != null ? `<b>${nf(r.actual)}</b>${r.amin != null ? `<span class="sub">${r.dnp ? 'DNP' : r.amin + ' min'}</span>` : ''}` : '<span class="dim">—</span>';
+    const hit = r.actual != null && r.line != null ? ((r.actual - r.line) * dir(r) > 0 ? 'pos' : (r.actual === r.line ? '' : 'neg')) : '';
+    return `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
+      <td>${esc(shortDate(r.tipoff))}<span class="sub">${esc(r.matchup)}</span></td>
+      <td class="pk">${esc(r.selection.slice(r.player.length).trim())}<span class="sub" style="font-weight:500">${r.kind === 'bet' ? '<span class="tag t-bet" style="padding:1px 5px">bet</span>' : 'Lean · ' + esc(r.reason || '')}</span><span class="sub mo">${odds(r.price)} ${esc(r.book)}</span></td>
+      <td class="r hm">${odds(r.price)}<span class="sub bk">${esc(r.book)}</span></td>
+      <td class="r">${nf(r.proj)}${r.pmin != null ? `<span class="sub">${r.pmin} min</span>` : ''}</td>
+      <td class="r ${hit}">${got}</td>
+      <td class="r u ${ucls(r.units)}">${r.result ? un(r.units) : '<span class="dim">pending</span>'}<span class="sub" style="font-weight:600">${esc(r.result || '')}</span></td></tr>`;
+  }).join('');
+  const chip = (v, l) => `<button type="button" class="fb${PTK === v ? ' on' : ''}" data-k="${v}" aria-pressed="${PTK === v}">${l}</button>`;
+  const tchip = (v, l) => `<button type="button" class="fb${PTEAM === v ? ' on' : ''}" data-t="${v || ''}" aria-pressed="${PTEAM === v}">${l}</button>`;
+  $('view').innerHTML = `<div style="display:grid;gap:12px">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${back}<div style="flex:1 1 220px;min-width:0">${psearch()}</div></div>
+    <div class="pl-h"><h2>${esc(PLR)}</h2><span class="dim">${esc(teams.join(' / ') || LEAGUES[LG])} &middot; ${mine.length} pick${mine.length === 1 ? '' : 's'} logged</span></div>
+    <div class="fbar" id="pf"><span class="f-lab">Show</span>${chip('all', 'All')}${chip('bet', 'Bets')}${chip('lean', 'Leans')}${teams.length > 1 ? `<span class="ndiv"></span>${tchip(null, 'Any team')}${teams.map(x => tchip(x, x)).join('')}` : ''}</div>
+    <div class="stats">${tiles}</div>
+    ${stat ? `<div class="sec">By stat</div><div class="tw"><table><thead><tr><th>Stat</th><th class="r hm">Picks</th><th class="r">Record</th><th class="r">Units</th><th class="r hm">Hit</th><th class="r">Avg line</th><th class="r">Avg sim</th><th class="r">Avg got</th></tr></thead><tbody>${stat}</tbody></table></div>
+    <div class="dim" style="font-size:11.5px">Averages are over graded picks. "Sim" is the projection on the game card (re-simmed if late news changed it).</div>` : ''}
+    <div class="sec">Every pick <span class="cnt">${rows.length}</span></div>
+    <div class="tw"><table><thead><tr><th>Game</th><th>Pick</th><th class="r hm">Price</th><th class="r">Sim</th><th class="r">Got</th><th class="r">Units</th></tr></thead>
+    <tbody>${log || '<tr><td colspan="6" class="dim">Nothing matches.</td></tr>'}</tbody></table></div>
+    <div class="dim" style="font-size:11.5px">Green / red "got" = finished on / against the pick's side of the line. Tap a row to open that game's card.</div></div>`;
+  $('pf').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.k) PTK = b.dataset.k; if ('t' in b.dataset) PTEAM = b.dataset.t || null; renderPlayer(); };
+  const openG = tr => { NID = tr.dataset.n; FOCUS = tr.dataset.g; VIEW = 'slate'; go(); };
+  $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = () => openG(tr); tr.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openG(tr); } }; });
+  wireSearch();
 }
 
 /* ---------- results: calendar + cumulative units ----------
@@ -1349,7 +1468,7 @@ function renderTop() {
     return `<button type="button" class="lgb${k === LG ? ' on' : ''}" data-l="${k}" aria-pressed="${k === LG}"><b>${l}</b><span class="lr">${rec(b)}<i> &middot; </i><span class="${ucls(b.units)}">${un(b.units)}</span></span></button>`;
   }).join('');
   document.querySelectorAll('.vw button').forEach(b => { b.classList.toggle('on', b.dataset.v === VIEW); b.setAttribute('aria-pressed', b.dataset.v === VIEW); });
-  $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'slate' ? 'every game simulated thousands of times' : VIEW === 'parlays' ? 'paper parlays · learning only' : VIEW === 'build' ? 'slip builder · paper only' : VIEW === 'report' ? 'model report card' : 'every pick, graded'}`;
+  $('hd').textContent = `${IDX[LG].season_label} · ${VIEW === 'player' ? 'player page' : VIEW === 'slate' ? 'every game simulated thousands of times' : VIEW === 'parlays' ? 'paper parlays · learning only' : VIEW === 'build' ? 'slip builder · paper only' : VIEW === 'report' ? 'model report card' : 'every pick, graded'}`;
   renderSeason();
   renderKpis();
 }
@@ -1436,10 +1555,10 @@ addEventListener('resize', () => document.querySelectorAll('.srow').forEach(srow
 
 async function go() {
   writeHash(); renderTop();
-  try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : VIEW === 'build' ? renderBuild() : VIEW === 'report' ? renderReport() : renderLedger()); writeHash(); }
+  try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : VIEW === 'build' ? renderBuild() : VIEW === 'report' ? renderReport() : VIEW === 'player' ? renderPlayer() : renderLedger()); writeHash(); }
   catch (e) { $('view').innerHTML = '<div class="empty">This couldn’t load. Refresh to try again.</div>'; }
 }
-$('leagues').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b || b.dataset.l === LG) return; LG = b.dataset.l; NID = null; FOCUS = null; go(); });
+$('leagues').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b || b.dataset.l === LG) return; LG = b.dataset.l; NID = null; FOCUS = null; if (VIEW === 'player') VIEW = 'ledger'; go(); });
 document.querySelector('.vw').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (!b) return; VIEW = b.dataset.v; FOCUS = null; go(); });
 let AWAY = 0;
 document.addEventListener('visibilitychange', () => { if (document.hidden) AWAY = Date.now(); else if (AWAY && Date.now() - AWAY > 600000) location.reload(); });
