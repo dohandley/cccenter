@@ -226,7 +226,7 @@ details.sp-g>summary::-webkit-details-marker{display:none}
 details.sp-g>summary::before{content:'\25B8';color:var(--text-4);margin-right:6px;font-size:11px}
 details.sp-g[open]>summary::before{content:'\25BE'}
 .sp-gn{flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:6px}.sp-gc{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-3);font-weight:600}
-.sp-gr{font-size:11.5px;font-weight:500;color:var(--text-3)}
+.sp-gr{font-size:11.5px;font-weight:500;color:var(--text-3);display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:1px;margin-left:auto}.sp-hs{font-size:10.5px;color:var(--text-3)}.sp-hs .u{font-weight:600}
 details.sp-g>.sp-l{padding:0 8px 8px}
 .shop{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:12px;color:var(--text-3);margin-top:6px}.shop.sm{font-size:10.5px;margin-top:3px;gap:2px 6px}.shop.sm .st-l{font-size:9px}.shop b{color:var(--gold);font-family:'JetBrains Mono',monospace;font-weight:700}
 @media(min-width:1580px){
@@ -556,6 +556,9 @@ function buildForm(lg) {
   for (const [k, t] of Object.entries(f.grp)) t.top = !!(f.cat[k.split('|')[0]] || {}).watch && n(t) >= 15 && adj(t) >= .09;
   FORM[lg] = f;
 }
+/* hit rate and ROI for a group record (Nov 9, Dylan): pushes count in neither; ROI = units / decided picks, same as the season tiles */
+const fstat = t => { const n = t.w + t.l; if (!n) return ''; const r = Math.round(t.u / n * 1000) / 10;
+  return `${Math.round(t.w / n * 100)}% hit &middot; <span class="u ${ucls(r)}">${r > 0 ? '+' : ''}${r}% ROI</span>`; };
 const frec = t => `${t.w}–${t.l}${t.p ? '–' + t.p : ''}, <span class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</span>`;
 const HOT = '<span class="pill p-hot">★ Hot</span>', COLD = '<span class="pill p-cold">❄ Cold</span>', TOP = '<span class="pill p-hot">★ Top group</span>';
 function betForm(p) {
@@ -702,7 +705,7 @@ function leanGroups(list, row) {
     const done = xs.filter(x => x.p.result), t = {w: 0, l: 0, p: 0, u: 0};
     for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
     const tonight = done.length ? ` &middot; this slate ${rec(t)} <span class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</span>` : '';
-    return `<details class="sp-g"><summary><span class="sp-gn">${esc(st.label)}<span class="sp-gc">${xs.length}</span></span><span class="sp-gr">${frec(st.t)}${tonight}</span></summary><div class="sp-l">${xs.map(x => row(x, true)).join('')}</div></details>`;
+    return `<details class="sp-g"><summary><span class="sp-gn">${esc(st.label)}<span class="sp-gc">${xs.length}</span></span><span class="sp-gr"><span>${frec(st.t)}${tonight}</span><span class="sp-hs">${fstat(st.t)}</span></span></summary><div class="sp-l">${xs.map(x => row(x, true)).join('')}</div></details>`;
   }).join('')}</div>`;
 }
 function spots(gs, unit) {
@@ -713,7 +716,7 @@ function spots(gs, unit) {
   const row = ({g, p, st}, inGroup) => `<button type="button" class="sp-r" data-g="${esc(g.game_id)}"><b>${esc(p.selection)}</b><span class="pr">${odds(p.price)}</span>
     <span class="sub">${esc(g.away)} @ ${esc(g.home)} &middot; <span class="bk">${esc(p.book)}</span>${p.result ? ` &middot; <span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>` : ''}</span>
     ${p.actual != null ? `<span class="sub fin">${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}
-    ${inGroup === true ? '' : `<span class="sub">${esc(st.label)} ${frec(st.t)}</span>`}${shopLine(p, true)}</button>`;
+    ${inGroup === true ? '' : `<span class="sub">${esc(st.label)} ${frec(st.t)}${fstat(st.t) ? ' &middot; ' + fstat(st.t) : ''}</span>`}${shopLine(p, true)}</button>`;
   const all = rows.bet.concat(rows.lean), done = all.filter(x => x.p.result);
   let recap = '';
   if (done.length) { const t = {w: 0, l: 0, p: 0, u: 0}; for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
