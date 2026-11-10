@@ -360,6 +360,15 @@ details.legd>summary::before{content:'▸ ';}details.legd[open]>summary::before{
 .psi span{font-size:11.5px;color:var(--text-3);white-space:nowrap}.psi.on,.psi:hover{background:var(--surface-2)}.psn{padding:10px;font-size:12.5px;color:var(--text-3)}
 .pl-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}.pl-h h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em}
 td.pos b{color:var(--green-text)}td.neg b{color:var(--red-text)}
+.pk-c{display:none;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;margin:-2px 0}
+.pk-cs{min-width:0;display:grid;gap:2px}.pk-cs b{font-weight:700;font-size:13.5px}.pk-ct{display:flex;align-items:center;gap:4px;flex:0 0 auto;font-size:12px;white-space:nowrap}
+.chev{color:var(--text-3);font-size:11px;margin-left:4px;transition:transform .15s}.pick.open .chev{transform:rotate(180deg)}
+.pl-more{display:none}
+@media(max-width:768px){.pick.open>.pk-h{display:none}.pick.open>.pl-more{display:block;font-size:12.5px;font-weight:600;color:var(--text-2)}.pick .pk-c{display:flex}.pick:not(.open)>:not(.pk-c){display:none}.pick:not(.open){padding:10px 12px}.pick.open .pk-c{padding-bottom:8px;border-bottom:1px dashed var(--border)}}
+.pk-c:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:4px}
+details.lnd>summary{cursor:pointer;list-style:none;font-size:12.5px;font-weight:600;color:var(--text-2);padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+details.lnd>summary::-webkit-details-marker{display:none}details.lnd>summary::before{content:'\25B8  ';color:var(--text-3)}details.lnd[open]>summary::before{content:'\25BE  '}
+details.lnd[open]>summary{margin-bottom:8px}details.lnd>summary:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 </style></head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -617,9 +626,13 @@ function finishLine(p) {
 function pickCard(g, p) {
   const res = p.result ? `<div class="res"><span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span>${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span><span class="u ${ucls(p.units)}">${un(p.units)}</span></div>`
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
-  return `<div class="pick"><div class="pk-h"><span class="pk-s">${selH(p)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
+  const st_ = !p.result && starOf(p);
+  const tail = p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>`
+    : ruledOut(g, p) ? OUTPILL : (st_ ? '<span class="pill p-hot">★</span> ' : '') + (p.hold ? '<span class="pill p-open">Hold</span> ' : '') + (p.role ? '<span class="pill p-cold">Role?</span> ' : '') + '<span class="pill p-open">pending</span>';
+  const cmp = `<div class="pk-c" role="button" tabindex="0" aria-expanded="false"><span class="pk-cs"><b>${esc(p.selection)}</b><span class="sub">${odds(p.price)} ${esc(p.book)} &middot; model ${pct(p.model_p)} vs mkt ${pct(p.book_p)}${p.result && p.actual != null && p.market === 'prop' ? ` &middot; finished ${esc(p.actual)}` : ''}</span></span><span class="pk-ct">${tail}<span class="chev" aria-hidden="true">&#9662;</span></span></div>`;
+  return `<div class="pick">${cmp}<div class="pk-h"><span class="pk-s">${selH(p)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
-    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${res}</div>`;
+    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${res}${p.player && p.market === 'prop' ? `<a class="pl-more" href="${plHref(p.player)}">Every pick on ${esc(p.player)} &rarr;</a>` : ''}</div>`;
 }
 /* price shopping from the odds pull: a better price at the same line, or a better number, at another book. Display only:
    the edge and the graded result use the listed price. */
@@ -631,11 +644,20 @@ function shopLine(p, small) {
 }
 function leanTable(ls, g) {
   if (!ls.length) return '';
-  const rows = ls.map(p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + selH(p) + '</b>' : selH(p)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
+  const row = p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + selH(p) + '</b>' : selH(p)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r hm">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
-    <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : out ? '<span class="pill p-void">void</span>' : '<span class="pill p-open">pending</span>'}</td></tr>`; }).join('');
+    <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : out ? '<span class="pill p-void">void</span>' : '<span class="pill p-open">pending</span>'}</td></tr>`; };
+  /* Nov 9 (Dylan): leans collapse by default; ★ Top group leans stay out in the open */
+  const isTop = p => { if (ruledOut(g, p)) return false; const lf = leanForm(p); return !!(lf && lf.top); };
+  const top = ls.filter(isTop), rest = ls.filter(p => !isTop(p));
+  const head = '<thead><tr><th>Lean</th><th class="r">Price</th><th class="r hm">Model</th><th class="r">Result</th></tr></thead>';
+  const done = ls.filter(p => p.result), t = {w: 0, l: 0, p: 0, u: 0};
+  for (const p of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
+  const recTxt = done.length ? ` &middot; ${rec(t)} <span class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</span>` : '';
   return `<div class="sec"><span class="tag t-lean">Lean</span> Tracked, not staked <span class="cnt">${ls.length}</span></div>
-    <div class="tw"><table><thead><tr><th>Lean</th><th class="r">Price</th><th class="r hm">Model</th><th class="r">Result</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    ${top.length ? `<div class="tw"><table>${head}<tbody>${top.map(row).join('')}</tbody></table></div>` : ''}
+    ${rest.length ? `<details class="lnd"><summary>${top.length ? `${rest.length} more lean${rest.length === 1 ? '' : 's'}` : `Show ${rest.length} lean${rest.length === 1 ? '' : 's'}`}${recTxt && !top.length ? recTxt : ''}</summary>
+    <div class="tw"><table>${head}<tbody>${rest.map(row).join('')}</tbody></table></div></details>` : ''}`;
 }
 const YDS = /yds|min/;
 const fmt = (k, v) => typeof v === 'number' ? v.toFixed(YDS.test(k) ? 0 : 1) : '';
@@ -850,6 +872,8 @@ async function renderSlate() {
   $('view').querySelectorAll('.sp-r').forEach(b => b.onclick = () => { const el = document.getElementById('g-' + b.dataset.g); if (!el) return;
     el.scrollIntoView({block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); });
   if ($('rbs')) $('rbs').onclick = () => { openHelp(); const h = document.getElementById('hp-sched'); if (h) h.scrollIntoView({block: 'start'}); };
+  $('view').querySelectorAll('.pk-c').forEach(c => { const t = () => { const p = c.parentElement, o = !p.classList.contains('open'); p.classList.toggle('open', o); c.setAttribute('aria-expanded', o); };
+    c.onclick = t; c.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); t(); } }; });
   wireStrip();
   if (FOCUS) { const el = document.getElementById('g-' + FOCUS); if (el) { el.scrollIntoView({block: 'start'}); el.classList.add('flash'); } FOCUS = null; }
 }
