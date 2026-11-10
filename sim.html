@@ -240,7 +240,7 @@ details.sp-g>.sp-l{padding:0 8px 8px}
 .gstrip{position:sticky;top:var(--hdrh,64px);z-index:50;margin:0 -4px;padding:6px 4px;background:var(--bg);min-width:0;max-width:calc(100% + 8px)}
 .slate-wrap>*{min-width:0}
 .gs-row{display:flex;gap:6px;overflow-x:auto;min-width:0;max-width:100%;scrollbar-width:thin;scroll-behavior:smooth;padding-bottom:2px}
-.gs{flex:0 0 auto;min-width:128px;max-width:170px;display:grid;gap:2px;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-family:inherit;color:var(--text);cursor:pointer}
+.gs{flex:0 0 auto;min-width:128px;max-width:210px;display:grid;gap:2px;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-family:inherit;color:var(--text);cursor:pointer}
 .gs:hover{border-color:var(--text-3)}.gs:focus-visible{outline:2px solid var(--green);outline-offset:1px}
 .gs.on{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text)}
 .gs.win{background:var(--green-bg);border-color:var(--green-border)}.gs.loss{background:var(--red-bg);border-color:var(--red-border)}
@@ -250,7 +250,7 @@ details.sp-g>.sp-l{padding:0 8px 8px}
 .gs .e{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-3);white-space:nowrap}
 .gs .e b{color:var(--text);font-weight:700}
 .gs .c{font-size:10.5px;color:var(--text-3);white-space:nowrap}
-.gs .c .st{color:var(--green-text);font-weight:800}.gs .c .hd{color:var(--blue-text);font-weight:800}
+.gs .c .gs-st{color:var(--green-text);font-weight:800}.gs .c .hd{color:var(--blue-text);font-weight:800}
 .gs .u{font-family:'JetBrains Mono',monospace;font-weight:700}
 /* report card */
 .rc-k{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
@@ -382,6 +382,7 @@ details.lnd[open]>summary{margin-bottom:8px}details.lnd>summary:focus-visible{ou
 @media(max-width:900px){.lines.l3{grid-template-columns:repeat(2,minmax(0,1fr))}.lines.l3>.ln:last-child{grid-column:1/-1}}
 @media(max-width:768px){.lines.l3{grid-template-columns:1fr}.lines.l3>.ln:last-child{grid-column:auto}.tm-n .tb{width:24px!important;height:24px!important;font-size:8px!important}}
 .gs .mt{display:inline-flex;align-items:center;gap:3px}.gs .mt .tb{margin-right:1px}
+th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{color:var(--text)}th.srt.on::after{content:' \25BE'}th.srt:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
 </style></head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -682,8 +683,9 @@ function box(g, t) {
   for (const grp of groups) {
     const rows = ((g.proj[t] || {})[grp.key]) || [];
     if (!rows.length) continue;
-    const hdr = `<tr><th>${esc(grp.label || 'Player')}</th>${grp.cols.map(c => `<th class="r">${esc(c[1])}</th>`).join('')}${'<th></th>'.repeat(ncol - grp.cols.length)}</tr>`;
-    if (groups.length === 1) head = hdr; else body += hdr.replace(/<th/g, '<th class="grp"').replace(/class="grp" class="r"/g, 'class="grp r"');
+    const hdr = `<tr><th>${esc(grp.label || 'Player')}</th>${grp.cols.map(c => `<th class="r srt" tabindex="0" role="button" title="Sort by projected ${esc(c[1])}">${esc(c[1])}</th>`).join('')}${'<th></th>'.repeat(ncol - grp.cols.length)}</tr>`;
+    if (groups.length === 1) head = hdr; else body += hdr.replace(/<th/g, '<th class="grp"').replace(/class="grp" class="([^"]*)"/g, 'class="grp $1"');
+    let ri = 0;
     for (const r of rows) {
       const a = act ? act[r.player] : undefined;
       const cells = grp.cols.map(([k]) => {
@@ -696,7 +698,7 @@ function box(g, t) {
         return `<td class="r">${shown}<span class="act${tone}">${esc(av)}</span></td>`;
       }).join('');
       const actv = r.active != null && r.active < 0.99 ? ` <span class="dim">(${Math.round(r.active * 100)}%)</span>` : '';
-      body += `<tr><td>${esc(r.player)}${actv}</td>${cells}${'<td></td>'.repeat(ncol - grp.cols.length)}</tr>`;
+      body += `<tr data-i="${ri++}"><td>${esc(r.player)}${actv}</td>${cells}${'<td></td>'.repeat(ncol - grp.cols.length)}</tr>`;
     }
   }
   return `<div><div class="ct">${esc(nick(t))} &middot; ${act ? 'projected, actual below' : 'projected'}</div><div class="tw"><table>${head ? `<thead>${head}</thead>` : ''}<tbody>${body}</tbody></table></div></div>`;
@@ -744,6 +746,28 @@ const totExtra = g => { const t = g.mk && g.mk.tot; if (!t || t.line !== g.total
   const bo = t.best_over, bu = t.best_under;
   return `<div class="ln-x">Over: sim ${Math.round(t.over_p * 100)}%${g.updated ? ' (at pricing)' : ''} &middot; market ${Math.round(t.over_nv * 100)}%${bo || bu ? `<br>Best: ${bo ? `O ${odds(bo.price)} ${esc(bo.book)}` : ''}${bo && bu ? ' &middot; ' : ''}${bu ? `U ${odds(bu.price)} ${esc(bu.book)}` : ''}` : ''}</div>`; };
 
+/* box score: tap a column to sort that group by the projection, highest first, in both teams' tables; tap again to go back to minutes order (Nov 10) */
+function boxSort(th) {
+  const wrap = th.closest('.box2'); if (!wrap) return;
+  const hr = th.parentElement, grp = (hr.querySelector('th') || {}).textContent || '', col = th.textContent.replace(/[▾]/g, '').trim();
+  const key = grp + '|' + col, on = wrap.dataset.sort !== key;
+  wrap.dataset.sort = on ? key : '';
+  wrap.querySelectorAll('table').forEach(tb => {
+    const all = [...tb.querySelectorAll('tr')];
+    all.forEach((tr, i) => {
+      const ths = [...tr.querySelectorAll('th')]; if (!ths.length || ths[0].textContent !== grp) return;
+      const ci = ths.findIndex(x => x.textContent.replace(/[▾]/g, '').trim() === col); if (ci < 1) return;
+      const block = []; for (let j = i + 1; j < all.length && !all[j].querySelector('th'); j++) block.push(all[j]);
+      const val = tr => { const td = tr.children[ci]; const v = td ? parseFloat((td.firstChild && td.firstChild.nodeType === 3 ? td.firstChild.textContent : td.textContent)) : NaN; return isNaN(v) ? -1 : v; };
+      const anchor = block.length ? block[block.length - 1].nextSibling : null, par = (block[0] || tr).parentElement;
+      block.sort(on ? (a, b) => val(b) - val(a) : (a, b) => a.dataset.i - b.dataset.i);
+      block.forEach(r => par.insertBefore(r, anchor));
+      ths.forEach((x, k) => { if (k) { x.classList.toggle('on', on && k === ci); x.setAttribute('aria-sort', on && k === ci ? 'descending' : 'none'); } });
+    });
+  });
+}
+document.addEventListener('click', e => { const th = e.target.closest('.box2 th.srt'); if (th) boxSort(th); });
+document.addEventListener('keydown', e => { const th = e.target.closest && e.target.closest('.box2 th.srt'); if (th && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); boxSort(th); } });
 function card(g) {
   const bets = g.picks.filter(p => p.kind === 'bet'), ls = g.picks.filter(p => p.kind === 'lean');
   const homeFav = g.home_mean >= g.away_mean, f = g.final;
@@ -841,7 +865,7 @@ function gameStrip(gs) {
     const when = f ? 'Final' : started ? 'Live' : new Date(g.tipoff).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York'});
     const line2 = f ? `<b>${esc(g.away)} ${f.away_score}</b> – <b>${esc(g.home)} ${f.home_score}</b>` : edge;
     const line3 = f && gb.length ? `Bets ${rec(wl)} <span class="u ${ucls(ur)}">${un(ur)}</span>`
-      : `${bets.length} bet${bets.length === 1 ? '' : 's'} · ${nl} lean${nl === 1 ? '' : 's'}${star ? ' <span class="st" title="Has a starred pick">★</span>' : ''}${hold ? ' <span class="hd" title="A pick on this game is on hold">Hold</span>' : ''}`;
+      : `${bets.length} bet${bets.length === 1 ? '' : 's'} · ${nl} lean${nl === 1 ? '' : 's'}${star ? ' <span class="gs-st" title="Has a starred pick">★</span>' : ''}${hold ? ' <span class="hd" title="A pick on this game is on hold">Hold</span>' : ''}`;
     const lab = `${g.away} at ${g.home}, ${f ? `final ${g.away} ${f.away_score}, ${g.home} ${f.home_score}` : when}. ${bets.length} bets, ${nl} leans. Jump to the game.`;
     return `<button type="button" class="gs${cls}" data-g="${esc(g.game_id)}" aria-label="${esc(lab)}"><span class="m"><span class="mt">${badge(g.away, 16)}${esc(g.away)} @ ${badge(g.home, 16)}${esc(g.home)}</span><i>${esc(when)}</i></span><span class="e">${line2}</span><span class="c">${line3}</span></button>`;
   };
