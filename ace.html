@@ -183,7 +183,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
     <h3>How a pick qualifies</h3>
     <ul>
       <li><b>Pool:</b> every player prop and game total the sim priced (spreads and moneylines are out).</li>
-      <li><b>Trust the sim only part way.</b> Where the sim and the market disagree, the market has mostly been right. So Ace uses <span class="mono">market + k &times; (sim &minus; market)</span>, with <span class="mono">k</span> fit each night on every pick already graded. A k of 0.20 means Ace believes the sim 20% of the way.</li>
+      <li><b>Trust the sim only part way.</b> Where the sim and the market disagree, the market has mostly been right. So Ace uses <span class="mono">market + k &times; (sim &minus; market)</span>, with <span class="mono">k</span> fit each night on picks already graded. Since Nov 10 the NBA fit uses only picks where the sim beat the market by 20+ points, the kind Ace picks from; the staked bets with smaller gaps had dragged k so low that no NBA pick could clear the bar (none Nov 7&ndash;9). A k of 0.20 means Ace believes the sim 20% of the way.</li>
       <li><b>Edge:</b> that number must beat the market&rsquo;s no-vig chance by 7 points on props, 6 on totals, and be +EV at the listed price.</li>
       <li><b>Limits:</b> one pick per player, one total per game, no nightly count. NFL picks flagged for a role or roster question are left out.</li>
       <li><b>Final after the injury check:</b> for games that start after the pre-game check (about 6 PM ET for the NBA), Ace's picks show as <b>pending</b> from pricing until the check confirms each one at the current price or pulls it. Don't play a pending pick; pending picks aren't in the record until confirmed.</li>
