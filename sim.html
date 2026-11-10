@@ -369,6 +369,19 @@ td.pos b{color:var(--green-text)}td.neg b{color:var(--red-text)}
 details.lnd>summary{cursor:pointer;list-style:none;font-size:12.5px;font-weight:600;color:var(--text-2);padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
 details.lnd>summary::-webkit-details-marker{display:none}details.lnd>summary::before{content:'\25B8  ';color:var(--text-3)}details.lnd[open]>summary::before{content:'\25BE  '}
 details.lnd[open]>summary{margin-bottom:8px}details.lnd>summary:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.tb{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;flex:0 0 auto;font-family:'JetBrains Mono',monospace;font-weight:800;letter-spacing:-.02em;line-height:1;text-transform:uppercase;vertical-align:middle}
+.tm-n{display:flex;align-items:center;gap:8px}.tm.home .tm-n{justify-content:flex-end}
+.game{position:relative;overflow:hidden}.game::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--ta) 0 50%,var(--th) 50% 100%)}
+.wp{display:grid;gap:5px}.wp-l{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;font-variant-numeric:tabular-nums}.wp-l>span{display:inline-flex;align-items:center;gap:6px}
+.wp-l .dim{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.wp-b{position:relative;display:flex;height:10px;border-radius:5px;overflow:visible;margin-bottom:14px}.wp-b>span:first-child{border-radius:5px 0 0 5px}.wp-b>span:nth-child(2){border-radius:0 5px 5px 0}
+.wp-b>span{box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.wp-b i{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--text);border-radius:1px}.wp-b i em{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:1px;font-style:normal;font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+.lines.l3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ln-x{font-size:11.5px;color:var(--text-3);margin-top:6px;line-height:1.45}
+@media(max-width:900px){.lines.l3{grid-template-columns:repeat(2,minmax(0,1fr))}.lines.l3>.ln:last-child{grid-column:1/-1}}
+@media(max-width:768px){.lines.l3{grid-template-columns:1fr}.lines.l3>.ln:last-child{grid-column:auto}.tm-n .tb{width:24px!important;height:24px!important;font-size:8px!important}}
+.gs .mt{display:inline-flex;align-items:center;gap:3px}.gs .mt .tb{margin-right:1px}
 </style></head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -688,6 +701,49 @@ function box(g, t) {
   }
   return `<div><div class="ct">${esc(nick(t))} &middot; ${act ? 'projected, actual below' : 'projected'}</div><div class="tw"><table>${head ? `<thead>${head}</thead>` : ''}<tbody>${body}</tbody></table></div></div>`;
 }
+/* ---------- team colors and badges (Nov 10). Colors only, no league or team logos (those are licensed marks). ---------- */
+const TCOL = {
+  nba: {ATL: ['#E03A3E', '#26282A'], BKN: ['#000000', '#FFFFFF'], BOS: ['#007A33', '#BA9653'], CHA: ['#1D1160', '#00788C'], CHI: ['#CE1141', '#000000'],
+    CLE: ['#860038', '#FDBB30'], DAL: ['#00538C', '#B8C4CA'], DEN: ['#0E2240', '#FEC524'], DET: ['#C8102E', '#1D42BA'], GS: ['#1D428A', '#FFC72C'],
+    HOU: ['#CE1141', '#000000'], IND: ['#002D62', '#FDBB30'], LAC: ['#C8102E', '#1D428A'], LAL: ['#552583', '#FDB927'], MEM: ['#5D76A9', '#12173F'],
+    MIA: ['#98002E', '#F9A01B'], MIL: ['#00471B', '#EEE1C6'], MIN: ['#0C2340', '#78BE20'], NO: ['#0C2340', '#C8102E'], NY: ['#006BB6', '#F58426'],
+    OKC: ['#007AC1', '#EF3B24'], ORL: ['#0077C0', '#C4CED4'], PHI: ['#006BB6', '#ED174C'], PHX: ['#1D1160', '#E56020'], POR: ['#E03A3E', '#000000'],
+    SAC: ['#5A2D81', '#63727A'], SA: ['#000000', '#C4CED4'], TOR: ['#CE1141', '#000000'], UTAH: ['#3E2680', '#000000'], WSH: ['#002B5C', '#E31837']},
+  nfl: {ARI: ['#97233F', '#000000'], ATL: ['#A71930', '#000000'], BAL: ['#241773', '#9E7C0C'], BUF: ['#00338D', '#C60C30'], CAR: ['#0085CA', '#101820'],
+    CHI: ['#0B162A', '#C83803'], CIN: ['#FB4F14', '#000000'], CLE: ['#311D00', '#FF3C00'], DAL: ['#003594', '#869397'], DEN: ['#FB4F14', '#002244'],
+    DET: ['#0076B6', '#B0B7BC'], GB: ['#203731', '#FFB612'], HOU: ['#03202F', '#A71930'], IND: ['#002C5F', '#A2AAAD'], JAX: ['#006778', '#D7A22A'],
+    KC: ['#E31837', '#FFB81C'], LA: ['#003594', '#FFA300'], LAC: ['#0080C6', '#FFC20E'], LV: ['#000000', '#A5ACAF'], MIA: ['#008E97', '#FC4C02'],
+    MIN: ['#4F2683', '#FFC62F'], NE: ['#002244', '#C60C30'], NO: ['#D3BC8D', '#101820'], NYG: ['#0B2265', '#A71930'], NYJ: ['#125740', '#FFFFFF'],
+    PHI: ['#004C54', '#A5ACAF'], PIT: ['#FFB612', '#101820'], SEA: ['#002244', '#69BE28'], SF: ['#AA0000', '#B3995D'], TB: ['#D50A0A', '#34302B'],
+    TEN: ['#0C2340', '#4B92DB'], WAS: ['#5A1414', '#FFB612']}};
+const tcol = t => (TCOL[LG] || {})[t] || ['#5b6472', '#9aa3ad'];
+const lum = h => { const n = parseInt(h.slice(1), 16), c = [n >> 16, n >> 8 & 255, n & 255].map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; };
+const ink = h => lum(h) > .4 ? '#111418' : '#ffffff';
+/* a round badge in the team's colors with its abbreviation; sz = px */
+const badge = (t, sz = 30) => { const [a, b] = tcol(t), fs = Math.round(sz * (t.length > 3 ? .27 : t.length > 2 ? .33 : .38));
+  return `<span class="tb" aria-hidden="true" style="width:${sz}px;height:${sz}px;background:${a};box-shadow:inset 0 0 0 ${Math.max(2, Math.round(sz / 12))}px ${b};color:${ink(a)};font-size:${fs}px">${esc(t)}</span>`; };
+/* American odds with no vig from a chance */
+const fairOdds = p => p <= 0 || p >= 1 ? '—' : p >= .5 ? '-' + Math.round(100 * p / (1 - p)) : '+' + Math.round(100 * (1 - p) / p);
+/* sim vs market win chance, in the two teams' colors, market as a tick */
+function winBar(g) {
+  const a = 1 - g.home_win, [ca] = tcol(g.away), [ch] = tcol(g.home);
+  const mk = g.mk && g.mk.ml ? 1 - g.mk.ml.home_nv : null;
+  return `<div class="wp"><div class="wp-l"><span>${badge(g.away, 18)} <b>${Math.round(a * 1000) / 10}%</b></span><span class="dim">sim win chance</span><span><b>${Math.round(g.home_win * 1000) / 10}%</b> ${badge(g.home, 18)}</span></div>
+    <div class="wp-b" role="img" aria-label="Sim: ${esc(g.away)} ${Math.round(a * 100)}%, ${esc(g.home)} ${Math.round(g.home_win * 100)}%${mk != null ? `. Market no-vig: ${esc(g.away)} ${Math.round(mk * 100)}%` : ''}"><span style="width:${a * 100}%;background:${ca}"></span><span style="flex:1;background:${ch}"></span>${mk != null ? `<i style="left:${mk * 100}%"><em>mkt</em></i>` : ''}</div></div>`;
+}
+/* moneyline tile: the side where the sim differs most from the market (positive edge) */
+function mlTile(g) {
+  const ml = g.mk && g.mk.ml; if (!ml) return '';
+  const sideH = g.home_win - ml.home_nv >= 0, t = sideH ? g.home : g.away;
+  const ps = sideH ? g.home_win : 1 - g.home_win, pm = sideH ? ml.home_nv : 1 - ml.home_nv, price = sideH ? ml.home : ml.away;
+  const e = Math.round((ps - pm) * 1000) / 10;
+  return `<div class="ln"><div class="st-l">Moneyline</div><div class="cmp"><div><small>Sim</small><b class="sv">${esc(t)} ${fairOdds(ps)}</b></div><div><small>Market</small><b>${esc(t)} ${odds(price)}</b></div></div>
+    <div class="gap">${Math.abs(e) < .5 ? 'Sim matches the market' : `Sim <b>${Math.round(ps * 100)}%</b> vs market ${Math.round(pm * 100)}% on ${esc(t)} (<b>+${e} pts</b>)`}</div></div>`;
+}
+const totExtra = g => { const t = g.mk && g.mk.tot; if (!t || t.line !== g.total_line) return '';
+  const bo = t.best_over, bu = t.best_under;
+  return `<div class="ln-x">Over: sim ${Math.round(t.over_p * 100)}%${g.updated ? ' (at pricing)' : ''} &middot; market ${Math.round(t.over_nv * 100)}%${bo || bu ? `<br>Best: ${bo ? `O ${odds(bo.price)} ${esc(bo.book)}` : ''}${bo && bu ? ' &middot; ' : ''}${bu ? `U ${odds(bu.price)} ${esc(bu.book)}` : ''}` : ''}</div>`; };
+
 function card(g) {
   const bets = g.picks.filter(p => p.kind === 'bet'), ls = g.picks.filter(p => p.kind === 'lean');
   const homeFav = g.home_mean >= g.away_mean, f = g.final;
@@ -702,16 +758,19 @@ function card(g) {
   const td = g.total_line == null ? null : g.fair_total - g.total_line;
   const tGap = td == null ? '' : `<div class="gap">${Math.abs(td) < 0.05 ? 'Sim matches the market' : `Sim <b>${Math.abs(td).toFixed(1)} pts ${td < 0 ? 'under' : 'over'}</b>`}</div>`;
   const outs = [g.away, g.home].filter(t => (g.out[t] || []).length).map(t => `<b>${esc(t)}</b> ${esc(g.out[t].join(', '))}`).join(' &middot; ');
-  return `<article class="game" id="g-${esc(g.game_id)}">
+  const [ca] = tcol(g.away), [ch] = tcol(g.home);
+  return `<article class="game" id="g-${esc(g.game_id)}" style="--ta:${ca};--th:${ch}">
     <div class="g-top"><span class="ct">${esc(tip(g.tipoff))} &middot; ${(g.sims || 4000).toLocaleString()} sims${g.line_source ? ' &middot; lines ' + esc(g.line_source.replace(/\s*\(.*\)\s*$/, '')) : ''}</span>${state}</div>
     <div class="score">
-      <div class="tm${homeFav ? '' : ' fav'}"><span class="tm-n">${esc(nick(g.away))}</span><span class="tm-p">${g.away_mean.toFixed(1)}</span>${f ? `<span class="tm-f">Final <b>${f.away_score}</b></span>` : ''}</div>
+      <div class="tm${homeFav ? '' : ' fav'}"><span class="tm-n">${badge(g.away, 30)}<span>${esc(nick(g.away))}</span></span><span class="tm-p">${g.away_mean.toFixed(1)}</span>${f ? `<span class="tm-f">Final <b>${f.away_score}</b></span>` : ''}</div>
       <div class="mid">${g.home_mean === g.away_mean ? '<b>Even</b>' : `<b>${esc(lead)} by ${Math.abs(g.home_mean - g.away_mean).toFixed(1)}</b><span class="mw">wins ${Math.round(leadWin * 100)}%</span>`}<span>avg of ${(g.sims || 4000).toLocaleString()} sims</span></div>
-      <div class="tm home${homeFav ? ' fav' : ''}"><span class="tm-n">${esc(nick(g.home))}</span><span class="tm-p">${g.home_mean.toFixed(1)}</span>${f ? `<span class="tm-f">Final <b>${f.home_score}</b></span>` : ''}</div>
+      <div class="tm home${homeFav ? ' fav' : ''}"><span class="tm-n"><span>${esc(nick(g.home))}</span>${badge(g.home, 30)}</span><span class="tm-p">${g.home_mean.toFixed(1)}</span>${f ? `<span class="tm-f">Final <b>${f.home_score}</b></span>` : ''}</div>
     </div>
-    <div class="lines">
+    ${winBar(g)}
+    <div class="lines${g.mk && g.mk.ml ? ' l3' : ''}">
       <div class="ln"><div class="st-l">Spread</div><div class="cmp"><div><small>Sim</small><b class="sv">${esc(fsTxt)}</b></div><div><small>Market</small><b>${sl == null ? '—' : esc(slTxt)}</b></div></div>${sGap}</div>
-      <div class="ln"><div class="st-l">Total</div><div class="cmp"><div><small>Sim</small><b class="sv">${g.fair_total.toFixed(1)}</b></div><div><small>Market</small><b>${g.total_line ?? '—'}</b></div></div>${tGap}</div>
+      <div class="ln"><div class="st-l">Total</div><div class="cmp"><div><small>Sim</small><b class="sv">${g.fair_total.toFixed(1)}</b></div><div><small>Market</small><b>${g.total_line ?? '—'}</b></div></div>${tGap}${totExtra(g)}</div>
+      ${mlTile(g)}
     </div>
     ${outs ? `<div class="out">Out: ${outs}</div>` : ''}
     ${g.updated ? `<div class="upd"><b>Updated for late news</b> &middot; ${esc(clockET(g.updated.at))}${(g.updated.changes || []).length ? ': ' + esc(g.updated.changes.join(', ')) : ''}. Projections, score and fair lines are re-simmed; each pick's percentages are from when it was priced.</div>` : ''}
@@ -784,7 +843,7 @@ function gameStrip(gs) {
     const line3 = f && gb.length ? `Bets ${rec(wl)} <span class="u ${ucls(ur)}">${un(ur)}</span>`
       : `${bets.length} bet${bets.length === 1 ? '' : 's'} · ${nl} lean${nl === 1 ? '' : 's'}${star ? ' <span class="st" title="Has a starred pick">★</span>' : ''}${hold ? ' <span class="hd" title="A pick on this game is on hold">Hold</span>' : ''}`;
     const lab = `${g.away} at ${g.home}, ${f ? `final ${g.away} ${f.away_score}, ${g.home} ${f.home_score}` : when}. ${bets.length} bets, ${nl} leans. Jump to the game.`;
-    return `<button type="button" class="gs${cls}" data-g="${esc(g.game_id)}" aria-label="${esc(lab)}"><span class="m">${esc(g.away)} @ ${esc(g.home)}<i>${esc(when)}</i></span><span class="e">${line2}</span><span class="c">${line3}</span></button>`;
+    return `<button type="button" class="gs${cls}" data-g="${esc(g.game_id)}" aria-label="${esc(lab)}"><span class="m"><span class="mt">${badge(g.away, 16)}${esc(g.away)} @ ${badge(g.home, 16)}${esc(g.home)}</span><i>${esc(when)}</i></span><span class="e">${line2}</span><span class="c">${line3}</span></button>`;
   };
   return `<nav class="gstrip" aria-label="Games on this slate"><div class="gs-row" id="gsrow">${gs.map(tile).join('')}</div></nav>`;
 }
