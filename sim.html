@@ -94,7 +94,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .tm-f{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-3)} .tm-f b{color:var(--text);font-weight:700}
 .mid{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4);text-align:center;padding-bottom:10px;line-height:1.5;display:grid;gap:3px;justify-items:center}
 .mid b{font-family:'Manrope',system-ui,sans-serif;font-size:clamp(13px,2.2vw,20px);font-weight:800;letter-spacing:-.01em;text-transform:none;color:var(--sim);white-space:nowrap}
-.mid .mw{font-size:10.5px;color:var(--text-3)}
+.mid .mw{font-size:11px;color:var(--text-2)}.mid>span:not(.mw){font-size:10.5px;color:var(--text-3)}.g-meta{font-size:11px;color:var(--text-2);letter-spacing:.1em}
 .lines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .cmp{display:flex;gap:18px;flex-wrap:wrap;margin-top:6px}
 .cmp>div{display:grid;gap:2px}
@@ -386,7 +386,7 @@ details.lnd[open]>summary{margin-bottom:8px}details.lnd>summary:focus-visible{ou
 .tm-n{display:flex;align-items:center;gap:8px}.tm.home .tm-n{justify-content:flex-end}
 .game{position:relative;overflow:hidden}.game::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--ta) 0 50%,var(--th) 50% 100%)}
 .wp{display:grid;gap:5px}.wp-l{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;font-variant-numeric:tabular-nums}.wp-l>span{display:inline-flex;align-items:center;gap:6px}
-.wp-l .dim{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.wp-l .dim{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.1em}
 .wp-b{position:relative;display:flex;height:10px;border-radius:5px;overflow:visible;margin-bottom:14px}.wp-b>span:first-child{border-radius:5px 0 0 5px}.wp-b>span:nth-child(2){border-radius:0 5px 5px 0}
 .wp-b>span{box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
 .wp-b i{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--text);border-radius:1px}.wp-b i em{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:1px;font-style:normal;font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
@@ -850,7 +850,7 @@ function card(g) {
   const outs = [g.away, g.home].filter(t => (g.out[t] || []).length).map(t => `<b>${esc(t)}</b> ${esc(g.out[t].join(', '))}`).join(' &middot; ');
   const [ca] = tcol(g.away), [ch] = tcol(g.home);
   return `<article class="game" id="g-${esc(g.game_id)}" style="--ta:${ca};--th:${ch}">
-    <div class="g-top"><span class="ct">${esc(tip(g.tipoff))} &middot; ${(g.sims || 4000).toLocaleString()} sims${g.line_source ? ' &middot; lines ' + esc(g.line_source.replace(/\s*\(.*\)\s*$/, '')) : ''}</span>${state}</div>
+    <div class="g-top"><span class="ct g-meta">${esc(tip(g.tipoff))} &middot; ${(g.sims || 4000).toLocaleString()} sims${g.line_source ? ' &middot; <span title="Spread, total and moneyline come from the first book in the feed with all three. Props and bets use the best price across every book.">game lines ' + esc(g.line_source.replace(/\s*\(.*\)\s*$/, '')) + '</span>' : ''}</span>${state}</div>
     <div class="score">
       <div class="tm${homeFav ? '' : ' fav'}"><span class="tm-n">${badge(g.away, 30)}<span>${esc(nick(g.away))}</span></span><span class="tm-p">${g.away_mean.toFixed(1)}</span>${f ? `<span class="tm-f">Final <b>${f.away_score}</b></span>` : ''}</div>
       <div class="mid">${g.home_mean === g.away_mean ? '<b>Even</b>' : `<b>${esc(lead)} by ${Math.abs(g.home_mean - g.away_mean).toFixed(1)}</b><span class="mw">wins ${Math.round(leadWin * 100)}%</span>`}<span>avg of ${(g.sims || 4000).toLocaleString()} sims</span></div>
