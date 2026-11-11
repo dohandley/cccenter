@@ -244,6 +244,9 @@ function rec(ps) {
     beat: c.filter(v => v > 0).length, nc: c.length, ev: ps.length ? ps.reduce((a, p) => a + p.ev, 0) / ps.length : null};
 }
 const fin = p => p.actual == null ? '' : `${p.market === 'total' ? 'Total' : 'Finished'} <b class="${p.result === 'win' ? 'pos' : p.result === 'loss' ? 'neg' : 'flat'}">${p.actual}</b> (line ${p.line})`;
+const wv = r => r === 'win' ? 'won' : r === 'loss' ? 'lost' : 'pushed';
+const wouldTxt = p => !p.would ? '' : ` <b>Would have ${wv(p.would.orig)}</b> at ${p.line} (<span class="${ucls(p.would.units)}">${un(p.would.units)}</span>)`
+  + (p.would.now ? ` and ${wv(p.would.now)} at the ${p.would.now_line} line the check saw` : '') + '.';
 const rtxt = r => `${r.w}–${r.l}${r.pu ? '–' + r.pu : ''}`;
 const pulledTxt = r => r.pl ? ` · ${r.pl} pulled` : '';
 
@@ -255,7 +258,7 @@ function why(p) {
     + `(${esc(p.book)}). Stake: one-tenth Kelly = <b>${p.stake.toFixed(2)}u</b>. Logged in the Sim Ledger as ${src}.`
     + (p.proj ? ` ${esc(p.proj)}` : '') + (p.actual != null ? ` ${fin(p)}.` : '')
     + (p.clv != null ? ` Closing-line value: <b class="${ucls(p.clv)}">${p.clv > 0 ? '+' : ''}${p.clv.toFixed(1)} pp</b>.` : '')
-    + (p.result === 'pulled' ? ` <br><b>Pulled before the game</b>${p.pulled_at ? ' (' + new Date(p.pulled_at).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}) + ' ET)' : ''}: ${esc(p.pull_reason || '')}. Stake returned; not a win or a loss.` : '');
+    + (p.result === 'pulled' ? ` <br><b>Pulled before the game</b>${p.pulled_at ? ' (' + new Date(p.pulled_at).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}) + ' ET)' : ''}: ${esc(p.pull_reason || '')}. Stake returned; not a win or a loss.${wouldTxt(p)}` : '');
 }
 
 function renderHeader() {
@@ -287,7 +290,7 @@ function pickRow(p, open) {
   const ck = p.check_at ? new Date(p.check_at).toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'}).replace(':00', '') : '';
   const right = p.pending ? `<span class="ptag">PENDING</span><span style="display:block;margin-top:4px">${ck ? p.lg.toUpperCase() + ' check ~' + ck + ' ET' : 'pre-game check'}</span>`
     : p.result == null ? `<b>${p.stake.toFixed(2)}u</b><span>${am(p.price)}</span>`
-    : `<b class="${ucls(p.units)}">${un(p.units)}</b><span>${p.result}${p.actual != null ? ' · ' + p.actual : ''}</span>`;
+    : `<b class="${ucls(p.units)}">${un(p.units)}</b><span>${p.result}${p.actual != null ? ' · ' + p.actual : ''}${p.would ? ' · would ' + (p.would.orig === 'win' ? 'W' : p.would.orig === 'loss' ? 'L' : 'P') : ''}</span>`;
   return `<div class="pk${p.pending ? ' pend' : ''}"><div class="pk-lg">${p.lg.toUpperCase()}<i>${dlab(p.slate)}</i></div>
     <div><div class="pk-s">${esc(p.selection)}<button class="wbtn" data-w="${id}">WHY</button></div>
     <div class="pk-m">${esc(p.matchup)} &middot; ${t} ET &middot; <span class="bk">${esc(p.book)}</span> ${am(p.price)}${p.pending ? ' at pricing' : ''} &middot; Ace ${pct(p.p)} vs mkt ${pct(p.mkt_p)}${p.actual != null ? ' &middot; ' + fin(p) : ''}</div></div>
@@ -440,6 +443,9 @@ function renderSplit() {
     <div class="sp-h">By side</div>${grp(p => side(p) || 'Other').map(row).join('')}
     <div class="sp-h">By market</div>${grp(statName).slice(0, 10).map(row).join('')}
     <div class="sp-h">By source</div>${grp(p => p.src === 'bet' ? 'Ledger bets' : 'Ledger leans').map(row).join('')}
+    ${(() => { const pl = ps.filter(p => p.would); if (!pl.length) return '';
+      const w = pl.filter(p => p.would.orig === 'win').length, l = pl.filter(p => p.would.orig === 'loss').length, u = pl.reduce((a, p) => a + p.would.units, 0);
+      return `<div class="sp-h">Pulled picks, if kept</div><div class="sp-r" title="What the picks the pre-game check pulled would have done at their original line and price. Not in the record."><span>${pl.length} pulled</span><span>${w}–${l}</span><span class="${ucls(u)}">${un(u)}</span></div>`; })()}
     <div class="sp-r" style="color:var(--text-4);font-size:10.5px;padding-top:10px"><span>Record · ROI on units staked</span></div>`;
 }
 
