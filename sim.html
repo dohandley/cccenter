@@ -385,7 +385,7 @@ details.lnd[open]>summary{margin-bottom:8px}details.lnd>summary:focus-visible{ou
 .tb{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;flex:0 0 auto;font-family:'JetBrains Mono',monospace;font-weight:800;letter-spacing:-.02em;line-height:1;text-transform:uppercase;vertical-align:middle}
 .tm-n{display:flex;align-items:center;gap:8px}.tm.home .tm-n{justify-content:flex-end}
 .game{position:relative;overflow:hidden}.game::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--ta) 0 50%,var(--th) 50% 100%)}
-.wp{display:grid;gap:5px}.wp-l{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;font-variant-numeric:tabular-nums}.wp-l>span{display:inline-flex;align-items:center;gap:6px}
+.bm-dv{font-size:12px;color:var(--text-2)}.bm-dv b{color:var(--text)}.wp{display:grid;gap:5px}.wp-l{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;font-variant-numeric:tabular-nums}.wp-l>span{display:inline-flex;align-items:center;gap:6px}
 .wp-l .dim{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.1em}
 .wp-b{position:relative;display:flex;height:10px;border-radius:5px;overflow:visible;margin-bottom:14px}.wp-b>span:first-child{border-radius:5px 0 0 5px}.wp-b>span:nth-child(2){border-radius:0 5px 5px 0}
 .wp-b>span{box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
@@ -664,7 +664,7 @@ const htBtn = (g, p, span) => {
 const SLH = {};
 function slateCharts(view) {
   if (view._slh) return; view._slh = 1;          // the view element is reused across renders: wire it once
-  const draw = c => { const o = SLH[c.dataset.ck]; c.innerHTML = histChart(o.key, o.xs, o.side, c.dataset.ck, o.H); };
+  const draw = c => { const o = SLH[c.dataset.ck]; c.innerHTML = histChart(o.key, o.xs, o.side, c.dataset.ck, o.H, o.D); };
   view.addEventListener('click', e => {
     const hs_ = e.target.closest('[data-hsel]');
     if (hs_ && !hs_.dataset.ht) {
@@ -686,7 +686,7 @@ function slateCharts(view) {
       if (nx && nx.dataset && nx.dataset.ckw === ck) { nx.remove(); t.innerHTML = '&#9656; L5/L10/L15'; return; }
       const nk = nightKey(gid);       // games before that night (NFL: that week): the night file's hist
       (NIGHT[nk] ? Promise.resolve(NIGHT[nk]) : getJSON(`sim/${nk}.json`).then(d => (NIGHT[nk] = d))).then(d => {
-      SLH[ck] = {key, xs: [{stat, line: +line}], side, H: d.hist || {}};
+      SLH[ck] = {key, xs: [{stat, line: +line}], side, H: d.hist || {}, D: d.dvp || {}};
       let w;
       if (tr) { w = document.createElement('tr'); w.innerHTML = `<td colspan="${tr.children.length}"><div class="slh" data-ck="${esc(ck)}"></div></td>`; }
       else { w = document.createElement('div'); w.innerHTML = `<div class="slh" data-ck="${esc(ck)}"></div>`; }
@@ -1485,11 +1485,23 @@ function slipCard(ls, info) {
 const HSTAT = {pts: g => g[4], reb: g => g[5], ast: g => g[6], fg3m: g => g[7], pra: g => g[4] + g[5] + g[6], pr: g => g[4] + g[5], pa: g => g[4] + g[6], ra: g => g[5] + g[6]};
 /* NFL (Nov 11): week files carry the same row shape with a stats object in slot 4, keyed by the prop stat */
 for (const k of ['pass_yds', 'pass_att', 'pass_comp', 'rush_yds', 'rush_att', 'rec_yds', 'rec']) HSTAT[k] = g => (g[4] && g[4][k]) || 0;
-function histChart(key, xs, side, ck, HH) {
+const nth = n => n + (n % 100 > 10 && n % 100 < 14 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
+const POSW = {G: 'guards', F: 'forwards', C: 'centers'};
+function dvpLine(D, st, sd) {
+  // What tonight's opponent allowed per game to the player's position (ESPN G/F/C), ranked 1 = most in the league.
+  const v = D && D.s && D.s[st];
+  if (!v) return '';
+  const [avg, rk, n, la] = v, soft = rk <= Math.round(D.t / 3), hard = rk > D.t - Math.round(D.t / 3);
+  const good = sd === 'Over' ? soft : hard, bad = sd === 'Over' ? hard : soft;
+  const rank = rk === 1 ? 'most in the league' : rk === D.t ? 'fewest in the league' : `${nth(rk)} most of ${D.t}`;
+  return `<div class="bm-dv">vs <b>${esc(D.o)}</b>: allows <b>${avg}</b> ${esc((STATW[st] || st).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'))} a game to ${POSW[D.p] || esc(D.p)} combined &middot; <span class="${good ? 'pos' : bad ? 'neg' : ''}">${rank}</span> <span class="dim">&middot; league avg ${la} &middot; ${n} game${n === 1 ? '' : 's'}</span></div>`;
+}
+function histChart(key, xs, side, ck, HH, DD) {
   // Recent games for one player: bars for the chosen stat, the line across, green = the chosen side cleared it.
   // ck keys the chart's own toggles (side, window, stat): the player in the leg list, or one leg on the slip.
   ck = ck || key;
   const H = (HH || (BLD.d && BLD.d.current && BLD.d.current.hist) || {})[key];
+  const DV = (DD || (BLD.d && BLD.d.current && BLD.d.current.dvp) || {})[key];
   if (!H || !H.length) return `<div class="bm-h dim">No recent games on file.</div>`;
   const stats = [...new Set(xs.map(l => l.stat))].filter(st => HSTAT[st]);
   const st = stats.includes(BLD.hstat[ck]) ? BLD.hstat[ck] : stats[0];
@@ -1506,9 +1518,9 @@ function histChart(key, xs, side, ck, HH) {
   const tg = (attr, v, label, on) => `<button type="button" class="fb${on ? ' on' : ''}" data-hk="${esc(ck)}" ${attr}="${esc(v)}" aria-pressed="${!!on}">${label}</button>`;
   return `<div class="bm-h">${stats.length < 2 ? '' : `<div class="bm-hc">${stats.map(x => tg('data-hs', x, esc(short(x)), x === st)).join('')}</div>`}
     <div class="bm-hc"><span class="bm-seg">${['Over', 'Under'].map(x => tg('data-hside', x, x, x === sd)).join('')}</span><span class="bm-seg">${[5, 10, 15].map(x => tg('data-hn', x, 'L' + x, x === n)).join('')}</span></div>
-    <div class="bm-hr"><b>${sd} ${line} ${esc(short(st))}</b> &middot; L${n} <b>${hits}/${games.length}</b>${games.length < n ? ` <span class="dim">(only ${games.length} games)</span>` : ''}${prior}</div>
+    <div class="bm-hr"><b>${sd} ${line} ${esc(short(st))}</b> &middot; L${n} <b>${hits}/${games.length}</b>${games.length < n ? ` <span class="dim">(only ${games.length} games)</span>` : ''}${prior}</div>${dvpLine(DV, st, sd)}
     <div class="bm-bars" style="--ln:${line / max * 100}%">${bars}</div>
-    <div class="cnote">Recent form is context: the books price it in, so it doesn't change our chance.</div></div>`;
+    <div class="cnote">Recent form${DV ? ' and the matchup are' : ' is'} context: the books price ${DV ? 'them' : 'it'} in${DV ? ' and the sim already adjusts for each team\'s defense' : ''}, so ${DV ? 'they don\'t' : 'it doesn\'t'} change our chance.${DV ? ' Positions are ESPN\'s guard / forward / center; every player at the position counts.' : ''}</div></div>`;
 }
 function bPicker() {
   const legs = bLegs(), q = BLD.q.trim().toLowerCase(), by = {};
