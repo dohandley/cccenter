@@ -1504,13 +1504,14 @@ for (const k of ['pass_yds', 'pass_att', 'pass_comp', 'rush_yds', 'rush_att', 'r
 const nth = n => n + (n % 100 > 10 && n % 100 < 14 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
 const POSW = {G: 'guards', F: 'forwards', C: 'centers'};
 function dvpLine(D, st, sd) {
-  // What tonight's opponent allowed per game to the player's position (ESPN G/F/C), ranked 1 = most in the league.
+  // What one player at this position (ESPN G/F/C, 20+ min) averaged against tonight's opponent, ranked 1 = most in the league.
   const v = D && D.s && D.s[st];
   if (!v) return '';
   const [avg, rk, n, la] = v, soft = rk <= Math.round(D.t / 3), hard = rk > D.t - Math.round(D.t / 3);
   const good = sd === 'Over' ? soft : hard, bad = sd === 'Over' ? hard : soft;
   const rank = rk === 1 ? 'most in the league' : rk === D.t ? 'fewest in the league' : `${nth(rk)} most of ${D.t}`;
-  return `<div class="bm-dv">vs <b>${esc(D.o)}</b>: allows <b>${avg}</b> ${esc((STATW[st] || st).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'))} a game to ${POSW[D.p] || esc(D.p)} combined &middot; <span class="${good ? 'pos' : bad ? 'neg' : ''}">${rank}</span> <span class="dim">&middot; league avg ${la} &middot; ${n} game${n === 1 ? '' : 's'}</span></div>`;
+  const pw = POSW[D.p] || esc(D.p), sw = esc((STATW[st] || st).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'));
+  return `<div class="bm-dv">vs <b>${esc(D.o)}</b>: ${pw} average <b>${avg}</b> ${sw} &middot; <span class="${good ? 'pos' : bad ? 'neg' : ''}">${rank}</span> <span class="dim">&middot; league avg ${la} &middot; ${n} ${pw.replace(/s$/, '')} game${n === 1 ? '' : 's'}, 20+ min</span></div>`;
 }
 function histChart(key, xs, side, ck, HH, DD) {
   // Recent games for one player: bars for the chosen stat, the line across, green = the chosen side cleared it.
@@ -1536,7 +1537,7 @@ function histChart(key, xs, side, ck, HH, DD) {
     <div class="bm-hc"><span class="bm-seg">${['Over', 'Under'].map(x => tg('data-hside', x, x, x === sd)).join('')}</span><span class="bm-seg">${[5, 10, 15].map(x => tg('data-hn', x, 'L' + x, x === n)).join('')}</span></div>
     <div class="bm-hr"><b>${sd} ${line} ${esc(short(st))}</b> &middot; L${n} <b>${hits}/${games.length}</b>${games.length < n ? ` <span class="dim">(only ${games.length} games)</span>` : ''}${prior}</div>${dvpLine(DV, st, sd)}
     <div class="bm-bars" style="--ln:${line / max * 100}%">${bars}</div>
-    <div class="cnote">Recent form${DV ? ' and the matchup are' : ' is'} context: the books price ${DV ? 'them' : 'it'} in${DV ? ' and the sim already adjusts for each team\'s defense' : ''}, so ${DV ? 'they don\'t' : 'it doesn\'t'} change our chance.${DV ? ' Positions are ESPN\'s guard / forward / center; every player at the position counts.' : ''}</div></div>`;
+    <div class="cnote">Recent form${DV ? ' and the matchup are' : ' is'} context: the books price ${DV ? 'them' : 'it'} in${DV ? ' and the sim already adjusts for each team\'s defense' : ''}, so ${DV ? 'they don\'t' : 'it doesn\'t'} change our chance.${DV ? ' Per player at the position (ESPN\'s guard / forward / center) who played 20+ minutes.' : ''}</div></div>`;
 }
 function bPicker() {
   const legs = bLegs(), q = BLD.q.trim().toLowerCase(), by = {};
