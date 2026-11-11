@@ -286,6 +286,8 @@ details.sp-g>.sp-l{padding:0 8px 8px}
 .bm-pl{display:grid;grid-template-columns:170px minmax(0,1fr);gap:6px 10px;padding:6px 0;border-top:1px dashed var(--border);align-items:start}
 .bm-pn{font-weight:700;font-size:13px;background:none;border:0;padding:0;color:var(--text);font-family:inherit;text-align:left;cursor:pointer;align-self:start}
 .bm-l5{display:block;font:600 10.5px 'JetBrains Mono',monospace;color:var(--accent,var(--green-text));margin-top:3px}
+.ht{background:none;border:0;padding:0;font:600 11px 'JetBrains Mono',monospace;color:var(--green-text);cursor:pointer;display:inline-block;margin-top:4px}
+.ht-w{margin:2px 0}.slh-w .bm-h{padding:6px 0}.spots .slh-w{padding:0 10px 8px}td .slh{max-width:640px}
 .bm-sl{cursor:pointer;min-width:0}.bm-seg{display:inline-flex;gap:4px;margin-right:10px}.bm-sh{padding:0 14px 6px}
 .bm-h{grid-column:1/-1;padding:8px 0 4px;display:grid;gap:6px}.bm-hc{display:flex;flex-wrap:wrap;gap:4px}.bm-hr{font-size:12.5px}
 .bm-bars{display:flex;gap:3px;align-items:flex-end}
@@ -648,6 +650,43 @@ function finishLine(p) {
   if (p.actual == null) return '';
   return p.market === 'prop' ? `Finished with ${esc(p.actual)}` : p.market === 'total' ? `Final total ${esc(p.actual)}` : `Final: ${esc(p.actual)}`;
 }
+/* Slate L5/L10/L15 (Nov 10): a toggle on NBA prop bets, leans and ★ rows opens the same recent-games chart as the
+   Build tab, from the night file's hist (games before that night), scored on the pick's own side. */
+const pSide = p => / Under /.test(p.selection || '') ? 'Under' : 'Over';
+const htBtn = (g, p, span) => {
+  const d = NIGHT[LG + '/' + NID];
+  if (LG !== 'nba' || p.market !== 'prop' || !p.player || !HSTAT[p.stat] || !d || !d.hist || !d.hist[p.team + '|' + p.player]) return '';
+  const v = esc([p.team + '|' + p.player, p.stat, p.line, pSide(p), g.game_id].join('~'));
+  return span ? `<span class="ht" role="button" tabindex="0" data-ht="${v}">&#9656; L5/L10/L15</span>` : `<button type="button" class="ht" data-ht="${v}">&#9656; L5/L10/L15</button>`;
+};
+const SLH = {};
+function slateCharts(view) {
+  if (view._slh) return; view._slh = 1;          // the view element is reused across renders: wire it once
+  const draw = c => { const o = SLH[c.dataset.ck]; c.innerHTML = histChart(o.key, o.xs, o.side, c.dataset.ck, o.H); };
+  view.addEventListener('click', e => {
+    const t = e.target.closest('[data-ht]');
+    if (t) {
+      e.stopPropagation(); e.preventDefault();
+      const [key, stat, line, side, gid] = t.dataset.ht.split('~'), ck = 'sl:' + NID + ':' + t.dataset.ht;
+      const tr = t.closest('tr'), sp = t.closest('.sp-r'), anchor = tr || sp || t.parentElement;
+      const nx = anchor.nextElementSibling;
+      if (nx && nx.dataset && nx.dataset.ckw === ck) { nx.remove(); t.innerHTML = '&#9656; L5/L10/L15'; return; }
+      SLH[ck] = {key, xs: [{stat, line: +line}], side, H: NIGHT[LG + '/' + NID].hist};
+      let w;
+      if (tr) { w = document.createElement('tr'); w.innerHTML = `<td colspan="${tr.children.length}"><div class="slh" data-ck="${esc(ck)}"></div></td>`; }
+      else { w = document.createElement('div'); w.innerHTML = `<div class="slh" data-ck="${esc(ck)}"></div>`; }
+      w.dataset.ckw = ck; w.className = 'slh-w'; anchor.after(w); draw(w.querySelector('.slh')); t.innerHTML = '&#9662; L5/L10/L15';
+      return;
+    }
+    const tg = e.target.closest('.slh [data-hside], .slh [data-hn], .slh [data-hs]');
+    if (tg) {
+      e.stopPropagation(); const k = tg.dataset.hk;
+      if (tg.dataset.hside) BLD.hside[k] = tg.dataset.hside; else if (tg.dataset.hn) BLD.hn[k] = +tg.dataset.hn; else BLD.hstat[k] = tg.dataset.hs;
+      draw(tg.closest('.slh'));
+    }
+  }, true);
+  view.addEventListener('keydown', e => { const t = e.target.closest && e.target.closest('span[data-ht]'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); t.click(); } }, true);
+}
 function pickCard(g, p) {
   const res = p.result ? `<div class="res"><span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span>${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span><span class="u ${ucls(p.units)}">${un(p.units)}</span></div>`
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
@@ -657,7 +696,7 @@ function pickCard(g, p) {
   const cmp = `<div class="pk-c" role="button" tabindex="0" aria-expanded="false"><span class="pk-cs"><b>${esc(p.selection)}</b><span class="sub">${odds(p.price)} ${esc(p.book)} &middot; model ${pct(p.model_p)} vs mkt ${pct(p.book_p)}${p.result && p.actual != null && p.market === 'prop' ? ` &middot; finished ${esc(p.actual)}` : ''}</span></span><span class="pk-ct">${tail}<span class="chev" aria-hidden="true">&#9662;</span></span></div>`;
   return `<div class="pick">${cmp}<div class="pk-h"><span class="pk-s">${selH(p)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
-    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${res}${p.player && p.market === 'prop' ? `<a class="pl-more" href="${plHref(p.player)}">Every pick on ${esc(p.player)} &rarr;</a>` : ''}</div>`;
+    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${htBtn(g, p) ? `<div class="ht-w">${htBtn(g, p)}</div>` : ''}${res}${p.player && p.market === 'prop' ? `<a class="pl-more" href="${plHref(p.player)}">Every pick on ${esc(p.player)} &rarr;</a>` : ''}</div>`;
 }
 /* price shopping from the odds pull: a better price at the same line, or a better number, at another book. Display only:
    the edge and the graded result use the listed price. */
@@ -669,7 +708,7 @@ function shopLine(p, small) {
 }
 function leanTable(ls, g) {
   if (!ls.length) return '';
-  const row = p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + selH(p) + '</b>' : selH(p)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}</td>
+  const row = p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + selH(p) + '</b>' : selH(p)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}${htBtn(g, p) ? `<span class="sub">${htBtn(g, p)}</span>` : ''}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r hm">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : out ? '<span class="pill p-void">void</span>' : '<span class="pill p-open">pending</span>'}</td></tr>`; };
   /* Nov 9 (Dylan): leans collapse by default; ★ Top group leans stay out in the open */
@@ -846,7 +885,7 @@ function spots(gs, unit) {
   const row = ({g, p, st}, inGroup) => `<button type="button" class="sp-r" data-g="${esc(g.game_id)}"><b>${esc(p.selection)}</b><span class="pr">${odds(p.price)}</span>
     <span class="sub">${esc(g.away)} @ ${esc(g.home)} &middot; <span class="bk">${esc(p.book)}</span>${p.result ? ` &middot; <span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>` : ''}</span>
     ${p.actual != null ? `<span class="sub fin">${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}
-    ${inGroup === true ? '' : `<span class="sub">${esc(st.label)} ${frec(st.t)}${fstat(st.t) ? ' &middot; ' + fstat(st.t) : ''}</span>`}${shopLine(p, true)}</button>`;
+    ${inGroup === true ? '' : `<span class="sub">${esc(st.label)} ${frec(st.t)}${fstat(st.t) ? ' &middot; ' + fstat(st.t) : ''}</span>`}${shopLine(p, true)}${htBtn(g, p, true) ? `<span class="sub">${htBtn(g, p, true)}</span>` : ''}</button>`;
   const all = rows.bet.concat(rows.lean), done = all.filter(x => x.p.result);
   let recap = '';
   if (done.length) { const t = {w: 0, l: 0, p: 0, u: 0}; for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
@@ -968,6 +1007,7 @@ async function renderSlate() {
   if ($('rbs')) $('rbs').onclick = () => { openHelp(); const h = document.getElementById('hp-sched'); if (h) h.scrollIntoView({block: 'start'}); };
   $('view').querySelectorAll('.pk-c').forEach(c => { const t = () => { const p = c.parentElement, o = !p.classList.contains('open'); p.classList.toggle('open', o); c.setAttribute('aria-expanded', o); };
     c.onclick = t; c.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); t(); } }; });
+  slateCharts($('view'));
   wireStrip();
   if (FOCUS) { const el = document.getElementById('g-' + FOCUS); if (el) { el.scrollIntoView({block: 'start'}); el.classList.add('flash'); } FOCUS = null; }
 }
@@ -1424,11 +1464,11 @@ function slipCard(ls, info) {
     <div class="tk">${rows}</div><div class="rc-k bm-t">${tiles}</div></div>`;
 }
 const HSTAT = {pts: g => g[4], reb: g => g[5], ast: g => g[6], fg3m: g => g[7], pra: g => g[4] + g[5] + g[6], pr: g => g[4] + g[5], pa: g => g[4] + g[6], ra: g => g[5] + g[6]};
-function histChart(key, xs, side, ck) {
+function histChart(key, xs, side, ck, HH) {
   // Recent games for one player: bars for the chosen stat, the line across, green = the chosen side cleared it.
   // ck keys the chart's own toggles (side, window, stat): the player in the leg list, or one leg on the slip.
   ck = ck || key;
-  const H = (BLD.d.current.hist || {})[key];
+  const H = (HH || (BLD.d && BLD.d.current && BLD.d.current.hist) || {})[key];
   if (!H || !H.length) return `<div class="bm-h dim">No recent games on file.</div>`;
   const stats = [...new Set(xs.map(l => l.stat))].filter(st => HSTAT[st]);
   const st = stats.includes(BLD.hstat[ck]) ? BLD.hstat[ck] : stats[0];
