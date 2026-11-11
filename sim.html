@@ -287,7 +287,7 @@ details.sp-g>.sp-l{padding:0 8px 8px}
 .bm-pn{font-weight:700;font-size:13px;background:none;border:0;padding:0;color:var(--text);font-family:inherit;text-align:left;cursor:pointer;align-self:start}
 .bm-l5{display:block;font:600 10.5px 'JetBrains Mono',monospace;color:var(--accent,var(--green-text));margin-top:3px}
 .ht{background:none;border:0;padding:0;font:600 11px 'JetBrains Mono',monospace;color:var(--green-text);cursor:pointer;display:inline-block;margin-top:4px}
-.ht-w{margin:2px 0}.slh-w .bm-h{padding:6px 0}.spots .slh-w{padding:0 10px 8px}td .slh{max-width:640px}
+.ht-w{margin:2px 0}.tks .slh-w{padding:0 14px 6px}.slh-w .bm-h{padding:6px 0}.spots .slh-w{padding:0 10px 8px}td .slh{max-width:640px}
 .bm-sl{cursor:pointer;min-width:0}.bm-seg{display:inline-flex;gap:4px;margin-right:10px}.bm-sh{padding:0 14px 6px}
 .bm-h{grid-column:1/-1;padding:8px 0 4px;display:grid;gap:6px}.bm-hc{display:flex;flex-wrap:wrap;gap:4px}.bm-hr{font-size:12.5px}
 .bm-bars{display:flex;gap:3px;align-items:flex-end}
@@ -664,18 +664,32 @@ function slateCharts(view) {
   if (view._slh) return; view._slh = 1;          // the view element is reused across renders: wire it once
   const draw = c => { const o = SLH[c.dataset.ck]; c.innerHTML = histChart(o.key, o.xs, o.side, c.dataset.ck, o.H); };
   view.addEventListener('click', e => {
+    const hs_ = e.target.closest('[data-hsel]');
+    if (hs_ && !hs_.dataset.ht) {
+      e.stopPropagation(); e.preventDefault();
+      const [gid, sel] = hs_.dataset.hsel.split('~'), nk = 'nba/' + gid.slice(0, 10);
+      (NIGHT[nk] ? Promise.resolve(NIGHT[nk]) : getJSON(`sim/${nk}.json`).then(d => (NIGHT[nk] = d))).then(d => {
+        const g = d.games.find(x => x.game_id === gid), p = g && g.picks.find(x => x.selection === sel);
+        if (!p || !p.player || !HSTAT[p.stat] || !(d.hist || {})[p.team + '|' + p.player]) { hs_.textContent = 'no recent games on file'; return; }
+        hs_.dataset.ht = [p.team + '|' + p.player, p.stat, p.line, pSide(p), gid].join('~'); hs_.click();
+      }).catch(() => { hs_.textContent = 'no recent games on file'; });
+      return;
+    }
     const t = e.target.closest('[data-ht]');
     if (t) {
       e.stopPropagation(); e.preventDefault();
-      const [key, stat, line, side, gid] = t.dataset.ht.split('~'), ck = 'sl:' + NID + ':' + t.dataset.ht;
-      const tr = t.closest('tr'), sp = t.closest('.sp-r'), anchor = tr || sp || t.parentElement;
+      const [key, stat, line, side, gid] = t.dataset.ht.split('~'), ck = 'sl:' + t.dataset.ht;
+      const tr = t.closest('tr'), sp = t.closest('.sp-r'), anchor = tr || sp || t.closest('.tk-l') || t.parentElement;
       const nx = anchor.nextElementSibling;
       if (nx && nx.dataset && nx.dataset.ckw === ck) { nx.remove(); t.innerHTML = '&#9656; L5/L10/L15'; return; }
-      SLH[ck] = {key, xs: [{stat, line: +line}], side, H: NIGHT[LG + '/' + NID].hist};
+      const nk = 'nba/' + gid.slice(0, 10);       // games before that night: the night file's hist
+      (NIGHT[nk] ? Promise.resolve(NIGHT[nk]) : getJSON(`sim/${nk}.json`).then(d => (NIGHT[nk] = d))).then(d => {
+      SLH[ck] = {key, xs: [{stat, line: +line}], side, H: d.hist || {}};
       let w;
       if (tr) { w = document.createElement('tr'); w.innerHTML = `<td colspan="${tr.children.length}"><div class="slh" data-ck="${esc(ck)}"></div></td>`; }
       else { w = document.createElement('div'); w.innerHTML = `<div class="slh" data-ck="${esc(ck)}"></div>`; }
       w.dataset.ckw = ck; w.className = 'slh-w'; anchor.after(w); draw(w.querySelector('.slh')); t.innerHTML = '&#9662; L5/L10/L15';
+      }).catch(() => { t.textContent = 'no recent games on file'; });
       return;
     }
     const tg = e.target.closest('.slh [data-hside], .slh [data-hn], .slh [data-hs]');
@@ -1290,7 +1304,7 @@ function renderResults() {
 const amer = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
 const FLAG = {backfill: 'Rebuilt from ledger', late: 'Built late', live: ''};
 function ticket(t) {
-  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span><span class="sub">${esc(l.matchup)} &middot; ${esc(shortDate(l.start))}</span></div>
+  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${LG === 'nba' && l.game_id ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-hsel="${esc(l.game_id + '~' + l.selection)}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup)} &middot; ${esc(shortDate(l.start))}</span></div>
       <div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">est ${pct(l.p)} &middot; mkt ${pct(l.book_p)}</span></div></div>`).join('');
   const foot = t.result === 'pulled' ? `<span class="pill p-pulled">pulled</span><span class="dim">Pulled before the games: ${esc(t.pull_reason || '')}. Not a win or a loss.</span>`
     : t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span><span class="u ${ucls(t.units)}">${un(t.units)}</span>`
@@ -1303,7 +1317,7 @@ function ticket(t) {
 const SGP = {}, KIND = {sgp: 'SGP', sgp_plus: 'SGP+', gap: 'Price gap'};
 const am = p => { const d = 1 / p; return d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1))); };
 function sgpTicket(t) {
-  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span><span class="sub">${esc(l.matchup || '')}</span></div>
+  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.player && l.game_id && HSTAT[l.stat] ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-ht="${esc([l.team + '|' + l.player, l.stat, l.line, l.side, l.game_id].join('~'))}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup || '')}</span></div>
       <div class="r">${l.price != null ? odds(l.price) + ' ' : ''}${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">${l.p != null && Math.abs(l.p - l.p_mkt) > 0.0005 ? `ours ${pct(l.p)} &middot; mkt ${pct(l.p_mkt)}` : `mkt ${pct(l.p_mkt)}`}</span></div></div>`).join('');
   const gap = t.kind === 'gap';
   const head = gap ? `<span class="tk-o">${esc(t.price)}<b>${esc(t.book)}</b></span><span class="tk-m">fair ${esc(t.target)} &middot; EV +${Math.round(t.ev * 100)}%</span>`
@@ -1363,6 +1377,7 @@ async function renderParlays() {
     <div class="notes"><b style="color:var(--text)">Paper parlays: learning only.</b> These tickets are never bet and never count toward the record above or the season units. Each ${unit}, the leans are paired into 2-leg tickets at one sportsbook, legs from different games, using a win chance pulled toward the market by how much the model has overrated leans so far. A ticket needs +${Math.round(d.rules.min_ev * 100)}% expected value or better; at most ${d.rules.per_slate} a ${unit}, each lean on ${d.rules.per_leg === 1 ? 'one ticket' : 'at most ' + d.rules.per_leg}${LG === 'nfl' ? '; overs tagged Role? are left out' : ''}. Rules changed Nov 2: earlier slates allowed a lean on two tickets. Units at the ticket's price, 1u per ticket.</div>
     ${sections || `<div class="dim" style="font-size:12.5px">${nights.length ? 'No lean 2-leggers for this ' + unit + '.' : `No ${LEAGUES[LG]} slates yet.`}</div>`}</div>`;
   if ($('pnights')) $('pnights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; PN[LG] = b.dataset.n; go(); };
+  slateCharts($('view'));
 }
 
 /* ---------- Build me one (slip builder, NBA, paper only) ----------
@@ -1512,7 +1527,7 @@ function bRecord(d) {
     + st('Units', un(R.units), '1u per slip, paper', ucls(R.units))
     + Object.entries(d.by_legs || {}).map(([n, r]) => st(`${n} legs`, rec(r), r.graded ? un(r.units) : `${r.open} open`, ucls(r.units))).slice(0, 3).join('');
   const tk = rows.map(s => `<div class="tk"><div class="tk-h"><span class="tk-o">${esc(s.price)}<b>${esc(s.book)} &middot; ${s.legs_n} legs</b></span><span class="tk-m">${esc(shortDate(s.slate + 'T12:00:00-05:00'))} &middot; preset ${esc(s.target)} &middot; ${pct(s.p)} &middot; EV ${s.ev > 0 ? '+' : ''}${Math.round(s.ev * 100)}%</span></div>
-      ${s.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span><span class="sub">${esc(l.matchup || '')}${l.result === 'void' && l.actual == null ? ' &middot; did not play' : l.actual != null ? ` &middot; Finished with ${esc(l.actual)}${l.min ? ' &middot; played ' + l.min + ' min' : ''}` : ''}</span></div><div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">${Math.round(l.p * 100)}%</span></div></div>`).join('')}
+      ${s.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.player && l.game_id && HSTAT[l.stat] ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-ht="${esc([l.team + '|' + l.player, l.stat, l.line, l.side, l.game_id].join('~'))}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup || '')}${l.result === 'void' && l.actual == null ? ' &middot; did not play' : l.actual != null ? ` &middot; Finished with ${esc(l.actual)}${l.min ? ' &middot; played ' + l.min + ' min' : ''}` : ''}</span></div><div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">${Math.round(l.p * 100)}%</span></div></div>`).join('')}
       <div class="tk-f">${s.result ? `<span class="pill p-${esc(s.result)}">${esc(s.result)}</span><span class="u ${ucls(s.units)}">${un(s.units)}</span>` : '<span class="pill p-open">pending</span><span class="dim">Settles when every leg is graded</span>'}</div></div>`).join('');
   return `<div class="pan"><div class="pan-h"><span class="pan-t">The builder's own slips</span><span class="cnote">paper only &middot; never bet, never in the record</span></div>
     <div class="rc-k">${tiles}</div>
@@ -1557,6 +1572,7 @@ async function renderBuild() {
       <div class="cnote">% = our blended chance. <b style="color:var(--green-text)">Bold green</b>: +3% EV or better at its best price (what Build me one uses). Faded green: +EV but under 3%, close to the model's margin of error. Tap legs to add them, then <b>Build around my picks</b> fills the rest of the slip at a book that hangs them all. <b>Next best</b> shows different slips, not the same legs reshuffled.</div></div>` : ''}
     <div class="notes"><b style="color:var(--text)">How it works.</b> Every main-line player prop the books post for tonight, priced by the sim. The sim alone has been overconfident on props, so each leg's chance is pulled toward the market's no-vig price: our chance = market + k &times; (sim &minus; market), with k = ${c ? c.k.toFixed(2) : 'the trust weight'} fitted on every graded pick so far (the same blend Ace uses). <b>Build me one</b> searches for the slip with the best expected value near your payout, every leg at least +3% EV on its own, all legs at one sportsbook at that book's own prices. Legs from different games are independent, so the payout is real. With <b>Allow same game</b> on, legs that share a game use the sim's correlation (how often they hit together across its simulated games), and the slip shows a fair price to take or beat, since books price same-game parlays themselves. Books on our feed: DraftKings, FanDuel, BetMGM, Caesars, ESPN BET.</div>
     ${bRecord(d)}</div>`;
+  slateCharts($('view'));
   if (!c) return;
   const msg = t => { $('bm-msg').textContent = t; };
   document.querySelector('.bm-c').onclick = e => {
