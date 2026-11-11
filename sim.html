@@ -1348,7 +1348,7 @@ function longShots(g, night) {
 }
 async function renderParlays() {
   if (!PARL[LG]) { try { PARL[LG] = await getJSON(`sim/${LG}/parlays.json`); } catch (e) { PARL[LG] = null; } }
-  if (LG === 'nba' && !(LG in SGP)) { try { SGP[LG] = await getJSON(`sim/${LG}/sgp.json`); } catch (e) { SGP[LG] = null; } }
+  if (!(LG in SGP)) { try { SGP[LG] = await getJSON(`sim/${LG}/sgp.json`); } catch (e) { SGP[LG] = null; } }
   const d = PARL[LG];
   if (!d) { $('season').innerHTML = ''; $('view').innerHTML = `<div class="empty">No ${LEAGUES[LG]} paper parlays yet.</div>`; return; }
   const tr = d.record.tracked, bf = d.record.backfill;
@@ -1393,7 +1393,8 @@ const BWIN = [0.75, 1.35], BPOOL = 30, minEV = () => (BLD.d && BLD.d.rules && BL
 const bdec = a => 1 + (a > 0 ? a / 100 : 100 / -a);
 const bam = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
 const bsel = l => `${l.player} ${l.side} ${l.line} ${STATW[l.stat] || l.stat}`;
-const statKey = s => ['pts', 'reb', 'ast', 'fg3m'].includes(s) ? s : 'combo';
+const statKey = s => LG === 'nfl' ? (s.startsWith('pass') ? 'pass' : s.startsWith('rush') ? 'rush' : 'rec') : ['pts', 'reb', 'ast', 'fg3m'].includes(s) ? s : 'combo';
+const BPROPS = {nba: {pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', combo: 'Combos'}, nfl: {pass: 'Passing', rush: 'Rushing', rec: 'Receiving'}};
 function bitsOf(l) {
   if (!l._b) { const s = atob(l.bits), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); l._b = u; }
   return l._b;
@@ -1540,10 +1541,13 @@ function bRecord(d) {
     ${tk ? `<div class="tks">${tk}</div>` : `<div class="dim" style="font-size:12.5px">The first slips are logged with the ${esc(shortDate(d.live_from + 'T12:00:00-05:00'))} slate.</div>`}</div>`;
 }
 async function renderBuild() {
-  if (LG !== 'nba') { $('season').innerHTML = ''; $('view').innerHTML = `<div class="empty">Build me one is NBA only for now.</div>`; return; }
+  if (BLD.lg !== LG) {                       // NFL since Nov 11: the builder's state is per league
+    Object.assign(BLD, {lg: LG, d: undefined, slip: [], lock: [], alts: [], ai: 0, q: '', book: '', open: {}, hopen: {}, sopen: {},
+      stats: Object.fromEntries(Object.keys(BPROPS[LG]).map(k => [k, 1]))});
+  }
   if (BLD.d === undefined) {
     try {
-      BLD.d = await getJSON('sim/nba/builder.json');
+      BLD.d = await getJSON(`sim/${LG}/builder.json`);
       const c = BLD.d.current;
       if (c) c.legs = c.legs.map(([g, player, team, stat, line, sd, p_sim, p_mkt, p, prices, bits]) => {
         const G = c.games[g], side = sd === 'O' ? 'Over' : 'Under';
@@ -1552,10 +1556,10 @@ async function renderBuild() {
     } catch (e) { BLD.d = null; }
   }
   const d = BLD.d;
-  if (!d) { $('season').innerHTML = ''; $('view').innerHTML = `<div class="empty">The slip builder starts with tonight’s pricing run.</div>`; return; }
+  if (!d) { $('season').innerHTML = ''; $('view').innerHTML = `<div class="empty">The slip builder starts with the next pricing run.</div>`; return; }
   const c = d.current, legs = bLegs();
   const R = d.record;
-  $('season').innerHTML = st('Tonight', c ? `${c.games.length} games` : '—', c ? `${legs.length} legs still to tip · ${esc(shortDate(c.slate + 'T12:00:00-05:00'))}` : 'built after pricing')
+  $('season').innerHTML = st(LG === 'nfl' ? 'This slate' : 'Tonight', c ? `${c.games.length} game${c.games.length === 1 ? '' : 's'}` : '—', c ? `${legs.length} legs still to ${LG === 'nfl' ? 'kick off' : 'tip'} · ${esc(shortDate(c.slate + 'T12:00:00-05:00'))}` : 'built after pricing')
     + st('Builder record', rec(R), R.graded ? `${R.w} hit · ${R.expected.toFixed(1)} expected` : 'paper, from ' + shortDate(d.live_from + 'T12:00:00-05:00'))
     + st('Units', un(R.units), '1u per slip', ucls(R.units))
     + st('Trust in the sim', c ? c.k.toFixed(2) : '—', 'k: how far legs move off the market')
@@ -1565,7 +1569,7 @@ async function renderBuild() {
   const ctrls = `<div class="bm-c">
       <div class="bm-r"><span class="f-lab">Legs</span>${[2, 3, 4, 5].map(n => ch('legs', n, n, BLD.legs === n)).join('')}${ch('legs', 0, 'Any', !BLD.legs)}</div>
       <div class="bm-r"><span class="f-lab">Payout</span>${[200, 500, 1000, 2500, 6000].map(t => ch('target', t, '+' + t, BLD.target === t)).join('')}</div>
-      <div class="bm-r"><span class="f-lab">Props</span>${Object.entries({pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', combo: 'Combos'}).map(([k, l]) => ch('stat', k, l, BLD.stats[k])).join('')}</div>
+      <div class="bm-r"><span class="f-lab">Props</span>${Object.entries(BPROPS[LG]).map(([k, l]) => ch('stat', k, l, BLD.stats[k])).join('')}</div>
       <div class="bm-r"><span class="f-lab">Book</span>${ch('book', '', 'Any', !BLD.book)}${books.map(b => ch('book', b, b, BLD.book === b)).join('')}</div>
       <div class="bm-r"><span class="f-lab">Games</span>${ch('sg', 0, 'Different games', !BLD.sg)}${ch('sg', 1, 'Allow same game', BLD.sg)}<button type="button" class="bm-go" id="bm-go"${legs.length ? '' : ' disabled'}>${BLD.lock.length ? `Build around my ${BLD.lock.length === 1 ? 'pick' : BLD.lock.length + ' picks'}` : 'Build me one'}</button></div>
       <div class="bm-msg" id="bm-msg"></div></div>`;
@@ -1573,7 +1577,7 @@ async function renderBuild() {
   $('view').innerHTML = `<div style="display:grid;gap:12px">
     <div class="pan"><div class="pan-h"><span class="pan-t">Build me one</span><span class="cnote">paper tool &middot; projections, not betting advice</span></div>
       ${c ? ctrls + slipCard(info ? info.legs : BLD.slip, info) : `<div class="dim" style="font-size:12.5px">Tonight’s legs are built right after the pricing run.</div>`}</div>
-    ${c ? `<div class="pan"><div class="pan-h"><span class="pan-t">Tonight's legs</span><input class="bm-q" id="bm-q" placeholder="Find a player…" value="${esc(BLD.q)}" aria-label="Find a player"></div><div id="bm-pick">${bPicker()}</div>
+    ${c ? `<div class="pan"><div class="pan-h"><span class="pan-t">${LG === 'nfl' ? "This slate's legs" : "Tonight's legs"}</span><input class="bm-q" id="bm-q" placeholder="Find a player…" value="${esc(BLD.q)}" aria-label="Find a player"></div><div id="bm-pick">${bPicker()}</div>
       <div class="cnote">% = our blended chance. <b style="color:var(--green-text)">Bold green</b>: +3% EV or better at its best price (what Build me one uses). Faded green: +EV but under 3%, close to the model's margin of error. Tap legs to add them, then <b>Build around my picks</b> fills the rest of the slip at a book that hangs them all. <b>Next best</b> shows different slips, not the same legs reshuffled.</div></div>` : ''}
     <div class="notes"><b style="color:var(--text)">How it works.</b> Every main-line player prop the books post for tonight, priced by the sim. The sim alone has been overconfident on props, so each leg's chance is pulled toward the market's no-vig price: our chance = market + k &times; (sim &minus; market), with k = ${c ? c.k.toFixed(2) : 'the trust weight'} fitted on every graded pick so far (the same blend Ace uses). <b>Build me one</b> searches for the slip with the best expected value near your payout, every leg at least +3% EV on its own, all legs at one sportsbook at that book's own prices. Legs from different games are independent, so the payout is real. With <b>Allow same game</b> on, legs that share a game use the sim's correlation (how often they hit together across its simulated games), and the slip shows a fair price to take or beat, since books price same-game parlays themselves. Books on our feed: DraftKings, FanDuel, BetMGM, Caesars, ESPN BET.</div>
     ${bRecord(d)}</div>`;
