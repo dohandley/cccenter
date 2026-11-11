@@ -1509,9 +1509,11 @@ function dvpLine(D, st, sd) {
   if (!v) return '';
   const [avg, rk, n, la] = v, soft = rk <= Math.round(D.t / 3), hard = rk > D.t - Math.round(D.t / 3);
   const good = sd === 'Over' ? soft : hard, bad = sd === 'Over' ? hard : soft;
-  const rank = rk === 1 ? 'most in the league' : rk === D.t ? 'fewest in the league' : `${nth(rk)} most of ${D.t}`;
+  // Lower half reads as "fewest" (29th most = 2nd fewest), and a colored rank says which side it helps (Nov 11).
+  const rank = rk === 1 ? 'most in the league' : rk === D.t ? 'fewest in the league' : rk <= D.t / 2 ? `${nth(rk)} most of ${D.t}` : `${nth(D.t - rk + 1)} fewest of ${D.t}`;
+  const tip = good ? ` &middot; helps the ${sd}` : bad ? ` &middot; works against the ${sd}` : '';
   const pw = POSW[D.p] || esc(D.p), sw = esc((STATW[st] || st).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'));
-  return `<div class="bm-dv">vs <b>${esc(D.o)}</b>: ${pw} average <b>${avg}</b> ${sw} &middot; <span class="${good ? 'pos' : bad ? 'neg' : ''}">${rank}</span> <span class="dim">&middot; league avg ${la} &middot; ${n} ${pw.replace(/s$/, '')} game${n === 1 ? '' : 's'}, 20+ min</span></div>`;
+  return `<div class="bm-dv">vs <b>${esc(D.o)}</b>: ${pw} average <b>${avg}</b> ${sw} &middot; <span class="${good ? 'pos' : bad ? 'neg' : ''}">${rank}${tip}</span> <span class="dim">&middot; league avg ${la} &middot; ${n} ${pw.replace(/s$/, '')} game${n === 1 ? '' : 's'}, 20+ min</span></div>`;
 }
 function histChart(key, xs, side, ck, HH, DD) {
   // Recent games for one player: bars for the chosen stat, the line across, green = the chosen side cleared it.
