@@ -284,7 +284,16 @@ details.sp-g>.sp-l{padding:0 8px 8px}
 .pan-t .cnt,.bm-gh .cnt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-3);margin-left:6px}
 .bm-gh{display:flex;gap:8px;align-items:center;width:100%;background:none;border:0;color:var(--text);font:800 14px inherit;font-family:inherit;padding:10px 0;cursor:pointer;text-align:left}
 .bm-pl{display:grid;grid-template-columns:170px minmax(0,1fr);gap:6px 10px;padding:6px 0;border-top:1px dashed var(--border);align-items:start}
-.bm-pn{font-weight:700;font-size:13px}.bm-pn em{font-style:normal;color:var(--text-3);font-size:11px;font-weight:600;margin-left:4px}
+.bm-pn{font-weight:700;font-size:13px;background:none;border:0;padding:0;color:var(--text);font-family:inherit;text-align:left;cursor:pointer;align-self:start}
+.bm-l5{display:block;font:600 10.5px 'JetBrains Mono',monospace;color:var(--accent,var(--green-text));margin-top:3px}
+.bm-h{grid-column:1/-1;padding:8px 0 4px;display:grid;gap:6px}.bm-hc{display:flex;flex-wrap:wrap;gap:4px}.bm-hr{font-size:12.5px}
+.bm-bars{display:flex;gap:3px;align-items:flex-end}
+.bm-b{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}
+.bm-b .t{position:relative;display:flex;align-items:flex-end;width:100%;height:84px}
+.bm-b .t::after{content:'';position:absolute;left:-2px;right:-2px;bottom:var(--ln);border-top:1.5px dashed var(--text);opacity:.55}
+.bm-b i{display:block;width:100%;border-radius:3px 3px 0 0}.bm-b i.hit{background:var(--green-text)}.bm-b i.miss{background:var(--red-text,#b91c1c);opacity:.7}
+.bm-b.prior{opacity:.4}.bm-b .v{font:700 10px 'JetBrains Mono',monospace;color:var(--text-2)}.bm-b .o{font:600 9px 'JetBrains Mono',monospace;color:var(--text-3);margin-top:2px}
+.bm-pn em{font-style:normal;color:var(--text-3);font-size:11px;font-weight:600;margin-left:4px}
 .bm-legs{display:flex;flex-wrap:wrap;gap:4px}
 .bm-leg{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);border-radius:6px;padding:5px 8px;font:600 11.5px 'JetBrains Mono',monospace;cursor:pointer;white-space:nowrap}
 .bm-leg b{color:var(--gold);font-weight:700}.bm-leg i{font-style:normal;color:var(--text-3)}
@@ -1320,7 +1329,7 @@ async function renderParlays() {
    leg's chance is the blended one (market no-vig + k x (sim - market), Ace's k), the slip is priced at ONE book that
    hangs every leg, and same-game legs use the sim's correlation (bits = which of 1,000 simulated games each leg hit).
    Same solver as slip_builder.solve(); the presets it logs nightly are the record shown at the bottom. */
-const BLD = {d: undefined, legs: 3, target: 1000, stats: {pts: 1, reb: 1, ast: 1, fg3m: 1, combo: 1}, sg: 0, book: '', slip: [], lock: [], alts: [], ai: 0, q: '', open: {}};
+const BLD = {d: undefined, legs: 3, target: 1000, stats: {pts: 1, reb: 1, ast: 1, fg3m: 1, combo: 1}, sg: 0, book: '', slip: [], lock: [], alts: [], ai: 0, q: '', open: {}, hopen: {}, hstat: {}};
 const BWIN = [0.75, 1.35], BPOOL = 30, minEV = () => (BLD.d && BLD.d.rules && BLD.d.rules.min_ev) || 0.03, STATW = {pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', pra: 'Pts+Reb+Ast', pr: 'Pts+Reb', pa: 'Pts+Ast', ra: 'Reb+Ast'};
 const bdec = a => 1 + (a > 0 ? a / 100 : 100 / -a);
 const bam = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
@@ -1413,6 +1422,25 @@ function slipCard(ls, info) {
   return `<div class="bm-slip"><div class="pan-h"><span class="pan-t">Your slip <span class="cnt">${ls.length} leg${ls.length === 1 ? '' : 's'}</span></span><span style="display:flex;gap:6px;align-items:center">${verdict}${nav}<button type="button" class="fb" id="bm-clear">Clear</button></span></div>
     <div class="tk">${rows}</div><div class="rc-k bm-t">${tiles}</div></div>`;
 }
+const HSTAT = {pts: g => g[4], reb: g => g[5], ast: g => g[6], fg3m: g => g[7], pra: g => g[4] + g[5] + g[6], pr: g => g[4] + g[5], pa: g => g[4] + g[6], ra: g => g[5] + g[6]};
+function histChart(key, xs) {
+  // L5/L10/L15 for one player: bars of his recent games in the chosen stat, the line across, green = cleared the over.
+  const H = (BLD.d.current.hist || {})[key];
+  if (!H || !H.length) return `<div class="bm-h dim">No recent games on file.</div>`;
+  const stats = [...new Set(xs.map(l => l.stat))].filter(st => HSTAT[st]);
+  const st = stats.includes(BLD.hstat[key]) ? BLD.hstat[key] : stats[0];
+  if (!st) return '';
+  const line = xs.find(l => l.stat === st).line, f = HSTAT[st], vals = H.map(f);
+  const rate = n => { const g = vals.slice(0, n); return g.length ? `${g.filter(v => v > line).length}/${g.length}` : '—'; };
+  const max = Math.max(line * 1.4, ...vals, 1), games = H.slice().reverse(), vv = vals.slice().reverse();
+  const bars = games.map((g, i) => `<div class="bm-b${g[8] ? ' prior' : ''}" title="${esc(g[0])} ${esc(g[2])} ${esc(g[1])} · ${vv[i]} ${esc(STATW[st] || st)} · ${g[3]} min${g[8] ? ' · last season' : ''}">
+      <span class="v">${vv[i]}</span><span class="t"><i class="${vv[i] > line ? 'hit' : 'miss'}" style="height:${Math.max(3, vv[i] / max * 100)}%"></i></span><span class="o">${esc(g[1])}</span></div>`).join('');
+  const prior = H.some(g => g[8]) ? `<span class="dim"> · faded bars are last season</span>` : '';
+  return `<div class="bm-h"><div class="bm-hc">${stats.map(x => `<button type="button" class="fb${x === st ? ' on' : ''}" data-hk="${esc(key)}" data-hs="${esc(x)}">${esc((STATW[x] || x).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'))}</button>`).join('')}</div>
+    <div class="bm-hr"><b>Over ${line}</b> &middot; L5 <b>${rate(5)}</b> &middot; L10 <b>${rate(10)}</b> &middot; L15 <b>${rate(15)}</b>${prior}</div>
+    <div class="bm-bars" style="--ln:${line / max * 100}%">${bars}</div>
+    <div class="cnote">Recent form is context: the books price it in, so it doesn't change our chance.</div></div>`;
+}
 function bPicker() {
   const legs = bLegs(), q = BLD.q.trim().toLowerCase(), by = {};
   for (const l of legs) if (!q || l.player.toLowerCase().includes(q)) (by[l.game_id] = by[l.game_id] || []).push(l);
@@ -1423,10 +1451,10 @@ function bPicker() {
     const ls = by[g.game_id], pl = {};
     for (const l of ls) (pl[l.player] = pl[l.player] || []).push(l);
     const open = q || BLD.open[g.game_id];
-    const body = open ? Object.entries(pl).map(([nm, xs]) => `<div class="bm-pl"><span class="bm-pn">${esc(nm)} <em>${esc(xs[0].team)}</em></span><div class="bm-legs">${xs.sort((a, b) => a.stat.localeCompare(b.stat) || a.side.localeCompare(b.side)).map(l => {
+    const body = open ? Object.entries(pl).map(([nm, xs]) => { const hk = xs[0].team + '|' + nm; return `<div class="bm-pl"><button type="button" class="bm-pn" data-hp="${esc(hk)}" aria-expanded="${!!BLD.hopen[hk]}">${esc(nm)} <em>${esc(xs[0].team)}</em> <span class="bm-l5">${BLD.hopen[hk] ? '▾' : '▸'} L5/L10/L15</span></button><div class="bm-legs">${xs.sort((a, b) => a.stat.localeCompare(b.stat) || a.side.localeCompare(b.side)).map(l => {
         const bp = Math.max(...Object.values(l.prices)), ev = l.p * bdec(bp) - 1;
         return `<button type="button" class="bm-leg${inSlip.has(l.id) ? ' on' : ''}${ev >= minEV() ? ' plus' : ev > 0 ? ' soft' : ''}" data-add="${esc(l.id)}" title="blended ${pct(l.p)} · market ${pct(l.p_mkt)} · sim ${pct(l.p_sim)} · best ${odds(bp)}">${l.side === 'Over' ? 'o' : 'u'}${l.line} ${esc((STATW[l.stat] || l.stat).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'))} <b>${odds(bp)}</b> <i>${Math.round(l.p * 100)}%</i></button>`;
-      }).join('')}</div></div>`).join('') : '';
+      }).join('')}</div>${BLD.hopen[hk] ? histChart(hk, xs) : ''}</div>`; }).join('') : '';
     return `<div class="bm-g"><button type="button" class="bm-gh" data-g="${esc(g.game_id)}" aria-expanded="${!!open}">${open ? '▾' : '▸'} ${esc(g.matchup)} <span class="cnt">${new Date(g.start).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York'})} ET &middot; ${Object.keys(pl).length} players</span></button>${body}</div>`;
   }).join('');
 }
@@ -1510,6 +1538,8 @@ async function renderBuild() {
   document.querySelector('.bm-slip').onclick = e => { const b = e.target.closest('[data-rm]'); if (!b) return; BLD.alts = []; BLD.slip = BLD.slip.filter(l => l.id !== b.dataset.rm); BLD.lock = BLD.slip.slice(); renderBuild(); };
   $('bm-pick').onclick = e => {
     const h = e.target.closest('[data-g]'); if (h) { BLD.open[h.dataset.g] = !BLD.open[h.dataset.g]; $('bm-pick').innerHTML = bPicker(); return; }
+    const hp = e.target.closest('[data-hp]'); if (hp) { BLD.hopen[hp.dataset.hp] = !BLD.hopen[hp.dataset.hp]; $('bm-pick').innerHTML = bPicker(); return; }
+    const hs = e.target.closest('[data-hs]'); if (hs) { BLD.hstat[hs.dataset.hk] = hs.dataset.hs; $('bm-pick').innerHTML = bPicker(); return; }
     const b = e.target.closest('[data-add]'); if (!b) return;
     const l = byId[b.dataset.add];
     if (BLD.alts.length) { BLD.alts = []; BLD.slip = BLD.lock.slice(); }      // tapping a leg goes back to your own picks
