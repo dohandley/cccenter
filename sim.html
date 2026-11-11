@@ -286,7 +286,7 @@ details.sp-g>.sp-l{padding:0 8px 8px}
 .bm-pl{display:grid;grid-template-columns:170px minmax(0,1fr);gap:6px 10px;padding:6px 0;border-top:1px dashed var(--border);align-items:start}
 .bm-pn{font-weight:700;font-size:13px;background:none;border:0;padding:0;color:var(--text);font-family:inherit;text-align:left;cursor:pointer;align-self:start}
 .bm-l5{display:block;font:600 10.5px 'JetBrains Mono',monospace;color:var(--accent,var(--green-text));margin-top:3px}
-.bm-sl{cursor:pointer;min-width:0}.bm-sh{padding:0 14px 6px}
+.bm-sl{cursor:pointer;min-width:0}.bm-seg{display:inline-flex;gap:4px;margin-right:10px}.bm-sh{padding:0 14px 6px}
 .bm-h{grid-column:1/-1;padding:8px 0 4px;display:grid;gap:6px}.bm-hc{display:flex;flex-wrap:wrap;gap:4px}.bm-hr{font-size:12.5px}
 .bm-bars{display:flex;gap:3px;align-items:flex-end}
 .bm-b{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}
@@ -1330,7 +1330,7 @@ async function renderParlays() {
    leg's chance is the blended one (market no-vig + k x (sim - market), Ace's k), the slip is priced at ONE book that
    hangs every leg, and same-game legs use the sim's correlation (bits = which of 1,000 simulated games each leg hit).
    Same solver as slip_builder.solve(); the presets it logs nightly are the record shown at the bottom. */
-const BLD = {d: undefined, legs: 3, target: 1000, stats: {pts: 1, reb: 1, ast: 1, fg3m: 1, combo: 1}, sg: 0, book: '', slip: [], lock: [], alts: [], ai: 0, q: '', open: {}, hopen: {}, hstat: {}, sopen: {}};
+const BLD = {d: undefined, legs: 3, target: 1000, stats: {pts: 1, reb: 1, ast: 1, fg3m: 1, combo: 1}, sg: 0, book: '', slip: [], lock: [], alts: [], ai: 0, q: '', open: {}, hopen: {}, hstat: {}, hside: {}, hn: {}, sopen: {}};
 const BWIN = [0.75, 1.35], BPOOL = 30, minEV = () => (BLD.d && BLD.d.rules && BLD.d.rules.min_ev) || 0.03, STATW = {pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', pra: 'Pts+Reb+Ast', pr: 'Pts+Reb', pa: 'Pts+Ast', ra: 'Reb+Ast'};
 const bdec = a => 1 + (a > 0 ? a / 100 : 100 / -a);
 const bam = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
@@ -1414,7 +1414,7 @@ function slipCard(ls, info) {
   const be = d ? 1 / d : null, ev = d ? p * d - 1 : null, fair = bam(1 / Math.max(p, 1e-3));
   const verdict = same ? `<span class="pill p-cat">fair target</span>` : ev == null ? `<span class="pill p-open">no single book</span>` : ev > 0 ? `<span class="pill p-win">value</span>` : `<span class="pill p-loss">no edge</span>`;
   const rows = ls.map(l => `<div class="tk-l"><div class="bm-sl" data-sh="${esc(l.id)}" role="button" tabindex="0" aria-expanded="${!!BLD.sopen[l.id]}"><span class="s">${esc(l.player)}${info && BLD.lock.some(x => x.id === l.id) ? ' <span class="pill p-open">your pick</span>' : ''}</span><span class="sub">${esc(l.side.toLowerCase())} ${l.line} ${esc(STATW[l.stat] || l.stat)} &middot; ${esc(l.matchup)}${bk && l.prices[bk] != null ? ' &middot; ' + esc(bk) : ''}</span><span class="bm-l5">${BLD.sopen[l.id] ? '▾' : '▸'} L5/L10/L15</span></div>
-      <div class="r">${bk && l.prices[bk] != null ? odds(l.prices[bk]) : '—'}<span class="sub" title="blended chance (market ${pct(l.p_mkt)}, sim ${pct(l.p_sim)})">${Math.round(l.p * 100)}%</span>${info ? '' : `<button type="button" class="bm-x" data-rm="${esc(l.id)}" aria-label="Remove">&times;</button>`}</div></div>${BLD.sopen[l.id] ? `<div class="bm-sh">${histChart(l.team + '|' + l.player, [l], l.side)}</div>` : ''}`).join('');
+      <div class="r">${bk && l.prices[bk] != null ? odds(l.prices[bk]) : '—'}<span class="sub" title="blended chance (market ${pct(l.p_mkt)}, sim ${pct(l.p_sim)})">${Math.round(l.p * 100)}%</span>${info ? '' : `<button type="button" class="bm-x" data-rm="${esc(l.id)}" aria-label="Remove">&times;</button>`}</div></div>${BLD.sopen[l.id] ? `<div class="bm-sh">${histChart(l.team + '|' + l.player, [l], l.side, 's:' + l.id)}</div>` : ''}`).join('');
   const tiles = same
     ? st('Fair price', fair, 'take this or longer in the app') + st('Our chance', pct(p), `with sim correlation ×${bLift(ls.filter((l, i, a) => a.filter(x => x.game_id === l.game_id).length > 1)).toFixed(2)}`) + st('Legs pay alone', d ? bam(d) : '—', bk ? `${esc(bk)}; the book's SGP price will be lower` : '')
     : st(bk ? `Pays at ${esc(bk)}` : 'Pays', d ? bam(d) : '—', d ? `1u wins ${(d - 1).toFixed(2)}u` : 'no book hangs every leg') + st('Our chance', pct(p), 'blended, legs multiplied')
@@ -1424,22 +1424,28 @@ function slipCard(ls, info) {
     <div class="tk">${rows}</div><div class="rc-k bm-t">${tiles}</div></div>`;
 }
 const HSTAT = {pts: g => g[4], reb: g => g[5], ast: g => g[6], fg3m: g => g[7], pra: g => g[4] + g[5] + g[6], pr: g => g[4] + g[5], pa: g => g[4] + g[6], ra: g => g[5] + g[6]};
-function histChart(key, xs, side) {
-  // L5/L10/L15 for one player: bars of his recent games in the chosen stat, the line across, green = cleared the over.
+function histChart(key, xs, side, ck) {
+  // Recent games for one player: bars for the chosen stat, the line across, green = the chosen side cleared it.
+  // ck keys the chart's own toggles (side, window, stat): the player in the leg list, or one leg on the slip.
+  ck = ck || key;
   const H = (BLD.d.current.hist || {})[key];
   if (!H || !H.length) return `<div class="bm-h dim">No recent games on file.</div>`;
   const stats = [...new Set(xs.map(l => l.stat))].filter(st => HSTAT[st]);
-  const st = stats.includes(BLD.hstat[key]) ? BLD.hstat[key] : stats[0];
+  const st = stats.includes(BLD.hstat[ck]) ? BLD.hstat[ck] : stats[0];
   if (!st) return '';
-  const line = xs.find(l => l.stat === st).line, f = HSTAT[st], vals = H.map(f), sd = side || 'Over';
+  const sd = BLD.hside[ck] || side || 'Over', n = BLD.hn[ck] || 10;
+  const line = xs.find(l => l.stat === st).line, f = HSTAT[st];
   const hit = v => sd === 'Over' ? v > line : v < line;
-  const rate = n => { const g = vals.slice(0, n); return g.length ? `${g.filter(hit).length}/${g.length}` : '—'; };
-  const max = Math.max(line * 1.4, ...vals, 1), games = H.slice().reverse(), vv = vals.slice().reverse();
-  const bars = games.map((g, i) => `<div class="bm-b${g[8] ? ' prior' : ''}" title="${esc(g[0])} ${esc(g[2])} ${esc(g[1])} · ${vv[i]} ${esc(STATW[st] || st)} · ${g[3]} min${g[8] ? ' · last season' : ''}">
+  const games = H.slice(0, n), vals = games.map(f), hits = vals.filter(hit).length;
+  const max = Math.max(line * 1.4, ...vals, 1), gs = games.slice().reverse(), vv = vals.slice().reverse();
+  const bars = gs.map((g, i) => `<div class="bm-b${g[8] ? ' prior' : ''}" title="${esc(g[0])} ${esc(g[2])} ${esc(g[1])} · ${vv[i]} ${esc(STATW[st] || st)} · ${g[3]} min${g[8] ? ' · last season' : ''}">
       <span class="v">${vv[i]}</span><span class="t"><i class="${hit(vv[i]) ? 'hit' : 'miss'}" style="height:${Math.max(3, vv[i] / max * 100)}%"></i></span><span class="o">${esc(g[1])}</span></div>`).join('');
-  const prior = H.some(g => g[8]) ? `<span class="dim"> · faded bars are last season</span>` : '';
-  return `<div class="bm-h">${stats.length < 2 ? '' : `<div class="bm-hc">${stats.map(x => `<button type="button" class="fb${x === st ? ' on' : ''}" data-hk="${esc(key)}" data-hs="${esc(x)}">${esc((STATW[x] || x).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'))}</button>`).join('')}</div>`}
-    <div class="bm-hr"><b>${sd} ${line} ${esc(STATW[st] || st)}</b> &middot; L5 <b>${rate(5)}</b> &middot; L10 <b>${rate(10)}</b> &middot; L15 <b>${rate(15)}</b>${prior}</div>
+  const prior = games.some(g => g[8]) ? `<span class="dim"> · faded = last season</span>` : '';
+  const short = x => (STATW[x] || x).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM');
+  const tg = (attr, v, label, on) => `<button type="button" class="fb${on ? ' on' : ''}" data-hk="${esc(ck)}" ${attr}="${esc(v)}" aria-pressed="${!!on}">${label}</button>`;
+  return `<div class="bm-h">${stats.length < 2 ? '' : `<div class="bm-hc">${stats.map(x => tg('data-hs', x, esc(short(x)), x === st)).join('')}</div>`}
+    <div class="bm-hc"><span class="bm-seg">${['Over', 'Under'].map(x => tg('data-hside', x, x, x === sd)).join('')}</span><span class="bm-seg">${[5, 10, 15].map(x => tg('data-hn', x, 'L' + x, x === n)).join('')}</span></div>
+    <div class="bm-hr"><b>${sd} ${line} ${esc(short(st))}</b> &middot; L${n} <b>${hits}/${games.length}</b>${games.length < n ? ` <span class="dim">(only ${games.length} games)</span>` : ''}${prior}</div>
     <div class="bm-bars" style="--ln:${line / max * 100}%">${bars}</div>
     <div class="cnote">Recent form is context: the books price it in, so it doesn't change our chance.</div></div>`;
 }
@@ -1538,6 +1544,8 @@ async function renderBuild() {
   if ($('bm-clear')) $('bm-clear').onclick = () => { BLD.slip = []; BLD.lock = []; BLD.alts = []; renderBuild(); };
   const byId = {}; for (const l of c.legs) byId[l.id] = l;
   document.querySelector('.bm-slip').onclick = e => {
+    const tgl = e.target.closest('[data-hside],[data-hn]');
+    if (tgl) { if (tgl.dataset.hside) BLD.hside[tgl.dataset.hk] = tgl.dataset.hside; else BLD.hn[tgl.dataset.hk] = +tgl.dataset.hn; const y = scrollY; renderBuild(); scrollTo(0, y); return; }
     const sh = e.target.closest('[data-sh]');
     if (sh && !e.target.closest('[data-rm]')) { BLD.sopen[sh.dataset.sh] = !BLD.sopen[sh.dataset.sh]; const y = scrollY; renderBuild(); scrollTo(0, y); return; }
     const b = e.target.closest('[data-rm]'); if (!b) return; BLD.alts = []; BLD.slip = BLD.slip.filter(l => l.id !== b.dataset.rm); BLD.lock = BLD.slip.slice(); renderBuild(); };
@@ -1545,6 +1553,8 @@ async function renderBuild() {
     const h = e.target.closest('[data-g]'); if (h) { BLD.open[h.dataset.g] = !BLD.open[h.dataset.g]; $('bm-pick').innerHTML = bPicker(); return; }
     const hp = e.target.closest('[data-hp]'); if (hp) { BLD.hopen[hp.dataset.hp] = !BLD.hopen[hp.dataset.hp]; $('bm-pick').innerHTML = bPicker(); return; }
     const hs = e.target.closest('[data-hs]'); if (hs) { BLD.hstat[hs.dataset.hk] = hs.dataset.hs; $('bm-pick').innerHTML = bPicker(); return; }
+    const hd = e.target.closest('[data-hside]'); if (hd) { BLD.hside[hd.dataset.hk] = hd.dataset.hside; $('bm-pick').innerHTML = bPicker(); return; }
+    const hn = e.target.closest('[data-hn]'); if (hn) { BLD.hn[hn.dataset.hk] = +hn.dataset.hn; $('bm-pick').innerHTML = bPicker(); return; }
     const b = e.target.closest('[data-add]'); if (!b) return;
     const l = byId[b.dataset.add];
     if (BLD.alts.length) { BLD.alts = []; BLD.slip = BLD.lock.slice(); }      // tapping a leg goes back to your own picks
