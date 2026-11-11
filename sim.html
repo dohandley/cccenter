@@ -397,6 +397,8 @@ details.lnd[open]>summary{margin-bottom:8px}details.lnd>summary:focus-visible{ou
 .gs .mt{display:inline-flex;align-items:center;gap:3px}.gs .mt .tb{margin-right:1px}
 th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{color:var(--text)}th.srt.on::after{content:' \25BE'}th.srt:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
 .fin-l{display:block;font-size:12.5px;font-weight:500;color:var(--text);margin-top:2px}.fin-l b{font-weight:800}.fin-l b.pos{color:var(--green-text)}.fin-l b.neg{color:var(--red-text)}
+.st.jump{cursor:pointer;transition:border-color .15s}.st.jump:hover,.st.jump:focus-visible{border-color:var(--text-3)}.st.jump .st-s{text-decoration:underline;text-underline-offset:2px}
+@keyframes tkflash{0%,40%{box-shadow:0 0 0 3px var(--gold)}100%{box-shadow:0 0 0 0 transparent}}.tk.flash{animation:tkflash 1.8s ease-out}
 </style></head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -1311,7 +1313,7 @@ function ticket(t) {
   const foot = t.result === 'pulled' ? `<span class="pill p-pulled">pulled</span><span class="dim">Pulled before the games: ${esc(t.pull_reason || '')}. Not a win or a loss.</span>`
     : t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span><span class="u ${ucls(t.units)}">${un(t.units)}</span>`
     : `<span class="pill p-open">pending</span><span class="dim">Settles when both legs are graded</span>`;
-  return `<div class="tk"><div class="tk-h"><span class="tk-o">${esc(t.american)}<b>${esc(t.book)}</b></span>
+  return `<div class="tk"${t.result ? '' : ' data-open="lean"'}><div class="tk-h"><span class="tk-o">${esc(t.american)}<b>${esc(t.book)}</b></span>
       <span class="tk-m">est ${pct(t.p)} &middot; fair ${amer(1 / t.p)} &middot; EV ${t.ev >= 0 ? '+' : ''}${(t.ev * 100).toFixed(0)}%</span></div>${legs}<div class="tk-f">${foot}</div></div>`;
 }
 /* Long shots: sim SGPs, SGP+ and cross-game price-gap tickets. Built by sim_sgp.py (NBA only so far),
@@ -1326,15 +1328,29 @@ function sgpTicket(t) {
     : `<span class="tk-o">${esc(t.target)}<b>${KIND[t.kind]} &middot; ${t.n} legs</b></span><span class="tk-m">est ${pct(t.p)} &middot; ${t.lift > 1.005 ? `sim lift &times;${t.lift.toFixed(2)} &middot; ` : ''}take ${esc(t.target)} or longer${t.book ? ' &middot; all legs at ' + esc(t.book) : ''}</span>`;
   const foot = t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span>${gap ? `<span class="u ${ucls(t.units)}">${un(t.units)}</span>` : ''}`
     : `<span class="pill p-open">pending</span><span class="dim">Settles when every leg is graded</span>`;
-  return `<div class="tk"><div class="tk-h">${head}</div>${legs}<div class="tk-f">${foot}</div></div>`;
+  return `<div class="tk"${t.result ? '' : ` data-open="${esc(t.kind)}"`}><div class="tk-h">${head}</div>${legs}<div class="tk-f">${foot}</div></div>`;
 }
+/* Open tiles jump to their open tickets (switching to that ticket's night first). key: lean | sgp | sgp_plus | gap */
+const jumpTile = (html, key, n) => n ? html.replace('<div class="st">', `<div class="st jump" role="button" tabindex="0" data-jump="${key}" title="Show the open ticket${n === 1 ? '' : 's'}">`) : html;
+async function jumpOpen(key) {
+  const src = key === 'lean' ? (PARL[LG] || {tickets: []}).tickets : (SGP[LG] || {tickets: []}).tickets.filter(t => t.kind === key);
+  const nts = [...new Set(src.filter(t => !t.result).map(t => t.slate))].sort().reverse();
+  if (!nts.length) return;
+  const night = nts.includes(PN[LG]) ? PN[LG] : nts[0];
+  if (night !== PN[LG]) { PN[LG] = night; await go(); }
+  const el = document.querySelector(`#view [data-open="${key}"]`); if (!el) return;
+  el.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center'});
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+}
+document.addEventListener('click', e => { const t = e.target.closest('[data-jump]'); if (t) jumpOpen(t.dataset.jump); });
+document.addEventListener('keydown', e => { const t = e.target.closest && e.target.closest('[data-jump]'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); jumpOpen(t.dataset.jump); } });
 function longShots(g, night) {
   if (!g || !g.tickets.length) return g ? `<div class="pan"><div class="pan-h"><span class="pan-t">Long shots: SGPs, SGP+ and price gaps</span></div><div class="dim" style="font-size:12.5px">Tracking starts with the ${esc(shortDate(g.live_from + 'T12:00:00-04:00'))} slate's next pricing run.</div></div>` : '';
   const R = g.record, hx = r => r.graded ? `${r.w}/${r.graded}` : '—';
   const ex = r => r.graded ? `hit · expected ${r.expected.toFixed(1)}${r.open ? ` · ${r.open} open` : ''}` : `none graded · ${r.open} open`;
-  const tiles = st('Sim SGPs', hx(R.sgp), ex(R.sgp), R.sgp.graded ? (R.sgp.w >= R.sgp.expected ? 'pos' : 'neg') : '')
-    + st('SGP+', hx(R.sgp_plus), ex(R.sgp_plus), R.sgp_plus.graded ? (R.sgp_plus.w >= R.sgp_plus.expected ? 'pos' : 'neg') : '')
-    + st('Price gaps', rec(R.gap), R.gap.graded ? un(R.gap.units) : `${R.gap.open} open`, ucls(R.gap.units));
+  const tiles = jumpTile(st('Sim SGPs', hx(R.sgp), ex(R.sgp), R.sgp.graded ? (R.sgp.w >= R.sgp.expected ? 'pos' : 'neg') : ''), 'sgp', R.sgp.open)
+    + jumpTile(st('SGP+', hx(R.sgp_plus), ex(R.sgp_plus), R.sgp_plus.graded ? (R.sgp_plus.w >= R.sgp_plus.expected ? 'pos' : 'neg') : ''), 'sgp_plus', R.sgp_plus.open)
+    + jumpTile(st('Price gaps', rec(R.gap), R.gap.graded ? un(R.gap.units) : `${R.gap.open} open`, ucls(R.gap.units)), 'gap', R.gap.open);
   const by = {}; for (const t of g.tickets) (by[t.slate] = by[t.slate] || []).push(t);
   const ord = {sgp_plus: 0, sgp: 1, gap: 2};
   const slates = Object.keys(by).filter(s => !night || s === night).map(s => {
@@ -1354,7 +1370,7 @@ async function renderParlays() {
   const tr = d.record.tracked, bf = d.record.backfill;
   $('season').innerHTML = st('Tracked tickets', rec(tr), `since ${shortDate(d.live_from + 'T12:00:00-04:00')}`)
     + st('Units', un(tr.units), tr.roi != null ? `${tr.roi > 0 ? '+' : ''}${tr.roi}% ROI` : 'paper only', ucls(tr.units))
-    + st('Open', tr.open, 'waiting on results')
+    + jumpTile(st('Open', tr.open, tr.open ? 'waiting on results · tap to see' : 'waiting on results'), 'lean', tr.open)
     + st('Rebuilt', rec(bf), bf.n ? `${un(bf.units)} · before tracking began` : 'none')
     + st('Rule', `${d.rules.legs} legs`, `+${Math.round(d.rules.min_ev * 100)}% EV or better`);
   const by = {}; for (const t of d.tickets) (by[t.slate] = by[t.slate] || []).push(t);
