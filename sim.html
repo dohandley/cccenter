@@ -652,10 +652,11 @@ function finishLine(p) {
 }
 /* Slate L5/L10/L15 (Nov 10): a toggle on NBA prop bets, leans and ★ rows opens the same recent-games chart as the
    Build tab, from the night file's hist (games before that night), scored on the pick's own side. */
+const nightKey = gid => /^\d{4}_\d\d_/.test(gid) ? `nfl/${gid.slice(0, 4)}-w${gid.slice(5, 7)}` : 'nba/' + gid.slice(0, 10);
 const pSide = p => / Under /.test(p.selection || '') ? 'Under' : 'Over';
 const htBtn = (g, p, span) => {
   const d = NIGHT[LG + '/' + NID];
-  if (LG !== 'nba' || p.market !== 'prop' || !p.player || !HSTAT[p.stat] || !d || !d.hist || !d.hist[p.team + '|' + p.player]) return '';
+  if (p.market !== 'prop' || !p.player || !HSTAT[p.stat] || !d || !d.hist || !d.hist[p.team + '|' + p.player]) return '';
   const v = esc([p.team + '|' + p.player, p.stat, p.line, pSide(p), g.game_id].join('~'));
   return span ? `<span class="ht" role="button" tabindex="0" data-ht="${v}">&#9656; L5/L10/L15</span>` : `<button type="button" class="ht" data-ht="${v}">&#9656; L5/L10/L15</button>`;
 };
@@ -667,7 +668,7 @@ function slateCharts(view) {
     const hs_ = e.target.closest('[data-hsel]');
     if (hs_ && !hs_.dataset.ht) {
       e.stopPropagation(); e.preventDefault();
-      const [gid, sel] = hs_.dataset.hsel.split('~'), nk = 'nba/' + gid.slice(0, 10);
+      const [gid, sel] = hs_.dataset.hsel.split('~'), nk = nightKey(gid);
       (NIGHT[nk] ? Promise.resolve(NIGHT[nk]) : getJSON(`sim/${nk}.json`).then(d => (NIGHT[nk] = d))).then(d => {
         const g = d.games.find(x => x.game_id === gid), p = g && g.picks.find(x => x.selection === sel);
         if (!p || !p.player || !HSTAT[p.stat] || !(d.hist || {})[p.team + '|' + p.player]) { hs_.textContent = 'no recent games on file'; return; }
@@ -682,7 +683,7 @@ function slateCharts(view) {
       const tr = t.closest('tr'), sp = t.closest('.sp-r'), anchor = tr || sp || t.closest('.tk-l') || t.parentElement;
       const nx = anchor.nextElementSibling;
       if (nx && nx.dataset && nx.dataset.ckw === ck) { nx.remove(); t.innerHTML = '&#9656; L5/L10/L15'; return; }
-      const nk = 'nba/' + gid.slice(0, 10);       // games before that night: the night file's hist
+      const nk = nightKey(gid);       // games before that night (NFL: that week): the night file's hist
       (NIGHT[nk] ? Promise.resolve(NIGHT[nk]) : getJSON(`sim/${nk}.json`).then(d => (NIGHT[nk] = d))).then(d => {
       SLH[ck] = {key, xs: [{stat, line: +line}], side, H: d.hist || {}};
       let w;
@@ -1304,7 +1305,7 @@ function renderResults() {
 const amer = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
 const FLAG = {backfill: 'Rebuilt from ledger', late: 'Built late', live: ''};
 function ticket(t) {
-  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${LG === 'nba' && l.game_id ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-hsel="${esc(l.game_id + '~' + l.selection)}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup)} &middot; ${esc(shortDate(l.start))}</span></div>
+  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.game_id ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-hsel="${esc(l.game_id + '~' + l.selection)}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup)} &middot; ${esc(shortDate(l.start))}</span></div>
       <div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">est ${pct(l.p)} &middot; mkt ${pct(l.book_p)}</span></div></div>`).join('');
   const foot = t.result === 'pulled' ? `<span class="pill p-pulled">pulled</span><span class="dim">Pulled before the games: ${esc(t.pull_reason || '')}. Not a win or a loss.</span>`
     : t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span><span class="u ${ucls(t.units)}">${un(t.units)}</span>`
@@ -1386,7 +1387,8 @@ async function renderParlays() {
    hangs every leg, and same-game legs use the sim's correlation (bits = which of 1,000 simulated games each leg hit).
    Same solver as slip_builder.solve(); the presets it logs nightly are the record shown at the bottom. */
 const BLD = {d: undefined, legs: 3, target: 1000, stats: {pts: 1, reb: 1, ast: 1, fg3m: 1, combo: 1}, sg: 0, book: '', slip: [], lock: [], alts: [], ai: 0, q: '', open: {}, hopen: {}, hstat: {}, hside: {}, hn: {}, sopen: {}};
-const BWIN = [0.75, 1.35], BPOOL = 30, minEV = () => (BLD.d && BLD.d.rules && BLD.d.rules.min_ev) || 0.03, STATW = {pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', pra: 'Pts+Reb+Ast', pr: 'Pts+Reb', pa: 'Pts+Ast', ra: 'Reb+Ast'};
+const BWIN = [0.75, 1.35], BPOOL = 30, minEV = () => (BLD.d && BLD.d.rules && BLD.d.rules.min_ev) || 0.03, STATW = {pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', pra: 'Pts+Reb+Ast', pr: 'Pts+Reb', pa: 'Pts+Ast', ra: 'Reb+Ast',
+  pass_yds: 'Pass Yds', pass_att: 'Pass Att', pass_comp: 'Completions', rush_yds: 'Rush Yds', rush_att: 'Rush Att', rec_yds: 'Rec Yds', rec: 'Receptions'};
 const bdec = a => 1 + (a > 0 ? a / 100 : 100 / -a);
 const bam = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
 const bsel = l => `${l.player} ${l.side} ${l.line} ${STATW[l.stat] || l.stat}`;
@@ -1479,6 +1481,8 @@ function slipCard(ls, info) {
     <div class="tk">${rows}</div><div class="rc-k bm-t">${tiles}</div></div>`;
 }
 const HSTAT = {pts: g => g[4], reb: g => g[5], ast: g => g[6], fg3m: g => g[7], pra: g => g[4] + g[5] + g[6], pr: g => g[4] + g[5], pa: g => g[4] + g[6], ra: g => g[5] + g[6]};
+/* NFL (Nov 11): week files carry the same row shape with a stats object in slot 4, keyed by the prop stat */
+for (const k of ['pass_yds', 'pass_att', 'pass_comp', 'rush_yds', 'rush_att', 'rec_yds', 'rec']) HSTAT[k] = g => (g[4] && g[4][k]) || 0;
 function histChart(key, xs, side, ck, HH) {
   // Recent games for one player: bars for the chosen stat, the line across, green = the chosen side cleared it.
   // ck keys the chart's own toggles (side, window, stat): the player in the leg list, or one leg on the slip.
@@ -1493,7 +1497,7 @@ function histChart(key, xs, side, ck, HH) {
   const hit = v => sd === 'Over' ? v > line : v < line;
   const games = H.slice(0, n), vals = games.map(f), hits = vals.filter(hit).length;
   const max = Math.max(line * 1.4, ...vals, 1), gs = games.slice().reverse(), vv = vals.slice().reverse();
-  const bars = gs.map((g, i) => `<div class="bm-b${g[8] ? ' prior' : ''}" title="${esc(g[0])} ${esc(g[2])} ${esc(g[1])} · ${vv[i]} ${esc(STATW[st] || st)} · ${g[3]} min${g[8] ? ' · last season' : ''}">
+  const bars = gs.map((g, i) => `<div class="bm-b${g[8] ? ' prior' : ''}" title="${esc(g[0])} ${esc(g[2])} ${esc(g[1])} · ${vv[i]} ${esc(STATW[st] || st)}${g[3] != null ? ` · ${g[3]} min` : ''}${g[8] ? ' · last season' : ''}">
       <span class="v">${vv[i]}</span><span class="t"><i class="${hit(vv[i]) ? 'hit' : 'miss'}" style="height:${Math.max(3, vv[i] / max * 100)}%"></i></span><span class="o">${esc(g[1])}</span></div>`).join('');
   const prior = games.some(g => g[8]) ? `<span class="dim"> · faded = last season</span>` : '';
   const short = x => (STATW[x] || x).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM');
