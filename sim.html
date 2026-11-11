@@ -288,7 +288,8 @@ details.sp-g>.sp-l{padding:0 8px 8px}
 .bm-legs{display:flex;flex-wrap:wrap;gap:4px}
 .bm-leg{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);border-radius:6px;padding:5px 8px;font:600 11.5px 'JetBrains Mono',monospace;cursor:pointer;white-space:nowrap}
 .bm-leg b{color:var(--gold);font-weight:700}.bm-leg i{font-style:normal;color:var(--text-3)}
-.bm-leg.plus{border-color:var(--green-border);background:var(--green-bg)}.bm-leg.plus i{color:var(--green-text)}
+.bm-leg.plus{border-color:var(--green-text);border-width:1.5px;background:var(--green-bg);color:var(--text)}.bm-leg.plus i{color:var(--green-text);font-weight:800}
+.bm-leg.soft{border-color:var(--green-border);background:color-mix(in srgb,var(--green-bg) 45%,var(--surface-2))}.bm-leg.soft i{color:var(--green-text);opacity:.75}
 .bm-leg.on{background:var(--text);color:var(--bg);border-color:var(--text)}.bm-leg.on i,.bm-leg.on b{color:var(--bg)}
 @media(max-width:768px){.bm-t{grid-template-columns:repeat(2,minmax(0,1fr))}.bm-pl{grid-template-columns:minmax(0,1fr)}.bm-go{margin-left:0;width:100%}.bm-q{min-width:0;width:100%}}
 .pan{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow);display:grid;gap:10px;align-content:start;min-width:0}
@@ -1253,7 +1254,7 @@ const SGP = {}, KIND = {sgp: 'SGP', sgp_plus: 'SGP+', gap: 'Price gap'};
 const am = p => { const d = 1 / p; return d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1))); };
 function sgpTicket(t) {
   const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span><span class="sub">${esc(l.matchup || '')}</span></div>
-      <div class="r">${l.price != null ? odds(l.price) + ' ' : ''}${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">mkt ${pct(l.p_mkt)}</span></div></div>`).join('');
+      <div class="r">${l.price != null ? odds(l.price) + ' ' : ''}${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">${l.p != null && Math.abs(l.p - l.p_mkt) > 0.0005 ? `ours ${pct(l.p)} &middot; mkt ${pct(l.p_mkt)}` : `mkt ${pct(l.p_mkt)}`}</span></div></div>`).join('');
   const gap = t.kind === 'gap';
   const head = gap ? `<span class="tk-o">${esc(t.price)}<b>${esc(t.book)}</b></span><span class="tk-m">fair ${esc(t.target)} &middot; EV +${Math.round(t.ev * 100)}%</span>`
     : `<span class="tk-o">${esc(t.target)}<b>${KIND[t.kind]} &middot; ${t.n} legs</b></span><span class="tk-m">est ${pct(t.p)} &middot; ${t.lift > 1.005 ? `sim lift &times;${t.lift.toFixed(2)} &middot; ` : ''}take ${esc(t.target)} or longer${t.book ? ' &middot; all legs at ' + esc(t.book) : ''}</span>`;
@@ -1319,8 +1320,8 @@ async function renderParlays() {
    leg's chance is the blended one (market no-vig + k x (sim - market), Ace's k), the slip is priced at ONE book that
    hangs every leg, and same-game legs use the sim's correlation (bits = which of 1,000 simulated games each leg hit).
    Same solver as slip_builder.solve(); the presets it logs nightly are the record shown at the bottom. */
-const BLD = {d: undefined, legs: 3, target: 1000, stats: {pts: 1, reb: 1, ast: 1, fg3m: 1, combo: 1}, sg: 0, book: '', slip: [], alts: [], ai: 0, q: '', open: {}};
-const BWIN = [0.75, 1.35], BPOOL = 30, STATW = {pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', pra: 'Pts+Reb+Ast', pr: 'Pts+Reb', pa: 'Pts+Ast', ra: 'Reb+Ast'};
+const BLD = {d: undefined, legs: 3, target: 1000, stats: {pts: 1, reb: 1, ast: 1, fg3m: 1, combo: 1}, sg: 0, book: '', slip: [], lock: [], alts: [], ai: 0, q: '', open: {}};
+const BWIN = [0.75, 1.35], BPOOL = 30, minEV = () => (BLD.d && BLD.d.rules && BLD.d.rules.min_ev) || 0.03, STATW = {pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', pra: 'Pts+Reb+Ast', pr: 'Pts+Reb', pa: 'Pts+Ast', ra: 'Reb+Ast'};
 const bdec = a => 1 + (a > 0 ? a / 100 : 100 / -a);
 const bam = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
 const bsel = l => `${l.player} ${l.side} ${l.line} ${STATW[l.stat] || l.stat}`;
@@ -1347,14 +1348,26 @@ function bLegs() {
   return c.legs.filter(l => new Date(l.start).getTime() > now && BLD.stats[statKey(l.stat)]);
 }
 function bSolve() {
-  const legs = bLegs(), ns = BLD.legs ? [BLD.legs] : [2, 3, 4, 5], t = bdec(BLD.target), lo = t * BWIN[0], hi = t * BWIN[1], out = [];
-  const books = [...new Set(legs.flatMap(l => Object.keys(l.prices)))].filter(b => !BLD.book || b === BLD.book).sort();
+  // Best slips near the payout: one book, every added leg +EV by at least minEV there, one leg per player, different
+  // games unless same-game is allowed. Your picks (BLD.lock) are always kept and the rest is filled around them.
+  // Alternatives must differ: each shares at most one leg with every slip above it, besides your picks.
+  const lock = BLD.lock, lockIds = new Set(lock.map(l => l.id)), legs = bLegs().filter(l => !lockIds.has(l.id));
+  let ns = (BLD.legs ? [BLD.legs] : [2, 3, 4, 5]).filter(n => n > lock.length);
+  if (!ns.length) ns = [lock.length + 1];
+  const t = bdec(BLD.target), lo = t * BWIN[0], hi = t * BWIN[1], out = [], mev = minEV();
+  const books = [...new Set(legs.concat(lock).flatMap(l => Object.keys(l.prices)))].filter(b => (!BLD.book || b === BLD.book) && lock.every(l => l.prices[b] != null)).sort();
   for (const bk of books) {
-    const pool = legs.filter(l => l.prices[bk] != null).map(l => [l.p * bdec(l.prices[bk]) - 1, l]).filter(x => x[0] > 0)
-      .sort((a, b) => b[0] - a[0]).slice(0, BPOOL).map(x => x[1]);
+    const d0 = lock.reduce((a, l) => a * bdec(l.prices[bk]), 1);
+    const pool = legs.filter(l => l.prices[bk] != null && !lock.some(x => x.player === l.player || (!BLD.sg && x.game_id === l.game_id)))
+      .map(l => [l.p * bdec(l.prices[bk]) - 1, l]).filter(x => x[0] >= mev).sort((a, b) => b[0] - a[0]).slice(0, BPOOL).map(x => x[1]);
     for (const n of ns) {
-      const pick = [], rec_ = (st, d) => {
-        if (pick.length === n) { if (d < lo) return; const p = BLD.sg ? slipP(pick) : pick.reduce((a, l) => a * l.p, 1); out.push({ev: p * d - 1, bk, legs: pick.slice(), p, d}); return; }
+      const pick = lock.slice(), rec_ = (st, d) => {
+        if (pick.length === n) {
+          if (d < lo) return;
+          const same = new Set(pick.map(l => l.game_id)).size < pick.length;
+          const p = same ? slipP(pick) : pick.reduce((a, l) => a * l.p, 1);
+          out.push({ev: p * d - 1, bk, legs: pick.slice(), p, d}); return;
+        }
         for (let i = st; i < pool.length; i++) {
           const l = pool[i], d2 = d * bdec(l.prices[bk]);
           if (d2 > hi) continue;
@@ -1362,12 +1375,16 @@ function bSolve() {
           pick.push(l); rec_(i + 1, d2); pick.pop();
         }
       };
-      rec_(0, 1);
+      if (d0 <= hi) rec_(0, d0);
     }
   }
   out.sort((a, b) => b.ev - a.ev);
-  const seen = new Set(), top = [];
-  for (const s of out) { const k = s.legs.map(l => l.id).sort().join(); if (seen.has(k)) continue; seen.add(k); top.push(s); if (top.length >= 8) break; }
+  const top = [];
+  for (const s of out) {
+    const ids = new Set(s.legs.map(l => l.id));
+    if (top.some(t => t.legs.filter(l => ids.has(l.id)).length > lock.length + 1)) continue;
+    top.push(s); if (top.length >= 8) break;
+  }
   return top;
 }
 function bPrice(ls) {                     // best single book hanging every leg; null when no book has them all
@@ -1386,7 +1403,7 @@ function slipCard(ls, info) {
   const bk = info ? info.bk : pr && pr.bk, d = info ? info.d : pr && pr.d;
   const be = d ? 1 / d : null, ev = d ? p * d - 1 : null, fair = bam(1 / Math.max(p, 1e-3));
   const verdict = same ? `<span class="pill p-cat">fair target</span>` : ev == null ? `<span class="pill p-open">no single book</span>` : ev > 0 ? `<span class="pill p-win">value</span>` : `<span class="pill p-loss">no edge</span>`;
-  const rows = ls.map(l => `<div class="tk-l"><div><span class="s">${esc(l.player)}</span><span class="sub">${esc(l.side.toLowerCase())} ${l.line} ${esc(STATW[l.stat] || l.stat)} &middot; ${esc(l.matchup)}${bk && l.prices[bk] != null ? ' &middot; ' + esc(bk) : ''}</span></div>
+  const rows = ls.map(l => `<div class="tk-l"><div><span class="s">${esc(l.player)}${info && BLD.lock.some(x => x.id === l.id) ? ' <span class="pill p-open">your pick</span>' : ''}</span><span class="sub">${esc(l.side.toLowerCase())} ${l.line} ${esc(STATW[l.stat] || l.stat)} &middot; ${esc(l.matchup)}${bk && l.prices[bk] != null ? ' &middot; ' + esc(bk) : ''}</span></div>
       <div class="r">${bk && l.prices[bk] != null ? odds(l.prices[bk]) : '—'}<span class="sub" title="blended chance (market ${pct(l.p_mkt)}, sim ${pct(l.p_sim)})">${Math.round(l.p * 100)}%</span>${info ? '' : `<button type="button" class="bm-x" data-rm="${esc(l.id)}" aria-label="Remove">&times;</button>`}</div></div>`).join('');
   const tiles = same
     ? st('Fair price', fair, 'take this or longer in the app') + st('Our chance', pct(p), `with sim correlation ×${bLift(ls.filter((l, i, a) => a.filter(x => x.game_id === l.game_id).length > 1)).toFixed(2)}`) + st('Legs pay alone', d ? bam(d) : '—', bk ? `${esc(bk)}; the book's SGP price will be lower` : '')
@@ -1408,7 +1425,7 @@ function bPicker() {
     const open = q || BLD.open[g.game_id];
     const body = open ? Object.entries(pl).map(([nm, xs]) => `<div class="bm-pl"><span class="bm-pn">${esc(nm)} <em>${esc(xs[0].team)}</em></span><div class="bm-legs">${xs.sort((a, b) => a.stat.localeCompare(b.stat) || a.side.localeCompare(b.side)).map(l => {
         const bp = Math.max(...Object.values(l.prices)), ev = l.p * bdec(bp) - 1;
-        return `<button type="button" class="bm-leg${inSlip.has(l.id) ? ' on' : ''}${ev > 0 ? ' plus' : ''}" data-add="${esc(l.id)}" title="blended ${pct(l.p)} · market ${pct(l.p_mkt)} · sim ${pct(l.p_sim)} · best ${odds(bp)}">${l.side === 'Over' ? 'o' : 'u'}${l.line} ${esc((STATW[l.stat] || l.stat).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'))} <b>${odds(bp)}</b> <i>${Math.round(l.p * 100)}%</i></button>`;
+        return `<button type="button" class="bm-leg${inSlip.has(l.id) ? ' on' : ''}${ev >= minEV() ? ' plus' : ev > 0 ? ' soft' : ''}" data-add="${esc(l.id)}" title="blended ${pct(l.p)} · market ${pct(l.p_mkt)} · sim ${pct(l.p_sim)} · best ${odds(bp)}">${l.side === 'Over' ? 'o' : 'u'}${l.line} ${esc((STATW[l.stat] || l.stat).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'))} <b>${odds(bp)}</b> <i>${Math.round(l.p * 100)}%</i></button>`;
       }).join('')}</div></div>`).join('') : '';
     return `<div class="bm-g"><button type="button" class="bm-gh" data-g="${esc(g.game_id)}" aria-expanded="${!!open}">${open ? '▾' : '▸'} ${esc(g.matchup)} <span class="cnt">${new Date(g.start).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York'})} ET &middot; ${Object.keys(pl).length} players</span></button>${body}</div>`;
   }).join('');
@@ -1454,15 +1471,15 @@ async function renderBuild() {
       <div class="bm-r"><span class="f-lab">Payout</span>${[200, 500, 1000, 2500, 6000].map(t => ch('target', t, '+' + t, BLD.target === t)).join('')}</div>
       <div class="bm-r"><span class="f-lab">Props</span>${Object.entries({pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', combo: 'Combos'}).map(([k, l]) => ch('stat', k, l, BLD.stats[k])).join('')}</div>
       <div class="bm-r"><span class="f-lab">Book</span>${ch('book', '', 'Any', !BLD.book)}${books.map(b => ch('book', b, b, BLD.book === b)).join('')}</div>
-      <div class="bm-r"><span class="f-lab">Games</span>${ch('sg', 0, 'Different games', !BLD.sg)}${ch('sg', 1, 'Allow same game', BLD.sg)}<button type="button" class="bm-go" id="bm-go"${legs.length ? '' : ' disabled'}>Build me one</button></div>
+      <div class="bm-r"><span class="f-lab">Games</span>${ch('sg', 0, 'Different games', !BLD.sg)}${ch('sg', 1, 'Allow same game', BLD.sg)}<button type="button" class="bm-go" id="bm-go"${legs.length ? '' : ' disabled'}>${BLD.lock.length ? `Build around my ${BLD.lock.length === 1 ? 'pick' : BLD.lock.length + ' picks'}` : 'Build me one'}</button></div>
       <div class="bm-msg" id="bm-msg"></div></div>`;
   const info = BLD.alts.length ? BLD.alts[BLD.ai] : null;
   $('view').innerHTML = `<div style="display:grid;gap:12px">
     <div class="pan"><div class="pan-h"><span class="pan-t">Build me one</span><span class="cnote">paper tool &middot; projections, not betting advice</span></div>
       ${c ? ctrls + slipCard(info ? info.legs : BLD.slip, info) : `<div class="dim" style="font-size:12.5px">Tonight’s legs are built right after the pricing run.</div>`}</div>
     ${c ? `<div class="pan"><div class="pan-h"><span class="pan-t">Tonight's legs</span><input class="bm-q" id="bm-q" placeholder="Find a player…" value="${esc(BLD.q)}" aria-label="Find a player"></div><div id="bm-pick">${bPicker()}</div>
-      <div class="cnote">% = our blended chance. Highlighted legs are +EV at their best price. Tap to add to your slip.</div></div>` : ''}
-    <div class="notes"><b style="color:var(--text)">How it works.</b> Every main-line player prop the books post for tonight, priced by the sim. The sim alone has been overconfident on props, so each leg's chance is pulled toward the market's no-vig price: our chance = market + k &times; (sim &minus; market), with k = ${c ? c.k.toFixed(2) : 'the trust weight'} fitted on every graded pick so far (the same blend Ace uses). <b>Build me one</b> searches for the slip with the best expected value near your payout, every leg +EV on its own, all legs at one sportsbook at that book's own prices. Legs from different games are independent, so the payout is real. With <b>Allow same game</b> on, legs that share a game use the sim's correlation (how often they hit together across its simulated games), and the slip shows a fair price to take or beat, since books price same-game parlays themselves. Books on our feed: DraftKings, FanDuel, BetMGM, Caesars, ESPN BET.</div>
+      <div class="cnote">% = our blended chance. <b style="color:var(--green-text)">Bold green</b>: +3% EV or better at its best price (what Build me one uses). Faded green: +EV but under 3%, close to the model's margin of error. Tap legs to add them, then <b>Build around my picks</b> fills the rest of the slip at a book that hangs them all. <b>Next best</b> shows different slips, not the same legs reshuffled.</div></div>` : ''}
+    <div class="notes"><b style="color:var(--text)">How it works.</b> Every main-line player prop the books post for tonight, priced by the sim. The sim alone has been overconfident on props, so each leg's chance is pulled toward the market's no-vig price: our chance = market + k &times; (sim &minus; market), with k = ${c ? c.k.toFixed(2) : 'the trust weight'} fitted on every graded pick so far (the same blend Ace uses). <b>Build me one</b> searches for the slip with the best expected value near your payout, every leg at least +3% EV on its own, all legs at one sportsbook at that book's own prices. Legs from different games are independent, so the payout is real. With <b>Allow same game</b> on, legs that share a game use the sim's correlation (how often they hit together across its simulated games), and the slip shows a fair price to take or beat, since books price same-game parlays themselves. Books on our feed: DraftKings, FanDuel, BetMGM, Caesars, ESPN BET.</div>
     ${bRecord(d)}</div>`;
   if (!c) return;
   const msg = t => { $('bm-msg').textContent = t; };
@@ -1477,20 +1494,28 @@ async function renderBuild() {
     msg('Searching…');
     setTimeout(() => {
       const r = bSolve(); BLD.alts = r; BLD.ai = 0;
-      if (!r.length) { BLD.alts = []; renderBuild(); $('bm-msg').textContent = `No slip with every leg +EV lands near +${BLD.target} with these settings. Try another payout, more legs or more props.`; return; }
+      if (!r.length) {
+        BLD.alts = []; BLD.slip = BLD.lock.slice(); renderBuild();
+        $('bm-msg').textContent = BLD.lock.length && ![...new Set(BLD.lock.flatMap(l => Object.keys(l.prices)))].some(b => BLD.lock.every(l => l.prices[b] != null))
+          ? 'No single book hangs all of your picks, so there is nothing to build around. Remove one and try again.'
+          : `No slip with every added leg +${Math.round(minEV() * 100)}% EV or better lands near +${BLD.target} with these settings. Try another payout, more legs or more props.`;
+        return;
+      }
       BLD.slip = r[0].legs.slice(); renderBuild();
     }, 20);
   };
   if ($('bm-next')) $('bm-next').onclick = () => { BLD.ai = (BLD.ai + 1) % BLD.alts.length; BLD.slip = BLD.alts[BLD.ai].legs.slice(); renderBuild(); };
-  if ($('bm-clear')) $('bm-clear').onclick = () => { BLD.slip = []; BLD.alts = []; renderBuild(); };
+  if ($('bm-clear')) $('bm-clear').onclick = () => { BLD.slip = []; BLD.lock = []; BLD.alts = []; renderBuild(); };
   const byId = {}; for (const l of c.legs) byId[l.id] = l;
-  document.querySelector('.bm-slip').onclick = e => { const b = e.target.closest('[data-rm]'); if (!b) return; BLD.alts = []; BLD.slip = BLD.slip.filter(l => l.id !== b.dataset.rm); renderBuild(); };
+  document.querySelector('.bm-slip').onclick = e => { const b = e.target.closest('[data-rm]'); if (!b) return; BLD.alts = []; BLD.slip = BLD.slip.filter(l => l.id !== b.dataset.rm); BLD.lock = BLD.slip.slice(); renderBuild(); };
   $('bm-pick').onclick = e => {
     const h = e.target.closest('[data-g]'); if (h) { BLD.open[h.dataset.g] = !BLD.open[h.dataset.g]; $('bm-pick').innerHTML = bPicker(); return; }
     const b = e.target.closest('[data-add]'); if (!b) return;
-    const l = byId[b.dataset.add]; BLD.alts = [];
+    const l = byId[b.dataset.add];
+    if (BLD.alts.length) { BLD.alts = []; BLD.slip = BLD.lock.slice(); }      // tapping a leg goes back to your own picks
     if (BLD.slip.some(x => x.id === l.id)) BLD.slip = BLD.slip.filter(x => x.id !== l.id);
     else { BLD.slip = BLD.slip.filter(x => x.player !== l.player); BLD.slip.push(l); }
+    BLD.lock = BLD.slip.slice();
     const y = scrollY; renderBuild(); scrollTo(0, y);
   };
   $('bm-q').oninput = e => { BLD.q = e.target.value; $('bm-pick').innerHTML = bPicker(); };
