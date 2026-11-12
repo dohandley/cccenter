@@ -1568,18 +1568,18 @@ const HSTAT = {pts: g => g[4], reb: g => g[5], ast: g => g[6], fg3m: g => g[7], 
 /* NFL (Nov 11): week files carry the same row shape with a stats object in slot 4, keyed by the prop stat */
 for (const k of ['pass_yds', 'pass_att', 'pass_comp', 'rush_yds', 'rush_att', 'rec_yds', 'rec']) HSTAT[k] = g => (g[4] && g[4][k]) || 0;
 const nth = n => n + (n % 100 > 10 && n % 100 < 14 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
-const POSW = {G: 'guards', F: 'forwards', C: 'centers'};
+const POSW = {G: 'guards', F: 'forwards', C: 'centers', QB: 'QBs', RB: 'RBs', WR: 'WRs', TE: 'TEs'};
 function dvpLine(D, st, sd) {
   // One player at this position (ESPN G/F/C, 20+ min) against tonight's opponent, plus the position per 48 min; rank by per 48 (1 = most).
   const v = D && D.s && D.s[st];
   if (!v) return '';
-  const [avg, rk, n, la, p48, la48] = v, soft = rk <= Math.round(D.t / 3), hard = rk > D.t - Math.round(D.t / 3);
+  const f1 = x => x == null ? x : (+x).toFixed(1), [avg, rk, n, la, p48, la48] = v.map((x, i) => i === 1 || i === 2 ? x : f1(x)), soft = rk <= Math.round(D.t / 3), hard = rk > D.t - Math.round(D.t / 3);
   const good = sd === 'Over' ? soft : hard, bad = sd === 'Over' ? hard : soft;
   // Lower half reads as "fewest" (29th most = 2nd fewest), and a colored rank says which side it helps (Nov 11).
   const rank = rk === 1 ? 'most in the league' : rk === D.t ? 'fewest in the league' : rk <= D.t / 2 ? `${nth(rk)} most of ${D.t}` : `${nth(D.t - rk + 1)} fewest of ${D.t}`;
   const tip = good ? ` &middot; helps the ${sd}` : bad ? ` &middot; works against the ${sd}` : '';
   const pw = POSW[D.p] || esc(D.p), sw = esc((STATW[st] || st).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'));
-  return `<div class="bm-dv">vs <b>${esc(D.o)}</b>: ${pw} average <b>${avg}</b> ${sw}${p48 != null ? ` &middot; ${p48} per 48 min` : ''} &middot; <span class="${good ? 'pos' : bad ? 'neg' : ''}">${rank}${tip}</span> <span class="dim">&middot; league ${la}${la48 != null ? ` / ${la48} per 48` : ''} &middot; ${n} ${pw.replace(/s$/, '')} game${n === 1 ? '' : 's'}, 20+ min</span></div>`;
+  return `<div class="bm-dv">vs <b>${esc(D.o)}</b>: ${pw} average <b>${avg}</b> ${sw}${p48 != null && p48 !== avg ? ` &middot; ${p48} ${D.u ? esc(D.u) : 'per 48 min'}` : ''} &middot; <span class="${good ? 'pos' : bad ? 'neg' : ''}">${rank}${tip}</span> <span class="dim">&middot; league ${la}${la48 != null ? ` / ${la48}${D.u ? '' : ' per 48'}` : ''} &middot; ${n} ${pw.replace(/s$/, '')} game${n === 1 ? '' : 's'}, ${D.f ? esc(D.f) : '20+ min'}</span></div>`;
 }
 function histChart(key, xs, side, ck, HH, DD) {
   // Recent games for one player: bars for the chosen stat, the line across, green = the chosen side cleared it.
@@ -1605,7 +1605,7 @@ function histChart(key, xs, side, ck, HH, DD) {
     <div class="bm-hc"><span class="bm-seg">${['Over', 'Under'].map(x => tg('data-hside', x, x, x === sd)).join('')}</span><span class="bm-seg">${[5, 10, 15].map(x => tg('data-hn', x, 'L' + x, x === n)).join('')}</span></div>
     <div class="bm-hr"><b>${sd} ${line} ${esc(short(st))}</b> &middot; L${n} <b>${hits}/${games.length}</b>${games.length < n ? ` <span class="dim">(only ${games.length} games)</span>` : ''}${prior}</div>${dvpLine(DV, st, sd)}
     <div class="bm-bars" style="--ln:${line / max * 100}%">${bars}</div>
-    <div class="cnote">Recent form${DV ? ' and the matchup are' : ' is'} context: the books price ${DV ? 'them' : 'it'} in${DV ? ' and the sim already adjusts for each team\'s defense' : ''}, so ${DV ? 'they don\'t' : 'it doesn\'t'} change our chance.${DV ? ' Matchup: the average is one player at the position (ESPN\'s guard / forward / center) with 20+ minutes; the rank is per 48 minutes the position played, every minute counted.' : ''}</div></div>`;
+    <div class="cnote">Recent form${DV ? ' and the matchup are' : ' is'} context: the books price ${DV ? 'them' : 'it'} in${DV ? ' and the sim already adjusts for each team\'s defense' : ''}, so ${DV ? 'they don\'t' : 'it doesn\'t'} change our chance.${DV ? (DV.u ? ' Matchup: the average is one player at the position (nflverse roster: QB / RB / WR / TE) with a real role that game; the rank is the whole position\'s total per game.' : ' Matchup: the average is one player at the position (ESPN\'s guard / forward / center) with 20+ minutes; the rank is per 48 minutes the position played, every minute counted.') : ''}</div></div>`;
 }
 function bPicker() {
   const legs = bLegs(), q = BLD.q.trim().toLowerCase(), by = {};
