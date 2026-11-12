@@ -186,7 +186,7 @@ tr.go{cursor:pointer} tr.go:hover td{background:var(--surface-2)}
 td.pk{font-weight:700;white-space:normal;min-width:180px}
 .grp{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-3);background:var(--surface-2)}
 .lsum{font-size:12.5px;color:var(--text-3)}.lsum b{color:var(--text);font-weight:800}.lsum b.pos{color:var(--green-text)}.lsum b.neg{color:var(--red-text)}
-.tk{border:1px solid var(--border);border-radius:8px;background:var(--surface);display:grid;min-width:0;box-shadow:var(--shadow)}
+.tk{border:1px solid var(--border);border-radius:8px;background:var(--surface);display:grid;min-width:0;box-shadow:var(--shadow)}.tk.won{border-color:var(--green-border);background:linear-gradient(var(--green-bg),var(--green-bg)),var(--surface)}.tk.won .tk-f{background:transparent;border-top-color:var(--green-border)}
 .tk-h{display:flex;justify-content:space-between;align-items:baseline;gap:6px 14px;flex-wrap:wrap;padding:12px 14px 10px}
 .tk-o{font-weight:800;font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .tk-o b{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:0;margin-left:6px}
@@ -1378,7 +1378,7 @@ function ticket(t) {
   const foot = t.result === 'pulled' ? `<span class="pill p-pulled">pulled</span><span class="dim">Pulled before the games: ${esc(t.pull_reason || '')}. Not a win or a loss.</span>`
     : t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span><span class="u ${ucls(t.units)}">${un(t.units)}</span>`
     : `<span class="pill p-open">pending</span><span class="dim">Settles when both legs are graded</span>`;
-  return `<div class="tk"${t.result ? '' : ' data-open="lean"'}><div class="tk-h"><span class="tk-o">${esc(t.american)}<b>${esc(t.book)}</b></span>
+  return `<div class="tk${t.result === 'win' ? ' won' : ''}"${t.result ? '' : ' data-open="lean"'}><div class="tk-h"><span class="tk-o">${esc(t.american)}<b>${esc(t.book)}</b></span>
       <span class="tk-m">est ${pct(t.p)} &middot; fair ${amer(1 / t.p)} &middot; EV ${t.ev >= 0 ? '+' : ''}${(t.ev * 100).toFixed(0)}%</span></div>${legs}<div class="tk-f">${foot}</div></div>`;
 }
 /* Long shots: sim SGPs, SGP+ and cross-game price-gap tickets. Built by sim_sgp.py (NBA only so far),
@@ -1393,7 +1393,7 @@ function sgpTicket(t) {
     : `<span class="tk-o">${esc(t.target)}<b>${KIND[t.kind]} &middot; ${t.n} legs</b></span><span class="tk-m">est ${pct(t.p)} &middot; ${t.lift > 1.005 ? `sim lift &times;${t.lift.toFixed(2)} &middot; ` : ''}take ${esc(t.target)} or longer${t.book ? ' &middot; all legs at ' + esc(t.book) : ''}</span>`;
   const foot = t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span>${gap ? `<span class="u ${ucls(t.units)}">${un(t.units)}</span>` : ''}`
     : `<span class="pill p-open">pending</span><span class="dim">Settles when every leg is graded</span>`;
-  return `<div class="tk"${t.result ? '' : ` data-open="${esc(t.kind)}"`}><div class="tk-h">${head}</div>${legs}<div class="tk-f">${foot}</div></div>`;
+  return `<div class="tk${t.result === 'win' ? ' won' : ''}"${t.result ? '' : ` data-open="${esc(t.kind)}"`}><div class="tk-h">${head}</div>${legs}<div class="tk-f">${foot}</div></div>`;
 }
 /* Open tiles jump to their open tickets (switching to that ticket's night first). key: lean | sgp | sgp_plus | gap */
 const jumpTile = (html, key, n) => n ? html.replace('<div class="st">', `<div class="st jump" role="button" tabindex="0" data-jump="${key}" title="Show the open ticket${n === 1 ? '' : 's'}">`) : html;
@@ -1636,7 +1636,7 @@ function bRecord(d) {
   const tiles = st('Builder slips', rec(R), R.graded ? `hit ${R.w} · expected ${R.expected.toFixed(1)}` : `${R.open} open`)
     + st('Units', un(R.units), '1u per slip, paper', ucls(R.units))
     + Object.entries(d.by_legs || {}).map(([n, r]) => st(`${n} legs`, rec(r), r.graded ? un(r.units) : `${r.open} open`, ucls(r.units))).slice(0, 3).join('');
-  const tk = rows.map(s => `<div class="tk"><div class="tk-h"><span class="tk-o">${esc(s.price)}<b>${esc(s.book)} &middot; ${s.legs_n} legs</b></span><span class="tk-m">${esc(shortDate(s.slate + 'T12:00:00-05:00'))} &middot; preset ${esc(s.target)} &middot; ${pct(s.p)} &middot; EV ${s.ev > 0 ? '+' : ''}${Math.round(s.ev * 100)}%</span></div>
+  const tk = rows.map(s => `<div class="tk${s.result === 'win' ? ' won' : ''}"><div class="tk-h"><span class="tk-o">${esc(s.price)}<b>${esc(s.book)} &middot; ${s.legs_n} legs</b></span><span class="tk-m">${esc(shortDate(s.slate + 'T12:00:00-05:00'))} &middot; preset ${esc(s.target)} &middot; ${pct(s.p)} &middot; EV ${s.ev > 0 ? '+' : ''}${Math.round(s.ev * 100)}%</span></div>
       ${s.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.player && l.game_id && HSTAT[l.stat] ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-ht="${esc([l.team + '|' + l.player, l.stat, l.line, l.side, l.game_id].join('~'))}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup || '')}</span>${l.result === 'void' && l.actual == null ? FIN_DNP : l.actual != null ? finHtml(l.actual, l.result, l.min) : finOnly(l.result)}</div><div class="r">${odds(l.price)} ${l.result ? '' : '<span class="pill p-open">pending</span>'}<span class="sub">${Math.round(l.p * 100)}%</span></div></div>`).join('')}
       <div class="tk-f">${s.result ? `<span class="pill p-${esc(s.result)}">${esc(s.result)}</span><span class="u ${ucls(s.units)}">${un(s.units)}</span>` : '<span class="pill p-open">pending</span><span class="dim">Settles when every leg is graded</span>'}</div></div>`).join('');
   return `<div class="pan"><div class="pan-h"><span class="pan-t">The builder's own slips</span><span class="cnote">paper only &middot; never bet, never in the record</span></div>
