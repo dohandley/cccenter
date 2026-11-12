@@ -101,7 +101,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .cmp small{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4)}
 .cmp b{font-weight:800;font-size:18px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .cmp .sv{color:var(--sim)}
-.gfin{font-size:12.5px;font-weight:500;color:var(--text);margin-top:7px}.gfin b{font-weight:800}.gfin b.pos{color:var(--green-text)}.gfin b.neg{color:var(--red-text)}.wp-f{text-align:center;margin-top:5px}.gap{font-size:12px;font-weight:600;color:var(--text-3);margin-top:8px;border-top:1px dashed var(--border);padding-top:7px}
+.gfin{font-size:12.5px;font-weight:500;color:var(--text);margin-top:7px}.gfin b{font-weight:800;font-size:13.5px}.gfin .pos{color:var(--green-text)}.gfin .neg{color:var(--red-text)}.gtag{font-size:11.5px;font-weight:600;margin-left:2px}.wp-f{text-align:center;margin-top:5px}.gap{font-size:12px;font-weight:600;color:var(--text-3);margin-top:8px;border-top:1px dashed var(--border);padding-top:7px}
 .gap b{color:var(--sim);font-weight:800}
 .ln{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;min-width:0}
 .ln-v{font-weight:800;font-size:18px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:4px}
@@ -396,7 +396,7 @@ details.lnd[open]>summary{margin-bottom:8px}details.lnd>summary:focus-visible{ou
 @media(max-width:768px){.lines.l3{grid-template-columns:1fr}.lines.l3>.ln:last-child{grid-column:auto}.tm-n .tb{width:24px!important;height:24px!important;font-size:8px!important}}
 .gs .mt{display:inline-flex;align-items:center;gap:3px}.gs .mt .tb{margin-right:1px}
 th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{color:var(--text)}th.srt.on::after{content:' \25BE'}th.srt:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
-.fv{font-weight:800;color:var(--text)}.fv.pos{color:var(--green-text)}.fv.neg{color:var(--red-text)}.fin-l{display:block;font-size:12.5px;font-weight:500;color:var(--text);margin-top:2px}.fin-l b{font-weight:800}.fin-l b.pos{color:var(--green-text)}.fin-l b.neg{color:var(--red-text)}
+.fv{font-weight:800;color:var(--text)}.fv.pos{color:var(--green-text)}.fv.neg{color:var(--red-text)}.fin-l{display:inline-flex;align-items:baseline;gap:7px;margin-top:6px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);background:var(--surface-3);font-size:12px;color:var(--text-3)}.fin-k{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}.fin-l b{font-size:14px;font-weight:800;color:var(--text)}.fin-l.w{background:var(--green-bg);border-color:var(--green-border)}.fin-l.w b{color:var(--green-text)}.fin-l.l{background:var(--red-bg);border-color:var(--red-border)}.fin-l.l b{color:var(--red-text)}.fin-m{font-size:11.5px}
 .st.jump{cursor:pointer;transition:border-color .15s}.st.jump:hover,.st.jump:focus-visible{border-color:var(--text-3)}.st.jump .st-s{text-decoration:underline;text-underline-offset:2px}
 @keyframes tkflash{0%,40%{box-shadow:0 0 0 3px var(--gold)}100%{box-shadow:0 0 0 0 transparent}}.tk.flash{animation:tkflash 1.8s ease-out}
 </style></head>
@@ -657,20 +657,21 @@ function finishLine(p) {
 }
 /* Finished line for a graded parlay / long-shot leg (Nov 12, same look as the builder's). Lean legs read the night
    file's pick (its own graded actual); long-shot legs read the game's final box. Night files load via loadFinals(). */
-const finHtml = (v, res, min) => `<span class="fin-l">Finished with <b class="${res === 'win' ? 'pos' : res === 'loss' ? 'neg' : ''}">${esc(v)}</b>${min ? ` &middot; played ${Math.round(min)} min` : ''}</span>`;
+const finHtml = (v, res, min) => `<span class="fin-l ${res === 'win' ? 'w' : res === 'loss' ? 'l' : ''}"><span class="fin-k">Final</span><b>${esc(v)}</b>${min ? `<span class="fin-m">${Math.round(min)} min</span>` : ''}</span>`;
+const FIN_DNP = '<span class="fin-l"><span class="fin-k">Did not play</span></span>';
 const BOXK = {pass_att: 'att', pass_comp: 'comp'};
 function legFin(l) {
   if (!l.result || !l.game_id) return '';
   const d = NIGHT[nightKey(l.game_id)], g = d && d.games.find(x => x.game_id === l.game_id);
-  if (!g || !g.final || !g.final.box) return l.result === 'void' ? '<span class="fin-l">Did not play</span>' : '';
+  if (!g || !g.final || !g.final.box) return l.result === 'void' ? FIN_DNP : '';
   let player = l.player, team = l.team, stat = l.stat, v = null;
   if (!stat) {                                    // lean leg: the night file's own pick
     const p = g.picks.find(x => x.selection === l.selection);
-    if (!p || p.market !== 'prop') return p && p.actual != null ? `<span class="fin-l">${finishLine(p)}</span>` : '';
+    if (!p || p.market !== 'prop') return p && p.actual != null ? finHtml(p.actual, l.result) : '';
     player = p.player; team = p.team; stat = p.stat; v = p.actual;
   }
   const a = (g.final.box[team] || {})[player];
-  if (a && a.dnp || !a && (v == null || l.result === 'void')) return l.result === 'void' || (a && a.dnp) ? '<span class="fin-l">Did not play</span>' : '';
+  if (a && a.dnp || !a && (v == null || l.result === 'void')) return l.result === 'void' || (a && a.dnp) ? FIN_DNP : '';
   if (!a) return finHtml(v, l.result);            // lean leg graded from the ledger; name not in the box (e.g. Day'Ron)
   if (v == null) {
     const parts = {pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ra: ['reb', 'ast']}[stat] || [BOXK[stat] || stat];
@@ -826,27 +827,31 @@ const badge = (t, sz = 30) => { const [a, b] = tcol(t), fs = Math.round(sz * (t.
 const fairOdds = p => p <= 0 || p >= 1 ? '—' : p >= .5 ? '-' + Math.round(100 * p / (1 - p)) : '+' + Math.round(100 * (1 - p) / p);
 /* Final results under the game lines (Nov 12): green when the sim's side came in, red when it didn't, grey on a push.
    Spread/total judge the side the sim leaned vs the market; moneyline the tile's side; the win bar the sim favorite. */
-const gfin = (txt, ok) => `<div class="gfin">${txt}${ok == null ? '' : ` <b class="${ok === 0 ? '' : ok > 0 ? 'pos' : 'neg'}">${ok === 0 ? 'push' : ok > 0 ? '&#10003; sim side' : '&#10007; sim side'}</b>`}</div>`;
+const okc = ok => ok == null || ok === 0 ? '' : ok > 0 ? 'pos' : 'neg';
+const gfin = (txt, ok) => `<div class="gfin">${txt}${ok == null ? '' : ` <span class="gtag ${okc(ok)}">${ok === 0 ? 'push' : ok > 0 ? '&#10003; sim side' : '&#10007; sim side'}</span>`}</div>`;
 function finLines(g) {
+  // the deciding number is colored: green when the sim's side came in, red when it didn't (Nov 12)
   const f = g.final; if (!f || f.home_score == null) return {};
   const m = f.home_score - f.away_score, win = m > 0 ? g.home : m < 0 ? g.away : null, out = {};
-  const fav = g.home_win >= .5 ? g.home : g.away;
-  out.wp = win ? `${esc(win)} won ${Math.max(f.home_score, f.away_score)}&ndash;${Math.min(f.home_score, f.away_score)} &middot; <b class="${win === fav ? 'pos' : 'neg'}">${win === fav ? 'sim favorite won' : 'sim favorite lost'}</b>` : 'Tie';
+  const fav = g.home_win >= .5 ? g.home : g.away, wok = win ? (win === fav ? 1 : -1) : null;
+  out.wp = win ? `${esc(win)} won <b class="${okc(wok)}">${Math.max(f.home_score, f.away_score)}&ndash;${Math.min(f.home_score, f.away_score)}</b> &middot; <span class="gtag ${okc(wok)}">${wok > 0 ? 'sim favorite won' : 'sim favorite lost'}</span>` : 'Tie';
   const sl = g.spread_line;
   if (sl != null) {
     const sd = g.fair_spread_home + sl, cov = m - sl, simH = sd < 0;   // cov > 0: home covered the market spread
     const covT = cov > 0 ? g.home : cov < 0 ? g.away : null;
+    const ok = Math.abs(sd) < .05 ? null : cov === 0 ? 0 : (cov > 0) === simH ? 1 : -1;
     const ln = covT === g.home ? `${esc(g.home)} ${sgn(-sl)}` : covT ? `${esc(g.away)} ${sgn(sl)}` : '';
-    out.sp = gfin(`Final ${win ? esc(win) + ' by ' + Math.abs(m) : 'tie'} &middot; ${covT ? ln + ' covered' : 'landed on the number'}`, Math.abs(sd) < .05 ? null : cov === 0 ? 0 : (cov > 0) === simH ? 1 : -1);
+    out.sp = gfin(`Final ${win ? esc(win) + ` by <b class="${okc(ok)}">${Math.abs(m)}</b>` : 'tie'} &middot; ${covT ? ln + ' covered' : 'landed on the number'}`, ok);
   }
   if (g.total_line != null) {
     const tot = f.home_score + f.away_score, d = tot - g.total_line, td = g.fair_total - g.total_line;
-    out.to = gfin(`Final total <b>${tot}</b> &middot; ${d > 0 ? 'Over' : d < 0 ? 'Under' : 'Push'}`, Math.abs(td) < .05 ? null : d === 0 ? 0 : (d > 0) === (td > 0) ? 1 : -1);
+    const ok = Math.abs(td) < .05 ? null : d === 0 ? 0 : (d > 0) === (td > 0) ? 1 : -1;
+    out.to = gfin(`Final total <b class="${okc(ok)}">${tot}</b> &middot; ${d > 0 ? 'Over' : d < 0 ? 'Under' : 'Push'}`, ok);
   }
   const ml = g.mk && g.mk.ml;
   if (ml) {
-    const sideH = g.home_win - ml.home_nv >= 0, t = sideH ? g.home : g.away;
-    out.ml = gfin(win ? `${esc(win)} won` : 'Tie', win ? (win === t ? 1 : -1) : 0);
+    const sideH = g.home_win - ml.home_nv >= 0, t = sideH ? g.home : g.away, ok = win ? (win === t ? 1 : -1) : 0;
+    out.ml = gfin(win ? `<b class="${okc(ok)}">${esc(win)}</b> won` : 'Tie', ok);
   }
   return out;
 }
@@ -1621,7 +1626,7 @@ function bRecord(d) {
     + st('Units', un(R.units), '1u per slip, paper', ucls(R.units))
     + Object.entries(d.by_legs || {}).map(([n, r]) => st(`${n} legs`, rec(r), r.graded ? un(r.units) : `${r.open} open`, ucls(r.units))).slice(0, 3).join('');
   const tk = rows.map(s => `<div class="tk"><div class="tk-h"><span class="tk-o">${esc(s.price)}<b>${esc(s.book)} &middot; ${s.legs_n} legs</b></span><span class="tk-m">${esc(shortDate(s.slate + 'T12:00:00-05:00'))} &middot; preset ${esc(s.target)} &middot; ${pct(s.p)} &middot; EV ${s.ev > 0 ? '+' : ''}${Math.round(s.ev * 100)}%</span></div>
-      ${s.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.player && l.game_id && HSTAT[l.stat] ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-ht="${esc([l.team + '|' + l.player, l.stat, l.line, l.side, l.game_id].join('~'))}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup || '')}</span>${l.result === 'void' && l.actual == null ? '<span class="fin-l">Did not play</span>' : l.actual != null ? `<span class="fin-l">Finished with <b class="${l.result === 'win' ? 'pos' : l.result === 'loss' ? 'neg' : ''}">${esc(l.actual)}</b>${l.min ? ` &middot; played ${l.min} min` : ''}</span>` : ''}</div><div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">${Math.round(l.p * 100)}%</span></div></div>`).join('')}
+      ${s.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.player && l.game_id && HSTAT[l.stat] ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-ht="${esc([l.team + '|' + l.player, l.stat, l.line, l.side, l.game_id].join('~'))}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup || '')}</span>${l.result === 'void' && l.actual == null ? FIN_DNP : l.actual != null ? finHtml(l.actual, l.result, l.min) : ''}</div><div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">${Math.round(l.p * 100)}%</span></div></div>`).join('')}
       <div class="tk-f">${s.result ? `<span class="pill p-${esc(s.result)}">${esc(s.result)}</span><span class="u ${ucls(s.units)}">${un(s.units)}</span>` : '<span class="pill p-open">pending</span><span class="dim">Settles when every leg is graded</span>'}</div></div>`).join('');
   return `<div class="pan"><div class="pan-h"><span class="pan-t">The builder's own slips</span><span class="cnote">paper only &middot; never bet, never in the record</span></div>
     <div class="rc-k">${tiles}</div>
