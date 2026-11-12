@@ -396,7 +396,7 @@ details.lnd[open]>summary{margin-bottom:8px}details.lnd>summary:focus-visible{ou
 @media(max-width:768px){.lines.l3{grid-template-columns:1fr}.lines.l3>.ln:last-child{grid-column:auto}.tm-n .tb{width:24px!important;height:24px!important;font-size:8px!important}}
 .gs .mt{display:inline-flex;align-items:center;gap:3px}.gs .mt .tb{margin-right:1px}
 th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{color:var(--text)}th.srt.on::after{content:' \25BE'}th.srt:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
-.fin-l{display:block;font-size:12.5px;font-weight:500;color:var(--text);margin-top:2px}.fin-l b{font-weight:800}.fin-l b.pos{color:var(--green-text)}.fin-l b.neg{color:var(--red-text)}
+.fv{font-weight:800;color:var(--text)}.fv.pos{color:var(--green-text)}.fv.neg{color:var(--red-text)}.fin-l{display:block;font-size:12.5px;font-weight:500;color:var(--text);margin-top:2px}.fin-l b{font-weight:800}.fin-l b.pos{color:var(--green-text)}.fin-l b.neg{color:var(--red-text)}
 .st.jump{cursor:pointer;transition:border-color .15s}.st.jump:hover,.st.jump:focus-visible{border-color:var(--text-3)}.st.jump .st-s{text-decoration:underline;text-underline-offset:2px}
 @keyframes tkflash{0%,40%{box-shadow:0 0 0 3px var(--gold)}100%{box-shadow:0 0 0 0 transparent}}.tk.flash{animation:tkflash 1.8s ease-out}
 </style></head>
@@ -649,9 +649,39 @@ function played(g, p) {
   if (a.dnp) return 'did not play';
   return a.min != null ? `played ${Math.round(a.min)} min` : '';
 }
+/* the finished number, green when the pick won, red when it lost (Nov 12: everywhere a finished line shows) */
+const fv = p => `<b class="fv ${p.result === 'win' ? 'pos' : p.result === 'loss' ? 'neg' : ''}">${esc(p.actual)}</b>`;
 function finishLine(p) {
   if (p.actual == null) return '';
-  return p.market === 'prop' ? `Finished with ${esc(p.actual)}` : p.market === 'total' ? `Final total ${esc(p.actual)}` : `Final: ${esc(p.actual)}`;
+  return p.market === 'prop' ? `Finished with ${fv(p)}` : p.market === 'total' ? `Final total ${fv(p)}` : `Final: ${esc(p.actual)}`;
+}
+/* Finished line for a graded parlay / long-shot leg (Nov 12, same look as the builder's). Lean legs read the night
+   file's pick (its own graded actual); long-shot legs read the game's final box. Night files load via loadFinals(). */
+const finHtml = (v, res, min) => `<span class="fin-l">Finished with <b class="${res === 'win' ? 'pos' : res === 'loss' ? 'neg' : ''}">${esc(v)}</b>${min ? ` &middot; played ${Math.round(min)} min` : ''}</span>`;
+const BOXK = {pass_att: 'att', pass_comp: 'comp'};
+function legFin(l) {
+  if (!l.result || !l.game_id) return '';
+  const d = NIGHT[nightKey(l.game_id)], g = d && d.games.find(x => x.game_id === l.game_id);
+  if (!g || !g.final || !g.final.box) return l.result === 'void' ? '<span class="fin-l">Did not play</span>' : '';
+  let player = l.player, team = l.team, stat = l.stat, v = null;
+  if (!stat) {                                    // lean leg: the night file's own pick
+    const p = g.picks.find(x => x.selection === l.selection);
+    if (!p || p.market !== 'prop') return p && p.actual != null ? `<span class="fin-l">${finishLine(p)}</span>` : '';
+    player = p.player; team = p.team; stat = p.stat; v = p.actual;
+  }
+  const a = (g.final.box[team] || {})[player];
+  if (a && a.dnp || !a && (v == null || l.result === 'void')) return l.result === 'void' || (a && a.dnp) ? '<span class="fin-l">Did not play</span>' : '';
+  if (!a) return finHtml(v, l.result);            // lean leg graded from the ledger; name not in the box (e.g. Day'Ron)
+  if (v == null) {
+    const parts = {pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ra: ['reb', 'ast']}[stat] || [BOXK[stat] || stat];
+    if (parts.some(k => a[k] == null)) return '';
+    v = parts.reduce((t, k) => t + a[k], 0);
+  }
+  return finHtml(v, l.result, a.min);
+}
+async function loadFinals(legs) {
+  const nks = [...new Set(legs.filter(l => l.result && l.game_id).map(l => nightKey(l.game_id)))].filter(k => !NIGHT[k]);
+  await Promise.all(nks.map(k => getJSON(`sim/${k}.json`).then(d => { NIGHT[k] = d; }).catch(() => {})));
 }
 /* Slate L5/L10/L15 (Nov 10): a toggle on NBA prop bets, leans and ★ rows opens the same recent-games chart as the
    Build tab, from the night file's hist (games before that night), scored on the pick's own side. */
@@ -711,7 +741,7 @@ function pickCard(g, p) {
   const st_ = !p.result && starOf(p);
   const tail = p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>`
     : ruledOut(g, p) ? OUTPILL : (st_ ? '<span class="pill p-hot">★</span> ' : '') + (p.hold ? '<span class="pill p-open">Hold</span> ' : '') + (p.role ? '<span class="pill p-cold">Role?</span> ' : '') + '<span class="pill p-open">pending</span>';
-  const cmp = `<div class="pk-c" role="button" tabindex="0" aria-expanded="false"><span class="pk-cs"><b>${esc(p.selection)}</b><span class="sub">${odds(p.price)} ${esc(p.book)} &middot; model ${pct(p.model_p)} vs mkt ${pct(p.book_p)}${p.result && p.actual != null && p.market === 'prop' ? ` &middot; finished ${esc(p.actual)}` : ''}</span></span><span class="pk-ct">${tail}<span class="chev" aria-hidden="true">&#9662;</span></span></div>`;
+  const cmp = `<div class="pk-c" role="button" tabindex="0" aria-expanded="false"><span class="pk-cs"><b>${esc(p.selection)}</b><span class="sub">${odds(p.price)} ${esc(p.book)} &middot; model ${pct(p.model_p)} vs mkt ${pct(p.book_p)}${p.result && p.actual != null && p.market === 'prop' ? ` &middot; finished ${fv(p)}` : ''}</span></span><span class="pk-ct">${tail}<span class="chev" aria-hidden="true">&#9662;</span></span></div>`;
   return `<div class="pick">${cmp}<div class="pk-h"><span class="pk-s">${selH(p)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
     <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${htBtn(g, p) ? `<div class="ht-w">${htBtn(g, p)}</div>` : ''}${res}${p.player && p.market === 'prop' ? `<a class="pl-more" href="${plHref(p.player)}">Every pick on ${esc(p.player)} &rarr;</a>` : ''}</div>`;
@@ -726,7 +756,7 @@ function shopLine(p, small) {
 }
 function leanTable(ls, g) {
   if (!ls.length) return '';
-  const row = p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + selH(p) + '</b>' : selH(p)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${esc(p.actual)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}${htBtn(g, p) ? `<span class="sub">${htBtn(g, p)}</span>` : ''}</td>
+  const row = p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + selH(p) + '</b>' : selH(p)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${fv(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}${htBtn(g, p) ? `<span class="sub">${htBtn(g, p)}</span>` : ''}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r hm">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : out ? '<span class="pill p-void">void</span>' : '<span class="pill p-open">pending</span>'}</td></tr>`; };
   /* Nov 9 (Dylan): leans collapse by default; ★ Top group leans stay out in the open */
@@ -1308,7 +1338,7 @@ function renderResults() {
 const amer = d => d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1)));
 const FLAG = {backfill: 'Rebuilt from ledger', late: 'Built late', live: ''};
 function ticket(t) {
-  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.game_id ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-hsel="${esc(l.game_id + '~' + l.selection)}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup)} &middot; ${esc(shortDate(l.start))}</span></div>
+  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.game_id ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-hsel="${esc(l.game_id + '~' + l.selection)}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup)} &middot; ${esc(shortDate(l.start))}</span>${legFin(l)}</div>
       <div class="r">${odds(l.price)} ${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">est ${pct(l.p)} &middot; mkt ${pct(l.book_p)}</span></div></div>`).join('');
   const foot = t.result === 'pulled' ? `<span class="pill p-pulled">pulled</span><span class="dim">Pulled before the games: ${esc(t.pull_reason || '')}. Not a win or a loss.</span>`
     : t.result ? `<span class="pill p-${esc(t.result)}">${esc(t.result)}</span><span class="u ${ucls(t.units)}">${un(t.units)}</span>`
@@ -1321,7 +1351,7 @@ function ticket(t) {
 const SGP = {}, KIND = {sgp: 'SGP', sgp_plus: 'SGP+', gap: 'Price gap'};
 const am = p => { const d = 1 / p; return d >= 2 ? '+' + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1))); };
 function sgpTicket(t) {
-  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.player && l.game_id && HSTAT[l.stat] ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-ht="${esc([l.team + '|' + l.player, l.stat, l.line, l.side, l.game_id].join('~'))}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup || '')}</span></div>
+  const legs = t.legs.map(l => `<div class="tk-l"><div><span class="s">${esc(l.selection)}</span>${l.player && l.game_id && HSTAT[l.stat] ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-ht="${esc([l.team + '|' + l.player, l.stat, l.line, l.side, l.game_id].join('~'))}">&#9656; L5/L10/L15</span></span>` : ''}<span class="sub">${esc(l.matchup || '')}</span>${legFin(l)}</div>
       <div class="r">${l.price != null ? odds(l.price) + ' ' : ''}${l.result ? `<span class="pill p-${esc(l.result)}">${esc(l.result)}</span>` : '<span class="pill p-open">pending</span>'}<span class="sub">${l.p != null && Math.abs(l.p - l.p_mkt) > 0.0005 ? `ours ${pct(l.p)} &middot; mkt ${pct(l.p_mkt)}` : `mkt ${pct(l.p_mkt)}`}</span></div></div>`).join('');
   const gap = t.kind === 'gap';
   const head = gap ? `<span class="tk-o">${esc(t.price)}<b>${esc(t.book)}</b></span><span class="tk-m">fair ${esc(t.target)} &middot; EV +${Math.round(t.ev * 100)}%</span>`
@@ -1381,6 +1411,7 @@ async function renderParlays() {
   const nights = Object.keys(lab).sort().reverse();
   if (!PN[LG] || !lab[PN[LG]]) PN[LG] = nights[0] || null;
   const cur = PN[LG];
+  await loadFinals([...(by[cur] || []), ...((SGP[LG] || {tickets: []}).tickets.filter(t => t.slate === cur))].flatMap(t => t.legs));
   const bar = nights.length ? `<div class="fbar" id="pnights" role="group" aria-label="Choose a ${unit}"><span class="f-lab">${LG === 'nfl' ? 'Day' : 'Night'}</span>${nights.map(n => `<button type="button" class="fb${n === cur ? ' on' : ''}" data-n="${esc(n)}" aria-pressed="${n === cur}">${esc(lab[n].replace(/^Week \d+ · /, ''))}</button>`).join('')}</div>` : '';
   const sections = d.slates.filter(s => s.id === cur).map(s => {
     const ts = by[s.id] || [], r = s.record;

@@ -424,7 +424,7 @@ function renderLog() {
     + (show.length ? show.map(p => {
       const id = 'L' + btoa(unescape(encodeURIComponent(p.id))).replace(/[^a-z0-9]/gi, '').slice(-24), o = OPEN.has(id);
       return `<tr class="${o ? 'has-w' : ''}"><td class="n">${dlab(p.slate)}<br><span class="tag">${p.lg.toUpperCase()}</span>${p.flag === 'backfill' ? '<span class="tag bf" title="Rebuilt from the ledger, not posted at the time">BF</span>' : ''}</td>
-        <td class="pick"><b>${esc(p.selection)}</b><span>${esc(p.matchup)}</span>${p.actual != null ? `<span class="mo">finished ${esc(p.actual)}</span>` : ''}</td><td class="bk hm">${esc(p.book)}</td>
+        <td class="pick"><b>${esc(p.selection)}</b><span>${esc(p.matchup)}</span>${p.actual != null ? `<span class="mo">finished <b class="${p.result === 'win' ? 'pos' : p.result === 'loss' ? 'neg' : 'flat'}">${esc(p.actual)}</b></span>` : ''}</td><td class="bk hm">${esc(p.book)}</td>
         <td class="r n">${am(p.price)}<span class="mo" style="font-size:11px;color:var(--text-3)">${p.stake.toFixed(2)}u</span></td><td class="r n hm">${p.stake.toFixed(2)}u</td><td class="r n hm">${pct(p.p)} / ${pct(p.mkt_p)}</td>
         <td class="r n hm ${p.result === 'win' ? 'pos' : p.result === 'loss' ? 'neg' : 'flat'}" title="${p.actual != null ? 'Finished ' + p.actual + ' vs line ' + p.line : ''}">${p.actual ?? '—'}</td>
         <td class="r n hm ${p.clv == null ? 'flat' : ucls(p.clv)}">${p.clv == null ? '—' : (p.clv > 0 ? '+' : '') + p.clv.toFixed(1)}</td>
