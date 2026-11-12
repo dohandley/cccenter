@@ -101,7 +101,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',syste
 .cmp small{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4)}
 .cmp b{font-weight:800;font-size:18px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .cmp .sv{color:var(--sim)}
-.gap{font-size:12px;font-weight:600;color:var(--text-3);margin-top:8px;border-top:1px dashed var(--border);padding-top:7px}
+.gfin{font-size:12.5px;font-weight:500;color:var(--text);margin-top:7px}.gfin b{font-weight:800}.gfin b.pos{color:var(--green-text)}.gfin b.neg{color:var(--red-text)}.wp-f{text-align:center;margin-top:5px}.gap{font-size:12px;font-weight:600;color:var(--text-3);margin-top:8px;border-top:1px dashed var(--border);padding-top:7px}
 .gap b{color:var(--sim);font-weight:800}
 .ln{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;min-width:0}
 .ln-v{font-weight:800;font-size:18px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:4px}
@@ -824,12 +824,38 @@ const badge = (t, sz = 30) => { const [a, b] = tcol(t), fs = Math.round(sz * (t.
   return `<span class="tb" aria-hidden="true" style="width:${sz}px;height:${sz}px;background:${a};box-shadow:inset 0 0 0 ${Math.max(2, Math.round(sz / 12))}px ${b};color:${ink(a)};font-size:${fs}px">${esc(t)}</span>`; };
 /* American odds with no vig from a chance */
 const fairOdds = p => p <= 0 || p >= 1 ? '—' : p >= .5 ? '-' + Math.round(100 * p / (1 - p)) : '+' + Math.round(100 * (1 - p) / p);
+/* Final results under the game lines (Nov 12): green when the sim's side came in, red when it didn't, grey on a push.
+   Spread/total judge the side the sim leaned vs the market; moneyline the tile's side; the win bar the sim favorite. */
+const gfin = (txt, ok) => `<div class="gfin">${txt}${ok == null ? '' : ` <b class="${ok === 0 ? '' : ok > 0 ? 'pos' : 'neg'}">${ok === 0 ? 'push' : ok > 0 ? '&#10003; sim side' : '&#10007; sim side'}</b>`}</div>`;
+function finLines(g) {
+  const f = g.final; if (!f || f.home_score == null) return {};
+  const m = f.home_score - f.away_score, win = m > 0 ? g.home : m < 0 ? g.away : null, out = {};
+  const fav = g.home_win >= .5 ? g.home : g.away;
+  out.wp = win ? `${esc(win)} won ${Math.max(f.home_score, f.away_score)}&ndash;${Math.min(f.home_score, f.away_score)} &middot; <b class="${win === fav ? 'pos' : 'neg'}">${win === fav ? 'sim favorite won' : 'sim favorite lost'}</b>` : 'Tie';
+  const sl = g.spread_line;
+  if (sl != null) {
+    const sd = g.fair_spread_home + sl, cov = m - sl, simH = sd < 0;   // cov > 0: home covered the market spread
+    const covT = cov > 0 ? g.home : cov < 0 ? g.away : null;
+    const ln = covT === g.home ? `${esc(g.home)} ${sgn(-sl)}` : covT ? `${esc(g.away)} ${sgn(sl)}` : '';
+    out.sp = gfin(`Final ${win ? esc(win) + ' by ' + Math.abs(m) : 'tie'} &middot; ${covT ? ln + ' covered' : 'landed on the number'}`, Math.abs(sd) < .05 ? null : cov === 0 ? 0 : (cov > 0) === simH ? 1 : -1);
+  }
+  if (g.total_line != null) {
+    const tot = f.home_score + f.away_score, d = tot - g.total_line, td = g.fair_total - g.total_line;
+    out.to = gfin(`Final total <b>${tot}</b> &middot; ${d > 0 ? 'Over' : d < 0 ? 'Under' : 'Push'}`, Math.abs(td) < .05 ? null : d === 0 ? 0 : (d > 0) === (td > 0) ? 1 : -1);
+  }
+  const ml = g.mk && g.mk.ml;
+  if (ml) {
+    const sideH = g.home_win - ml.home_nv >= 0, t = sideH ? g.home : g.away;
+    out.ml = gfin(win ? `${esc(win)} won` : 'Tie', win ? (win === t ? 1 : -1) : 0);
+  }
+  return out;
+}
 /* sim vs market win chance, in the two teams' colors, market as a tick */
 function winBar(g) {
   const a = 1 - g.home_win, [ca] = tcol(g.away), [ch] = tcol(g.home);
   const mk = g.mk && g.mk.ml ? 1 - g.mk.ml.home_nv : null;
   return `<div class="wp"><div class="wp-l"><span>${badge(g.away, 18)} <b>${Math.round(a * 1000) / 10}%</b></span><span class="dim">sim win chance</span><span><b>${Math.round(g.home_win * 1000) / 10}%</b> ${badge(g.home, 18)}</span></div>
-    <div class="wp-b" role="img" aria-label="Sim: ${esc(g.away)} ${Math.round(a * 100)}%, ${esc(g.home)} ${Math.round(g.home_win * 100)}%${mk != null ? `. Market no-vig: ${esc(g.away)} ${Math.round(mk * 100)}%` : ''}"><span style="width:${a * 100}%;background:${ca}"></span><span style="flex:1;background:${ch}"></span>${mk != null ? `<i style="left:${mk * 100}%"><em>mkt</em></i>` : ''}</div></div>`;
+    <div class="wp-b" role="img" aria-label="Sim: ${esc(g.away)} ${Math.round(a * 100)}%, ${esc(g.home)} ${Math.round(g.home_win * 100)}%${mk != null ? `. Market no-vig: ${esc(g.away)} ${Math.round(mk * 100)}%` : ''}"><span style="width:${a * 100}%;background:${ca}"></span><span style="flex:1;background:${ch}"></span>${mk != null ? `<i style="left:${mk * 100}%"><em>mkt</em></i>` : ''}</div>${finLines(g).wp ? `<div class="gfin wp-f">${finLines(g).wp}</div>` : ''}</div>`;
 }
 /* moneyline tile: the side where the sim differs most from the market (positive edge) */
 function mlTile(g) {
@@ -838,7 +864,7 @@ function mlTile(g) {
   const ps = sideH ? g.home_win : 1 - g.home_win, pm = sideH ? ml.home_nv : 1 - ml.home_nv, price = sideH ? ml.home : ml.away;
   const e = Math.round((ps - pm) * 1000) / 10;
   return `<div class="ln"><div class="st-l">Moneyline</div><div class="cmp"><div><small>Sim</small><b class="sv">${esc(t)} ${fairOdds(ps)}</b></div><div><small>Market</small><b>${esc(t)} ${odds(price)}</b></div></div>
-    <div class="gap">${Math.abs(e) < .5 ? 'Sim matches the market' : `Sim <b>${Math.round(ps * 100)}%</b> vs market ${Math.round(pm * 100)}% on ${esc(t)} (<b>+${e} pts</b>)`}</div></div>`;
+    <div class="gap">${Math.abs(e) < .5 ? 'Sim matches the market' : `Sim <b>${Math.round(ps * 100)}%</b> vs market ${Math.round(pm * 100)}% on ${esc(t)} (<b>+${e} pts</b>)`}</div>${finLines(g).ml || ''}</div>`;
 }
 const totExtra = g => { const t = g.mk && g.mk.tot; if (!t || t.line !== g.total_line) return '';
   const bo = t.best_over, bu = t.best_under;
@@ -880,7 +906,7 @@ function card(g) {
   const td = g.total_line == null ? null : g.fair_total - g.total_line;
   const tGap = td == null ? '' : `<div class="gap">${Math.abs(td) < 0.05 ? 'Sim matches the market' : `Sim <b>${Math.abs(td).toFixed(1)} pts ${td < 0 ? 'under' : 'over'}</b>`}</div>`;
   const outs = [g.away, g.home].filter(t => (g.out[t] || []).length).map(t => `<b>${esc(t)}</b> ${esc(g.out[t].join(', '))}`).join(' &middot; ');
-  const [ca] = tcol(g.away), [ch] = tcol(g.home);
+  const [ca] = tcol(g.away), [ch] = tcol(g.home), FL = finLines(g);
   return `<article class="game" id="g-${esc(g.game_id)}" style="--ta:${ca};--th:${ch}">
     <div class="g-top"><span class="ct g-meta">${esc(tip(g.tipoff))} &middot; ${(g.sims || 4000).toLocaleString()} sims${g.line_source ? ' &middot; <span title="Spread, total and moneyline come from the first book in the feed with all three. Props and bets use the best price across every book.">game lines ' + esc(g.line_source.replace(/\s*\(.*\)\s*$/, '')) + '</span>' : ''}</span>${state}</div>
     <div class="score">
@@ -890,8 +916,8 @@ function card(g) {
     </div>
     ${winBar(g)}
     <div class="lines${g.mk && g.mk.ml ? ' l3' : ''}">
-      <div class="ln"><div class="st-l">Spread</div><div class="cmp"><div><small>Sim</small><b class="sv">${esc(fsTxt)}</b></div><div><small>Market</small><b>${sl == null ? '—' : esc(slTxt)}</b></div></div>${sGap}</div>
-      <div class="ln"><div class="st-l">Total</div><div class="cmp"><div><small>Sim</small><b class="sv">${g.fair_total.toFixed(1)}</b></div><div><small>Market</small><b>${g.total_line ?? '—'}</b></div></div>${tGap}${totExtra(g)}</div>
+      <div class="ln"><div class="st-l">Spread</div><div class="cmp"><div><small>Sim</small><b class="sv">${esc(fsTxt)}</b></div><div><small>Market</small><b>${sl == null ? '—' : esc(slTxt)}</b></div></div>${sGap}${FL.sp || ''}</div>
+      <div class="ln"><div class="st-l">Total</div><div class="cmp"><div><small>Sim</small><b class="sv">${g.fair_total.toFixed(1)}</b></div><div><small>Market</small><b>${g.total_line ?? '—'}</b></div></div>${tGap}${totExtra(g)}${FL.to || ''}</div>
       ${mlTile(g)}
     </div>
     ${outs ? `<div class="out">Out: ${outs}</div>` : ''}
