@@ -1625,7 +1625,14 @@ function bPicker() {
   }).join('');
 }
 function bRecord(d) {
-  const R = d.record, rows = d.slips.slice(0, 24);
+  // night bar (Nov 12, same as Parlays): the builder's slips one night at a time, newest first
+  const nights = [...new Set(d.slips.map(s => s.slate))].sort().reverse();
+  if (!BLD.night || !nights.includes(BLD.night)) BLD.night = nights[0] || null;
+  const rows = d.slips.filter(s => s.slate === BLD.night), R = d.record;
+  const nr = rows.reduce((a, s) => { if (s.result === 'win') a.w++; else if (s.result === 'loss') a.l++; else if (!s.result) a.o++; a.u += s.units || 0; return a; }, {w: 0, l: 0, o: 0, u: 0});
+  const nlab = n => new Date(n + 'T12:00:00-05:00').toLocaleDateString('en-US', LG === 'nfl' ? {month: 'short', day: 'numeric', timeZone: 'America/New_York'} : {weekday: 'short', month: 'short', day: 'numeric', timeZone: 'America/New_York'});
+  const bar = nights.length > 1 ? `<div class="fbar" id="bnights" role="group" aria-label="Choose a ${LG === 'nfl' ? 'slate' : 'night'}"><span class="f-lab">${LG === 'nfl' ? 'Day' : 'Night'}</span>${nights.map(n => `<button type="button" class="fb${n === BLD.night ? ' on' : ''}" data-n="${esc(n)}" aria-pressed="${n === BLD.night}">${esc(nlab(n))}</button>`).join('')}</div>` : '';
+  const nhead = BLD.night ? `<div class="sl-h">${esc(nlab(BLD.night))}<span class="cnt">${rows.length} slip${rows.length === 1 ? '' : 's'}${nr.w + nr.l ? ` &middot; ${nr.w}&ndash;${nr.l}, <span class="u ${ucls(nr.u)}">${un(Math.round(nr.u * 100) / 100)}</span>` : ''}${nr.o ? ` &middot; ${nr.o} open` : ''}</span></div>` : '';
   const tiles = st('Builder slips', rec(R), R.graded ? `hit ${R.w} · expected ${R.expected.toFixed(1)}` : `${R.open} open`)
     + st('Units', un(R.units), '1u per slip, paper', ucls(R.units))
     + Object.entries(d.by_legs || {}).map(([n, r]) => st(`${n} legs`, rec(r), r.graded ? un(r.units) : `${r.open} open`, ucls(r.units))).slice(0, 3).join('');
@@ -1635,11 +1642,12 @@ function bRecord(d) {
   return `<div class="pan"><div class="pan-h"><span class="pan-t">The builder's own slips</span><span class="cnote">paper only &middot; never bet, never in the record</span></div>
     <div class="rc-k">${tiles}</div>
     <div class="notes" style="margin:6px 0">After every pricing run the builder answers each preset (2, 3 and 4 legs at +200, +500, +1000 and +2500) with the same rule as the button, legs from different games at one book, each player on one slip a night, and logs it before tip. That record is how you'll know whether the button is any good: wins against the expected count, and units at 1u a slip.</div>
+    ${bar}${nhead}
     ${tk ? `<div class="tks">${tk}</div>` : `<div class="dim" style="font-size:12.5px">The first slips are logged with the ${esc(shortDate(d.live_from + 'T12:00:00-05:00'))} slate.</div>`}</div>`;
 }
 async function renderBuild() {
   if (BLD.lg !== LG) {                       // NFL since Nov 11: the builder's state is per league
-    Object.assign(BLD, {lg: LG, d: undefined, slip: [], lock: [], alts: [], ai: 0, q: '', book: '', open: {}, hopen: {}, sopen: {},
+    Object.assign(BLD, {lg: LG, d: undefined, night: null, slip: [], lock: [], alts: [], ai: 0, q: '', book: '', open: {}, hopen: {}, sopen: {},
       stats: Object.fromEntries(Object.keys(BPROPS[LG]).map(k => [k, 1]))});
   }
   if (BLD.d === undefined) {
@@ -1679,6 +1687,7 @@ async function renderBuild() {
     <div class="notes"><b style="color:var(--text)">How it works.</b> Every main-line player prop the books post for tonight, priced by the sim. The sim alone has been overconfident on props, so each leg's chance is pulled toward the market's no-vig price: our chance = market + k &times; (sim &minus; market), with k = ${c ? c.k.toFixed(2) : 'the trust weight'} fitted on every graded pick so far (the same blend Ace uses). <b>Build me one</b> searches for the slip with the best expected value near your payout, every leg at least +3% EV on its own, all legs at one sportsbook at that book's own prices. Legs from different games are independent, so the payout is real. With <b>Allow same game</b> on, legs that share a game use the sim's correlation (how often they hit together across its simulated games), and the slip shows a fair price to take or beat, since books price same-game parlays themselves. Books on our feed: DraftKings, FanDuel, BetMGM, Caesars, ESPN BET.</div>
     ${bRecord(d)}</div>`;
   slateCharts($('view'));
+  if ($('bnights')) $('bnights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; BLD.night = b.dataset.n; renderBuild(); };
   if (!c) return;
   const msg = t => { $('bm-msg').textContent = t; };
   document.querySelector('.bm-c').onclick = e => {
