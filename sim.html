@@ -474,6 +474,7 @@ th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{
     <ul>
       <li><span class="pill p-open">Hold</span> on an NFL pick: when it was priced, the books posted props for a teammate the sim had no role for, so that team's projections were inflated. Wait on it. Hold and Role? picks never get a star.</li>
       <li><span class="pill p-cold">Role?</span> on an NFL over: the sim projects more than 1.33&times; the line, which often means it gives the player a bigger role than the books do. It is still a pick; check his workload first.</li>
+      <li><span class="pill p-cold">Wind</span> on an NFL over (the total, or a passing / receiving prop): the forecast at kickoff has sustained wind of 15+ mph or gusts of 30+. The sim plays every game in calm, dry weather, and wind cuts passing and scoring far more than rain does, so these overs run high. Still a bet; no star, and kept out of parlays and Ace. The game card shows the forecast.
       <li><span class="pill p-hot">★ Hot</span> on a bet: that bet type (market, stat and side, e.g. "3-pointers unders") has 15+ graded bets and is +9% ROI or better this season, after adjusting for sample size: the record is judged as if 40 breakeven picks were added, so 49–22 counts for more than 9–6.</li>
       <li><span class="pill p-cold">❄ Cold</span>: 15+ graded and &minus;9% or worse, adjusted the same way. Every ungraded bet also shows its bet type's record, tagged or not.</li>
       <li><b>Watch list</b> leans: a lean category (the reason it wasn't bet) that is up units over 30+ graded picks. <span class="pill p-hot">★ Top group</span> marks a stat group inside it with 15+ graded and +9% ROI, adjusted the same way.</li>
@@ -487,7 +488,7 @@ th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{
     <ul>
       <li>Each slate, the leans on props and totals are paired into <b>2-leg tickets</b>: both legs at the same sportsbook and price, from different games, one leg per player.</li>
       <li>The sim overrates leans, so each leg's win chance is pulled toward the market's by however much the model has overrated leans before that slate. A ticket needs <b>+10% expected value</b> or better; at most 5 a slate, each lean on one ticket (two before Nov 2, 2026).</li>
-      <li><b>NFL:</b> overs tagged <span class="pill p-cold">Role?</span> are left out (since Nov 2, 2026).</li>
+      <li><b>NFL:</b> overs tagged <span class="pill p-cold">Role?</span> are left out (since Nov 2, 2026), and so are overs tagged <span class="pill p-cold">Wind</span> (since Nov 13).</li>
       <li>Tickets are graded from the leans' own results. A void leg drops out and the ticket pays on the other one, as sportsbooks do.</li>
       <li><span class="pill p-cat">Rebuilt from ledger</span> slates were built after the fact from leans priced before tracking began, using only results known at the time. They are shown separately from the tracked record.</li>
     </ul>
@@ -623,7 +624,7 @@ function leanForm(p) {
   const f = FORM[LG]; if (!f || p.result) return null;
   const c = catOf(p), ct = c && f.cat[c]; if (!ct || !ct.watch) return null;
   const g = f.grp[c + '|' + parts(p).base], cat = CATS.find(x => x[0] === c);
-  const top = !!(g && g.top) && !p.role && !p.hold;                  // NFL ROLE? / HOLD: no Top group tag (Nov 3)
+  const top = !!(g && g.top) && !p.role && !p.hold && !p.wind;                  // NFL ROLE? / HOLD: no Top group tag (Nov 3)
   return {top, html: `<span class="sub">${top ? TOP + ' ' : ''}<span class="pill p-cat">${cat[2]}</span> ${esc(parts(p).base)} ${g ? frec(g) : ''}</span>`};
 }
 function legend() {
@@ -745,9 +746,9 @@ function pickCard(g, p) {
     : (g.final ? '' : `<div class="res"><span class="pill p-open">pending</span><span class="dim">Graded the morning after the game</span></div>`);
   const st_ = !p.result && starOf(p);
   const tail = p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>`
-    : ruledOut(g, p) ? OUTPILL : (st_ ? '<span class="pill p-hot">★</span> ' : '') + (p.hold ? '<span class="pill p-open">Hold</span> ' : '') + (p.role ? '<span class="pill p-cold">Role?</span> ' : '') + '<span class="pill p-open">pending</span>';
+    : ruledOut(g, p) ? OUTPILL : (st_ ? '<span class="pill p-hot">★</span> ' : '') + (p.hold ? '<span class="pill p-open">Hold</span> ' : '') + (p.role ? '<span class="pill p-cold">Role?</span> ' : '') + (p.wind ? '<span class="pill p-cold">Wind</span> ' : '') + '<span class="pill p-open">pending</span>';
   const cmp = `<div class="pk-c" role="button" tabindex="0" aria-expanded="false"><span class="pk-cs"><b>${esc(p.selection)}</b><span class="sub">${odds(p.price)} ${esc(p.book)} &middot; model ${pct(p.model_p)} vs mkt ${pct(p.book_p)}${p.result && p.actual != null && p.market === 'prop' ? ` &middot; finished ${fv(p)}` : ''}</span></span><span class="pk-ct">${tail}<span class="chev" aria-hidden="true">&#9662;</span></span></div>`;
-  return `<div class="pick">${cmp}<div class="pk-h"><span class="pk-s">${selH(p)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
+  return `<div class="pick">${cmp}<div class="pk-h"><span class="pk-s">${selH(p)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.wind ? ' <span class="pill p-cold" title="Windy forecast for this game. The sim plays every game in calm weather, so passing and total overs run high.">Wind</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
     <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${htBtn(g, p) ? `<div class="ht-w">${htBtn(g, p)}</div>` : ''}${res}${p.player && p.market === 'prop' ? `<a class="pl-more" href="${plHref(p.player)}">Every pick on ${esc(p.player)} &rarr;</a>` : ''}</div>`;
 }
@@ -761,7 +762,7 @@ function shopLine(p, small) {
 }
 function leanTable(ls, g) {
   if (!ls.length) return '';
-  const row = p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + selH(p) + '</b>' : selH(p)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${fv(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}${htBtn(g, p) ? `<span class="sub">${htBtn(g, p)}</span>` : ''}</td>
+  const row = p => { const out = ruledOut(g, p), lf = out ? null : leanForm(p); return `<tr><td class="w"><span class="ln-s">${lf && lf.top ? '<b>' + selH(p) + '</b>' : selH(p)}</span>${out ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.wind ? ' <span class="pill p-cold" title="Windy forecast for this game. The sim plays every game in calm weather, so passing and total overs run high.">Wind</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}${p.actual != null && p.market === 'prop' ? `<span class="sub">finished ${fv(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}<span class="sub">${esc(p.reason || '')}</span><span class="sub mo">model ${pct(p.model_p)} &middot; mkt ${pct(p.book_p)}</span>${lf ? lf.html : ''}${out ? '' : shopLine(p, true)}${htBtn(g, p) ? `<span class="sub">${htBtn(g, p)}</span>` : ''}</td>
     <td class="r">${odds(p.price)}<span class="sub bk">${esc(p.book)}</span></td><td class="r hm">${pct(p.model_p)}<span class="sub">mkt ${pct(p.book_p)}</span></td>
     <td class="r">${p.result ? `<span class="pill p-${esc(p.result)}">${esc(p.result)}</span><span class="sub u ${ucls(p.units)}">${un(p.units)}</span>` : out ? '<span class="pill p-void">void</span>' : '<span class="pill p-open">pending</span>'}</td></tr>`; };
   /* Nov 9 (Dylan): leans collapse by default; ★ Top group leans stay out in the open */
@@ -929,7 +930,7 @@ function card(g) {
       <div class="ln"><div class="st-l">Total</div><div class="cmp"><div><small>Sim</small><b class="sv">${g.fair_total.toFixed(1)}</b></div><div><small>Market</small><b>${g.total_line ?? '—'}</b></div></div>${tGap}${totExtra(g)}${FL.to || ''}</div>
       ${mlTile(g)}
     </div>
-    ${outs ? `<div class="out">Out: ${outs}</div>` : ''}
+    ${outs ? `<div class="out">Out: ${outs}</div>` : ''}${g.weather ? `<div class="out">Forecast at kickoff: ${[g.weather.wind_mph != null ? `wind ${g.weather.wind_mph} mph` : '', g.weather.gust_mph != null ? `gusts ${g.weather.gust_mph}` : '', g.weather.precip_pct != null ? `${g.weather.precip_pct}% rain` : '', g.weather.temp_f != null ? `${g.weather.temp_f}&deg;F` : ''].filter(Boolean).join(' &middot; ')}${g.picks.some(p => p.wind) ? ' &middot; <b>windy: the sim plays it in calm weather</b>' : ''}</div>` : ''}
     ${g.updated ? `<div class="upd"><b>Updated for late news</b> &middot; ${esc(clockET(g.updated.at))}${(g.updated.changes || []).length ? ': ' + esc(g.updated.changes.join(', ')) : ''}. Projections, score and fair lines are re-simmed; each pick's percentages are from when it was priced.</div>` : ''}
     <div class="sec"><span class="tag t-bet">Bet</span> 1 unit each <span class="cnt">${bets.length || 'none cleared the bar'}</span></div>
     ${bets.length ? `<div class="picks">${bets.map(p => pickCard(g, p)).join('')}</div>` : ''}
@@ -942,7 +943,7 @@ const ruledOut = (g, p) => p.market === 'prop' && !p.result && !!g.updated && (g
 const OUTPILL = '<span class="pill p-void" title="Ruled out after this was priced. A player who doesn\'t play voids the prop at the book.">Ruled out</span>';
 /* the slate's starred picks: Hot bets and Top group leans, in one list (same rules as the tags) */
 function starOf(p) {
-  const f = FORM[LG]; if (!f || p.role || p.hold) return null;      // NFL ROLE? / HOLD picks never get a star (Nov 3)
+  const f = FORM[LG]; if (!f || p.role || p.hold || p.wind) return null;      // NFL ROLE? / HOLD picks never get a star (Nov 3)
   if (p.kind === 'bet') { const t = f.bet[betKey(p)]; return t && t.tag === 'hot' ? {t, label: betLabel(p)} : null; }
   const c = catOf(p), ct = c && f.cat[c]; if (!ct || !ct.watch) return null;
   const g = f.grp[c + '|' + parts(p).base]; return g && g.top ? {t: g, label: `${CATS.find(x => x[0] === c)[1].toLowerCase()} · ${parts(p).base}`} : null;
