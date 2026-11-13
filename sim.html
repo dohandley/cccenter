@@ -199,7 +199,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .sl-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:800;font-size:15px;letter-spacing:-.01em;margin-top:6px}
 .sl-h .cnt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-3);letter-spacing:0}
 @media(max-width:768px){.tks{grid-template-columns:1fr}}
-.runbar{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;font-size:12.5px;color:var(--text-3);padding:2px 2px}.runbar b{color:var(--text)}.runbar .rb-w{color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;flex:1 1 100%}.runbar button{font:inherit;color:var(--text-2);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+#noti{background:var(--amber-bg,#fff7e0);border:1px solid var(--amber-border,#f1d48a);color:var(--text);border-radius:8px;padding:9px 14px;font-size:13px;line-height:1.5;margin-bottom:12px}#noti b{font-weight:700}.nt-r{font:inherit;font-size:12px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:2px 8px;margin-left:4px;cursor:pointer}.runbar{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;font-size:12.5px;color:var(--text-3);padding:2px 2px}.runbar b{color:var(--text)}.runbar .rb-w{color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;flex:1 1 100%}.runbar button{font:inherit;color:var(--text-2);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .upd{font-size:12.5px;color:var(--amber-text);background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:8px 12px}.upd b{color:var(--amber-text)}
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
@@ -422,6 +422,7 @@ th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{
 <a class="nt" href="ace.html">Ace</a>
 </div></div>
 <div class="body">
+  <div id="noti" role="status" hidden></div>
   <div class="lg">
     <div class="lg" id="leagues" role="group" aria-label="League"></div>
     <div class="vw" role="group" aria-label="View"><button type="button" data-v="slate">Slate</button><button type="button" data-v="build">Build</button><button type="button" data-v="ledger">Ledger</button><button type="button" data-v="parlays">Parlays</button><button type="button" data-v="report">Report</button></div>
@@ -1048,6 +1049,31 @@ function nextRun(lg, now) {
   }
   return best;
 }
+/* Page-wide notice (Nov 13, a user's suggestion: "have that notice at top of the screen, on each page"): when today's
+   NBA board isn't up yet, every view says so above the tabs, with when it posts and which board you're looking at. */
+function boardNote() {
+  const el = $('noti'); if (!el) return;
+  let html = '';
+  try {
+    const idx = IDX.nba; var now = etNow();
+    if (LG === 'nba' && idx && idx.nights.length && idx.nights[0].id < now.date) {
+      const today = RUNS.nba.filter(r => r.d.includes(now.dow) && r.what !== "last night's results");
+      const due = today.find(r => r.m + r.post > now.min), last = esc(idx.nights[0].label);
+      const wk = now.dow === 0 || now.dow === 6;
+      html = due ? `<b>Today's board isn't up yet.</b> ${wk ? `Weekend games are priced at <b>10:55 AM ET</b> (afternoon tips) and <b>4:55 PM ET</b> (the night)` : `It's priced at <b>${hm(due.m)} ET</b>`} and posts about ${due.post} minutes later. Until then the latest board is <b>${last}</b>.`
+        : today.length ? `<b>Today's board should be up by now.</b> <button type="button" class="nt-r" onclick="location.reload()">Refresh</button> If it still isn't, there may be no games today. The latest board is <b>${last}</b>.` : '';
+    }
+    if (LG === 'nfl' && IDX.nfl) {                 // an NFL pricing run due today that hasn't posted yet
+      const u = IDX.nfl.updated ? etNow(new Date(IDX.nfl.updated)) : null;
+      const r = RUNS.nfl.find(r => r.d.includes(now.dow) && r.what !== 'results' && now.min < r.m + r.post && !(u && u.date === now.date && u.min >= r.m));
+      if (r) html = `<b>${esc(r.what[0].toUpperCase() + r.what.slice(1))} ${r.what.endsWith('s') ? 'are' : 'is'} priced today at ${hm(r.m)} ET</b> and post${r.what.endsWith('s') ? '' : 's'} about ${r.post} minutes later. Until then this shows the last board.`;
+    }
+    if (html) html += ` <button type="button" class="nt-r" id="nts">Schedule</button>`;
+  } catch (e) { html = ''; }
+  el.innerHTML = html; el.hidden = !html;
+  if ($('nts')) $('nts').onclick = () => { openHelp(); const h = document.getElementById('hp-sched'); if (h) h.scrollIntoView({block: 'start'}); };
+}
+setInterval(() => { try { boardNote(); } catch (e) {} }, 60000);
 function runBar(idx) {
   try {
     const now = etNow(), nx = nextRun(LG, now);
@@ -1055,7 +1081,7 @@ function runBar(idx) {
     const updTxt = upd && !isNaN(upd) ? `${DOW[etNow(upd).dow]} ${clockET(upd)}` : '';
     const when = nx ? (nx.off === 0 ? (nx.m <= now.min ? 'running now' : 'today ' + hm(nx.m)) : (nx.off === 1 ? 'tomorrow ' : DOW[nx.dow] + ' ') + hm(nx.m)) : '';
     let warn = '';
-    if (LG === 'nba' && NID === idx.nights[0].id && idx.nights[0].id < now.date) {
+    if (false) {
       const today = RUNS.nba.filter(r => r.d.includes(now.dow) && r.what !== "last night's results");
       const due = today.find(r => r.m + r.post > now.min);
       const wk = now.dow === 0 || now.dow === 6;
@@ -1903,7 +1929,7 @@ new MutationObserver(() => srows()).observe(document.getElementById('view'), {ch
 addEventListener('resize', () => document.querySelectorAll('.srow').forEach(srowState));
 
 async function go() {
-  writeHash(); renderTop();
+  writeHash(); renderTop(); boardNote();
   try { await (VIEW === 'slate' ? renderSlate() : VIEW === 'parlays' ? renderParlays() : VIEW === 'build' ? renderBuild() : VIEW === 'report' ? renderReport() : VIEW === 'player' ? renderPlayer() : renderLedger()); writeHash(); }
   catch (e) { $('view').innerHTML = '<div class="empty">This couldn’t load. Refresh to try again.</div>'; }
 }
