@@ -596,10 +596,20 @@ function tallyAdd(o, k, r) {
   if (r.result === 'win') t.w++; else if (r.result === 'loss') t.l++; else t.p++;
   t.u += r.units || 0;
 }
-function buildForm(lg) {
+/* Tags as they stood before a night (Nov 14): a past night's stars, Hot/Cold and Top group tags, and the ★ panel's
+   record use only results from earlier nights, the same tags the pricing email showed. Before this the panel re-tagged
+   old nights with today's records, so a group that lost that night could drop out and hide its own losses
+   (Nov 13: shown 7-3 when the 12 picks tagged at pricing went 7-5). asOf = night id; null = every graded row. */
+const FORMS = {};
+function formAt(lg, asOf) {
+  const k = lg + '|' + (asOf || '');
+  if (!FORMS[k]) { buildForm(lg, asOf); FORMS[k] = FORM[lg]; }
+  FORM[lg] = FORMS[k];
+}
+function buildForm(lg, asOf) {
   const rows = (LEDGER[lg] || {}).rows || [], f = {bet: {}, cat: {}, grp: {}};
   for (const r of rows) {
-    if (!r.result) continue;
+    if (!r.result || (asOf && r.night >= asOf)) continue;
     if (r.kind === 'bet') tallyAdd(f.bet, betKey(r), r);
     else { const c = catOf(r); if (!c) continue; tallyAdd(f.cat, c, r); tallyAdd(f.grp, c + '|' + parts(r).base, r); }
   }
@@ -981,7 +991,7 @@ function spots(gs, unit) {
     ${rows.bet.length ? `<div class="sp-l">${rows.bet.map(row).join('')}</div>` : '<div class="sp-n">None yet. A bet type needs 15+ graded and +9% ROI or better, adjusted for sample size.</div>'}
     <div class="sp-s"><b>★</b> Top group leans <span>tracked, not staked</span></div>
     ${rows.lean.length ? leanGroups(rows.lean, row) : '<div class="sp-n">None on this slate.</div>'}
-    <div class="sp-n">${graded ? 'Tagged with today\'s season records. ' : ''}Tap a group to see its picks, and a pick to jump to its game. Several unders on one team tend to win or lose together.</div>
+    <div class="sp-n">${graded ? 'Tagged with the records as they stood before this night, the same tags the picks had when they were priced. ' : ''}Tap a group to see its picks, and a pick to jump to its game. Several unders on one team tend to win or lose together.</div>
   </div></aside>`;
 }
 /* game strip: one tile per game (matchup + time or final score, the sim's spread edge, picks with a star / hold
@@ -1098,7 +1108,7 @@ async function renderSlate() {
   if (!NID || !idx.nights.some(n => n.id === NID)) NID = idx.nights[0].id;
   const key = LG + '/' + NID;
   if (!NIGHT[key]) NIGHT[key] = await getJSON(`sim/${LG}/${NID}.json`);
-  try { if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`); if (!FORM[LG]) buildForm(LG); } catch (e) {}
+  try { if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`); formAt(LG, NID); } catch (e) {}
   const data = NIGHT[key], gs = data.games, r = data.record;
   let nb = 0, nl = 0;
   for (const g of gs) for (const p of g.picks) p.kind === 'bet' ? nb++ : nl++;
@@ -1125,7 +1135,7 @@ async function renderSlate() {
 /* ---------- ledger ---------- */
 async function renderLedger() {
   if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`);
-  if (!FORM[LG]) buildForm(LG);
+  formAt(LG, null);
   const all = LEDGER[LG].rows;
   const rowTag = r => { if (r.result) return '';
     if (r.kind === 'bet') { const t = FORM[LG].bet[betKey(r)]; return t && t.tag ? `<span class="pill tg ${t.tag === 'hot' ? 'p-hot">★ Hot' : 'p-cold">❄ Cold'}</span>` : ''; }
