@@ -295,7 +295,7 @@ details.sp-g>.sp-l{padding:0 8px 8px}
 .bm-b .t{position:relative;display:flex;align-items:flex-end;width:100%;height:84px}
 .bm-b .t::after{content:'';position:absolute;left:-2px;right:-2px;bottom:var(--ln);border-top:1.5px dashed var(--text);opacity:.55}
 .bm-b i{display:block;width:100%;border-radius:3px 3px 0 0}.bm-b i.hit{background:var(--green-text)}.bm-b i.miss{background:var(--red-text,#b91c1c);opacity:.7}
-.bm-b.prior{opacity:.4}.bm-b .v{font:700 10px 'JetBrains Mono',monospace;color:var(--text-2)}.bm-b .o{font:600 9px 'JetBrains Mono',monospace;color:var(--text-3);margin-top:2px}
+.bm-b.prior{opacity:.4}.bm-b .v{font:700 10px 'JetBrains Mono',monospace;color:var(--text-2)}.bm-b .v em{font-style:normal;font-weight:500;color:var(--text-4)}.bm-b .t s{position:absolute;left:3px;right:3px;bottom:0;border:1.5px solid var(--text-4);border-bottom:0;border-radius:3px 3px 0 0;opacity:.7;text-decoration:none}.bm-b[data-gl]{cursor:pointer}.bm-b.sel .o{color:var(--text);font-weight:800}.bm-gd{font-size:12px;color:var(--text-2);margin-top:6px;min-height:18px;line-height:1.5}.bm-gd b{color:var(--text)}.bm-b .o{font:600 9px 'JetBrains Mono',monospace;color:var(--text-3);margin-top:2px}
 .bm-pn em{font-style:normal;color:var(--text-3);font-size:11px;font-weight:600;margin-left:4px}
 .bm-legs{display:flex;flex-wrap:wrap;gap:4px}
 .bm-leg{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);border-radius:6px;padding:5px 8px;font:600 11.5px 'JetBrains Mono',monospace;cursor:pointer;white-space:nowrap}
@@ -1604,6 +1604,25 @@ function slipCard(ls, info) {
 const HSTAT = {pts: g => g[4], reb: g => g[5], ast: g => g[6], fg3m: g => g[7], pra: g => g[4] + g[5] + g[6], pr: g => g[4] + g[5], pa: g => g[4] + g[6], ra: g => g[5] + g[6]};
 /* NFL (Nov 11): week files carry the same row shape with a stats object in slot 4, keyed by the prop stat */
 for (const k of ['pass_yds', 'pass_att', 'pass_comp', 'rush_yds', 'rush_att', 'rec_yds', 'rec']) HSTAT[k] = g => (g[4] && g[4][k]) || 0;
+/* "Potential" outline (Nov 16, PropFinder-style): the volume behind a made stat, drawn as a hollow bar behind it.
+   NBA threes: attempts (row slot 9[2]); NFL receptions: targets. */
+const HPOT = {fg3m: [g => g[9] && g[9][2], 'attempts'], rec: [g => g[4] && g[4].tgt, 'targets']};
+/* one game's full line for the chart's detail row (tap or hover a bar) */
+function gameLine(g, st) {
+  const when = `${esc(g[0])} ${esc(g[2])} ${esc(g[1])}${g[8] ? ' (last season)' : ''}`;
+  if (g[4] && typeof g[4] === 'object') {                     // NFL: stats object
+    const s = g[4], parts = [];
+    if (s.pass_att) parts.push(`${s.pass_comp || 0}/${s.pass_att} passing, ${s.pass_yds || 0} yds`);
+    if (s.rush_att) parts.push(`${s.rush_att} carries, ${s.rush_yds || 0} yds`);
+    if (s.tgt || s.rec) parts.push(`${s.rec || 0} catches on ${s.tgt || 0} targets, ${s.rec_yds || 0} yds`);
+    return `<b>${when}</b> &middot; ${parts.join(' &middot; ') || 'no touches'}`;
+  }
+  const x = g[9];
+  const res = x && x[8] != null ? ` &middot; <span class="${x[8] > x[9] ? 'pos' : 'neg'}">${x[8] > x[9] ? 'W' : 'L'} ${x[8]}&ndash;${x[9]}</span>` : '';
+  return `<b>${when}</b>${res} &middot; ${g[3]} min &middot; <b>${g[4]}</b> pts${x ? ` (${x[0]}-${x[1]} FG, ${g[7]}-${x[2]} 3PT, ${x[3]}-${x[4]} FT)` : ''} &middot; <b>${g[5]}</b> reb &middot; <b>${g[6]}</b> ast${x ? ` &middot; ${x[5]} stl &middot; ${x[6]} blk &middot; ${x[7]} tov` : ''}`;
+}
+document.addEventListener('click', e => { const b = e.target.closest('.bm-b[data-gl]'); if (!b) return; const h = b.closest('.bm-h'), d = h && h.querySelector('.bm-gd'); if (!d) return; h.querySelectorAll('.bm-b.sel').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); d.innerHTML = b.dataset.gl; });
+document.addEventListener('mouseover', e => { const b = e.target.closest('.bm-b[data-gl]'); if (!b || !matchMedia('(hover:hover)').matches) return; const d = b.closest('.bm-h').querySelector('.bm-gd'); if (d && !b.closest('.bm-h').querySelector('.bm-b.sel')) d.innerHTML = b.dataset.gl; });
 const nth = n => n + (n % 100 > 10 && n % 100 < 14 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
 const POSW = {G: 'guards', F: 'forwards', C: 'centers', QB: 'QBs', RB: 'RBs', WR: 'WRs', TE: 'TEs'};
 function dvpLine(D, st, sd) {
@@ -1632,9 +1651,10 @@ function histChart(key, xs, side, ck, HH, DD) {
   const line = xs.find(l => l.stat === st).line, f = HSTAT[st];
   const hit = v => sd === 'Over' ? v > line : v < line;
   const games = H.slice(0, n), vals = games.map(f), hits = vals.filter(hit).length;
-  const max = Math.max(line * 1.4, ...vals, 1), gs = games.slice().reverse(), vv = vals.slice().reverse();
-  const bars = gs.map((g, i) => `<div class="bm-b${g[8] ? ' prior' : ''}" title="${esc(g[0])} ${esc(g[2])} ${esc(g[1])} · ${vv[i]} ${esc(STATW[st] || st)}${g[3] != null ? ` · ${g[3]} min` : ''}${g[8] ? ' · last season' : ''}">
-      <span class="v">${vv[i]}</span><span class="t"><i class="${hit(vv[i]) ? 'hit' : 'miss'}" style="height:${Math.max(3, vv[i] / max * 100)}%"></i></span><span class="o">${esc(g[1])}</span></div>`).join('');
+  const pf = HPOT[st] && games.some(g => HPOT[st][0](g)) ? HPOT[st] : null, pot = g => pf ? (pf[0](g) || 0) : 0;
+  const max = Math.max(line * 1.4, ...vals, ...games.map(pot), 1), gs = games.slice().reverse(), vv = vals.slice().reverse();
+  const bars = gs.map((g, i) => `<div class="bm-b${g[8] ? ' prior' : ''}" data-gl="${esc(gameLine(g, st))}" title="${esc(g[0])} ${esc(g[2])} ${esc(g[1])} · ${vv[i]} ${esc(STATW[st] || st)}${pf ? ` on ${pot(g)} ${pf[1]}` : ''}${g[3] != null ? ` · ${g[3]} min` : ''}${g[8] ? ' · last season' : ''}">
+      <span class="v">${vv[i]}${pf ? `<em>/${pot(g)}</em>` : ''}</span><span class="t">${pf ? `<s style="height:${Math.max(3, pot(g) / max * 100)}%"></s>` : ''}<i class="${hit(vv[i]) ? 'hit' : 'miss'}" style="height:${Math.max(3, vv[i] / max * 100)}%"></i></span><span class="o">${esc(g[1])}</span></div>`).join('');
   const prior = games.some(g => g[8]) ? `<span class="dim"> · faded = last season</span>` : '';
   const short = x => (STATW[x] || x).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM');
   const tg = (attr, v, label, on) => `<button type="button" class="fb${on ? ' on' : ''}" data-hk="${esc(ck)}" ${attr}="${esc(v)}" aria-pressed="${!!on}">${label}</button>`;
@@ -1642,6 +1662,7 @@ function histChart(key, xs, side, ck, HH, DD) {
     <div class="bm-hc"><span class="bm-seg">${['Over', 'Under'].map(x => tg('data-hside', x, x, x === sd)).join('')}</span><span class="bm-seg">${[5, 10, 15].map(x => tg('data-hn', x, 'L' + x, x === n)).join('')}</span></div>
     <div class="bm-hr"><b>${sd} ${line} ${esc(short(st))}</b> &middot; L${n} <b>${hits}/${games.length}</b>${games.length < n ? ` <span class="dim">(only ${games.length} games)</span>` : ''}${prior}</div>${dvpLine(DV, st, sd)}
     <div class="bm-bars" style="--ln:${line / max * 100}%">${bars}</div>
+    <div class="bm-gd">${pf ? `Outline = ${pf[1]} (the chance he had); filled = made. ` : ''}Tap ${matchMedia('(hover:hover)').matches ? 'or hover ' : ''}a bar for that game's full line.</div>
     <div class="cnote">Recent form${DV ? ' and the matchup are' : ' is'} context: the books price ${DV ? 'them' : 'it'} in${DV ? ' and the sim already adjusts for each team\'s defense' : ''}, so ${DV ? 'they don\'t' : 'it doesn\'t'} change our chance.${DV ? (DV.u ? ' Matchup: the average is one player at the position (QB / RB / WR / TE) who played a real share of the offense\'s snaps that game (QBs and WRs 50%+, TEs 40%+, RBs 30%+), catches or not; the rank is the whole position\'s total per game.' : ' Matchup: the average is one player at the position (ESPN\'s guard / forward / center) with 20+ minutes; the rank is per 48 minutes the position played, every minute counted.') : ''}</div></div>`;
 }
 function bPicker() {
