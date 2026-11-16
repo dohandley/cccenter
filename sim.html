@@ -228,7 +228,7 @@ details.sp-g[open]>summary::before{content:'\25BE'}
 .sp-gn{flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:6px}.sp-gc{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-3);font-weight:600}
 .sp-gr{font-size:11.5px;font-weight:500;color:var(--text-3);display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:1px;margin-left:auto}.sp-hs{font-size:10.5px;color:var(--text-3)}.sp-hs .u{font-weight:600}
 details.sp-g>.sp-l{padding:0 8px 8px}
-.shop{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:12px;color:var(--text-3);margin-top:6px}.shop.sm{font-size:10.5px;margin-top:3px;gap:2px 6px}.shop.sm .st-l{font-size:9px}.shop b{color:var(--gold);font-family:'JetBrains Mono',monospace;font-weight:700}
+.shop{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:12px;color:var(--text-3);margin-top:6px}.amb{color:var(--amber-text)}.shop.sm{font-size:10.5px;margin-top:3px;gap:2px 6px}.shop.sm .st-l{font-size:9px}.shop b{color:var(--gold);font-family:'JetBrains Mono',monospace;font-weight:700}
 @media(min-width:1580px){
   html,body{overflow-x:clip}
   .slate-wrap{position:relative}
@@ -407,7 +407,7 @@ th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{
 <div class="seg" id="k-kind" role="group" aria-label="Show all picks, bets or leans"><button type="button" data-k="all">All</button><button type="button" data-k="bet">Bets</button><button type="button" data-k="lean">Leans</button></div>
 <div class="kpi"><span class="kpi-l" id="k-rl">Bets</span><span class="kpi-v" id="k-rec">&mdash;</span></div>
 <div class="kpi"><span class="kpi-l">Units</span><span class="kpi-v" id="k-u">&mdash;</span></div>
-<div class="kpi kpi-d"><span class="kpi-v" id="k-d" title="Units times your unit size">$&mdash;</span><label class="ksz"><span class="kpi-l">Unit $</span><input id="k-sz" type="text" inputmode="decimal" autocomplete="off" placeholder="25" aria-label="Your unit size in dollars"></label></div>
+<div class="kpi kpi-d"><span class="kpi-v" id="k-d" title="Units times your unit size">$&mdash;</span><label class="ksz"><span class="kpi-l">Unit $</span><input id="k-sz" type="text" inputmode="decimal" autocomplete="off" placeholder="100" aria-label="Your unit size in dollars"></label></div>
 </div>
 <div class="hdr-r">
 <a class="tbtn" href="ace.html" title="Ace: the short list, one paper bankroll" style="text-decoration:none;font-size:12px;font-weight:700;white-space:nowrap">&spades;&nbsp;Ace</a>
@@ -761,10 +761,26 @@ function pickCard(g, p) {
   const cmp = `<div class="pk-c" role="button" tabindex="0" aria-expanded="false"><span class="pk-cs"><b>${esc(p.selection)}</b><span class="sub">${odds(p.price)} ${esc(p.book)} &middot; model ${pct(p.model_p)} vs mkt ${pct(p.book_p)}${p.result && p.actual != null && p.market === 'prop' ? ` &middot; finished ${fv(p)}` : ''}</span></span><span class="pk-ct">${tail}<span class="chev" aria-hidden="true">&#9662;</span></span></div>`;
   return `<div class="pick">${cmp}<div class="pk-h"><span class="pk-s">${selH(p)}${ruledOut(g, p) ? ' ' + OUTPILL : ''}${p.role ? ' <span class="pill p-cold" title="The sim projects more than 1.33x the line on this over: it may be giving the player a bigger role than the books do.">Role?</span>' : ''}${p.wind ? ' <span class="pill p-cold" title="Windy forecast for this game. The sim plays every game in calm weather, so passing and total overs run high.">Wind</span>' : ''}${p.hold ? ' <span class="pill p-open" title="The books price a teammate the sim had no role for when this was priced, so this team\'s projections are inflated. Wait.">Hold</span>' : ''}</span><span class="pk-p">${odds(p.price)} &middot; <b>${esc(p.book)}</b></span></div>
     ${p.why ? `<div class="why">${esc(p.why)}</div>` : ''}
-    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p)}${htBtn(g, p) ? `<div class="ht-w">${htBtn(g, p)}</div>` : ''}${res}${p.player && p.market === 'prop' ? `<a class="pl-more" href="${plHref(p.player)}">Every pick on ${esc(p.player)} &rarr;</a>` : ''}</div>`;
+    <div class="meters">${meter('Model', p.model_p, p.breakeven)}${meter('Stress test', p.stress_p, p.breakeven)}${meter('Market, no-vig', p.book_p, null, true)}</div>${betForm(p)}${ruledOut(g, p) ? '' : shopLine(p) + nowLine(p)}${htBtn(g, p) ? `<div class="ht-w">${htBtn(g, p)}</div>` : ''}${res}${p.player && p.market === 'prop' ? `<a class="pl-more" href="${plHref(p.player)}">Every pick on ${esc(p.player)} &rarr;</a>` : ''}</div>`;
 }
 /* price shopping from the odds pull: a better price at the same line, or a better number, at another book. Display only:
    the edge and the graded result use the listed price. */
+/* Is it still playable? (Nov 16) The pre-game re-check's market for an open bet: the price at that check, and whether
+   the line or price has moved against the pick since pricing. p.now = {at, m: "<line> o<price>/u<price> <book>", v, n}. */
+function nowLine(p, small) {
+  if (p.result || !p.now || !p.now.m) return '';
+  const mm = /^(\S+) o([+-]?\d+)\/u([+-]?\d+) (.+)$/.exec(p.now.m); if (!mm) return '';
+  const over = / Over /.test(' ' + p.selection + ' ') || /^Over /.test(p.selection), l1 = +mm[1], pr = +(over ? mm[2] : mm[3]), bk = mm[4];
+  const imp = x => x < 0 ? -x / (-x + 100) : 100 / (x + 100), l0 = +p.line;
+  const tm = p.now.at ? new Date(p.now.at).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York'}) : '';
+  let tag = '', cls = '';
+  if (l1 !== l0) { const bad = over ? l1 > l0 : l1 < l0; tag = `line moved to ${l1}${bad ? ', against the pick' : ', in its favor'}`; cls = bad ? 'neg' : 'pos'; }
+  else if (imp(pr) > p.breakeven + 0.015) { tag = 'same line, price worse'; cls = 'neg'; }
+  else if (imp(pr) < p.breakeven - 0.015) { tag = 'same line, price better'; cls = 'pos'; }
+  else tag = 'same line and price';
+  const v = p.now.v, warn = v === 'OUT' || v === 'FLIPPED' || v === 'HOLD' ? `<span class="neg"> &middot; <b>check: ${esc(v.toLowerCase())}</b>${p.now.n ? ' (' + esc(p.now.n) + ')' : ''}</span>` : v === 'WEAKER' ? `<span class="amb"> &middot; check: weaker</span>` : '';
+  return `<div class="shop now${small ? ' sm' : ''}"><span class="st-l" style="margin:0">Now</span> <b>${over ? 'o' : 'u'}${l1} ${odds(pr)}</b> ${esc(bk)}${tm ? ` <span class="dim">at the ${esc(tm)} check</span>` : ''} &middot; <span class="${cls}">${tag}</span>${warn}</div>`;
+}
 function shopLine(p, small) {
   if (p.result || !(p.best_price || p.alt_line)) return '';
   const fx = t => esc(t).replace(/ -(\d)/g, ' −$1');
@@ -972,6 +988,24 @@ function leanGroups(list, row) {
     return `<details class="sp-g"><summary><span class="sp-gn">${esc(st.label)}<span class="sp-gc">${xs.length}</span></span><span class="sp-gr"><span>${frec(st.t)}${tonight}</span><span class="sp-hs">${fstat(st.t)}</span></span></summary><div class="sp-l">${xs.map(x => row(x, true)).join('')}</div></details>`;
   }).join('')}</div>`;
 }
+/* Ace's picks for these games (Nov 16, a pro-bettor review: lead with the picks that have a winning tracked record,
+   not the full list). From sim/<lg>/ace.json; live picks only, pending ones say when they're final. */
+const ACEJ = {};
+function acePicks(gs) {
+  const a = ACEJ[LG]; if (!a || !a.picks) return [];
+  const ids = new Set(gs.map(g => g.game_id));
+  return a.picks.filter(x => x.flag === 'live' && ids.has(x.game_id)).sort((x, y) => new Date(x.start) - new Date(y.start));
+}
+function aceRow(x) {
+  const tm = t => new Date(t).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York'});
+  const st = x.result === 'pulled' ? `<span class="pill p-void">pulled</span> <span class="dim">${esc(x.pull_reason || '')}</span>`
+    : x.result ? `<span class="pill p-${esc(x.result)}">${esc(x.result)}</span> <span class="u ${ucls(x.units)}">${un(x.units)}</span>`
+    : x.pending ? `<span class="pill p-open">pending</span> <span class="dim">final after the ${esc(tm(x.check_at))} ET check, don't play yet</span>`
+    : `<b>${x.stake}u</b> <span class="dim">stake</span>`;
+  return `<button type="button" class="sp-r" data-g="${esc(x.game_id)}"><b>${esc(x.selection)}</b><span class="pr">${odds(x.price)}</span>
+    <span class="sub">${esc(x.matchup)} &middot; <span class="bk">${esc(x.book)}</span> &middot; ${st}</span>
+    <span class="sub">Ace ${pct(x.p)} vs market ${pct(x.mkt_p)}${x.result || x.pending ? ` &middot; ${x.stake}u` : ''}</span></button>`;
+}
 function spots(gs, unit) {
   const rows = {bet: [], lean: []};
   for (const g of gs) for (const p of g.picks) { if (ruledOut(g, p)) continue; const st = starOf(p); if (st) rows[p.kind].push({g, p, st}); }
@@ -980,13 +1014,17 @@ function spots(gs, unit) {
   const row = ({g, p, st}, inGroup) => `<button type="button" class="sp-r" data-g="${esc(g.game_id)}"><b>${esc(p.selection)}</b><span class="pr">${odds(p.price)}</span>
     <span class="sub">${esc(g.away)} @ ${esc(g.home)} &middot; <span class="bk">${esc(p.book)}</span>${p.result ? ` &middot; <span class="pill p-${esc(p.result)}">${esc(p.result)}</span> <span class="u ${ucls(p.units)}">${un(p.units)}</span>` : ''}</span>
     ${p.actual != null ? `<span class="sub fin">${finishLine(p)}${played(g, p) ? ' &middot; ' + played(g, p) : ''}</span>` : ''}
-    ${inGroup === true ? '' : `<span class="sub">${esc(st.label)} ${frec(st.t)}${fstat(st.t) ? ' &middot; ' + fstat(st.t) : ''}</span>`}${shopLine(p, true)}${htBtn(g, p, true) ? `<span class="sub">${htBtn(g, p, true)}</span>` : ''}</button>`;
+    ${inGroup === true ? '' : `<span class="sub">${esc(st.label)} ${frec(st.t)}${fstat(st.t) ? ' &middot; ' + fstat(st.t) : ''}</span>`}${shopLine(p, true)}${nowLine(p, true)}${htBtn(g, p, true) ? `<span class="sub">${htBtn(g, p, true)}</span>` : ''}</button>`;
   const all = rows.bet.concat(rows.lean), done = all.filter(x => x.p.result);
+  const ace = acePicks(gs), ar = ACEJ[LG] && ACEJ[LG].record && ACEJ[LG].record.live;
+  const aceSec = ace.length || ar ? `<div class="sp-s"><b>&spades;</b> Ace <span>${ar ? `live ${rec(ar)}, <b class="u ${ucls(ar.units)}">${un(ar.units)}</b> &middot; ` : ''}sized by edge, paper bankroll &middot; <a href="ace.html">all of Ace</a></span></div>
+    ${ace.length ? `<div class="sp-l">${ace.map(aceRow).join('')}</div>` : `<div class="sp-n">No Ace picks ${unit === 'Week' ? 'this week' : 'on this night'}: nothing cleared its bar.</div>`}` : '';
   let recap = '';
   if (done.length) { const t = {w: 0, l: 0, p: 0, u: 0}; for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
     recap = `<div class="sp-n">These picks went <b>${rec(t)}</b>, <b class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</b>${rows.lean.some(x => x.p.result) ? ' (leans at 1u)' : ''}.</div>`; }
   return `<aside class="spots" aria-label="Starred picks"><div class="spots-in">
-    <div class="sp-t">${graded ? '★ Picks on this ' + unit.toLowerCase() : unit === 'Week' ? "This week's ★ picks" : "Tonight's ★ picks"}<span>${all.length}</span></div>${recap}
+    <div class="sp-t">${graded ? 'Best picks on this ' + unit.toLowerCase() : unit === 'Week' ? "This week's best picks" : "Tonight's best picks"}<span>${all.length + ace.length}</span></div>
+    <div class="sp-n">The picks with a winning tracked record: Ace first, then the ★ tags. The full list is in each game below.</div>${aceSec}${recap}
     <div class="sp-s"><b>★</b> Hot bets <span>1 unit each</span></div>
     ${rows.bet.length ? `<div class="sp-l">${rows.bet.map(row).join('')}</div>` : '<div class="sp-n">None yet. A bet type needs 15+ graded and +9% ROI or better, adjusted for sample size.</div>'}
     <div class="sp-s"><b>★</b> Top group leans <span>tracked, not staked</span></div>
@@ -1109,6 +1147,7 @@ async function renderSlate() {
   const key = LG + '/' + NID;
   if (!NIGHT[key]) NIGHT[key] = await getJSON(`sim/${LG}/${NID}.json`);
   try { if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`); formAt(LG, NID); } catch (e) {}
+  try { if (!(LG in ACEJ)) ACEJ[LG] = await getJSON(`sim/${LG}/ace.json`); } catch (e) { ACEJ[LG] = null; }
   const data = NIGHT[key], gs = data.games, r = data.record;
   let nb = 0, nl = 0;
   for (const g of gs) for (const p of g.picks) p.kind === 'bet' ? nb++ : nl++;
@@ -1936,7 +1975,7 @@ function renderSeason() {
 }
 /* header KPIs: the open league (LG); All = bets + leans (leans graded as 1u). The unit size is the viewer's own,
    kept in this browser only, and turns units into dollars for them. The site itself never shows real stakes. */
-let KK = 'bet', USZ = '';
+let KK = 'bet', USZ = '100';   // default $100 units like ace.html (Nov 16: a grey placeholder looked filled in but showed $—)
 try { const s = JSON.parse(localStorage.getItem('simk') || '{}'); if (['all', 'bet', 'lean'].includes(s.k)) KK = s.k; if (s.u) USZ = String(s.u); } catch (e) {}
 const saveK = () => { try { localStorage.setItem('simk', JSON.stringify({k: KK, u: USZ})); } catch (e) {} };
 const money = v => { const d = Math.abs(v) < 100 ? 2 : 0; return (v < 0 ? '−' : v > 0 ? '+' : '') + '$' + Math.abs(v).toLocaleString('en-US', {maximumFractionDigits: d, minimumFractionDigits: d}); };
