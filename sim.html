@@ -610,6 +610,7 @@ function buildForm(lg, asOf) {
   const rows = (LEDGER[lg] || {}).rows || [], f = {bet: {}, cat: {}, grp: {}};
   for (const r of rows) {
     if (!r.result || (asOf && r.night >= asOf)) continue;
+    if (r.role) { f.role = f.role || {}; tallyAdd(f.role, 'all', r); }   // NFL ROLE? overs, bets and leans (Nov 16)
     if (r.kind === 'bet') tallyAdd(f.bet, betKey(r), r);
     else { const c = catOf(r); if (!c) continue; tallyAdd(f.cat, c, r); tallyAdd(f.grp, c + '|' + parts(r).base, r); }
   }
@@ -633,6 +634,10 @@ function betForm(p) {
 }
 function leanForm(p) {
   const f = FORM[LG]; if (!f || p.result) return null;
+  // NFL ROLE? overs became leans on Nov 16 (the mid-November review: tagged overs lost all season). Show that record so
+  // the reason is visible; no watch-list category until 30+ graded as leans.
+  const rt = p.role && f.role && f.role.all;
+  if (rt && /ROLE\?/.test(p.reason || '')) return {top: false, html: `<span class="sub"><span class="pill p-cat">ROLE? overs</span> before this ${LG === 'nfl' ? 'week' : 'night'} ${frec(rt)} &middot; ${fstat(rt)}</span>`};
   const c = catOf(p), ct = c && f.cat[c]; if (!ct || !ct.watch) return null;
   const g = f.grp[c + '|' + parts(p).base], cat = CATS.find(x => x[0] === c);
   const top = !!(g && g.top) && !p.role && !p.hold && !p.wind;                  // NFL ROLE? / HOLD: no Top group tag (Nov 3)
