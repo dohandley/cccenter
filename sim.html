@@ -996,7 +996,7 @@ function acePicks(gs) {
   const ids = new Set(gs.map(g => g.game_id));
   return a.picks.filter(x => x.flag === 'live' && ids.has(x.game_id)).sort((x, y) => new Date(x.start) - new Date(y.start));
 }
-function aceRow(x) {
+function aceRow(x, gs) {
   const tm = t => new Date(t).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York'});
   const st = x.result === 'pulled' ? `<span class="pill p-void">pulled</span> <span class="dim">${esc(x.pull_reason || '')}</span>`
     : x.result ? `<span class="pill p-${esc(x.result)}">${esc(x.result)}</span> <span class="u ${ucls(x.units)}">${un(x.units)}</span>`
@@ -1004,7 +1004,11 @@ function aceRow(x) {
     : `<b>${x.stake}u</b> <span class="dim">stake</span>`;
   return `<button type="button" class="sp-r" data-g="${esc(x.game_id)}"><b>${esc(x.selection)}</b><span class="pr">${odds(x.price)}</span>
     <span class="sub">${esc(x.matchup)} &middot; <span class="bk">${esc(x.book)}</span> &middot; ${st}</span>
-    <span class="sub">Ace ${pct(x.p)} vs market ${pct(x.mkt_p)}${x.result || x.pending ? ` &middot; ${x.stake}u` : ''}</span></button>`;
+    <span class="sub">Ace ${pct(x.p)} vs market ${pct(x.mkt_p)}${x.result || x.pending ? ` &middot; ${x.stake}u` : ''}</span>${(() => {
+      // the same L5/L10/L15 chart as the game card's pick (Nov 16), when the night file has his games
+      const g = (gs || []).find(z => z.game_id === x.game_id), q = g && g.picks.find(z => z.selection === x.selection);
+      const b = g && q ? htBtn(g, q, true) : ''; return b ? `<span class="sub">${b}</span>` : '';
+    })()}</button>`;
 }
 function spots(gs, unit) {
   const rows = {bet: [], lean: []};
@@ -1018,7 +1022,7 @@ function spots(gs, unit) {
   const all = rows.bet.concat(rows.lean), done = all.filter(x => x.p.result);
   const ace = acePicks(gs), ar = ACEJ[LG] && ACEJ[LG].record && ACEJ[LG].record.live;
   const aceSec = ace.length || ar ? `<div class="sp-s"><b>&spades;</b> Ace <span>${ar ? `live ${rec(ar)}, <b class="u ${ucls(ar.units)}">${un(ar.units)}</b> &middot; ` : ''}sized by edge, paper bankroll &middot; <a href="ace.html">all of Ace</a></span></div>
-    ${ace.length ? `<div class="sp-l">${ace.map(aceRow).join('')}</div>` : `<div class="sp-n">No Ace picks ${unit === 'Week' ? 'this week' : 'on this night'}: nothing cleared its bar.</div>`}` : '';
+    ${ace.length ? `<div class="sp-l">${ace.map(x => aceRow(x, gs)).join('')}</div>` : `<div class="sp-n">No Ace picks ${unit === 'Week' ? 'this week' : 'on this night'}: nothing cleared its bar.</div>`}` : '';
   let recap = '';
   if (done.length) { const t = {w: 0, l: 0, p: 0, u: 0}; for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
     recap = `<div class="sp-n">These picks went <b>${rec(t)}</b>, <b class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</b>${rows.lean.some(x => x.p.result) ? ' (leans at 1u)' : ''}.</div>`; }
