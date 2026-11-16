@@ -1176,6 +1176,8 @@ async function renderSlate() {
 }
 
 /* ---------- ledger ---------- */
+/* L5/L10/L15 on ledger and player-page rows (Nov 16): loads that night's file on tap (games before that night) */
+const ldgHt = r => r.market === 'prop' && r.player && HSTAT[r.stat] && r.game_id ? `<span class="sub"><span class="ht" role="button" tabindex="0" data-hsel="${esc(r.game_id + '~' + r.selection)}">&#9656; L5/L10/L15</span></span>` : '';
 async function renderLedger() {
   if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`);
   formAt(LG, null);
@@ -1193,7 +1195,7 @@ async function renderLedger() {
   const LIM = FILT.lim || 150, shown = rows.slice(0, LIM);
   const body = shown.map(r => `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
       <td>${esc(shortDate(r.tipoff))}<span class="sub">${esc(r.matchup)}</span></td>
-      <td class="pk">${selH(r)}${rowTag(r)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}</td>
+      <td class="pk">${selH(r)}${rowTag(r)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}${ldgHt(r)}</td>
       <td class="hm"><span class="tag ${r.kind === 'bet' ? 't-bet' : 't-lean'}">${r.kind}</span></td>
       <td class="r">${odds(r.price)}<span class="sub bk">${esc(r.book)}</span></td>
       <td class="r hm">${pct(r.model_p)}<span class="sub">mkt ${pct(r.book_p)}</span></td>
@@ -1218,7 +1220,8 @@ async function renderLedger() {
   if ($('lmore')) $('lmore').onclick = () => { const y = scrollY; FILT.lim = LIM + 300; renderLedger().then(() => scrollTo(0, y)); };
   renderResults();
   const open = tr => { NID = tr.dataset.n; FOCUS = tr.dataset.g; VIEW = 'slate'; go(); };
-  $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = e => { if (!e.target.closest('a')) open(tr); }; tr.onkeydown = e => { if (e.target.closest('a')) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(tr); } }; });
+  $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = e => { if (!e.target.closest('a, .ht')) open(tr); }; tr.onkeydown = e => { if (e.target.closest('a, .ht')) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(tr); } }; });
+  slateCharts($('view'));
   wireSearch();
 }
 
@@ -1300,7 +1303,7 @@ async function renderPlayer() {
     const hit = r.actual != null && r.line != null ? ((r.actual - r.line) * dir(r) > 0 ? 'pos' : (r.actual === r.line ? '' : 'neg')) : '';
     return `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
       <td>${esc(shortDate(r.tipoff))}<span class="sub">${esc(r.matchup)}</span></td>
-      <td class="pk">${esc(r.selection.slice(r.player.length).trim())}<span class="sub" style="font-weight:500">${r.kind === 'bet' ? '<span class="tag t-bet" style="padding:1px 5px">bet</span>' : 'Lean · ' + esc(r.reason || '')}</span><span class="sub mo">${odds(r.price)} ${esc(r.book)}</span></td>
+      <td class="pk">${esc(r.selection.slice(r.player.length).trim())}<span class="sub" style="font-weight:500">${r.kind === 'bet' ? '<span class="tag t-bet" style="padding:1px 5px">bet</span>' : 'Lean · ' + esc(r.reason || '')}</span><span class="sub mo">${odds(r.price)} ${esc(r.book)}</span>${ldgHt(r)}</td>
       <td class="r hm">${odds(r.price)}<span class="sub bk">${esc(r.book)}</span></td>
       <td class="r">${nf(r.proj)}${r.pmin != null ? `<span class="sub">${r.pmin} min</span>` : ''}</td>
       <td class="r ${hit}">${got}</td>
@@ -1321,7 +1324,8 @@ async function renderPlayer() {
     <div class="dim" style="font-size:11.5px">Green / red "got" = finished on / against the pick's side of the line. Tap a row to open that game's card.</div></div>`;
   $('pf').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.k) PTK = b.dataset.k; if ('t' in b.dataset) PTEAM = b.dataset.t || null; renderPlayer(); };
   const openG = tr => { NID = tr.dataset.n; FOCUS = tr.dataset.g; VIEW = 'slate'; go(); };
-  $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = () => openG(tr); tr.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openG(tr); } }; });
+  $('view').querySelectorAll('tr.go').forEach(tr => { tr.onclick = e => { if (!e.target.closest('.ht')) openG(tr); }; tr.onkeydown = e => { if (e.target.closest('.ht')) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openG(tr); } }; });
+  slateCharts($('view'));
   wireSearch();
 }
 
