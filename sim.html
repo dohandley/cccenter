@@ -1502,9 +1502,18 @@ function longShots(g, night) {
   if (!g || !g.tickets.length) return g ? `<div class="pan"><div class="pan-h"><span class="pan-t">Long shots: SGPs, SGP+ and price gaps</span></div><div class="dim" style="font-size:12.5px">Tracking starts with the ${esc(shortDate(g.live_from + 'T12:00:00-04:00'))} slate's next pricing run.</div></div>` : '';
   const R = g.record, hx = r => r.graded ? `${r.w}/${r.graded}` : '—';
   const ex = r => r.graded ? `hit · expected ${r.expected.toFixed(1)}${r.open ? ` · ${r.open} open` : ''}` : `none graded · ${r.open} open`;
-  const tiles = jumpTile(st('Sim SGPs', hx(R.sgp), ex(R.sgp), R.sgp.graded ? (R.sgp.w >= R.sgp.expected ? 'pos' : 'neg') : ''), 'sgp', R.sgp.open)
-    + jumpTile(st('SGP+', hx(R.sgp_plus), ex(R.sgp_plus), R.sgp_plus.graded ? (R.sgp_plus.w >= R.sgp_plus.expected ? 'pos' : 'neg') : ''), 'sgp_plus', R.sgp_plus.open)
-    + jumpTile(st('Price gaps', rec(R.gap), R.gap.graded ? un(R.gap.units) : `${R.gap.open} open`, ucls(R.gap.units)), 'gap', R.gap.open);
+  // tiles follow the night bar (Nov 17): the chosen night's tickets, with the season under them
+  const nr = k => { const ts = g.tickets.filter(t => t.kind === k && (!night || t.slate === night)), gr = ts.filter(t => t.result && t.result !== 'void');
+    return {n: ts.length, graded: gr.length, w: gr.filter(t => t.result === 'win').length, l: gr.filter(t => t.result === 'loss').length, p: 0,
+      expected: gr.reduce((a, t) => a + (t.p || 0), 0), open: ts.filter(t => !t.result).length, units: Math.round(gr.reduce((a, t) => a + (t.units || 0), 0) * 100) / 100}; };
+  const lab = night ? shortDate(night + 'T12:00:00-05:00') : 'Season';
+  const hitT = (name, k) => { const r = nr(k), S = R[k];
+    const main = r.graded ? `${r.w}/${r.graded}` : r.n ? `${r.open} open` : '—';
+    const sub = `${r.graded ? `exp ${r.expected.toFixed(1)}${r.open ? ` · ${r.open} open` : ''} · ` : ''}season ${S.graded ? `${S.w}/${S.graded}, exp ${S.expected.toFixed(1)}` : '—'}`;
+    return jumpTile(st(`${name} · ${lab}`, main, sub, r.graded ? (r.w >= r.expected ? 'pos' : 'neg') : ''), k, r.open); };
+  const gr = nr('gap'), GS = R.gap;
+  const tiles = hitT('Sim SGPs', 'sgp') + hitT('SGP+', 'sgp_plus')
+    + jumpTile(st(`Price gaps · ${lab}`, gr.graded ? rec(gr) : gr.n ? `${gr.open} open` : '—', `${gr.graded ? un(gr.units) + ' · ' : ''}season ${rec(GS)}, ${un(GS.units)}`, gr.graded ? ucls(gr.units) : ''), 'gap', gr.open);
   const by = {}; for (const t of g.tickets) (by[t.slate] = by[t.slate] || []).push(t);
   const ord = {sgp_plus: 0, sgp: 1, gap: 2};
   const slates = Object.keys(by).filter(s => !night || s === night).map(s => {
