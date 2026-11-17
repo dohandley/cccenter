@@ -151,6 +151,17 @@ td.w{white-space:normal;min-width:160px}td.w .ln-s{font-weight:700;color:var(--t
 .bk{font-weight:700;color:var(--gold)}
 .act{display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:var(--text-4)}
 .act.hit{color:var(--green-text)} .act.miss{color:var(--red-text)}
+/* books' line under each projection (Nov 17, pregame only), shaded only where we have a Bet or Lean: blue over, orange
+   under (never green/red, which are the recap's). Tap for each book's price. */
+.pl{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--text-4);white-space:nowrap}
+td.plc{cursor:pointer} td.plc:hover .pl,td.plc.on .pl{color:var(--text-2);text-decoration:underline dotted}
+td.sh-ob{background:color-mix(in srgb,var(--s1) 36%,transparent)} td.sh-ol{background:color-mix(in srgb,var(--s1) 12%,transparent)}
+td.sh-ub{background:color-mix(in srgb,var(--s2) 36%,transparent)} td.sh-ul{background:color-mix(in srgb,var(--s2) 12%,transparent)}
+td.sh-ob .pl,td.sh-ol .pl,td.sh-ub .pl,td.sh-ul .pl{color:var(--text-2);font-weight:700}
+.bxk{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;margin-top:8px;font-size:11.5px;color:var(--text-3)}
+.bxk i{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:4px}
+.bxd{margin-top:8px;padding:9px 11px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);font-size:12.5px;line-height:1.55}
+.bxd .bb{display:inline-block;margin-right:12px;white-space:nowrap}.bxd .bb b{font-weight:700}
 details{border-top:1px solid var(--border);padding-top:12px}
 summary{cursor:pointer;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
 .box2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
@@ -450,7 +461,7 @@ th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{
       <li><b>Spread and Total</b> put the sim's number next to the market's, with the gap underneath. The sim's numbers here are medians, the line it lands over half the time, so they can differ slightly from the gap between the averages.</li>
       <li><b>Out</b> lists players the sim treated as unavailable.</li>
       <li><b>Updated for late news</b>: if an injury or lineup change comes in after a game is priced, the game is re-simmed before tip and the card shows the new projections, score and fair lines. Each pick keeps the win chances it was posted with.</li>
-      <li>Open <b>Projected box score</b> for each player's projected stats. After the game, the actual number appears under each projection, green if it beat the projection and red if it fell short.</li>
+      <li>Open <b>Projected box score</b> for each player's projected stats. Before the game, a stat with a prop shows the books' line under the projection (o/u; tap it for every book's price). Shaded cells are our picks: blue for overs, orange for unders, darker for a Bet and lighter for a Lean. An unshaded cell has no pick, even when the projection sits above or below the line. After the game, the actual number appears under each projection, green if it beat the projection and red if it fell short.</li>
     </ul>
 
     <h3>Bets</h3>
@@ -826,7 +837,12 @@ function box(g, t) {
       const a = act ? act[r.player] : undefined;
       const cells = grp.cols.map(([k]) => {
         const shown = fmt(k, r[k]);
-        if (!act) return `<td class="r">${shown}</td>`;
+        if (!act) {
+          const L = (((g.lines || {})[t] || {})[r.player] || {})[k];
+          if (!L) return `<td class="r">${shown}</td>`;
+          const sh = L.k ? ` sh-${L.s === 'O' ? 'o' : 'u'}${L.k === 'bet' ? 'b' : 'l'}` : '';
+          return `<td class="r plc${sh}" tabindex="0" role="button" data-pl="${esc([t, r.player, k].join('~'))}">${shown}<span class="pl">o/u ${esc(L.l)}</span></td>`;
+        }
         let av, tone = '';
         if (a === undefined) { av = '—'; }
         else if (a.dnp) { av = 'DNP'; tone = ' miss'; }
@@ -837,7 +853,7 @@ function box(g, t) {
       body += `<tr data-i="${ri++}"><td>${esc(r.player)}${actv}</td>${cells}${'<td></td>'.repeat(ncol - grp.cols.length)}</tr>`;
     }
   }
-  return `<div><div class="ct">${esc(nick(t))} &middot; ${act ? 'projected, actual below' : 'projected'}</div><div class="tw"><table>${head ? `<thead>${head}</thead>` : ''}<tbody>${body}</tbody></table></div></div>`;
+  return `<div><div class="ct">${esc(nick(t))} &middot; ${act ? 'projected, actual below' : 'projected'}</div><div class="tw"><table>${head ? `<thead>${head}</thead>` : ''}<tbody>${body}</tbody></table></div>${!act && (g.lines || {})[t] ? '<div class="bxd" hidden></div>' : ''}</div>`;
 }
 /* ---------- team colors and badges (Nov 10). Colors only, no league or team logos (those are licensed marks). ---------- */
 const TCOL = {
@@ -913,6 +929,32 @@ const totExtra = g => { const t = g.mk && g.mk.tot; if (!t || t.line !== g.total
   return `<div class="ln-x">Over: sim ${Math.round(t.over_p * 100)}%${g.updated ? ' (at pricing)' : ''} &middot; market ${Math.round(t.over_nv * 100)}%${bo || bu ? `<br>Best: ${bo ? `O ${odds(bo.price)} ${esc(bo.book)}` : ''}${bo && bu ? ' &middot; ' : ''}${bu ? `U ${odds(bu.price)} ${esc(bu.book)}` : ''}` : ''}</div>`; };
 
 /* box score: tap a column to sort that group by the projection, highest first, in both teams' tables; tap again to go back to minutes order (Nov 10) */
+function boxKey(g) {
+  const any = Object.values(g.lines).some(t => Object.values(t).some(p => Object.values(p).some(e => e.k)));
+  return `<div class="bxk"><span>o/u = the books' line when priced &middot; tap one for every book's price</span>${any ? `<span><i style="background:color-mix(in srgb,var(--s1) 36%,transparent)"></i>Over bet <i style="background:color-mix(in srgb,var(--s1) 12%,transparent);margin-left:6px"></i>lean</span><span><i style="background:color-mix(in srgb,var(--s2) 36%,transparent)"></i>Under bet <i style="background:color-mix(in srgb,var(--s2) 12%,transparent);margin-left:6px"></i>lean</span>` : ''}<span>Unshaded: no pick, even when the projection is above or below the line.</span></div>`;
+}
+function boxLine(td) {
+  const wrap = td.closest('.box2'), det = wrap && td.closest('.box2 > div').querySelector('.bxd'); if (!det) return;
+  const d = NIGHT[LG + '/' + NID], g = d && d.games.find(x => x.game_id === wrap.dataset.g); if (!g || !g.lines) return;
+  const [t, pl, k] = td.dataset.pl.split('~'), L = ((g.lines[t] || {})[pl] || {})[k]; if (!L) return;
+  const was = td.classList.contains('on');
+  wrap.querySelectorAll('td.plc.on').forEach(x => x.classList.remove('on'));
+  wrap.querySelectorAll('.bxd').forEach(x => { x.hidden = true; });
+  if (was) return;
+  td.classList.add('on');
+  const grp = (g.box_groups || []).find(x => x.cols.some(c => c[0] === k)), col = grp && grp.cols.find(c => c[0] === k);
+  const lab = col ? (grp.label ? grp.label + ' ' + col[1].toLowerCase() : col[1]) : k;
+  const bo = Math.max(...L.b.map(b => b[1] ?? -1e9)), bu = Math.max(...L.b.map(b => b[2] ?? -1e9));
+  const pr = (v, best) => v == null ? '—' : v === best && L.b.length > 1 ? `<b>${odds(v)}</b>` : odds(v);
+  const books = L.b.map(b => `<span class="bb">${esc(b[0])} o ${pr(b[1], bo)} &middot; u ${pr(b[2], bu)}</span>`).join('');
+  const off = (L.o || []).map(b => `<span class="bb">${esc(b[0])} ${esc(b[1])}: o ${odds(b[2])} &middot; u ${odds(b[3])}</span>`).join('');
+  const pick = L.k ? ` &middot; our ${L.k === 'bet' ? 'Bet' : 'Lean'}: <b>${L.s === 'O' ? 'Over' : 'Under'}</b>` : '';
+  det.innerHTML = `<b>${esc(pl)}</b> ${esc(lab)} &middot; o/u ${esc(L.l)} &middot; projected ${td.firstChild.textContent}${pick}<br>${books}${off ? `<br><span class="dim">Other numbers:</span> ${off}` : ''}<br><span class="dim">Prices when the game was priced; bold is the best price.</span>`;
+  det.hidden = false;
+  det.scrollIntoView({block: 'nearest', behavior: 'smooth'});
+}
+document.addEventListener('click', e => { const td = e.target.closest('.box2 td.plc'); if (td) boxLine(td); });
+document.addEventListener('keydown', e => { const td = e.target.closest && e.target.closest('.box2 td.plc'); if (td && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); boxLine(td); } });
 function boxSort(th) {
   const wrap = th.closest('.box2'); if (!wrap) return;
   const hr = th.parentElement, grp = (hr.querySelector('th') || {}).textContent || '', col = th.textContent.replace(/[▾]/g, '').trim();
@@ -967,7 +1009,7 @@ function card(g) {
     <div class="sec"><span class="tag t-bet">Bet</span> 1 unit each <span class="cnt">${bets.length || 'none cleared the bar'}</span></div>
     ${bets.length ? `<div class="picks">${bets.map(p => pickCard(g, p)).join('')}</div>` : ''}
     ${leanTable(ls, g)}
-    <details${FOCUS === g.game_id ? ' open' : ''}><summary>${f ? 'Box score: projected vs actual' : 'Projected box score'}</summary><div class="box2">${box(g, g.away)}${box(g, g.home)}</div></details>
+    <details${FOCUS === g.game_id ? ' open' : ''}><summary>${f ? 'Box score: projected vs actual' : 'Projected box score'}</summary><div class="box2" data-g="${esc(g.game_id)}">${box(g, g.away)}${box(g, g.home)}</div>${!f && g.lines && Object.keys(g.lines).length ? boxKey(g) : ''}</details>
   </article>`;
 }
 /* a prop whose player was ruled out after pricing (the late-news re-sim lists him as out): no star, flagged on the card */
