@@ -1771,6 +1771,22 @@ function bCalib(d) {
     <div class="tw"><table><thead><tr><th>Our EV</th><th class="r">Legs</th><th class="r hm">We said</th><th class="r">Hit</th><th class="r">Return at best price</th></tr></thead><tbody>${evr}</tbody></table></div>
     <p class="cnote">A week of legs, many on the same players and nights, so read the bottom rows as a direction, not proof. Paper only: nothing here is a bet.</p></div>`;
 }
+/* Alt-line ladder paper test (Nov 17, NBA): every plus-money alt rung priced with the same blend and graded. Records
+   and calibration only, never picks; whether it ever shows plays is decided after 2-3 weeks of this. */
+function bAlt(d) {
+  const a = d.alt; if (!a || !a.logged) return '';
+  const P = x => (x * 100).toFixed(1) + '%', pr = a.price_range, fd = esc(shortDate(a.first + 'T12:00:00-05:00'));
+  const head = `<div class="pan"><div class="pan-h"><span class="pan-t">Alt lines: paper test</span><span class="cnote">learning only &middot; never bet, never a pick</span></div>
+    <p class="cnote" style="margin:0">Since ${fd}, every alt line priced +${pr[0]} to +${pr[1].toLocaleString()} (like 8+ rebounds at +265) gets our chance from the same blend as the builder and is checked against the box score. Alt lines sit in the tails, where sims miss most, so this has to prove itself before any of it is shown as a play. ${a.logged.toLocaleString()} logged over ${a.nights} night${a.nights === 1 ? '' : 's'}, ${a.plus_ev.toLocaleString()} at +${Math.round(a.ev_bar * 100)}% EV or more.</p>`;
+  if (!a.bins || !a.bins.length) return head + `<div class="dim" style="font-size:12.5px;margin-top:6px">The first results come in once tonight's games are graded.</div></div>`;
+  const rows = a.bins.map(b => `<tr><td>${b[0]}&ndash;${b[0] + 5}%</td><td class="r hm">${b[1].toLocaleString()}</td><td class="r"><b>${P(b[2])}</b></td><td class="r"><b class="${Math.abs(b[5] - b[2]) <= 0.02 ? 'pos' : 'neg'}">${P(b[5])}</b></td><td class="r hm">${P(b[3])}</td><td class="r hm">${P(b[4])}</td></tr>`).join('');
+  const evr = (a.ev || []).map(e => `<tr><td>${esc(e[0])}</td><td class="r">${e[1].toLocaleString()}</td><td class="r hm">${P(e[2])}</td><td class="r">${P(e[3])}</td><td class="r"><b class="${e[4] >= 0 ? 'pos' : 'neg'}">${e[4] >= 0 ? '+' : ''}${(e[4] * 100).toFixed(1)}%</b></td></tr>`).join('');
+  return head + `<p class="cnote">${a.graded.toLocaleString()} graded. Brier: ours ${a.brier.ours}, market ${a.brier.market}, raw sim ${a.brier.sim} (lower is better). The market's chance is no-vig only where a book hangs both sides of that number; elsewhere it's the price's own chance, vig in.</p>
+    <div class="tw"><table><thead><tr><th>Our chance</th><th class="r hm">Lines</th><th class="r">We said</th><th class="r">Hit</th><th class="r hm">Market said</th><th class="r hm">Raw sim said</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${evr ? `<div class="sec">What they returned, by our EV at the best price</div>
+    <div class="tw"><table><thead><tr><th>Our EV</th><th class="r">Lines</th><th class="r hm">We said</th><th class="r">Hit</th><th class="r">Return</th></tr></thead><tbody>${evr}</tbody></table></div>` : ''}
+    <p class="cnote">Rungs of one player's ladder move together, so a few nights can swing these rows a lot. Paper only: nothing here is a bet.</p></div>`;
+}
 function bRecord(d) {
   // night bar (Nov 12, same as Parlays): the builder's slips one night at a time, newest first
   const nights = [...new Set(d.slips.map(s => s.slate))].sort().reverse();
@@ -1832,7 +1848,7 @@ async function renderBuild() {
     ${c ? `<div class="pan"><div class="pan-h"><span class="pan-t">${LG === 'nfl' ? "This slate's legs" : "Tonight's legs"}</span><input class="bm-q" id="bm-q" placeholder="Find a player…" value="${esc(BLD.q)}" aria-label="Find a player"></div><div id="bm-pick">${bPicker()}</div>
       <div class="cnote">% = our blended chance. <b style="color:var(--green-text)">Bold green</b>: +3% EV or better at its best price (what Build me one uses). Faded green: +EV but under 3%, close to the model's margin of error. Tap legs to add them, then <b>Build around my picks</b> fills the rest of the slip at a book that hangs them all. <b>Next best</b> shows different slips, not the same legs reshuffled.</div></div>` : ''}
     <div class="notes"><b style="color:var(--text)">How it works.</b> Every main-line player prop the books post for tonight, priced by the sim. The sim alone has been overconfident on props, so each leg's chance is pulled toward the market's no-vig price: our chance = market + k &times; (sim &minus; market), with k = ${c ? c.k.toFixed(2) : 'the trust weight'} fitted on every graded pick so far (the same blend Ace uses). <b>Build me one</b> searches for the slip with the best expected value near your payout, every leg at least +3% EV on its own, all legs at one sportsbook at that book's own prices. Legs from different games are independent, so the payout is real. With <b>Allow same game</b> on, legs that share a game use the sim's correlation (how often they hit together across its simulated games), and the slip shows a fair price to take or beat, since books price same-game parlays themselves. Books on our feed: DraftKings, FanDuel, BetMGM, Caesars, ESPN BET.</div>
-    ${bCalib(d)}
+    ${bCalib(d)}${bAlt(d)}
     ${bRecord(d)}</div>`;
   slateCharts($('view'));
   if ($('bnights')) $('bnights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; BLD.night = b.dataset.n; renderBuild(); };
