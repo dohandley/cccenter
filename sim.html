@@ -1619,11 +1619,15 @@ function bSolve() {
     }
   }
   out.sort((a, b) => b.ev - a.ev);
-  const top = [];
+  // Nov 16: a player (any of his props) may appear in at most 2 of the 8 alternatives, your picks aside, so one soft
+  // price or one minutes call (Cissoko u3.5 reb at BetMGM -150 and his other unders) can't ride along in all 8.
+  const top = [], uses = {};
   for (const s of out) {
     const ids = new Set(s.legs.map(l => l.id));
     if (top.some(t => t.legs.filter(l => ids.has(l.id)).length > lock.length + 1)) continue;
-    top.push(s); if (top.length >= 8) break;
+    if (s.legs.some(l => !lockIds.has(l.id) && (uses[l.player] || 0) >= 2)) continue;
+    top.push(s); s.legs.forEach(l => { uses[l.player] = (uses[l.player] || 0) + 1; });
+    if (top.length >= 8) break;
   }
   return top;
 }
