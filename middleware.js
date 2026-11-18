@@ -1,8 +1,9 @@
 // Site password for CC Center.
-// Public (no password): the Sim Ledger page, the Ace page, its data, its home-screen manifest and icons, the logo, and the login page.
+// The home page '/' is the Sim Ledger (Nov 18, Dylan): rewritten to sim.html, public. The dashboard stays at /index.html.
+// Public (no password): the home page, the Sim Ledger page, the Ace page, its data, its home-screen manifest and icons, the logo, and the login page.
 // Everything else (dashboard, SimpleOdds, HR Highlights, the picks logs) needs the password.
 // The password lives only in the Vercel environment variable CC_PASSWORD, never in this repo.
-import { next } from '@vercel/functions';
+import { next, rewrite } from '@vercel/functions';
 
 export const config = { matcher: ['/', '/:path*'] }; // '/' listed on its own: '/:path*' alone skipped the home page
 
@@ -23,7 +24,7 @@ const cookie = (req, name) => {
   const m = (req.headers.get('cookie') || '').match(new RegExp('(?:^|;\\s*)' + name + '=([^;]+)'));
   return m ? decodeURIComponent(m[1]) : '';
 };
-const safeNext = n => (n && n.startsWith('/') && !n.startsWith('//') ? n : '/');
+const safeNext = n => (n && n.startsWith('/') && !n.startsWith('//') && n !== '/' ? n : '/index.html'); // signing in lands on the dashboard
 const redirect = (to, cookies = []) => {
   const h = new Headers({ Location: to, 'Cache-Control': 'no-store' });
   cookies.forEach(c => h.append('Set-Cookie', c));
@@ -52,6 +53,7 @@ export default async function middleware(req) {
     return redirect(`/login.html?e=1&next=${encodeURIComponent(to)}`);
   }
 
+  if (path === '/') return rewrite(new URL('/sim.html' + url.search, req.url));
   if (PUBLIC.some(r => r.test(path))) return next();
 
   if (pw && same(cookie(req, COOKIE), await token(pw))) return next();
