@@ -635,24 +635,29 @@ function buildForm(lg, asOf) {
 }
 /* hit rate and ROI for a group record (Nov 9, Dylan): pushes count in neither; ROI = units / decided picks, same as the season tiles */
 const fstat = t => { const n = t.w + t.l; if (!n) return ''; const r = Math.round(t.u / n * 1000) / 10;
-  return `${Math.round(t.w / n * 100)}% hit &middot; <span class="u ${ucls(r)}">${r > 0 ? '+' : ''}${r}% ROI</span>`; };
+  return `${Math.round(t.w / n * 100)}% hit &middot; <span class="u ${ucls(r)}">${r > 0 ? '+' : r < 0 ? '−' : ''}${Math.abs(r)}% ROI</span>`; };
 const frec = t => `${t.w}–${t.l}${t.p ? '–' + t.p : ''}, <span class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</span>`;
 const HOT = '<span class="pill p-hot">★ Hot</span>', COLD = '<span class="pill p-cold">❄ Cold</span>', TOP = '<span class="pill p-hot">★ Top group</span>';
-function betForm(p) {
-  const f = FORM[LG]; if (!f || p.result) return '';
+/* Nov 18 (Dylan): the group record shows on graded picks too, as it stood before that night (formAt), with hit rate
+   and ROI like the best-picks panel, on the slate and the ledger */
+const befN = p => p.result ? ` <span class="dim">before this ${LG === 'nfl' ? 'week' : 'night'}</span>` : '';
+const fboth = t => frec(t) + (fstat(t) ? ' &middot; ' + fstat(t) : '');
+function betForm(p, bare) {
+  const f = FORM[LG]; if (!f) return '';
   const t = f.bet[betKey(p)];
-  return `<div class="fm">${t && t.tag === 'hot' ? HOT : t && t.tag === 'cold' ? COLD : ''}<span>${esc(betLabel(p))} ${t ? frec(t) : '· first graded pick pending'}</span></div>`;
+  if (bare) return t ? `<span class="sub">${t.tag === 'hot' ? HOT + ' ' : t.tag === 'cold' ? COLD + ' ' : ''}${esc(betLabel(p))}${befN(p)} ${fboth(t)}</span>` : '';
+  return `<div class="fm">${t && t.tag === 'hot' ? HOT : t && t.tag === 'cold' ? COLD : ''}<span>${esc(betLabel(p))}${befN(p)} ${t ? fboth(t) : '· first graded pick pending'}</span></div>`;
 }
 function leanForm(p) {
-  const f = FORM[LG]; if (!f || p.result) return null;
+  const f = FORM[LG]; if (!f) return null;
   // NFL ROLE? overs became leans on Nov 16 (the mid-November review: tagged overs lost all season). Show that record so
   // the reason is visible; no watch-list category until 30+ graded as leans.
   const rt = p.role && f.role && f.role.all;
-  if (rt && /ROLE\?/.test(p.reason || '')) return {top: false, html: `<span class="sub"><span class="pill p-cat">ROLE? overs</span> before this ${LG === 'nfl' ? 'week' : 'night'} ${frec(rt)} &middot; ${fstat(rt)}</span>`};
+  if (rt && /ROLE\?/.test(p.reason || '')) return {top: false, html: `<span class="sub"><span class="pill p-cat">ROLE? overs</span> before this ${LG === 'nfl' ? 'week' : 'night'} ${fboth(rt)}</span>`};
   const c = catOf(p), ct = c && f.cat[c]; if (!ct || !ct.watch) return null;
   const g = f.grp[c + '|' + parts(p).base], cat = CATS.find(x => x[0] === c);
   const top = !!(g && g.top) && !p.role && !p.hold && !p.wind;                  // NFL ROLE? / HOLD: no Top group tag (Nov 3)
-  return {top, html: `<span class="sub">${top ? TOP + ' ' : ''}<span class="pill p-cat">${cat[2]}</span> ${esc(parts(p).base)} ${g ? frec(g) : ''}</span>`};
+  return {top, html: `<span class="sub">${top ? TOP + ' ' : ''}<span class="pill p-cat">${cat[2]}</span> ${esc(parts(p).base)}${befN(p)} ${g ? fboth(g) : ''}</span>`};
 }
 function legend() {
   const f = FORM[LG]; if (!f) return '';
@@ -1230,7 +1235,7 @@ async function renderLedger() {
   if (!LEDGER[LG]) LEDGER[LG] = await getJSON(`sim/${LG}/ledger.json`);
   formAt(LG, null);
   const all = LEDGER[LG].rows;
-  const rowTag = r => { if (r.result) return '';
+  const rowTag = r => { if (r.result) return ''; formAt(LG, r.night);
     if (r.kind === 'bet') { const t = FORM[LG].bet[betKey(r)]; return t && t.tag ? `<span class="pill tg ${t.tag === 'hot' ? 'p-hot">★ Hot' : 'p-cold">❄ Cold'}</span>` : ''; }
     const lf = leanForm(r); return lf && lf.top ? '<span class="pill tg p-hot">★ Top group</span>' : ''; };
   const mk = m => m === 'prop' ? 'props' : m === 'total' ? 'totals' : 'sides';
@@ -1241,14 +1246,16 @@ async function renderLedger() {
   const tally = g.length ? ` Graded: <b>${rec({w: g.filter(r => r.result === 'win').length, l: g.filter(r => r.result === 'loss').length, p: g.filter(r => r.result === 'push').length})}</b>, <b class="${ucls(sumU)}">${un(Math.round(sumU * 100) / 100)}</b>${FILT.kind !== 'bet' && rows.some(r => r.kind === 'lean') ? ' (leans counted as 1u each)' : ''}.` : '';
   const chip = (grp, v, l) => `<button type="button" class="fb${FILT[grp] === v ? ' on' : ''}" data-g="${grp}" data-v="${v}" aria-pressed="${FILT[grp] === v}">${l}</button>`;
   const LIM = FILT.lim || 150, shown = rows.slice(0, LIM);
+  const ldgRec = r => { formAt(LG, r.night); const h = r.kind === 'bet' ? betForm(r, true) : ((leanForm(r) || {}).html || ''); return h; };
   const body = shown.map(r => `<tr class="go" tabindex="0" data-n="${esc(r.night)}" data-g="${esc(r.game_id)}">
       <td>${esc(shortDate(r.tipoff))}<span class="sub">${esc(r.matchup)}</span></td>
-      <td class="pk">${selH(r)}${rowTag(r)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}${ldgHt(r)}</td>
+      <td class="pk">${selH(r)}${rowTag(r)}${r.kind === 'lean' ? `<span class="sub" style="font-weight:500"><span class="mo">Lean · </span>${esc(r.reason || '')}</span>` : ''}${ldgRec(r)}${ldgHt(r)}</td>
       <td class="hm"><span class="tag ${r.kind === 'bet' ? 't-bet' : 't-lean'}">${r.kind}</span></td>
       <td class="r">${odds(r.price)}<span class="sub bk">${esc(r.book)}</span></td>
       <td class="r hm">${pct(r.model_p)}<span class="sub">mkt ${pct(r.book_p)}</span></td>
       <td class="r hm">${r.result ? `<span class="pill p-${esc(r.result)}">${esc(r.result)}</span>` : '<span class="pill p-open">pending</span>'}</td>
       <td class="r u ${ucls(r.units)}">${r.result ? un(r.units) : '<span class="dim">pending</span>'}<span class="sub mo" style="font-weight:600">${esc(r.result || '')}</span></td></tr>`).join('');
+  formAt(LG, null);
   $('view').innerHTML = `<div style="display:grid;gap:12px">
     ${psearch()}
     <section id="res" style="display:grid;gap:10px" aria-label="Results by ${LG === 'nfl' ? 'week' : 'night'}"></section>
