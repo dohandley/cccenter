@@ -1057,7 +1057,7 @@ function aceRow(x, gs) {
     : `<b>${x.stake}u</b> <span class="dim">stake</span>`;
   return `<button type="button" class="sp-r" data-g="${esc(x.game_id)}"><b>${esc(x.selection)}</b><span class="pr">${odds(x.price)}</span>
     <span class="sub">${esc(x.matchup)} &middot; <span class="bk">${esc(x.book)}</span> &middot; ${st}</span>
-    <span class="sub">Ace ${pct(x.p)} vs market ${pct(x.mkt_p)}${x.result || x.pending ? ` &middot; ${x.stake}u` : ''}</span>${(() => {
+    <span class="sub">Ace ${pct(x.p)} vs market ${pct(x.mkt_p)}${x.result || x.pending ? ` &middot; ${x.stake}u` : ''}</span>${betForm(x, true)}${(() => {
       // the same L5/L10/L15 chart as the game card's pick (Nov 16), when the night file has his games
       const g = (gs || []).find(z => z.game_id === x.game_id), q = g && g.picks.find(z => z.selection === x.selection);
       const b = g && q ? htBtn(g, q, true) : ''; return b ? `<span class="sub">${b}</span>` : '';
