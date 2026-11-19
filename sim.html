@@ -1759,7 +1759,9 @@ function dvpLine(D, st, sd) {
   const rank = rk === 1 ? 'most in the league' : rk === D.t ? 'fewest in the league' : rk <= D.t / 2 ? `${nth(rk)} most of ${D.t}` : `${nth(D.t - rk + 1)} fewest of ${D.t}`;
   const tip = good ? ` &middot; helps the ${sd}` : bad ? ` &middot; works against the ${sd}` : '';
   const pw = POSW[D.p] || esc(D.p), sw = esc((STATW[st] || st).replace('Points', 'Pts').replace('Rebounds', 'Reb').replace('Assists', 'Ast').replace('Threes', '3PM'));
-  return `<div class="bm-dv">vs <b>${esc(D.o)}</b>: ${pw} average <b>${avg}</b> ${sw}${p48 != null && p48 !== avg ? ` &middot; ${p48} ${D.u ? esc(D.u) : 'per 48 min'}` : ''} &middot; <span class="${good ? 'pos' : bad ? 'neg' : ''}">${rank}${tip}</span> <span class="dim">&middot; league ${la}${la48 != null ? ` / ${la48}${D.u ? '' : ' per 48'}` : ''} &middot; ${n} ${pw.replace(/s$/, '')} game${n === 1 ? '' : 's'}, ${D.f ? esc(D.f) : '20+ min'}</span></div>`;
+  // Each number sits next to its own league average (Nov 19, Dylan read "34.2 ... league 32.0 / 32.8" as a contradiction).
+  const lg = x => ` <span class="dim">(league ${x})</span>`, two = p48 != null && p48 !== avg;
+  return `<div class="bm-dv">vs <b>${esc(D.o)}</b>: ${pw} average <b>${avg}</b> ${sw}${lg(la)}${two ? ` &middot; ${p48} ${D.u ? esc(D.u) : 'per 48 min'}${la48 != null ? lg(la48) : ''}` : ''} &middot; <span class="${good ? 'pos' : bad ? 'neg' : ''}">${rank}${tip}</span> <span class="dim">&middot; ${n} ${pw.replace(/s$/, '')} game${n === 1 ? '' : 's'}, ${D.f ? esc(D.f) : '20+ min'}</span></div>`;
 }
 function histChart(key, xs, side, ck, HH, DD) {
   // Recent games for one player: bars for the chosen stat, the line across, green = the chosen side cleared it.
