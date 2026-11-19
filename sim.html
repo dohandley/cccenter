@@ -236,7 +236,7 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .sp-t{font-weight:800;font-size:14px;letter-spacing:-.01em;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .sp-t span{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--text-4);text-transform:uppercase;letter-spacing:.08em}
 .sp-s{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 6px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-top:4px}
-.sp-s b{color:var(--green-text)}.sp-s b.u.neg{color:var(--red-text)}.sp-s b.u:not(.pos):not(.neg){color:var(--text-2)}.sp-s span{font-weight:500;color:var(--text-4);text-transform:none;letter-spacing:0;font-family:Manrope,sans-serif;font-size:11px}
+.sp-rc{margin-top:14px;padding-top:10px;border-top:1px solid var(--border)}.sp-s b{color:var(--green-text)}.sp-s b.u.neg{color:var(--red-text)}.sp-s b.u:not(.pos):not(.neg){color:var(--text-2)}.sp-s span{font-weight:500;color:var(--text-4);text-transform:none;letter-spacing:0;font-family:Manrope,sans-serif;font-size:11px}
 .sp-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:6px}.sp-r .fin{color:var(--text-2);font-size:11px}
 .sp-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:inherit;color:var(--text);cursor:pointer;width:100%}
 .sp-r:hover{border-color:var(--text-3)}.sp-r:focus-visible{outline:2px solid var(--green);outline-offset:2px}
@@ -1134,10 +1134,14 @@ function spots(gs, unit) {
     ${ace.length ? `<div class="sp-l">${ace.map(x => aceRow(x, gs)).join('')}</div>` : `<div class="sp-n">No Ace picks ${unit === 'Week' ? 'this week' : 'on this night'}: nothing cleared its bar.</div>`}` : '';
   let recap = '';
   if (done.length) { const t = {w: 0, l: 0, p: 0, u: 0}; for (const {p} of done) { if (p.result === 'win') t.w++; else if (p.result === 'loss') t.l++; else t.p++; t.u += p.units || 0; }
-    recap = `<div class="sp-n">These picks went <b>${rec(t)}</b>, <b class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</b>${rows.lean.some(x => x.p.result) ? ' (leans at 1u)' : ''}.</div>`; }
+    recap = `<div class="sp-n sp-rc">&starf; picks ${unit === 'Week' ? 'this week' : 'on this night'} went <b>${rec(t)}</b>, <b class="u ${ucls(t.u)}">${un(Math.round(t.u * 100) / 100)}</b>${rows.lean.some(x => x.p.result) ? ' (leans at 1u)' : ''}.</div>`; }
+  // Each section's recap sits with its own picks (Nov 19, Dylan: the ★ recap read as Ace's): Ace's under Ace, ★ above the ★ sections.
+  const ad = ace.filter(x => ['win', 'loss', 'push', 'void'].includes(x.result));
+  const aceRc = ad.length ? (() => { const t = {w: 0, l: 0, p: 0}; let u = 0; for (const x of ad) { if (x.result === 'win') t.w++; else if (x.result === 'loss') t.l++; else t.p++; u += x.units || 0; }
+    return `<div class="sp-n">Ace ${unit === 'Week' ? 'this week' : 'on this night'} went <b>${rec(t)}</b>, <b class="u ${ucls(u)}">${un(Math.round(u * 100) / 100)}</b> (sized by edge).</div>`; })() : '';
   return `<aside class="spots" aria-label="Starred picks"><div class="spots-in">
     <div class="sp-t">${graded ? 'Best picks on this ' + unit.toLowerCase() : unit === 'Week' ? "This week's best picks" : "Tonight's best picks"}<span>${all.length + ace.length}</span></div>
-    <div class="sp-n">The picks with a winning tracked record: Ace first, then the ★ tags. The full list is in each game below.</div>${aceSec}${recap}
+    <div class="sp-n">The picks with a winning tracked record: Ace first, then the ★ tags. The full list is in each game below.</div>${aceSec}${aceRc}${recap}
     <div class="sp-s"><b>★</b> Hot bets <span>1 unit each</span></div>
     ${rows.bet.length ? `<div class="sp-l">${rows.bet.map(row).join('')}</div>` : '<div class="sp-n">None yet. A bet type needs 15+ graded and +9% ROI or better, adjusted for sample size.</div>'}
     <div class="sp-s"><b>★</b> Top group leans <span>tracked, not staked</span></div>
