@@ -180,6 +180,21 @@ dialog.help::backdrop{background:rgba(10,12,16,.45)}
 .hp-b p{margin:0 0 8px}.hp-b ul{margin:0 0 8px;padding-left:18px}.hp-b li{margin-bottom:5px}
 .hp-b b{color:var(--text)}
 .hp-b .pill{vertical-align:1px}
+/* first-visit intro (Nov 19): four short steps, shown once per browser (localStorage simi), reopened from the help popup */
+dialog.intro{width:min(460px,calc(100vw - 24px))}
+.in-b{padding:18px 20px 6px;font-size:14px;line-height:1.55;color:var(--text-2);min-height:236px}
+.in-b h2{margin:0 0 8px;font-size:19px;font-weight:800;letter-spacing:-.02em;color:var(--text)}
+.in-b p{margin:0 0 9px}.in-b b{color:var(--text)}.in-b b.pos{color:var(--green-text)}.in-b b.neg{color:var(--red-text)}
+.in-k{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-text);margin-bottom:6px}
+.in-mock{border:1px solid var(--border);border-radius:9px;background:var(--surface-2);padding:10px 12px;margin:4px 0 10px;font-size:12.5px;line-height:1.5}
+.in-mock .t{display:flex;justify-content:space-between;font-weight:800;color:var(--text);font-size:14px}
+.in-mock .m{color:var(--text-3)}.in-mock .bk{color:var(--gold);font-weight:700}
+.in-mock .pill{vertical-align:1px}
+.in-l{margin:0 0 9px;padding-left:18px}.in-l li{margin-bottom:4px}
+.in-f{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 20px 16px;border-top:1px solid var(--border)}
+.in-d{display:flex;gap:6px}.in-d i{width:7px;height:7px;border-radius:50%;background:var(--border)}.in-d i.on{background:var(--text)}
+.in-f .bt{display:flex;gap:8px}
+.in-go{background:var(--text);color:var(--surface);border-color:var(--text)}
 .hp-fine{font-size:12px;color:var(--text-3);border-top:1px dashed var(--border);margin-top:18px;padding-top:12px}
 .notes{padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-3);font-size:11.5px}
 .notes ul{padding-left:16px;margin:8px 0 0}.notes li{margin-bottom:4px}
@@ -442,6 +457,10 @@ th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{
   <div id="view"><div class="empty">Loading&hellip;</div></div>
   <div class="helpbar"><button type="button" class="hlink" id="hb2">How the sim and ledger work &rarr;</button></div>
 </div>
+<dialog class="help intro" id="intro" aria-labelledby="in-t">
+  <div class="in-b" id="inb"></div>
+  <div class="in-f"><div class="in-d" id="ind"></div><div class="bt"><button type="button" class="tbtn" id="inskip">Skip</button><button type="button" class="tbtn in-go" id="innext">Next</button></div></div>
+</dialog>
 <dialog class="help" id="help" aria-labelledby="hp-t">
   <div class="hp-h"><h2 id="hp-t">How this works</h2><button type="button" class="tbtn" id="hx" aria-label="Close">&#10005;</button></div>
   <div class="hp-b">
@@ -530,6 +549,7 @@ th.srt{cursor:pointer;user-select:none}th.srt:hover{color:var(--text)}th.srt.on{
       <li>The record at the top right is for the league you have open; switch it between <b>All</b> picks, <b>Bets</b> and <b>Leans</b> (leans graded as 1u each). Type your own unit size in <b>Unit $</b> to see that record in dollars; it stays in your browser only. The season tiles and the NBA / NFL buttons follow the same switch. Links to a slate or the ledger can be shared, and the &#9789; button switches light and dark mode.</li>
     </ul>
 
+    <p><a href="#" id="inagain">Show the intro again</a></p>
     <p class="hp-fine">Records are early-season samples and say little on their own. Prices are from when each game was priced and may have moved. For entertainment only, not betting advice. If gambling stops being fun, call 1-800-GAMBLER.</p>
   </div>
 </dialog>
@@ -544,7 +564,43 @@ const HELP = document.getElementById('help');
 function openHelp() { if (HELP.showModal) HELP.showModal(); else HELP.setAttribute('open', ''); HELP.scrollTop = 0; }
 document.getElementById('hb').onclick = openHelp; document.getElementById('hb2').onclick = openHelp;
 document.getElementById('hx').onclick = () => HELP.close();
+document.getElementById('inagain').onclick = e => { e.preventDefault(); HELP.close(); introOpen(); };
 HELP.addEventListener('click', e => { if (e.target === HELP) HELP.close(); });
+/* First-visit intro (Nov 19, Dylan: the site may be a lot for a first-time visitor). Shown once per browser; the help
+   popup's "Show the intro again" reopens it. Keep its wording in step with the help popup. */
+const INTRO = document.getElementById('intro');
+const INS = [
+  `<div class="in-k">Welcome</div><h2 id="in-t">Every game, simulated thousands of times</h2>
+   <p>Each NBA and NFL game is played out thousands of times by a computer model. When the model disagrees with the sportsbooks' price on a prop or total, that's a pick.</p>
+   <p>Every pick is posted <b>before</b> the game and graded the next morning, wins and losses alike. Nothing gets deleted.</p>`,
+  `<div class="in-k">Start here</div><h2>Look at "Best picks on this night" first</h2>
+   <p>It's the short list: at the top on a phone, on the right on a wide screen.</p>
+   <ul class="in-l"><li><b>&spades; Ace</b> picks come first: the strictest filter, sized by how big the edge is.</li><li><b>&starf;</b> picks are the kinds of plays with a winning record so far.</li></ul>
+   <p>Every other pick is inside each game card below it.</p>`,
+  `<div class="in-k">Reading a pick</div><h2>What each part means</h2>
+   <div class="in-mock"><div class="t"><span>Cam Spencer Under 7.5 ast</span><span>+105</span></div>
+   <div class="m">MEM @ CLE &middot; <span class="bk">Caesars</span> &middot; <span class="pill p-win">Win</span> <b class="pos">+0.94u</b></div>
+   <div class="m">assists unders before this night 58&ndash;46&ndash;8, <b class="pos">+2.20u</b> &middot; 56% hit</div></div>
+   <ul class="in-l"><li><b>+105 at Caesars</b>: the price and book when it was posted.</li><li><b>Win / Loss</b> and units: 1 unit = one bet of your usual size. Type yours in <b>Unit $</b> at the top to see dollars.</li><li>The grey line is how that kind of pick had done going into the night.</li><li><b class="pos">Green</b> is good, <b class="neg">red</b> is bad, <b style="color:var(--blue-text)">blue</b> means not played yet.</li></ul>`,
+  `<div class="in-k">The rest</div><h2>Bets, leans and the tabs</h2>
+   <ul class="in-l"><li><b>Bets</b> pass every rule and make up the main record. <b>Leans</b> are close calls, tracked with their own record but not bet. Switch between them with All / Bets / Leans at the top.</li>
+   <li><b>Slate</b> is tonight's games, <b>Ledger</b> is every pick so far, <b>Report</b> checks how accurate the model is. <b>Parlays</b> and <b>Build</b> are paper-only parlay tools.</li>
+   <li>Tap <b>?</b> at the top any time for the full guide.</li></ul>
+   <p class="dim" style="font-size:12px">For entertainment, not betting advice. If gambling stops being fun, call 1-800-GAMBLER.</p>`];
+let INI = 0;
+function introShow(i) {
+  INI = i; document.getElementById('inb').innerHTML = INS[i];
+  document.getElementById('ind').innerHTML = INS.map((_, j) => `<i class="${j === i ? 'on' : ''}"></i>`).join('');
+  document.getElementById('innext').textContent = i === INS.length - 1 ? 'Got it' : 'Next';
+  document.getElementById('inskip').textContent = i ? 'Back' : 'Skip';
+}
+function introOpen() { introShow(0); if (INTRO.showModal) INTRO.showModal(); else INTRO.setAttribute('open', ''); }
+INTRO.addEventListener('close', () => { try { localStorage.setItem('simi', '1'); } catch (e) {} });
+document.getElementById('innext').onclick = () => INI < INS.length - 1 ? introShow(INI + 1) : INTRO.close();
+document.getElementById('inskip').onclick = () => INI ? introShow(INI - 1) : INTRO.close();
+INTRO.addEventListener('click', e => { if (e.target === INTRO) INTRO.close(); });
+let seenIntro = false; try { seenIntro = !!localStorage.getItem('simi'); } catch (e) { seenIntro = true; }
+if (!seenIntro && !/[?&]nointro\b/.test(location.search)) setTimeout(() => { if (!HELP.open) introOpen(); }, 700);
 document.getElementById('th').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
 
 const $ = id => document.getElementById(id);
