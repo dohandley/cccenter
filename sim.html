@@ -2045,7 +2045,7 @@ async function renderReport() {
       <td class="r u ${ucls(w.units)}">${un(w.units)}</td><td class="r hm">${w.clv && w.clv.n ? (w.clv.avg > 0 ? '+' : '') + w.clv.avg.toFixed(1) : '—'}</td></tr>`).join('');
   const gr = k.groups.map(g => `<tr><td>${esc(g.group)}</td><td class="r">${g.w}–${g.l}${g.p ? '–' + g.p : ''}</td><td class="r hm">${pc(g.model)}</td><td class="r hm">${pc(g.market)}</td><td class="r">${pc(g.actual)}</td>
       <td class="r u ${ucls(g.units)}">${un(g.units)}</td><td class="r hm">${g.trust == null ? '—' : g.trust.toFixed(2)}</td></tr>`).join('');
-  const pj = d.projections || [], fl = pj.filter(p => p.n >= 30 && p.avg_actual && Math.abs(p.bias) / p.avg_actual >= .05);
+  const pj = d.projections || [], fl = pj.filter(p => p.n >= 30 && p.avg_actual && Math.abs(p.bias) / p.avg_actual >= .05 && Math.abs(p.bias) >= (p.floor || 0)); // floor: report_card.FLAG_FLOOR (Nov 20)
   const pr = pj.map(p => `<tr><td>${esc(p.stat)}</td><td class="r hm">${p.n}</td><td class="r">${p.avg_actual.toFixed(1)}</td><td class="r">${p.mae.toFixed(1)}</td>
       <td class="r"><b class="${fl.includes(p) ? 'neg' : ''}">${Math.abs(p.bias) < .05 ? '0.0' : (p.bias > 0 ? '+' : '') + p.bias.toFixed(1)}</b></td></tr>`).join('');
   const tw = (head, body) => `<div class="tw"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
