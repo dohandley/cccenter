@@ -1672,12 +1672,13 @@ function altSection(night) {
   const card = ({rs}) => {
     const r0 = rs[0], [aw, hm] = r0[0].split('_').slice(1), tip = A.tipoff && A.tipoff[r0[0]], started = tip && new Date(tip) <= now && rs.every(r => !r[11]);
     const proj = r0[13], main = r0[14], far = proj != null && main != null && main > 0 && proj > main * 1.4;
+    const late = (A.news || []).includes(r0[0]) && !rs.some(r => r[11]);
     const top = new Set([...rs].sort((a, b) => b[10] - a[10]).slice(0, showAll ? 99 : 4)), more = rs.length - top.size;
     const rows = rs.filter(r => top.has(r)).map(r => `<div class="al-r"><b class="al-l">${esc(rungLab(r))}</b><span class="al-p">${odds(r[7])}</span><span class="bk">${esc(r[6])}</span>
       <span class="al-c">ours ${pc(r[8])} &middot; mkt ${pc(r[9])} &middot; <b class="pos">EV +${Math.round(r[10] * 100)}%</b></span>
       ${r[11] ? `<span class="al-x"><span class="pill p-${esc(r[11] === 'void' ? 'push' : r[11])}">${esc(r[11] === 'void' ? 'DNP' : r[11])}</span>${r[12] != null ? ` <span class="${r[11] === 'win' ? 'pos' : r[11] === 'loss' ? 'neg' : ''}">${r[12]}</span>` : ''}</span>` : ''}</div>`).join('');
     return `<div class="al-g${started ? ' al-s' : ''}"><div class="al-h"><span><b>${esc(r0[1])}</b> &middot; ${esc(STATW[r0[3]] || r0[3])}</span><span class="dim">${esc(aw)} @ ${esc(hm)}${started ? ' &middot; started' : ''}</span></div>
-      ${proj != null ? `<div class="al-m">sim ${proj}${main != null ? ` &middot; books' main line ${main}` : ''}${far ? ' &middot; <span class="neg">sim far above the books: check his minutes and the news first</span>' : ''}</div>` : ''}${rows}${more ? `<div class="al-m">+${more} more rung${more === 1 ? '' : 's'} (Show all)</div>` : ''}</div>`;
+      ${proj != null ? `<div class="al-m">sim ${proj}${main != null ? ` &middot; books' main line ${main}` : ''}${far ? ' &middot; <span class="neg">sim far above the books: check his minutes and the news first</span>' : ''}</div>` : ''}${late ? `<div class="al-m"><span class="neg">Injury news in this game after these were priced; the chances don't include it.</span></div>` : ''}${rows}${more ? `<div class="al-m">+${more} more rung${more === 1 ? '' : 's'} (Show all)</div>` : ''}</div>`;
   };
   return head + `<div class="al-list">${vis.map(card).join('')}</div>${G.length > 15 || G.some(g => g.rs.length > 4) ? `<button type="button" class="tbtn" id="altall" style="margin-top:8px">${showAll ? 'Show the top 15' : `Show all ${G.length} players and rungs`}</button>` : ''}</div>`;
 }
