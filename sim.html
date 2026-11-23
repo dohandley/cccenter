@@ -236,6 +236,13 @@ td.pk{font-weight:700;white-space:normal;min-width:180px}
 .sp-t{font-weight:800;font-size:14px;letter-spacing:-.01em;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .sp-t span{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--text-4);text-transform:uppercase;letter-spacing:.08em}
 .sp-s{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 6px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-top:4px}
+.al-list{display:grid;gap:8px}
+.al-g{border:1px solid var(--border);border-radius:9px;background:var(--surface);padding:9px 12px}.al-g.al-s{opacity:.55}
+.al-h{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13.5px}.al-h b{font-weight:800}
+.al-m{font-size:11.5px;color:var(--text-3);margin:2px 0 4px}
+.al-r{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:4px 0;border-top:1px dashed var(--border);font-size:12.5px}
+.al-r:first-of-type{border-top:0}.al-l{min-width:34px;font-family:'JetBrains Mono',monospace}.al-p{font-family:'JetBrains Mono',monospace;font-weight:700;min-width:46px}
+.al-r .bk{color:var(--gold);font-weight:700}.al-c{color:var(--text-3)}.al-x{margin-left:auto;font-family:'JetBrains Mono',monospace;font-weight:700}
 .sp-rc{margin-top:14px;padding-top:10px;border-top:1px solid var(--border)}.sp-s b{color:var(--green-text)}.sp-s b.u.neg{color:var(--red-text)}.sp-s b.u:not(.pos):not(.neg){color:var(--text-2)}.sp-s span{font-weight:500;color:var(--text-4);text-transform:none;letter-spacing:0;font-family:Manrope,sans-serif;font-size:11px}
 .sp-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:6px}.sp-r .fin{color:var(--text-2);font-size:11px}
 .sp-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:inherit;color:var(--text);cursor:pointer;width:100%}
@@ -1635,9 +1642,49 @@ function longShots(g, night) {
     <div class="notes" style="margin:10px 0">Built from <b>every</b> prop the books post, not just the leans. <b>Sim SGPs</b> (2 to 4 legs, one game): each leg's chance comes from the books' no-vig price, then the sim's 4,000 games say how much more often the legs land together than apart (the <b>lift</b>). The shown price is the fair price; only take it at that or longer, since we can't see the books' SGP prices. <b>SGP+</b> pairs two SGPs from different games. <b>Price gaps</b> are 3 or 4 leg tickets at one book whose every leg beats the other books' no-vig price. SGPs are graded by hits against the expected count; price gaps in units, 1u a ticket.</div>
     ${slates || `<div class="dim" style="font-size:12.5px">No long-shot tickets ${night && night < g.live_from ? 'before tracking began (' + esc(shortDate(g.live_from + 'T12:00:00-04:00')) + ')' : 'for this night'}.</div>`}</div>`;
 }
+/* ---------- Alt lines (test, NBA, from Nov 23) ----------
+   Data: sim/nba/alt.json from alt_ladder.public() (nba-sim-ledger). Every plus-money alt rung (+100 to +1500) gets the
+   builder's blended chance; listed here: rungs at +3% EV or better at the best of the five books, grouped by player and
+   stat (one ladder wins or loses together). Dylan asked Nov 23 to show them on the real site so they can be played,
+   labeled as a test: tracked separately, never in the bet record. */
+const ALT = {d: undefined, all: {}};
+function altSection(night) {
+  const A = ALT.d; if (LG !== 'nba' || !A || !A.nights) return '';
+  const N = A.nights.find(n => n.slate === night);
+  const pc = x => (x * 100).toFixed(x < 0.1 ? 1 : 0) + '%', sg = x => (x >= 0 ? '+' : '−') + Math.abs(x * 100).toFixed(0) + '%';
+  const roi = r => r.n ? r.u / r.n : 0;
+  const tot = A.nights.reduce((t, n) => ({n: t.n + n.rec.n, w: t.w + n.rec.w, exp: t.exp + n.rec.exp, u: t.u + n.rec.u}), {n: 0, w: 0, exp: 0, u: 0});
+  const gN = A.nights.filter(n => n.rec.n);
+  const tiles = (N && N.rec.n ? st(`This night`, `${N.rec.w} of ${N.rec.n} hit`, `expected ${N.rec.exp.toFixed(0)} &middot; ${sg(roi(N.rec))} return`, roi(N.rec) >= 0 ? 'pos' : 'neg')
+      : st('This night', N ? `${N.rungs.length} lines` : '—', N ? 'not graded yet' : 'none logged'))
+    + st(`Since ${shortDate(A.nights[0].slate + 'T12:00:00-05:00')}`, `${tot.w} of ${tot.n} hit`, `expected ${tot.exp.toFixed(0)} &middot; ${sg(tot.n ? tot.u / tot.n : 0)} return`, tot.u >= 0 ? 'pos' : 'neg')
+    + st('Nights up', `${gN.filter(n => n.rec.u > 0).length} of ${gN.length}`, gN.map(n => `<span class="${n.rec.u >= 0 ? 'pos' : 'neg'}">${sg(roi(n.rec))}</span>`).join(' '));
+  const head = `<div class="pan"><div class="pan-h"><span class="pan-t">Alt lines (test)</span><span class="cnote">tracked separately &middot; not in the bet record</span></div>
+    <div class="rc-k">${tiles}</div>
+    <div class="notes" style="margin:10px 0">Every plus-money alt line the books post (+${A.price_range[0]} to +${A.price_range[1].toLocaleString()}) gets our chance from the same blend as Build: mostly the market, nudged toward the sim. Listed: lines at <b>+${Math.round(A.ev_bar * 100)}% EV or better</b> at the best of five books, grouped by player. One player's ladder wins or loses together, so a night swings hard (see <b>Nights up</b>). Prices are from the last pull before the games; check your book's number first. If you play any, keep it to a small part of a unit. Return assumes 1 unit on every line listed.</div>`;
+  if (!N || !N.rungs.length) return head + `<div class="dim" style="font-size:12.5px">${N ? 'No alt line cleared +' + Math.round(A.ev_bar * 100) + '% EV this night.' : 'No alt lines logged for this night (the test started ' + esc(shortDate(A.nights[0].slate + 'T12:00:00-05:00')) + ').'}</div></div>`;
+  const now = Date.now(), grp = {};
+  for (const r of N.rungs) { const k = r[0] + '|' + r[1] + '|' + r[3]; (grp[k] = grp[k] || []).push(r); }
+  const G = Object.values(grp).map(rs => ({rs: rs.sort((a, b) => a[4] - b[4]), best: Math.max(...rs.map(r => r[10]))}))
+    .sort((a, b) => b.best - a.best);
+  const showAll = ALT.all[night], vis = showAll ? G : G.slice(0, 15);
+  const rungLab = r => r[5] === 'Over' ? `${Math.ceil(r[4])}+` : `under ${r[4]}`;
+  const card = ({rs}) => {
+    const r0 = rs[0], [aw, hm] = r0[0].split('_').slice(1), tip = A.tipoff && A.tipoff[r0[0]], started = tip && new Date(tip) <= now && rs.every(r => !r[11]);
+    const proj = r0[13], main = r0[14], far = proj != null && main != null && main > 0 && proj > main * 1.4;
+    const top = new Set([...rs].sort((a, b) => b[10] - a[10]).slice(0, showAll ? 99 : 4)), more = rs.length - top.size;
+    const rows = rs.filter(r => top.has(r)).map(r => `<div class="al-r"><b class="al-l">${esc(rungLab(r))}</b><span class="al-p">${odds(r[7])}</span><span class="bk">${esc(r[6])}</span>
+      <span class="al-c">ours ${pc(r[8])} &middot; mkt ${pc(r[9])} &middot; <b class="pos">EV +${Math.round(r[10] * 100)}%</b></span>
+      ${r[11] ? `<span class="al-x"><span class="pill p-${esc(r[11] === 'void' ? 'push' : r[11])}">${esc(r[11] === 'void' ? 'DNP' : r[11])}</span>${r[12] != null ? ` <span class="${r[11] === 'win' ? 'pos' : r[11] === 'loss' ? 'neg' : ''}">${r[12]}</span>` : ''}</span>` : ''}</div>`).join('');
+    return `<div class="al-g${started ? ' al-s' : ''}"><div class="al-h"><span><b>${esc(r0[1])}</b> &middot; ${esc(STATW[r0[3]] || r0[3])}</span><span class="dim">${esc(aw)} @ ${esc(hm)}${started ? ' &middot; started' : ''}</span></div>
+      ${proj != null ? `<div class="al-m">sim ${proj}${main != null ? ` &middot; books' main line ${main}` : ''}${far ? ' &middot; <span class="neg">sim far above the books: check his minutes and the news first</span>' : ''}</div>` : ''}${rows}${more ? `<div class="al-m">+${more} more rung${more === 1 ? '' : 's'} (Show all)</div>` : ''}</div>`;
+  };
+  return head + `<div class="al-list">${vis.map(card).join('')}</div>${G.length > 15 || G.some(g => g.rs.length > 4) ? `<button type="button" class="tbtn" id="altall" style="margin-top:8px">${showAll ? 'Show the top 15' : `Show all ${G.length} players and rungs`}</button>` : ''}</div>`;
+}
 async function renderParlays() {
   if (!PARL[LG]) { try { PARL[LG] = await getJSON(`sim/${LG}/parlays.json`); } catch (e) { PARL[LG] = null; } }
   if (!(LG in SGP)) { try { SGP[LG] = await getJSON(`sim/${LG}/sgp.json`); } catch (e) { SGP[LG] = null; } }
+  if (LG === 'nba' && ALT.d === undefined) { try { ALT.d = await getJSON('sim/nba/alt.json'); } catch (e) { ALT.d = null; } }
   const d = PARL[LG];
   if (!d) { $('season').innerHTML = ''; $('view').innerHTML = `<div class="empty">No ${LEAGUES[LG]} paper parlays yet.</div>`; return; }
   const tr = d.record.tracked, bf = d.record.backfill;
@@ -1651,6 +1698,7 @@ async function renderParlays() {
   // night bar (same look as the Slate view's): every night with lean tickets or long shots, newest first
   const lab = {}; for (const s of d.slates) lab[s.id] = s.label;
   for (const t of (SGP[LG] || {tickets: []}).tickets) if (!lab[t.slate]) lab[t.slate] = new Date(t.slate + 'T12:00:00-05:00').toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric', timeZone: 'America/New_York'});
+  if (LG === 'nba' && ALT.d) for (const n of ALT.d.nights) if (!lab[n.slate]) lab[n.slate] = new Date(n.slate + 'T12:00:00-05:00').toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric', timeZone: 'America/New_York'});
   const nights = Object.keys(lab).sort().reverse();
   if (!PN[LG] || !lab[PN[LG]]) PN[LG] = nights[0] || null;
   const cur = PN[LG];
@@ -1664,11 +1712,13 @@ async function renderParlays() {
   }).join('');
   $('view').innerHTML = `<div style="display:grid;gap:12px">
     ${bar}
+    ${altSection(cur)}
     ${longShots(SGP[LG], cur)}
     <div class="pan-h"><span class="pan-t">Lean 2-leggers</span></div>
     <div class="notes"><b style="color:var(--text)">Paper parlays: learning only.</b> These tickets are never bet and never count toward the record above or the season units. Each ${unit}, the leans are paired into 2-leg tickets at one sportsbook, legs from different games, using a win chance pulled toward the market by how much the model has overrated leans so far. A ticket needs +${Math.round(d.rules.min_ev * 100)}% expected value or better; at most ${d.rules.per_slate} a ${unit}, each lean on ${d.rules.per_leg === 1 ? 'one ticket' : 'at most ' + d.rules.per_leg}${LG === 'nfl' ? '; overs tagged Role? are left out' : ''}. Rules changed Nov 2: earlier slates allowed a lean on two tickets. Units at the ticket's price, 1u per ticket.</div>
     ${sections || `<div class="dim" style="font-size:12.5px">${nights.length ? 'No lean 2-leggers for this ' + unit + '.' : `No ${LEAGUES[LG]} slates yet.`}</div>`}</div>`;
   if ($('pnights')) $('pnights').onclick = e => { const b = e.target.closest('button[data-n]'); if (!b) return; PN[LG] = b.dataset.n; go(); };
+  if ($('altall')) $('altall').onclick = () => { ALT.all[cur] = !ALT.all[cur]; go(); };
   slateCharts($('view'));
 }
 
